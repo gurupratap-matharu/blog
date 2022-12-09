@@ -28,7 +28,7 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="").split(" ")
 
 INSTALLED_APPS = [
     "blog.apps.BlogConfig",
-    "home.apps.HomeConfig",
+    "home",
     "search",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
