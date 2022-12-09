@@ -18,7 +18,9 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+PROJECT_DIR = Path(__file__).resolve().parent  # Django project dir
+BASE_DIR = PROJECT_DIR.parent  # Git root
+
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -89,7 +91,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            BASE_DIR / "templates",
+            PROJECT_DIR / "templates",
         ],
         "APP_DIRS": True,
         "OPTIONS": {
