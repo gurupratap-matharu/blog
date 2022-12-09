@@ -13,6 +13,9 @@ from taggit.models import TaggedItemBase
 
 
 class BlogIndexPage(Page):
+
+    page_description = "Use this page to show a list of blog posts"
+
     intro = RichTextField(blank=True)
     content_panels = Page.content_panels + [FieldPanel("intro")]
 
@@ -24,6 +27,9 @@ class BlogIndexPage(Page):
 
         return context
 
+    class Meta:
+        verbose_name = "blogindexpage"
+
 
 class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey(
@@ -32,6 +38,9 @@ class BlogPageTag(TaggedItemBase):
 
 
 class BlogTagIndexPage(Page):
+
+    page_description = "Use this page to list blog posts by a tag"
+
     def get_context(self, request, *args, **kwargs):
         tag = request.GET.get("tag")
         blogpages = BlogPage.objects.filter(tags__name=tag)
@@ -43,6 +52,9 @@ class BlogTagIndexPage(Page):
 
 
 class BlogPage(Page):
+
+    page_description = "Use this page to write a single blog post"
+
     date = models.DateField("Post date")
     intro = models.CharField(max_length=250)
     body = RichTextField(blank=True)
@@ -73,7 +85,7 @@ class BlogPage(Page):
         FieldPanel("intro"),
         FieldPanel("body"),
         InlinePanel("gallery_images", label="Gallery images"),
-        InlinePanel("related_links", heading="Related links", label="Related link"),
+        InlinePanel("related_links", heading="Related links", label="Related links"),
     ]
 
     promote_panels = [
@@ -83,6 +95,9 @@ class BlogPage(Page):
 
     parent_page_types = ["blog.BlogIndexPage"]
     subpage_types = []
+
+    class Meta:
+        verbose_name = "blogpage"
 
     def main_image(self):
         gallery_item = self.gallery_images.first()  # type: ignore
@@ -135,3 +150,10 @@ class BlogCategory(models.Model):
 
     class Meta:
         verbose_name_plural = "blog categories"
+
+
+class LandingPage(Page):
+    page_description = "Use this page for converting users"
+
+    class Meta:
+        verbose_name = "landingpage"
