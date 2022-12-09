@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "blog"
 version = "0.1.0"
-description = ""
+description = "This is my personal blog site"
 authors = ["Gurupratap Matharu <gurupratap.matharu@gmail.com>"]
 readme = "README.md"
 
@@ -39,7 +39,7 @@ profile = "black"
 skip = ["docs", "migrations"]
 known_django = "django"
 known_wagtail = "wagtail"
-sections = "FUTURE,STDLIB,DJANGO, WAGTAIL, THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+sections = "FUTURE,STDLIB,DJANGO, WAGTAIL,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 
 [tool.black]
 exclude = '''
