@@ -29,6 +29,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.DEPLOY_PORT }}
+          script_stop: true
           script: |
             cd ${{ secrets.PROJECT_PATH }}
 
