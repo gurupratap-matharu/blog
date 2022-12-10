@@ -34,7 +34,7 @@ jobs:
             cd ${{ secrets.PROJECT_PATH }}
 
             echo "Veer: running git pull..."
-            git pull origin master
+            git pull origin main
 
             echo "Veer: running poetry install..."
             /home/veer/.local/bin/poetry install
