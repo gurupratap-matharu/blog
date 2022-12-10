@@ -29,7 +29,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.DEPLOY_PORT }}
-          script_stop: true
           script: |
             cd ${{ secrets.PROJECT_PATH }}
 
@@ -37,7 +36,7 @@ jobs:
             git pull origin main
 
             echo "Veer: running poetry install..."
-            /home/veer/.local/bin/poetry install
+            /home/veer/.local/bin/poetry install --verbose
 
             echo "Veer: collecting static..."
             /home/veer/.pyenv/versions/blog/bin/python mysite/manage.py collectstatic --noinput
