@@ -173,7 +173,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "mysite"
+WAGTAIL_SITE_NAME = "FalconHunt"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
@@ -185,7 +185,7 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "http://example.com"  # <-- Veer change this
+WAGTAILADMIN_BASE_URL = "https://falconhunt.xyz"
 
 CSRF_TRUSTED_ORIGINS = ["https://*.falconhunt.xyz", "https://*.127.0.0.1"]
 
