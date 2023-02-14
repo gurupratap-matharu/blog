@@ -6,9 +6,6 @@ on:
   pull_request:
     branches:
       - main
-  # Trigger everyday at 1 UTC
-  schedule:
-    - cron: "0 1 * * *"
   workflow_dispatch:
 
 # Cancel any running workflow if the CI gets triggered again.
