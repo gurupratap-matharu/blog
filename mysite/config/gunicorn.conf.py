@@ -2,12 +2,11 @@
 # https://docs.gunicorn.org/en/stable/configure.html#configuration-file
 # https://docs.gunicorn.org/en/stable/settings.html
 
-import multiprocessing
+# import multiprocessing
 
 # restart workers after so many requests with some variability
 max_requests = 1000
 max_requests_jitter = 50
-
 
 # Bind to a unix socket (created by systemd)
 bind = "unix:/run/wagtail.sock"

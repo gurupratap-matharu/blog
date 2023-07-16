@@ -221,14 +221,14 @@ LOGGING = {
         },
     },
     "root": {
-        "handlers": ["console", "file"],
+        "handlers": ["console"],
         "level": "INFO",
         "formatter": "elegant",
     },
     "loggers": {
         "django": {
             "level": os.getenv("DJANGO_LOG_LEVEL", default="INFO"),
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "propagate": True,
         },
     },
