@@ -62,7 +62,7 @@ format:
 
 lint: isort format
 	poetry run flake8 .
-	# djlint .
+	djlint .
 
 test: check migrations-check
 	coverage run --source='.' mysite/manage.py test
