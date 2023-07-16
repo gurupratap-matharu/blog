@@ -13,7 +13,6 @@ from taggit.models import TaggedItemBase
 
 
 class BlogIndexPage(Page):
-
     page_description = "Use this page to show a list of blog posts"
 
     intro = RichTextField(blank=True)
@@ -38,7 +37,6 @@ class BlogPageTag(TaggedItemBase):
 
 
 class BlogTagIndexPage(Page):
-
     page_description = "Use this page to list blog posts by a tag"
 
     def get_context(self, request, *args, **kwargs):
@@ -52,7 +50,6 @@ class BlogTagIndexPage(Page):
 
 
 class BlogPage(Page):
-
     page_description = "Use this page to write a single blog post"
 
     date = models.DateField("Post date")

@@ -4,7 +4,6 @@ from wagtail.models import Page
 
 
 class HomePage(Page):
-
     page_description = "Use this page to show a home page"
 
     body = RichTextField(blank=True)
