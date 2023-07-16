@@ -61,7 +61,7 @@ format:
 	poetry run black . --check 
 
 lint: isort format
-	poetry run flake8 .
+	poetry run ruff .
 	djlint .
 
 test: check migrations-check
