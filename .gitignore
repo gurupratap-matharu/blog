@@ -1,5 +1,7 @@
 # Local
 ssl/
+docs/
+static/
 
 # Macos
 .DS_Store
