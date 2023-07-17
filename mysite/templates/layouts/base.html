@@ -4,6 +4,9 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="apple-touch-icon" sizes="76x76" href="{% static "assets/img/apple-icon.png" %}" />
+        <link rel="icon" type="image/png" href="{% static "assets/img/favicon.png" %}" />
         <title>
 
             {% block title %}
@@ -20,27 +23,36 @@
             {% endblock title_suffix %}
 
         </title>
-        <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!--     Fonts and icons     -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
         {# Force all links in the live preview panel to be opened in a new tab #}
         {% if request.in_preview_panel %}<base target="_blank">{% endif %}
+        <!-- CSS Files -->
+        <link href="{% static 'assets/css/soft-design-system.css' %}" rel="stylesheet" type="text/css"   id="pagestyle" />
         {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}">
+        <link href="{% static 'assets/css/mysite.css' %}" rel="stylesheet" type="text/css">
 
-        {% block extra_css %}{# Override this in templates to add extra stylesheets #}{% endblock %}
+        {% block extra_css %}
+        {% endblock extra_css %}
 
     </head>
-    <body class=" 
-        {% block body_class %}{% endblock body_class %}
-         ">
+    <body class="index-page">
+
+        {% include "includes/navigation.html" %}
+
         {% wagtailuserbar %}
 
-        {% block content %}{% endblock content %}
+        {% block content %}
+        {% endblock content %}
 
-        {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/mysite.js' %}"></script>
+        {% include "includes/footer.html" %}
 
-        {% block extra_js %}{# Override this in templates to add extra javascript #}{% endblock %}
+        <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "assets/js/soft-design-system.js" %}"></script>
+        <script type="text/javascript" src="{% static 'assets/js/mysite.js' %}"></script>
+
+        {% block extra_js %}
+        {% endblock extra_js %}
 
     </body>
 </html>
