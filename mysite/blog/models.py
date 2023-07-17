@@ -39,6 +39,9 @@ class BlogPageTag(TaggedItemBase):
 class BlogTagIndexPage(Page):
     page_description = "Use this page to list blog posts by a tag"
 
+    class Meta:
+        verbose_name = "Blog Tag Index Page"
+
     def get_context(self, request, *args, **kwargs):
         tag = request.GET.get("tag")
         blogpages = BlogPage.objects.filter(tags__name=tag)
@@ -97,7 +100,7 @@ class BlogPage(Page):
         verbose_name = "blogpage"
 
     def main_image(self):
-        gallery_item = self.gallery_images.first()  # type: ignore
+        gallery_item = self.gallery_images.first()
 
         return gallery_item.image if gallery_item else None
 
