@@ -40,24 +40,41 @@
                             70+ carefully crafted small elements that come with multiple
                             colors and shapes. These are only a few of them.
                         </h6>
+                        <div class="card">
+                            <div class="card-header pt-4 pb-3">
+                                <span class="badge rounded-pill bg-light text-dark">Premium</span>
+                                <h6 class="font-weight-bold mt-2">Experience scheduling automation for yourself!</h6>
+                            </div>
+                            <div class="card-body text-lg-start text-center pt-0">
+                                Create a Falcon account in seconds.
+                                <a href="javascript:;" class="btn btn-icon bg-gradient-primary d-lg-block mt-3 mb-0">
+                                    Sign up for free
+                                    <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-9">
                     {{ page.body|richtext }}
-                    <div class="row py-3 mt-3">
-                        <div class="col-12">
-                            {% with categories=page.categories.all %}
-                                {% for category in categories %}<span class="badge bg-gradient-dark">{{ category.name }}</span>{% endfor %}
-                            {% endwith %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="mt-3">Boost creativity</h2>
+                            <p>
+                                The easiest way to get started is to use one of our
+                                pre-built example pages. Get started with Falcon Routing today to maximize every revenue opportunity, get to each meeting milestone faster, and win more deals.
+                            </p>
+                            <a href="javascript:;" class="btn btn-icon bg-gradient-primary mt-3 mb-0">
+                                Talk to Sales
+                                <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                            </a>
                         </div>
                     </div>
-                    {% for tag in page.tags.all %}
-                        <a href="{% slugurl 'tags' %}?tag={{ tag }}" class="badge bg-gradient-primary">{{ tag }}</a>
-                    {% endfor %}
                 </div>
             </div>
         </div>
     </section>
+    <!-- Related Articles -->
     <section class="pt-5 pb-0">
         <div class="container">
             <div class="d-flex justify-content-center my-5">
