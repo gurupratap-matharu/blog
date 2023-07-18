@@ -5,32 +5,31 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    <h1>{{ page.title }}</h1>
-    <p class="meta">{{ page.date }}</p>
-    {% with categories=page.categories.all %}
-        {% if categories %}
-            <h3>Posted in:</h3>
-            <ul>
-                {% for category in categories %}
-                    <li style="display: inline">
-                        {% image category.icon fill-32x32 style="vertical-align: middle" %}
-                        {{ category.name }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-    {% if page.tags.all.count %}
-        <div class="tags">
-            <h3>Tags</h3>
-            {% for tag in page.tags.all %}
-                <a href="{% slugurl 'tags' %}?tag={{ tag }}">
-                    <button type="button">{{ tag }}</button>
-                </a>
-            {% endfor %}
+    <!-- -------- START HEADER 1 w/ text and image on right ------- -->
+    <header>
+        <div class="page-header min-vh-75">
+            <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
+                <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
+                     style="background-image:url({% static 'assets/img/curved-images/curved11.jpg' %})"></div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
+                        <h1 class="mb-4">{{ page.title }}</h1>
+                        <p>Read Time: 8 mins</p>
+                        <div class="author align-items-center">
+                            <img src="{% static 'assets/img/team-1.jpg' %}" alt="avatar image" class="avatar rounded-circle">
+                            <div class="name ps-3 pt-3">
+                                <span>Katie Roof</span>
+                                <p class="text-gradient text-primary">{{ page.date }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    {% endif %}
-    <div class="intro">{{ page.intro }}</div>
+    </header>
+    <!-- -------- END HEADER 1 w/ text and image on right ------- -->
     <section class="my-5 py-5">
         <div class="container mt-sm-5 mt-3">
             <div class="row">
@@ -43,11 +42,23 @@
                         </h6>
                     </div>
                 </div>
-                <div class="col-lg-9">{{ page.body|richtext }}</div>
+                <div class="col-lg-9">
+                    {{ page.body|richtext }}
+                    <div class="row py-3 mt-3">
+                        <div class="col-12">
+                            {% with categories=page.categories.all %}
+                                {% for category in categories %}<span class="badge bg-gradient-dark">{{ category.name }}</span>{% endfor %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                    {% for tag in page.tags.all %}
+                        <a href="{% slugurl 'tags' %}?tag={{ tag }}" class="badge bg-gradient-primary">{{ tag }}</a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </section>
-    <section>
+    <section class="pt-5 pb-0">
         <div class="container">
             <div class="d-flex justify-content-center my-5">
                 <h2>Related Articles</h2>
@@ -62,9 +73,10 @@
                                 <h5 class="card-title">
                                     <a href="">Another Article</a>
                                 </h5>
-                                <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
                                 <p class="card-text">How did the platform help company x save 10x amount of money!</p>
-                                <a href="" class="card-link">Read Now</a>
+                                <a href="javascript:;" class="card-link text-darker icon-move-right">Read Now
+                                    <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -74,8 +86,8 @@
             </div>
         </div>
     </section>
-    <div class="container d-flex justify-content-center mt-sm-5 mt-3">
-        <a href="{{ page.get_parent.url }}" class="btn bg-gradient-primary">View All Blog Posts</a>
+    <div class="container d-flex justify-content-center mt-sm-5 pt-5">
+        <a href="{{ page.get_parent.url }}" class="btn btn-lg bg-gradient-primary">View All Blog Posts</a>
     </div>
     <section class="py-sm-7" id="download-soft-ui">
         <div class="bg-gradient-dark position-relative m-3 border-radius-xl overflow-hidden">
