@@ -1,9 +1,8 @@
 {% extends "layouts/base.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load static %}
 
-{% block body_class %}
-{% endblock body_class %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
     <h1>{{ page.title }}</h1>
@@ -32,14 +31,46 @@
         </div>
     {% endif %}
     <div class="intro">{{ page.intro }}</div>
-    {{ page.body|richtext }}
-    {% for item in page.gallery_images.all %}
-        <div style="float: left; margin: 10px">
-            {% image item.image fill-320x240 %}
-            <p>{{ item.caption }}</p>
+    <section class="my-5 py-5">
+        <div class="container mt-sm-5 mt-3">
+            <div class="row">
+                <div class="col-lg-3 bg-warning">
+                    <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2" style="top: 100px">
+                        <h3>Elements</h3>
+                        <h6 class="text-secondary font-weight-normal pe-3">
+                            70+ carefully crafted small elements that come with multiple
+                            colors and shapes. These are only a few of them.
+                        </h6>
+                    </div>
+                </div>
+                <div class="col-lg-9 bg-success">{{ page.body|richtext }}</div>
+            </div>
         </div>
-    {% endfor %}
-    <p>
-        <a href="{{ page.get_parent.url }}">Return to blog</a>
-    </p>
+    </section>
+    <div class="container d-flex justify-content-center mt-sm-5 mt-3">
+        <a href="{{ page.get_parent.url }}" class="btn bg-gradient-primary">View All Blog Posts</a>
+    </div>
+    <section class="py-sm-7" id="download-soft-ui">
+        <div class="bg-gradient-dark position-relative m-3 border-radius-xl overflow-hidden">
+            <img src="{% static 'assets/img/shapes/waves-white.svg' %}"
+                 alt="pattern-lines"
+                 class="position-absolute start-0 top-md-0 w-100 opacity-6">
+            <div class="container py-7 postion-relative z-index-2 position-relative">
+                <div class="row">
+                    <div class="col-md-7 mx-auto text-center">
+                        <h3 class="text-white mb-0">Do you love this awesome</h3>
+                        <h3 class="text-primary text-gradient mb-4">Design System for Bootstrap 5?</h3>
+                        <p class="text-white mb-5">
+                            Cause if you do, it can be yours for FREE. Hit the button below
+                            to navigate to Creative Tim where you can find the Design System
+                            in HTML. Start a new project or give an old Bootstrap project a
+                            new look!
+                        </p>
+                        <a href="" class="btn bg-gradient-primary mb-3 me-3 mb-sm-0">Sign up for free</a>
+                        <a href="" class="btn bg-white mb-3 mb-sm-0">Talk to Sales</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock content %}
