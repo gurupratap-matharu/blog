@@ -20,6 +20,7 @@ djlint = "^1.31.1"
 safety = "^2.3.5"
 bandit = "^1.7.5"
 ipython = "^8.14.0"
+django-extensions = "^3.2.3"
 
 [build-system]
 requires = ["poetry-core"]
