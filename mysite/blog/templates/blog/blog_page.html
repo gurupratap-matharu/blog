@@ -34,7 +34,7 @@
     <section class="my-5 py-5">
         <div class="container mt-sm-5 mt-3">
             <div class="row">
-                <div class="col-lg-3 bg-warning">
+                <div class="col-lg-3">
                     <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2" style="top: 100px">
                         <h3>Elements</h3>
                         <h6 class="text-secondary font-weight-normal pe-3">
@@ -43,7 +43,34 @@
                         </h6>
                     </div>
                 </div>
-                <div class="col-lg-9 bg-success">{{ page.body|richtext }}</div>
+                <div class="col-lg-9">{{ page.body|richtext }}</div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            <div class="d-flex justify-content-center my-5">
+                <h2>Related Articles</h2>
+            </div>
+            <div class="row">
+                {% for i in '012'|make_list %}
+                    <div class="col-md-4 mt-4">
+                        <div class="card h-100">
+                            <img src="{% static 'assets/img/card-2.jpg' %}" class="card-img-top" alt="Card Header">
+                            <div class="card-body">
+                                <p class="text-gradient text-primary mb-2 text-sm">Luxury Suite • 12 Buses • 3 Trips</p>
+                                <h5 class="card-title">
+                                    <a href="">Another Article</a>
+                                </h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                                <p class="card-text">How did the platform help company x save 10x amount of money!</p>
+                                <a href="" class="card-link">Read Now</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <h5>There are no companies yet.</h5>
+                {% endfor %}
             </div>
         </div>
     </section>
