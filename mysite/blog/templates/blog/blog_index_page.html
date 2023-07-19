@@ -1,26 +1,89 @@
 {% extends "layouts/base.html" %}
 
+{% load static %}
+
 {% load wagtailcore_tags wagtailimages_tags %}
 
-{% block body_class %}
-    template-blogindexpage
-{% endblock body_class %}
-
 {% block content %}
-    <h1>{{ page.title }}</h1>
-    <div class="intro">{{ page.intro|richtext }}</div>
-    {% for post in blogpages %}
-        {% with post=post.specific %}
-            <h2>
-                <a href="{% pageurl post %}">{{ post.title }}</a>
-            </h2>
-            {% with post.main_image as main_image %}
-                {% if main_image %}
-                    {% image main_image fill-160x100 %}
-                {% endif %}
-            {% endwith %}
-            {{ post.intro }}
-            {{ post.body|richtext }}
-        {% endwith %}
-    {% endfor %}
+    <!-- -------- START HEADER 1 w/ text and image on right ------- -->
+    <header>
+        <div class="page-header min-vh-75">
+            <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
+                <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
+                     style="background-image:url({% static 'assets/img/curved-images/curved11.jpg' %})"></div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
+                        <p class="lead text-primary text-gradient">The Falcon Blog</p>
+                        {% with featured=blogpages.first %}
+                            <h1 class="mb-4">{{ featured.title }}</h1>
+                            <a href="{{ featured.url }}" class="card-link text-darker icon-move-right">Read article
+                                <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                            </a>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- -------- END HEADER 1 w/ text and image on right ------ -->
+    <!-- Latest Articles -->
+    <section class="pt-5 pb-0">
+        <div class="container">
+            <div class="d-flex justify-content-center my-5">
+                <h2>Latest Articles</h2>
+            </div>
+            <div class="row">
+                {% for post in blogpages %}
+                    {% with post=post.specific %}
+                        <div class="col-md-4 mt-4">
+                            <div class="card h-100">
+                                <img src="{% static 'assets/img/curved-images/curved6-small.jpg' %}" class="card-img-top" alt="Card Header">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="{% pageurl post %}">{{ post.title }}</a>
+                                    </h5>
+                                    <p class="card-text text-xs">Read Time 3 mins</p>
+                                    <p class="card-text">{{ post.intro }}</p>
+                                    <a href="{% pageurl post %}" class="card-link text-darker icon-move-right">Read Now
+                                        <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% empty %}
+                    <h5>There are no companies yet.</h5>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    {% include "includes/pagination.html" %}
+
+    <!-- Call to Action -->
+    <section class="py-sm-7" id="download-soft-ui">
+        <div class="bg-gradient-dark position-relative m-3 border-radius-xl overflow-hidden">
+            <img src="{% static 'assets/img/shapes/waves-white.svg' %}"
+                 alt="pattern-lines"
+                 class="position-absolute start-0 top-md-0 w-100 opacity-6">
+            <div class="container py-7 postion-relative z-index-2 position-relative">
+                <div class="row">
+                    <div class="col-md-7 mx-auto text-center">
+                        <h3 class="text-white mb-0">Do you love this awesome</h3>
+                        <h3 class="text-primary text-gradient mb-4">Design System for Bootstrap 5?</h3>
+                        <p class="text-white mb-5">
+                            Cause if you do, it can be yours for FREE. Hit the button below
+                            to navigate to Creative Tim where you can find the Design System
+                            in HTML. Start a new project or give an old Bootstrap project a
+                            new look!
+                        </p>
+                        <a href="" class="btn bg-gradient-primary mb-3 me-3 mb-sm-0">Sign up for free</a>
+                        <a href="" class="btn bg-white mb-3 mb-sm-0">Talk to Sales</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock content %}
