@@ -1,6 +1,7 @@
 import logging
 
 from django import forms
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
@@ -19,20 +20,33 @@ logger = logging.getLogger(__name__)
 
 class BlogIndexPage(Page):
     page_description = "Use this page to show a list of blog posts"
-
     intro = RichTextField(blank=True)
     content_panels = Page.content_panels + [FieldPanel("intro")]
+
+    class Meta:
+        verbose_name = "blogindexpage"
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
-        blogpages = self.get_children().live().order_by("-first_published_at")  # type: ignore
+        qs = self.get_children().live().order_by("-first_published_at")
+        paginator = Paginator(qs, 3)
+        page = request.GET.get("page")
+
+        try:
+            blogpages = paginator.page(page)
+
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            blogpages = paginator.page(1)
+
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page.
+            blogpages = paginator.page(paginator.num_pages)
+
         context["blogpages"] = blogpages
 
         return context
-
-    class Meta:
-        verbose_name = "blogindexpage"
 
 
 class BlogPageTag(TaggedItemBase):
