@@ -22,11 +22,11 @@
                                     {% for p in self.get_ancestors %}
                                         {% if p.is_root == False %}
                                             <li class="breadcrumb-item">
-                                                <a href="{{ p.url }}">{{ p.title }}</a>
+                                                <a href="{{ p.url }}">{{ p.title|title }}</a>
                                             </li>
                                         {% endif %}
                                     {% endfor %}
-                                    <li class="breadcrumb-item active" aria-current="page">sales</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Sales</li>
                                 </ol>
                             {% endif %}
                         </nav>
@@ -53,7 +53,7 @@
                 <div class="col-lg-3">
                     <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2" style="top: 100px">
                         <a data-bs-toggle="collapse" href="#tableOfContents" role="button" aria-expanded="false" aria-controls="tableOfContents">
-                            <h5 class="ms-3 py-3">Table of contents</h5>
+                            <h5 class="ms-3 pb-3">Table of contents</h5>
                         </a>
                         <div class="collapse show" id="tableOfContents">
                             <div class="list-group list-group-flush">
