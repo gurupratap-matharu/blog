@@ -30,21 +30,12 @@ class BlogIndexPage(Page):
         context = super().get_context(request, *args, **kwargs)
 
         qs = self.get_children().live().order_by("-first_published_at")
-        paginator = Paginator(qs, 3)
-        page = request.GET.get("page")
 
-        try:
-            blogpages = paginator.page(page)
+        paginator = Paginator(qs, 9)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
 
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            blogpages = paginator.page(1)
-
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page.
-            blogpages = paginator.page(paginator.num_pages)
-
-        context["blogpages"] = blogpages
+        context["posts"] = context["page_obj"] = page_obj
 
         return context
 
