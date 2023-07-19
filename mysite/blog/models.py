@@ -36,7 +36,7 @@ class BlogIndexPage(Page):
         page_obj = paginator.get_page(page_number)
 
         context["posts"] = context["page_obj"] = page_obj
-
+        context["featured"] = qs.first()
         return context
 
 

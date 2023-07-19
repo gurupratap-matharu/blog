@@ -16,12 +16,10 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
                         <p class="lead text-primary text-gradient">The Falcon Blog</p>
-                        {% with featured=posts.first %}
-                            <h1 class="mb-4">{{ featured.title }}</h1>
-                            <a href="{{ featured.url }}" class="card-link text-darker icon-move-right">Read article
-                                <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
-                            </a>
-                        {% endwith %}
+                        <h1 class="mb-4">{{ featured.title }}</h1>
+                        <a href="{{ featured.url }}" class="card-link text-darker icon-move-right">Read article
+                            <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                        </a>
                     </div>
                 </div>
             </div>
