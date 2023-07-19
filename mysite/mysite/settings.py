@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.sitemaps",
+    # Third part
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
