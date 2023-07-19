@@ -1,3 +1,5 @@
+import logging
+
 from django import forms
 from django.db import models
 
@@ -7,9 +9,12 @@ from wagtail.models import Orderable, Page
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
+from bs4 import BeautifulSoup
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
+
+logger = logging.getLogger(__name__)
 
 
 class BlogIndexPage(Page):
@@ -103,6 +108,11 @@ class BlogPage(Page):
         gallery_item = self.gallery_images.first()
 
         return gallery_item.image if gallery_item else None
+
+    def toc(self):
+        """Get table of contents for a page"""
+        bs = BeautifulSoup(self.body)
+        return [e.get_text().strip() for e in bs.find_all("h2")]
 
 
 class BlogPageGalleryImage(Orderable):
