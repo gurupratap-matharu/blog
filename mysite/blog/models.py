@@ -1,11 +1,11 @@
 import logging
 
 from django import forms
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.core.paginator import Paginator
 from django.db import models
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable, Page
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
@@ -14,6 +14,8 @@ from bs4 import BeautifulSoup
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
+
+from blog.blocks import CommonContentBlock
 
 logger = logging.getLogger(__name__)
 
@@ -172,3 +174,17 @@ class LandingPage(Page):
 
     class Meta:
         verbose_name = "landingpage"
+
+
+class DocsPage(Page):
+    page_description = "Use this page to write awesome documentation"
+
+    author = models.CharField(max_length=255)
+    date = models.DateField("Post Date")
+    body = StreamField(CommonContentBlock(), use_json_field=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel("author"),
+        FieldPanel("date"),
+        FieldPanel("body"),
+    ]
