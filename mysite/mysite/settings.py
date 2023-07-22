@@ -29,9 +29,7 @@ DEBUG = int(os.getenv("DEBUG", default=0))
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="").split(" ")
 
 INSTALLED_APPS = [
-    "blog.apps.BlogConfig",
-    "home",
-    "search",
+    # Wagtail
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -44,7 +42,7 @@ INSTALLED_APPS = [
     "wagtail.admin",
     "wagtail",
     "modelcluster",
-    "taggit",
+    # Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -53,8 +51,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.sitemaps",
-    # Third part
+    # Third party
     "django_extensions",
+    "taggit",
+    # Local
+    "blog.apps.BlogConfig",
+    "home",
+    "search",
 ]
 
 MIDDLEWARE = [
@@ -74,7 +77,6 @@ ROOT_URLCONF = "mysite.urls"
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
 DEFAULT_FROM_EMAIL = "noreply@falconhunt.xyz"
 DEFAULT_TO_EMAIL = "gurupratap.matharu@gmail.com"
 SERVER_EMAIL = "wagtail@falconhunt.xyz"
