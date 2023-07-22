@@ -171,10 +171,3 @@ class BlogCategory(models.Model):
 
     class Meta:
         verbose_name_plural = "blog categories"
-
-
-class LandingPage(Page):
-    page_description = "Use this page for converting users"
-
-    class Meta:
-        verbose_name = "landingpage"
