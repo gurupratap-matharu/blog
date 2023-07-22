@@ -29,6 +29,10 @@ DEBUG = int(os.getenv("DEBUG", default=0))
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="").split(" ")
 
 INSTALLED_APPS = [
+    # Local
+    "home",
+    "search",
+    "blog.apps.BlogConfig",
     # Wagtail
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -54,10 +58,6 @@ INSTALLED_APPS = [
     # Third party
     "django_extensions",
     "taggit",
-    # Local
-    "blog.apps.BlogConfig",
-    "home",
-    "search",
 ]
 
 MIDDLEWARE = [
