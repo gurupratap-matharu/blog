@@ -11,12 +11,13 @@ class PersonBlock(blocks.StructBlock):
 
     class Meta:
         icon = "user"
+        template = "blog/blocks/person.html"
 
 
 class CommonContentBlock(blocks.StreamBlock):
     heading = blocks.CharBlock(form_classname="title")
-    paragraph = blocks.TextBlock()
-    image = ImageChooserBlock()
+    paragraph = blocks.RichTextBlock()
+    image = ImageChooserBlock(template="blog/blocks/image.html")
     gallery = blocks.ListBlock(ImageChooserBlock())
     link = blocks.URLBlock()
     embed = EmbedBlock(
@@ -28,5 +29,5 @@ class CommonContentBlock(blocks.StreamBlock):
     time = blocks.TimeBlock()
     boolean = blocks.BooleanBlock()
     html = blocks.RawHTMLBlock()
-    blockquote = blocks.BlockQuoteBlock(form_classname="blockquote")
+    blockquote = blocks.BlockQuoteBlock(template="blog/blocks/blockquote.html")
     person = PersonBlock()

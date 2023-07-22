@@ -67,9 +67,12 @@ class BlogTagIndexPage(Page):
 class BlogPage(Page):
     page_description = "Use this page to write a single blog post"
 
+    author = models.CharField(max_length=255)
     date = models.DateField("Post date")
     intro = models.CharField(max_length=250)
-    body = RichTextField(blank=True)
+
+    body = StreamField(CommonContentBlock(), use_json_field=True)
+
     feed_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -88,6 +91,7 @@ class BlogPage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel(
             [
+                FieldPanel("author"),
                 FieldPanel("date"),
                 FieldPanel("tags"),
                 FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
@@ -174,17 +178,3 @@ class LandingPage(Page):
 
     class Meta:
         verbose_name = "landingpage"
-
-
-class DocsPage(Page):
-    page_description = "Use this page to write awesome documentation"
-
-    author = models.CharField(max_length=255)
-    date = models.DateField("Post Date")
-    body = StreamField(CommonContentBlock(), use_json_field=True)
-
-    content_panels = Page.content_panels + [
-        FieldPanel("author"),
-        FieldPanel("date"),
-        FieldPanel("body"),
-    ]

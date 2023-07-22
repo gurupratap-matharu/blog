@@ -117,46 +117,38 @@
                     </div>
                 </div>
                 <div class="col-lg-9">
-                    <article>
-                        {% for block in page.body %}
-                            {% if block.block_type == 'paragraph' %}
-                                <p>{{ block.value }}</p>
-                            {% elif block.block_type == 'gallery' %}
-                                <!-- Gallery -->
-                                <div class="container">
-                                    <div class="row">
+                    <div class="container px-5">
+                        <article>
+                            {% for block in page.body %}
+                                {% if block.block_type == 'paragraph' %}
+                                    <p>{{ block.value }}</p>
+                                {% elif block.block_type == 'gallery' %}
+                                    <!-- Gallery -->
+                                    <div class="row my-5">
                                         {% for img in block.value %}
-                                            <div class="col-sm-12 col-md-4 col-lg-3">{% image img original class="rounded img-thumbnail img-fluid" %}</div>
+                                            <div class="col-12 col-md-4 col-lg-3">{% image img original class="rounded img-thumbnail img-fluid" %}</div>
                                         {% endfor %}
                                     </div>
-                                </div>
-                            {% elif block.block_type == 'heading' %}
-                                <!-- Headings -->
-                                <h2>{{ block.value }}</h2>
-                            {% elif block.block_type == 'blockquote' %}
-                                <figure>
-                                    <blockquote class="blockquote">
-                                        <p class="lead ps-2">
-                                            <strong>{{ block.value }}</strong>
-                                        </p>
-                                    </blockquote>
-                                </figure>
-                            {% else %}
-                                {% include_block block %}
-                            {% endif %}
-                        {% endfor %}
-                    </article>
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="mt-3">Boost creativity</h2>
-                            <p>
-                                The easiest way to get started is to use one of our
-                                pre-built example pages. Get started with Falcon Routing today to maximize every revenue opportunity, get to each meeting milestone faster, and win more deals.
-                            </p>
-                            <a href="javascript:;" class="btn btn-icon bg-gradient-primary mt-3 mb-0">
-                                Talk to Sales
-                                <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
-                            </a>
+                                {% elif block.block_type == 'heading' %}
+                                    <!-- Headings -->
+                                    <h2>{{ block.value }}</h2>
+                                {% else %}
+                                    {% include_block block %}
+                                {% endif %}
+                            {% endfor %}
+                        </article>
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="mt-3">Boost creativity</h2>
+                                <p>
+                                    The easiest way to get started is to use one of our
+                                    pre-built example pages. Get started with Falcon Routing today to maximize every revenue opportunity, get to each meeting milestone faster, and win more deals.
+                                </p>
+                                <a href="javascript:;" class="btn btn-icon bg-gradient-primary mt-3 mb-0">
+                                    Talk to Sales
+                                    <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
