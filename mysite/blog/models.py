@@ -68,10 +68,11 @@ class BlogPage(Page):
     page_description = "Use this page to write a single blog post"
 
     author = models.CharField(max_length=255)
-    date = models.DateField("Post date")
-    intro = models.CharField(max_length=250)
+    date = models.DateField("Post date", blank=True, null=True)
+    intro = models.CharField(max_length=255)
+    subtitle = models.CharField(max_length=255, blank=True)
 
-    body = StreamField(CommonContentBlock(), use_json_field=True)
+    body = StreamField(CommonContentBlock(), verbose_name="Page body", blank=True, use_json_field=True)
 
     feed_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -79,6 +80,7 @@ class BlogPage(Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
+        help_text="Landscape mode only; horizontal width between 1000px to 3000px"
     )
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
     categories = ParentalManyToManyField("blog.BlogCategory", blank=True)
@@ -99,6 +101,7 @@ class BlogPage(Page):
             heading="Blog information",
         ),
         FieldPanel("intro"),
+        FieldPanel("subtitle"),
         FieldPanel("body"),
         InlinePanel("gallery_images", label="Gallery images"),
         InlinePanel("related_links", heading="Related links", label="Related links"),
