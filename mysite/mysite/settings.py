@@ -33,9 +33,10 @@ INSTALLED_APPS = [
     "home",
     "search",
     "blog.apps.BlogConfig",
-    # Wagtail
+    # Wagtail contrib
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
+    # Wagtail core
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
+    "wagtail.locales",
     "wagtail",
     "modelcluster",
     # Django
@@ -182,7 +184,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "FalconHunt"
+WAGTAIL_SITE_NAME = "Falcon"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
@@ -194,7 +196,15 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "https://falconhunt.xyz"
+WAGTAILADMIN_BASE_URL = "http://localhost:8000"
+
+WAGTAIL_I18N_ENABLED = True
+
+WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
+    ("en", "English"),
+    ("es", "Spanish"),
+]
+
 
 CSRF_TRUSTED_ORIGINS = ["https://*.falconhunt.xyz", "https://*.127.0.0.1"]
 
