@@ -21,6 +21,7 @@ safety = "^2.3.5"
 bandit = "^1.7.5"
 ipython = "^8.14.0"
 django-extensions = "^3.2.3"
+django-debug-toolbar = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]
