@@ -72,7 +72,9 @@ class BlogPage(Page):
     intro = models.CharField(max_length=255)
     subtitle = models.CharField(max_length=255, blank=True)
 
-    body = StreamField(CommonContentBlock(), verbose_name="Page body", blank=True, use_json_field=True)
+    body = StreamField(
+        CommonContentBlock(), verbose_name="Page body", blank=True, use_json_field=True
+    )
 
     feed_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -80,7 +82,7 @@ class BlogPage(Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        help_text="Landscape mode only; horizontal width between 1000px to 3000px"
+        help_text="Landscape mode only; horizontal width between 1000px to 3000px",
     )
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
     categories = ParentalManyToManyField("blog.BlogCategory", blank=True)
