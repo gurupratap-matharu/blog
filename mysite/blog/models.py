@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.db import models
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.contrib.routable_page.models import RoutablePageMixin
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable, Page
 from wagtail.search import index
@@ -39,7 +39,7 @@ class BlogIndexPage(RoutablePageMixin, Page):
     ]
 
     # Specify that only blog pages can be children of this blogindex page
-    subpage_types = ["BlogPage"]
+    subpage_types = ["BlogPage", "BlogTagIndexPage"]
 
     class Meta:
         verbose_name = "blogindexpage"
@@ -60,6 +60,12 @@ class BlogIndexPage(RoutablePageMixin, Page):
 
 
 class BlogPageTag(TaggedItemBase):
+    """
+    This model allows us to create a many-to-many relationship between
+    the BlogPage object and tags. There's a longer guide on using it at
+    https://docs.wagtail.org/en/stable/reference/pages/model_recipes.html#tagging
+    """
+
     content_object = ParentalKey(
         "BlogPage", related_name="tagged_items", on_delete=models.CASCADE
     )
