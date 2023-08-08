@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     # Wagtail contrib
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
+    "wagtail.contrib.routable_page",
     # Wagtail core
     "wagtail.embeds",
     "wagtail.sites",
