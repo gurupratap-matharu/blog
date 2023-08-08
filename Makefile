@@ -1,14 +1,15 @@
-.PHONY: collectstatic run test ci install install-dev migrations staticfiles
+.PHONY: collectstatic run test ci install install-dev migrations staticfiles lint format
 
 help:
 	@echo "Available commands"
-	@echo " - ci               : lints, migrations, tests, coverage"
-	@echo " - install          : installs production requirements"
-	@echo " - isort            : sorts all imports of the project"
-	@echo " - lint             : lints the codebase"
-	@echo " - runserver              : runs the development server"
-	@echo " - setup-test-data  : erases the db and loads mock data"
-	@echo " - shellplus        : runs the development shell"
+	@echo "ci - lints, migrations, tests, coverage"
+	@echo "install - installs production requirements"
+	@echo "isort - sorts all imports of the project"
+	@echo "runserver - runs the development server"
+	@echo "setup-test-data - erases the db and loads mock data"
+	@echo "shellplus - runs the development shell"
+	@echo "lint - check style with black, flake8, sort python with isort, and indent html"
+	@echo "format - enforce a consistent code style across the codebase and sort python files with isort"
 
 collectstatic:
 	python mysite/manage.py collectstatic --noinput
@@ -54,15 +55,16 @@ runserver:
 
 build: install makemigrations migrate runserver
 
-isort:
-	poetry run isort . --check-only --profile black
-
 format:
-	poetry run black . --check 
+	black --target-version py37 .
+	isort .
+	git ls-files '*.html' | xargs djlint --reformat
 
-lint: isort format
-	poetry run ruff .
-	djlint .
+lint:
+	black --target-version py37 --check --diff .
+	ruff .
+	isort --check-only --diff .
+	git ls-files '*.html' | xargs djlint --check
 
 test: check migrations-check
 	coverage run --source='.' mysite/manage.py test
@@ -107,3 +109,4 @@ logs:
 	@sudo journalctl -fu wagtail.service
 	
 
+	
