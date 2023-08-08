@@ -23,10 +23,32 @@ logger = logging.getLogger(__name__)
 class BlogIndexPage(Page):
     page_description = "Use this page to show a list of blog posts"
     intro = RichTextField(blank=True)
-    content_panels = Page.content_panels + [FieldPanel("intro")]
+
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Landscape mode only; horizontal width between 1000px to 3000px.",
+    )
+    content_panels = Page.content_panels + [
+        FieldPanel("intro"),
+        FieldPanel("image"),
+    ]
+
+    # Specify that only blog pages can be children of this blogindex page
+    subpage_types = ["BlogPage"]
 
     class Meta:
         verbose_name = "blogindexpage"
+
+    def get_children(self):
+        """
+        Return all the children (BlogPage) objects of this page.
+        """
+
+        return self.get_children().specific().live()
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -129,6 +151,22 @@ class BlogPage(Page):
         """Get table of contents for a page"""
         bs = BeautifulSoup(self.body)
         return [e.get_text().strip() for e in bs.find_all("h2")]
+
+    @property
+    def get_tags(self):
+        """
+        Find all the tags that
+        are related to the blog post into a list we can access on the template.
+        We're additionally adding a URL to access BlogPage objects with that tag
+        """
+
+        base_url = self.get_parent().url
+        tags = self.tags.all()
+
+        for tag in tags:
+            tag.url = f"{base_url}tags/{tag.slug}/"
+
+        return tags
 
 
 class BlogPageGalleryImage(Orderable):
