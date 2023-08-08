@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.db import models
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable, Page
 from wagtail.search import index
@@ -20,7 +21,7 @@ from blog.blocks import CommonContentBlock
 logger = logging.getLogger(__name__)
 
 
-class BlogIndexPage(Page):
+class BlogIndexPage(RoutablePageMixin, Page):
     page_description = "Use this page to show a list of blog posts"
     intro = RichTextField(blank=True)
 
@@ -43,13 +44,6 @@ class BlogIndexPage(Page):
     class Meta:
         verbose_name = "blogindexpage"
 
-    def get_children(self):
-        """
-        Return all the children (BlogPage) objects of this page.
-        """
-
-        return self.get_children().specific().live()
-
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
@@ -60,7 +54,8 @@ class BlogIndexPage(Page):
         page_obj = paginator.get_page(page_number)
 
         context["posts"] = context["page_obj"] = page_obj
-        context["featured"] = qs.first()
+        context["featured"] = qs.first()  # <- TODO: Improve this
+
         return context
 
 
