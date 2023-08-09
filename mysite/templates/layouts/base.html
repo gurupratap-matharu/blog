@@ -6,6 +6,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="{% if page.search_description %}{{ page.search_description }}{% endif %}">
         <link rel="apple-touch-icon" sizes="76x76" href="{% static "assets/img/apple-icon.png" %}" />
         <link rel="icon" type="image/png" href="{% static "assets/img/favicon.png" %}" />
         <title>
@@ -46,8 +47,18 @@
 
         {% include "includes/navigation.html" %}
 
-        {% block content %}
-        {% endblock content %}
+        {% block messages %}
+
+            {% include "includes/messages.html" %}
+
+        {% endblock messages %}
+
+        <main>
+
+            {% block content %}
+            {% endblock content %}
+
+        </main>
 
         {% include "includes/footer.html" %}
 
