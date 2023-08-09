@@ -1,0 +1,9 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+    {% include "base/includes/header-hero.html" %}
+
+    {% if page.introduction %}<p>{{ page.introduction }}</p>{% endif %}
+    {{ page.body }}
+{% endblock content %}
