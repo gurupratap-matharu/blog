@@ -1,15 +1,17 @@
 from django.db import models
 
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
+from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.contrib.settings.models import (
     BaseGenericSetting,
     BaseSiteSetting,
     register_setting,
 )
-from wagtail.fields import StreamField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
 
 from base.blocks import BaseStreamBlock
+from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 
@@ -42,6 +44,48 @@ class StandardPage(Page):
         FieldPanel("introduction"),
         FieldPanel("image"),
         FieldPanel("body"),
+    ]
+
+
+class FormField(AbstractFormField):
+    """
+    One FormPage can have many FormFields. Here we declare the parentalkey (foreign key)
+    for our form.
+    """
+
+    page = ParentalKey("FormPage", related_name="form_fields", on_delete=models.CASCADE)
+
+
+class FormPage(AbstractEmailForm):
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+    body = StreamField(BaseStreamBlock(), use_json_field=True)
+    thank_you_text = RichTextField(blank=True)
+
+    # Veer note how we include the FormField obj via an InlinePanel using the
+    # related_name value
+    content_panels = AbstractEmailForm.content_panels + [
+        FieldPanel("image"),
+        FieldPanel("body"),
+        InlinePanel("form_fields", heading="Form fields", label="Field"),
+        FieldPanel("thank_you_text"),
+        MultiFieldPanel(
+            [
+                FieldRowPanel(
+                    [
+                        FieldPanel("from_address"),
+                        FieldPanel("to_address"),
+                    ]
+                ),
+                FieldPanel("subject"),
+            ],
+            "Email",
+        ),
     ]
 
 
