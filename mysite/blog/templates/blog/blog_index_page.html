@@ -5,7 +5,7 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    <!-- -------- START HEADER 1 w/ text and image on right ------- -->
+    {% comment "Header 1 with text and image on right" %}{% endcomment %}
     <header>
         <div class="page-header min-vh-75">
             <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
@@ -25,8 +25,7 @@
             </div>
         </div>
     </header>
-    <!-- -------- END HEADER 1 w/ text and image on right ------ -->
-    <!-- Top Articles -->
+    {% comment "Top Articles" %}{% endcomment %}
     <section class="py-5 my-5 bg-gray-100">
         <div class="container">
             <div class="row">
@@ -84,7 +83,7 @@
             </div>
         </div>
     </section>
-    <!-- Latest Articles -->
+    {% comment "Latest Articles" %}{% endcomment %}
     <section class="pt-5 pb-0">
         <div class="container">
             <div class="d-flex justify-content-center my-5">
@@ -118,7 +117,7 @@
 
     {% include "includes/pagination.html" %}
 
-    <!-- Call to Action -->
+    {% comment "Call to Action" %}{% endcomment %}
     <section class="py-sm-7" id="download-soft-ui">
         <div class="bg-gradient-dark position-relative m-3 border-radius-xl overflow-hidden">
             <img src="{% static 'assets/img/shapes/waves-white.svg' %}"
