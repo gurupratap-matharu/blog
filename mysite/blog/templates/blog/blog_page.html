@@ -5,7 +5,7 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    <!-- -------- START HEADER 1 w/ text and image on right ------- -->
+    {% comment "Header 1 with text and image on right" %}{% endcomment %}
     <header>
         <div class="page-header min-vh-75">
             <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
@@ -15,7 +15,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-                        <!-- Breadcrumbs -->
+                        {% comment "Breadcrumbs" %}{% endcomment %}
                         <nav aria-label="breadcrumb">
                             {% if self.get_ancestors|length > 1 %}
                                 <ol class="breadcrumb bg-white ms-0 ps-1">
@@ -30,7 +30,6 @@
                                 </ol>
                             {% endif %}
                         </nav>
-                        <!-- Breadcrumbs End -->
                         <h1 class="mb-4">{{ page.title }}</h1>
                         <p>Read Time: 8 mins</p>
                         <div class="author align-items-center">
@@ -45,12 +44,12 @@
             </div>
         </div>
     </header>
-    <!-- -------- END HEADER 1 w/ text and image on right ------ -->
+    {% comment "Main content" %}{% endcomment %}
     <section class="my-5 py-5">
         <div class="container mt-sm-5 mt-3">
             <div class="row">
                 <div class="col-lg-3">
-                    <!-- TOC -->
+                    {% comment "Table of contents" %}{% endcomment %}
                     <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2" style="top: 100px">
                         <a data-bs-toggle="collapse" href="#tableOfContents" role="button" aria-expanded="false" aria-controls="tableOfContents">
                             <h5 class="ms-3 pb-3">Table of contents</h5>
@@ -100,7 +99,7 @@
             </div>
         </div>
     </section>
-    <!-- Related Articles -->
+    {% comment "Related Articles" %}{% endcomment %}
     <section class="pt-5 pb-0">
         <div class="container">
             <div class="d-flex justify-content-center my-5">
@@ -124,7 +123,7 @@
                         </div>
                     </div>
                 {% empty %}
-                    <h5>There are no companies yet.</h5>
+                    <h5>There are no articles to show.</h5>
                 {% endfor %}
             </div>
         </div>
@@ -132,6 +131,7 @@
     <div class="container d-flex justify-content-center mt-sm-5 pt-5">
         <a href="{{ page.get_parent.url }}" class="btn btn-lg bg-gradient-primary">View All Blog Posts</a>
     </div>
+    {% comment "Call to action" %}{% endcomment %}
     <section class="py-sm-7" id="download-soft-ui">
         <div class="bg-gradient-dark position-relative m-3 border-radius-xl overflow-hidden">
             <img src="{% static 'assets/img/shapes/waves-white.svg' %}"
