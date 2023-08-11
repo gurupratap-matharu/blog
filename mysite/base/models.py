@@ -2,6 +2,7 @@ from django.db import models
 
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
+from wagtail.contrib.forms.panels import FormSubmissionsPanel
 from wagtail.contrib.settings.models import (
     BaseGenericSetting,
     BaseSiteSetting,
@@ -70,6 +71,7 @@ class FormPage(AbstractEmailForm):
     # Veer note how we include the FormField obj via an InlinePanel using the
     # related_name value
     content_panels = AbstractEmailForm.content_panels + [
+        FormSubmissionsPanel(),
         FieldPanel("image"),
         FieldPanel("body"),
         InlinePanel("form_fields", heading="Form fields", label="Field"),
