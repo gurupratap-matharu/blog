@@ -1,0 +1,54 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+    <header>
+        <div class="page-header min-vh-85">
+            <div>
+                <img class="position-absolute fixed-top ms-auto w-50 h-100 z-index-0 d-none d-sm-none d-md-block border-radius-section border-top-end-radius-0 border-top-start-radius-0 border-bottom-end-radius-0"
+                     src="{% static 'assets/img/curved-images/curved8.jpg' %}"
+                     alt="image">
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 d-flex justify-content-center flex-column">
+                        <div class="card d-flex blur justify-content-center p-4 shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
+                            <div class="text-center">
+                                <h3 class="text-gradient text-primary">{{ page.title }}</h3>
+                                <p class="mb-0">
+                                    For further questions, including partnership opportunities, please email hello@falconhunt.xyz
+                                    or contact using our contact form.
+                                </p>
+                            </div>
+                            <form action="{% pageurl page %}" id="contact-form" method="post" autocomplete="off">
+                                {% csrf_token %}
+                                <div class="card-body pb-2">
+                                    {{ form.non_field_errors }}
+                                    <div class="row">
+                                        {% for field in form.visible_fields %}
+                                            <div class="col-12 mb-3">
+                                                {{ field.label_tag }}
+                                                <div class="text-danger">{{ field.errors }}</div>
+                                                {{ field }}
+                                                <div class="form-text ms-2">{{ field.help_text|safe }}</div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-end">
+                                            <a href="/" class="btn mt-3 me-2 mb-0">Cancel</a>
+                                            <button type="submit" class="btn bg-gradient-primary mt-3 mb-0">Send</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock content %}

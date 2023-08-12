@@ -1,7 +1,15 @@
+import logging
+import pdb
+
 from django.db import models
+from django.forms import widgets
 
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
-from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
+from wagtail.contrib.forms.models import (
+    FORM_FIELD_CHOICES,
+    AbstractEmailForm,
+    AbstractFormField,
+)
 from wagtail.contrib.forms.panels import FormSubmissionsPanel
 from wagtail.contrib.settings.models import (
     BaseGenericSetting,
@@ -14,6 +22,8 @@ from wagtail.models import Page
 from base.blocks import BaseStreamBlock
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
+
+logger = logging.getLogger(__name__)
 
 
 class StandardPage(Page):
@@ -54,10 +64,18 @@ class FormField(AbstractFormField):
     for our form.
     """
 
+    field_type = models.CharField(
+        verbose_name="field type",
+        max_length=16,
+        choices=list(FORM_FIELD_CHOICES) + [("image", "Upload Image")],
+    )
+
     page = ParentalKey("FormPage", related_name="form_fields", on_delete=models.CASCADE)
 
 
 class FormPage(AbstractEmailForm):
+    page_description = "Use this page to create a simple form"
+
     image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -89,6 +107,20 @@ class FormPage(AbstractEmailForm):
             "Email",
         ),
     ]
+
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+
+        for name, field in form.fields.items():
+            if isinstance(field.widget, widgets.Textarea):
+                field.widget.attrs.update({"rows": "5"})
+
+            attrs = field.widget.attrs
+            css_classes = attrs.get("class", "").split()
+            css_classes.append("form-control")
+            attrs.update({"class": " ".join(css_classes)})
+
+        return form
 
 
 @register_setting
