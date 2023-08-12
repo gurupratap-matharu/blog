@@ -18,12 +18,9 @@
                         <div class="card d-flex blur justify-content-center p-4 shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
                             <div class="text-center">
                                 <h3 class="text-gradient text-primary">{{ page.title }}</h3>
-                                <p class="mb-0">
-                                    For further questions, including partnership opportunities, please email hello@falconhunt.xyz
-                                    or contact using our contact form.
-                                </p>
+                                <p class="mb-0">{{ page.body }}</p>
                             </div>
-                            <form action="{% pageurl page %}" id="contact-form" method="post" autocomplete="off">
+                            <form action="{% pageurl page %}" id="contact-form" method="post" autocomplete="off" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="card-body pb-2">
                                     {{ form.non_field_errors }}
@@ -40,7 +37,7 @@
                                     <div class="row">
                                         <div class="col-md-12 text-end">
                                             <a href="/" class="btn mt-3 me-2 mb-0">Cancel</a>
-                                            <button type="submit" class="btn bg-gradient-primary mt-3 mb-0">Send</button>
+                                            <button type="submit" class="btn bg-gradient-primary mt-3 mb-0" tabindex="0">Send</button>
                                         </div>
                                     </div>
                                 </div>

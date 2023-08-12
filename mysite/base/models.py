@@ -1,10 +1,11 @@
 import logging
-import pdb
+from os.path import splitext
 
 from django.db import models
 from django.forms import widgets
 
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
+from wagtail.contrib.forms.forms import FormBuilder
 from wagtail.contrib.forms.models import (
     FORM_FIELD_CHOICES,
     AbstractEmailForm,
@@ -17,13 +18,17 @@ from wagtail.contrib.settings.models import (
     register_setting,
 )
 from wagtail.fields import RichTextField, StreamField
-from wagtail.models import Page
+from wagtail.images import get_image_model
+from wagtail.images.fields import WagtailImageField
+from wagtail.models import Collection, Page
 
 from base.blocks import BaseStreamBlock
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 logger = logging.getLogger(__name__)
+
+ImageModel = get_image_model()
 
 
 class StandardPage(Page):
@@ -73,8 +78,14 @@ class FormField(AbstractFormField):
     page = ParentalKey("FormPage", related_name="form_fields", on_delete=models.CASCADE)
 
 
+class CustomFormBuilder(FormBuilder):
+    def create_image_field(self, field, options):
+        return WagtailImageField(**options)
+
+
 class FormPage(AbstractEmailForm):
     page_description = "Use this page to create a simple form"
+    form_builder = CustomFormBuilder
 
     image = models.ForeignKey(
         "wagtailimages.Image",
@@ -83,8 +94,15 @@ class FormPage(AbstractEmailForm):
         on_delete=models.SET_NULL,
         related_name="+",
     )
-    body = StreamField(BaseStreamBlock(), use_json_field=True)
+    body = StreamField(BaseStreamBlock(), use_json_field=True, blank=True)
     thank_you_text = RichTextField(blank=True)
+
+    uploaded_image_collection = models.ForeignKey(
+        "wagtailcore.Collection",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
 
     # Veer note how we include the FormField obj via an InlinePanel using the
     # related_name value
@@ -94,6 +112,7 @@ class FormPage(AbstractEmailForm):
         FieldPanel("body"),
         InlinePanel("form_fields", heading="Form fields", label="Field"),
         FieldPanel("thank_you_text"),
+        FieldPanel("uploaded_image_collection"),
         MultiFieldPanel(
             [
                 FieldRowPanel(
@@ -121,6 +140,85 @@ class FormPage(AbstractEmailForm):
             attrs.update({"class": " ".join(css_classes)})
 
         return form
+
+    @staticmethod
+    def get_image_title(filename):
+        """
+        Generates a usable title from the filename of an image upload.
+        Note: The filename will be provided as a 'path/to/file.jpg'
+        """
+
+        if not filename:
+            return
+
+        result = splitext(filename)[0]
+        result = result.replace("-", " ").replace("_", " ").title()
+
+        logger.info("image_title: %s" % result)
+
+        return result.title()
+
+    def get_uploaded_image_collection(self):
+        """
+        Returns a Wagtail Collection, using this form's saved value if present,
+        otherwise returns the 'Root' Collection.
+        """
+
+        collection = self.uploaded_image_collection
+        return collection or Collection.get_first_root_node()
+
+    def process_form_submission(self, form):
+        """
+        If an Image upload is found, pull out the files data, create an actual
+        Wagtail Image and reference its ID in the stored form response.
+        """
+
+        cleaned_data = form.cleaned_data
+
+        logger.info("cleaned_data:%s" % cleaned_data)
+
+        for name, field in form.fields.items():
+            if isinstance(field, WagtailImageField):
+                image_file_data = cleaned_data[name]
+
+                if image_file_data:
+                    kwargs = {
+                        "file": cleaned_data[name],
+                        "title": self.get_image_title(cleaned_data[name].name),
+                        "collection": self.get_uploaded_image_collection(),
+                    }
+
+                    if form.user and not form.user.is_anonymous:
+                        kwargs["uploaded_by_user"] = form.user
+
+                    logger.info("kwargs:%s" % kwargs)
+                    logger.info("creating image...")
+
+                    image = ImageModel(**kwargs)
+                    image.save()
+                    # saving the image id
+                    # alternatively we can store a path to the image via image.get_rendition
+
+                    logger.info("created image:%s..." % image.pk)
+
+                    cleaned_data.update({name: image.pk})
+
+                else:
+                    # remove the value from the data
+                    logger.warn("image_file_data is None...")
+                    del cleaned_data[name]
+
+        submission = self.get_submission_class().objects.create(
+            form_data=cleaned_data, page=self
+        )
+
+        logger.info("submission:%s" % submission)
+
+        # important: if extending AbstractEmailForm, email logic must be re-added here
+        if self.to_address:
+            self.send_mail(form)
+
+        return submission
 
 
 @register_setting
