@@ -23,6 +23,7 @@ from wagtail.images.fields import WagtailImageField
 from wagtail.models import Collection, Page
 
 from base.blocks import BaseStreamBlock
+from base.views import CustomSubmissionsListView
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
@@ -86,6 +87,7 @@ class CustomFormBuilder(FormBuilder):
 class FormPage(AbstractEmailForm):
     page_description = "Use this page to create a simple form"
     form_builder = CustomFormBuilder
+    submissions_list_view_class = CustomSubmissionsListView
 
     image = models.ForeignKey(
         "wagtailimages.Image",
