@@ -12,7 +12,7 @@
                      src="{% static 'assets/img/curved-images/curved8.jpg' %}"
                      alt="image">
             </div>
-            <div class="container">
+            <div class="container mt-4">
                 <div class="row">
                     <div class="col-lg-7 d-flex justify-content-center flex-column">
                         <div class="card d-flex blur justify-content-center p-4 shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
@@ -20,7 +20,11 @@
                                 <h3 class="text-gradient text-primary">{{ page.title }}</h3>
                                 <p class="mb-0">{{ page.body }}</p>
                             </div>
-                            <form action="{% pageurl page %}" id="contact-form" method="post" autocomplete="off" enctype="multipart/form-data">
+                            <form action="{% pageurl page %}"
+                                  id="contact-form"
+                                  method="post"
+                                  autocomplete="off"
+                                  {% if has_upload %}enctype="multipart/form-data"{% endif %}>
                                 {% csrf_token %}
                                 <div class="card-body pb-2">
                                     {{ form.non_field_errors }}

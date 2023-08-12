@@ -127,6 +127,17 @@ class FormPage(AbstractEmailForm):
         ),
     ]
 
+    def get_context(self, request, *args, **kwargs):
+        """
+        Find if the form on this page instance has an image upload in it.
+        """
+
+        context = super().get_context(request, *args, **kwargs)
+        context["has_upload"] = any(
+            f.field_type == "image" for f in self.form_fields.all()
+        )
+        return context
+
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
 
