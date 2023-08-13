@@ -116,13 +116,13 @@ class Person(
     @property
     def thumb_image(self):
         """
-        Render a thumnail image of the person if available
+        Generate a square html tag for this person if he/she has an image uploaded.
+
+        Ex: '<img alt="kal-visuals-square" height="50" width="50"
+                src="/media/images/kal-visuals-square.2e16d0ba.fill-50x50.jpg">'
         """
 
-        try:
-            return self.image.get_rendition("fill-50x50").img_tag()
-        except:
-            return ""
+        return self.image.get_rendition("fill-50x50").img_tag() if self.image else ""
 
     @property
     def preview_modes(self):

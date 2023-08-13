@@ -5,7 +5,7 @@ at certain points in Wagtail’s execution, such as when a page is saved or when
 main menu is constructed.
 """
 
-from wagtail.snippets.models import register_snippet, register_snippet_viewset
+from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
 
 from base.models import Person
