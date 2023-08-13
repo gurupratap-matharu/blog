@@ -36,7 +36,6 @@ from wagtail.models import (
     Page,
     PreviewableMixin,
     RevisionMixin,
-    TranslatableMixin,
     WorkflowMixin,
 )
 from wagtail.search import index
@@ -137,6 +136,13 @@ class Person(
 
         # TODO: see conditional rendering for this in bakery demo
         return "base/preview/person.html"
+
+    def get_preview_context(self, request, mode_name):
+        context = super().get_preview_context(request, mode_name)
+
+        # TODO: yet to be completed. refer bakerydemo
+
+        return context
 
 
 class StandardPage(Page):
