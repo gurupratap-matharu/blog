@@ -1,8 +1,10 @@
 import logging
 from os.path import splitext
 
+from django.contrib import messages
 from django.db import models
 from django.forms import widgets
+from django.shortcuts import redirect
 
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.forms.forms import FormBuilder
@@ -232,6 +234,20 @@ class FormPage(AbstractEmailForm):
             self.send_mail(form)
 
         return submission
+
+    def render_landing_page(self, request, form_submission=None, *args, **kwargs):
+        """
+        Redirect user to home page after successful submission.
+        """
+
+        url = "/"
+        # if a form_submission instance is available, append the id to URL
+        # when previewing landing page, there will not be a form_submission instance
+        if form_submission:
+            url += "?id=%s" % form_submission.id
+
+        messages.success(request, "Message sent successfully! 🙌")
+        return redirect(url, permanent=False)
 
 
 @register_setting
