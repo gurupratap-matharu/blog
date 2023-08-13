@@ -5,8 +5,15 @@ from django.contrib import messages
 from django.db import models
 from django.forms import widgets
 from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
+from wagtail.admin.panels import (
+    FieldPanel,
+    FieldRowPanel,
+    InlinePanel,
+    MultiFieldPanel,
+    PublishingPanel,
+)
 from wagtail.contrib.forms.forms import FormBuilder
 from wagtail.contrib.forms.models import (
     FORM_FIELD_CHOICES,
@@ -22,7 +29,17 @@ from wagtail.contrib.settings.models import (
 from wagtail.fields import RichTextField, StreamField
 from wagtail.images import get_image_model
 from wagtail.images.fields import WagtailImageField
-from wagtail.models import Collection, Page
+from wagtail.models import (
+    Collection,
+    DraftStateMixin,
+    LockableMixin,
+    Page,
+    PreviewableMixin,
+    RevisionMixin,
+    TranslatableMixin,
+    WorkflowMixin,
+)
+from wagtail.search import index
 
 from base.blocks import BaseStreamBlock
 from base.views import CustomSubmissionsListView
@@ -32,6 +49,94 @@ from modelcluster.models import ClusterableModel
 logger = logging.getLogger(__name__)
 
 ImageModel = get_image_model()
+
+
+class Person(
+    WorkflowMixin,
+    DraftStateMixin,
+    LockableMixin,
+    RevisionMixin,
+    PreviewableMixin,
+    index.Indexed,
+    ClusterableModel,
+):
+    """
+    A model to store Person objects.
+
+    It is registered using the `register_snippet` as a function in wagtail_hooks.py
+
+    `Person` uses the `ClusterableModel`, which allows the relationship with another
+    model to be stored locally to the 'parent' model (e.g. a PageModel) until the parent
+    is explicitly saved. This allows the editor to use the 'Preview' button, to preview
+    the content without saving the relationship to the database first.
+
+    Read more at https://github.com/wagtail/django-modelcluster
+    """
+
+    first_name = models.CharField("First name", max_length=254)
+    last_name = models.CharField("Last name", max_length=254)
+    job_title = models.CharField("Job title", max_length=254)
+
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldRowPanel(
+                    [
+                        FieldPanel("first_name"),
+                        FieldPanel("last_name"),
+                    ]
+                )
+            ],
+            "Name",
+        ),
+        FieldPanel("job_title"),
+        FieldPanel("image"),
+        PublishingPanel(),
+    ]
+
+    search_fields = [
+        index.SearchField("first_name"),
+        index.SearchField("last_name"),
+        index.FilterField("job_title"),
+        index.AutocompleteField("first_name"),
+        index.AutocompleteField("last_name"),
+    ]
+
+    class Meta:
+        verbose_name = "Person"
+        verbose_name_plural = "People"
+
+    @property
+    def thumb_image(self):
+        """
+        Render a thumnail image of the person if available
+        """
+
+        try:
+            return self.image.get_rendition("fill-50x50").img_tag()
+        except:
+            return ""
+
+    @property
+    def preview_modes(self):
+        return PreviewableMixin.DEFAULT_PREVIEW_MODES + [("blog_post", _("Blog post"))]
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    def get_preview_template(self, request, mode_name):
+        """Html template to render the person model in UI"""
+
+        # TODO: see conditional rendering for this in bakery demo
+        return "base/preview/person.html"
 
 
 class StandardPage(Page):
