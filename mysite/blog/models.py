@@ -6,18 +6,15 @@ from django.db import models
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin
-from wagtail.fields import RichTextField, StreamField
+from wagtail.fields import StreamField
 from wagtail.models import Orderable, Page
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
 from base.blocks import BaseStreamBlock
-from bs4 import BeautifulSoup
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
-
-from blog.blocks import CommonContentBlock
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +52,7 @@ class BlogIndexPage(RoutablePageMixin, Page):
         related_name="+",
         help_text="Landscape mode only; horizontal width between 1000px to 3000px.",
     )
-    
+
     content_panels = Page.content_panels + [
         FieldPanel("intro"),
         FieldPanel("image"),
