@@ -20,8 +20,7 @@
             {% endblock title %}
 
             {% block title_suffix %}
-                {% wagtail_site as current_site %}
-                {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
+                | {{ settings.base.SiteSettings.title_suffix }}
             {% endblock title_suffix %}
 
         </title>
