@@ -11,6 +11,7 @@ from wagtail.models import Orderable, Page
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
+from base.blocks import BaseStreamBlock
 from bs4 import BeautifulSoup
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -21,9 +22,30 @@ from blog.blocks import CommonContentBlock
 logger = logging.getLogger(__name__)
 
 
+class BlogPersonRelationship(Orderable, models.Model):
+    """
+    This defines the relationship between the `Person` within the `base`
+    app and the BlogPage below. This allows people to be added to a BlogPage.
+
+    We have created a two way relationship between BlogPage and Person using
+    the ParentalKey and ForeignKey
+    """
+
+    page = ParentalKey(
+        "BlogPage", related_name="blog_person_relationship", on_delete=models.CASCADE
+    )
+
+    person = models.ForeignKey(
+        "base.Person", related_name="person_blog_relationship", on_delete=models.CASCADE
+    )
+
+    panels = [FieldPanel("person")]
+
+
 class BlogIndexPage(RoutablePageMixin, Page):
     page_description = "Use this page to show a list of blog posts"
-    intro = RichTextField(blank=True)
+
+    intro = models.TextField(help_text="Text to describe the page", blank=True)
 
     image = models.ForeignKey(
         "wagtailimages.Image",
@@ -33,6 +55,7 @@ class BlogIndexPage(RoutablePageMixin, Page):
         related_name="+",
         help_text="Landscape mode only; horizontal width between 1000px to 3000px.",
     )
+    
     content_panels = Page.content_panels + [
         FieldPanel("intro"),
         FieldPanel("image"),
@@ -88,17 +111,19 @@ class BlogTagIndexPage(Page):
 
 
 class BlogPage(Page):
+    """
+    A Blog Page or a single Blog Post
+
+    We access the Person object with an inline panel that references the
+    ParentalKey's `related_name` in BlogPersonRelationship. More docs:
+    https://docs.wagtail.org/en/stable/topics/pages.html#inline-models
+    """
+
     page_description = "Use this page to write a single blog post"
 
-    author = models.CharField(max_length=255)
-    date = models.DateField("Post date", blank=True, null=True)
-    intro = models.CharField(max_length=255)
-    subtitle = models.CharField(max_length=255, blank=True)
-
-    body = StreamField(
-        CommonContentBlock(), verbose_name="Page body", blank=True, use_json_field=True
+    intro = models.CharField(
+        help_text="Text to describe the page", max_length=255, blank=True
     )
-
     feed_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -107,7 +132,12 @@ class BlogPage(Page):
         related_name="+",
         help_text="Landscape mode only; horizontal width between 1000px to 3000px",
     )
+    body = StreamField(
+        BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
+    )
+    subtitle = models.CharField(max_length=255, blank=True)
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
+    date = models.DateField("Post date", blank=True, null=True)
     categories = ParentalManyToManyField("blog.BlogCategory", blank=True)
 
     search_fields = Page.search_fields + [
@@ -115,18 +145,25 @@ class BlogPage(Page):
         index.SearchField("body"),
         index.FilterField("date"),
     ]
+
     content_panels = Page.content_panels + [
         MultiFieldPanel(
             [
-                FieldPanel("author"),
+                InlinePanel(
+                    "blog_person_relationship",
+                    heading="Authors",
+                    label="Author",
+                    panels=None,
+                    min_num=1,
+                ),
                 FieldPanel("date"),
                 FieldPanel("tags"),
                 FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
             ],
             heading="Blog information",
         ),
-        FieldPanel("intro"),
         FieldPanel("subtitle"),
+        FieldPanel("intro"),
         FieldPanel("body"),
         InlinePanel("gallery_images", label="Gallery images"),
         InlinePanel("related_links", heading="Related links", label="Related links"),
@@ -137,7 +174,11 @@ class BlogPage(Page):
         FieldPanel("feed_image"),
     ]
 
+    # Specifies parent to BlogPage as being BlogIndexPages
     parent_page_types = ["blog.BlogIndexPage"]
+
+    # Specifies what content types can exist as children of BlogPage.
+    # Empty list means that no child content types are allowed.
     subpage_types = []
 
     class Meta:
@@ -147,11 +188,6 @@ class BlogPage(Page):
         gallery_item = self.gallery_images.first()
 
         return gallery_item.image if gallery_item else None
-
-    def toc(self):
-        """Get table of contents for a page"""
-        bs = BeautifulSoup(self.body)
-        return [e.get_text().strip() for e in bs.find_all("h2")]
 
     @property
     def get_tags(self):
@@ -168,6 +204,23 @@ class BlogPage(Page):
             tag.url = f"{base_url}tags/{tag.slug}/"
 
         return tags
+
+    def authors(self):
+        """
+        Returns the BlogPage's related people.
+        We are using the ParentalKey's `related_name` from the BlogPersonRelationship model
+        to access these objects. This allows us to access the Person objects
+        with a loop on the template.
+
+        If we tried to access the blog_person_relationship directly we'd print `blog.BlogPersonRelationship.None`
+        """
+        # Only return authors that are not in draft
+        return [
+            n.person
+            for n in self.blog_person_relationship.filter(
+                person__live=True
+            ).select_related("person")
+        ]
 
 
 class BlogPageGalleryImage(Orderable):
