@@ -1,13 +1,20 @@
 {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-primary alert-dismissible fade show mx-4 text-white" role="alert">
-            <span class="alert-icon me-2"><i class="ni ni-bell-55"></i></span>
-            <span class="alert-text"><strong>
-                {% if message.tags %}{{ message.tags|title }}:{% endif %}
-            </strong>{{ message }}</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                <i class="bi bi-x-circle-fill"></i>
-            </button>
+    <div class="container position-sticky z-index-sticky top-0">
+        <div class="position-absolute top-0 z-index-fixed start-0 end-0 mt-7 container-fluid">
+            {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show text-white blur blur-rounded" role="alert">
+                    <span class="alert-icon me-2"><i class="bi bi-bell"></i></span>
+                    <span class="alert-text">
+                        <strong>
+                            {% if message.tags %}{{ message.tags|title }}:{% endif %}
+                        </strong>
+                        {{ message }}
+                    </span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
+    </div>
 {% endif %}
