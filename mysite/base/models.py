@@ -36,6 +36,7 @@ from wagtail.models import (
     Page,
     PreviewableMixin,
     RevisionMixin,
+    TranslatableMixin,
     WorkflowMixin,
 )
 from wagtail.search import index
@@ -143,6 +144,34 @@ class Person(
         # TODO: yet to be completed. refer bakerydemo
 
         return context
+
+
+class FooterText(
+    DraftStateMixin, RevisionMixin, PreviewableMixin, TranslatableMixin, models.Model
+):
+    """
+    Site footer text which is registered using the `register_snippet` in `wagtail_hooks.py`.
+    It is made accessible on the template via a template tag defined in `navigation_tags.py`
+    """
+
+    body = RichTextField()
+
+    panels = [
+        FieldPanel("body"),
+        PublishingPanel(),
+    ]
+
+    class Meta(TranslatableMixin.Meta):
+        verbose_name_plural = "Footer Text"
+
+    def __str__(self):
+        return "Footer Text"
+
+    def get_preview_template(self, request, mode_name):
+        return "base.html"
+
+    def get_preview_context(self, request, mode_name):
+        return {"footer_text": self.body}
 
 
 class StandardPage(Page):
