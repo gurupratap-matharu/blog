@@ -62,7 +62,11 @@
             {% endblock content %}
 
         </main>
-        {% include "includes/footer.html" %}
+
+        {% block footer %}
+            {% include "includes/footer.html" %}
+        {% endblock footer %}
+
         <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
         <script type="text/javascript" src="{% static "assets/js/soft-design-system.js" %}"></script>
         <script type="text/javascript" src="{% static 'assets/js/mysite.js' %}"></script>

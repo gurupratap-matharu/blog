@@ -8,11 +8,13 @@ main menu is constructed.
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
 
-from base.models import Person
+from base.models import FooterText, Person
 
 
 class PersonViewSet(SnippetViewSet):
-    """Add the person model to snippets section."""
+    """
+    Add the person model to snippets section.
+    """
 
     model = Person
     icon = "group"
@@ -20,11 +22,20 @@ class PersonViewSet(SnippetViewSet):
     list_filter = {"job_title": ["icontains"]}
 
 
+class FooterTextViewSet(SnippetViewSet):
+    """
+    Add the footer text model to snippets section.
+    """
+
+    model = FooterText
+    search_fields = ("body",)
+
+
 class MiscSnippetViewSetGroup(SnippetViewSetGroup):
     menu_label = "Misc"
     # menu_icon = "utensils"
     menu_order = 300
-    items = (PersonViewSet,)
+    items = (PersonViewSet, FooterTextViewSet)
 
 
 register_snippet(MiscSnippetViewSetGroup)

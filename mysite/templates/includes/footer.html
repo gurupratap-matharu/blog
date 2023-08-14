@@ -1,4 +1,4 @@
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags navigation_tags %}
 
 <footer class="footer pt-5 mt-5">
     <hr class="horizontal dark mb-5" />
@@ -111,13 +111,14 @@
             </div>
             <div class="col-12">
                 <div class="text-center">
-                    <p class="my-4 text-sm">
+                    <p class="mt-4">
                         All rights reserved. Copyright ©
                         <script>
                              document.write(new Date().getFullYear());
                         </script>
                         Made with ❤️ in Argentina 🇦🇷
                     </p>
+                    {% get_footer_text %}
                 </div>
             </div>
         </div>
