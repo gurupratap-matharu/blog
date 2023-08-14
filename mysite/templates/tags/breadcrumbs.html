@@ -1,10 +1,10 @@
 {% load wagtailcore_tags %}
 
 {% if ancestors %}
-    <div class="container pt-7 mt-2 bg-info">
+    <div class="container pt-7 mt-2">
         <div class="row">
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb bg-white">
                     {% for ancestor in ancestors %}
                         {% if forloop.last %}
                             <li class="breadcrumb-item active" aria-current="page">{{ ancestor }}</li>

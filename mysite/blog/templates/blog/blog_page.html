@@ -15,21 +15,6 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-                        {% comment "Breadcrumbs" %}{% endcomment %}
-                        <nav aria-label="breadcrumb">
-                            {% if self.get_ancestors|length > 1 %}
-                                <ol class="breadcrumb bg-white ms-0 ps-1">
-                                    {% for p in self.get_ancestors %}
-                                        {% if p.is_root == False %}
-                                            <li class="breadcrumb-item">
-                                                <a href="{{ p.url }}">{{ p.title|title }}</a>
-                                            </li>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <li class="breadcrumb-item active" aria-current="page">Sales</li>
-                                </ol>
-                            {% endif %}
-                        </nav>
                         <h1 class="mb-4">{{ page.title }}</h1>
                         <p>Read Time: 8 mins</p>
                         <div class="author align-items-center">
