@@ -39,20 +39,20 @@
     </head>
     <body class="index-page">
         {% wagtailuserbar %}
+        <header>
 
-        {% block header %}
+            {% block header %}
+                {% include "includes/navigation.html" %}
+            {% endblock header %}
 
-            {% include "includes/navigation.html" %}
-
-        {% endblock header %}
+        </header>
 
         {% block messages %}
-
             {% include "includes/messages.html" %}
-
         {% endblock messages %}
 
         {% block breadcrumb %}
+            {# breadcrumbs is defined in base/templatetags/navigation_tags.py #}
             {% breadcrumbs %}
         {% endblock breadcrumb %}
 
@@ -62,9 +62,7 @@
             {% endblock content %}
 
         </main>
-
         {% include "includes/footer.html" %}
-
         <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
         <script type="text/javascript" src="{% static "assets/js/soft-design-system.js" %}"></script>
         <script type="text/javascript" src="{% static 'assets/js/mysite.js' %}"></script>
