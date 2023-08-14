@@ -144,6 +144,9 @@ class BlogPage(Page):
     ]
 
     content_panels = Page.content_panels + [
+        FieldPanel("subtitle"),
+        FieldPanel("intro"),
+        FieldPanel("body"),
         MultiFieldPanel(
             [
                 InlinePanel(
@@ -159,9 +162,6 @@ class BlogPage(Page):
             ],
             heading="Blog information",
         ),
-        FieldPanel("subtitle"),
-        FieldPanel("intro"),
-        FieldPanel("body"),
         InlinePanel("gallery_images", label="Gallery images"),
         InlinePanel("related_links", heading="Related links", label="Related links"),
     ]
