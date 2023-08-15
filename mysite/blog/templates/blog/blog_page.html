@@ -8,34 +8,37 @@
     {% comment "Header 1 with text and image on right" %}{% endcomment %}
     <header>
         <div class="page-header min-vh-75">
+            {% image page.feed_image original as tmp_photo %}
             <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
                 <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
-                     style="background-image:url({% static 'assets/img/curved-images/curved11.jpg' %})"></div>
+                     style="background-image:url({{ tmp_photo.url }})"></div>
             </div>
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-                        <h1 class="mb-4">{{ page.title }}</h1>
-                        <p>Read Time: 8 mins</p>
-                        <div class="author align-items-center">
-                            <img src="{% static 'assets/img/team-1.jpg' %}" alt="avatar image" class="avatar rounded-circle">
-                            <div class="name ps-3 pt-3">
-                                <span>Katie Roof</span>
-                                <p class="text-gradient text-primary">{{ page.date }}</p>
+                        <h1 class="display-1">{{ page.title }}</h1>
+                        <p>{{ page.subtitle }}</p>
+                        <p>{{ page.date }}</p>
+                        {% for author in page.authors %}
+                            <div class="author">
+                                {% image author.image fill-50x50-c100 class="avatar rounded-circle" %}
+                                <div class="name ps-3 pt-3">
+                                    <p class="text-gradient text-primary">{{ author.first_name }} {{ author.last_name }}</p>
+                                </div>
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </header>
     {% comment "Main content" %}{% endcomment %}
-    <section class="my-5 py-5">
-        <div class="container mt-sm-5 mt-3">
+    <section class="my-md-5 py-md-5">
+        <div class="container">
             <div class="row">
                 <div class="col-lg-3">
                     {% comment "Table of contents" %}{% endcomment %}
-                    <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2" style="top: 100px">
+                    <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2 d-none d-md-block" style="top: 100px">
                         <a data-bs-toggle="collapse" href="#tableOfContents" role="button" aria-expanded="false" aria-controls="tableOfContents">
                             <h5 class="ms-3 pb-3">Table of contents</h5>
                         </a>
@@ -66,6 +69,7 @@
                     </div>
                 </div>
                 <div class="col-lg-9">
+                    <h1 class="display-6 mb-5">{{ page.intro }}</h1>
                     {{ page.body }}
                     <div class="card">
                         <div class="card-body">
@@ -88,29 +92,42 @@
     <section class="pt-5 pb-0">
         <div class="container">
             <div class="d-flex justify-content-center my-5">
-                <h2>Related Articles</h2>
+                <h1 class="display-6">Related Articles</h1>
             </div>
             <div class="row">
-                {% for i in '012'|make_list %}
+                {% for post in page.get_similar_posts %}
                     <div class="col-md-4 mt-4">
                         <div class="card h-100">
-                            <img src="{% static 'assets/img/card-2.jpg' %}" class="card-img-top" alt="Card Header">
+                            {% image post.feed_image width-400 class="card-img-top" %}
                             <div class="card-body">
-                                <p class="text-gradient text-primary mb-2 text-sm">Luxury Suite • 12 Buses • 3 Trips</p>
                                 <h5 class="card-title">
-                                    <a href="">Another Article</a>
+                                    <a href="{% pageurl post %}">{{ post.title }}</a>
                                 </h5>
-                                <p class="card-text">How did the platform help company x save 10x amount of money!</p>
-                                <a href="javascript:;" class="card-link text-darker icon-move-right">Read Now
-                                    <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                                <p class="card-text">{{ post.intro|truncatechars:180 }}</p>
+                                <a href="{% pageurl post %}" class="card-link">Read Now
+                                    <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
                 {% empty %}
-                    <h5>There are no articles to show.</h5>
+                    <h5>There are no related posts yet.</h5>
                 {% endfor %}
             </div>
+        </div>
+    </section>
+    <section class="pt-md-5">
+        <div class="container">
+            {% if page.get_tags %}
+                <div class="d-flex justify-content-center my-5">
+                    <h1 class="display-6">Find more blog posts with similar tags</h1>
+                </div>
+                <div class="text-center">
+                    {% for tag in page.get_tags %}
+                        <a href="{{ tag.url }}" class="btn rounded-pill btn-outline-dark me-2">{{ tag }}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </section>
     <div class="container d-flex justify-content-center mt-sm-5 pt-5">
