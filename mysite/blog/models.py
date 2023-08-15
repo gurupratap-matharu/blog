@@ -3,6 +3,7 @@ import logging
 from django import forms
 from django.core.paginator import Paginator
 from django.db import models
+from django.db.models import Count
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin
@@ -186,7 +187,6 @@ class BlogPage(Page):
 
         return gallery_item.image if gallery_item else None
 
-    @property
     def get_tags(self):
         """
         Find all the tags that
@@ -201,6 +201,20 @@ class BlogPage(Page):
             tag.url = f"{base_url}tags/{tag.slug}/"
 
         return tags
+
+    def get_similar_posts(self):
+        """
+        Using tags find posts most similar to this one.
+        """
+
+        post_tags_ids = self.tags.values_list("id", flat=True)
+        similar_posts = BlogPage.objects.filter(tags__in=post_tags_ids).exclude(
+            id=self.id
+        )
+        similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
+            "-same_tags"
+        )[:3]
+        return similar_posts
 
     def authors(self):
         """
@@ -243,6 +257,9 @@ class BlogPageRelatedLink(Orderable):
         FieldPanel("name"),
         FieldPanel("url"),
     ]
+
+    def __str__(self):
+        return f"{self.name} | {self.url}"
 
 
 @register_snippet
