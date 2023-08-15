@@ -1,6 +1,6 @@
 {% load wagtailimages_tags %}
 
 <figure class="py-3">
-    {% image self.image fill-600x338 loading="lazy" class="rounded-3 img-fluid mx-auto d-block" %}
+    {% image self.image width-950 loading="lazy" class="rounded-3 img-fluid mx-auto d-block" %}
     <figcaption class="text-center text-muted mt-3">{{ self.caption }} - {{ self.attribution }}</figcaption>
 </figure>
