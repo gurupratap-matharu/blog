@@ -6,6 +6,8 @@
 
 {% block content %}
     {% comment "Header 1 with text and image on right" %}{% endcomment %}
+    {% include "includes/header-card.html" %}
+    {% include "includes/header-chips.html" %}
     <header>
         <div class="page-header min-vh-75">
             <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
@@ -30,50 +32,26 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-8 mx-auto my-5 text-center">
-                    <h2>Explore our top articles</h2>
+                    <h1 class="display-6">Explore our top articles</h1>
                 </div>
             </div>
             <div class="row">
                 {% for post in posts|slice:":3" %}
                     {% with post=post.specific %}
                         <div class="col-md-4 my-5">
-                            <div class="card card-pricing h-100">
-                                <div class="card-header bg-gradient-dark text-center pt-4 pb-5 position-relative">
-                                    <div class="z-index-1 position-relative">
-                                        <h5 class="text-white">Featured</h5>
-                                        <h3 class="text-white">{{ post.title }}</h3>
-                                    </div>
-                                </div>
-                                <div class="position-relative mt-n5" style="height: 50px;">
-                                    <div class="position-absolute w-100">
-                                        <svg class="waves waves-sm"
-                                             xmlns="http://www.w3.org/2000/svg"
-                                             xmlns:xlink="http://www.w3.org/1999/xlink"
-                                             viewBox="0 24 150 40"
-                                             preserveAspectRatio="none"
-                                             shape-rendering="auto">
-                                            <defs>
-                                            <path id="card-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
-                                            </defs>
-                                            <g class="moving-waves">
-                                            <use xlink:href="#card-wave" x="48" y="-1" fill="rgba(255,255,255,0.30"></use>
-                                            <use xlink:href="#card-wave" x="48" y="3" fill="rgba(255,255,255,0.35)"></use>
-                                            <use xlink:href="#card-wave" x="48" y="5" fill="rgba(255,255,255,0.25)"></use>
-                                            <use xlink:href="#card-wave" x="48" y="8" fill="rgba(255,255,255,0.20)"></use>
-                                            <use xlink:href="#card-wave" x="48" y="13" fill="rgba(255,255,255,0.15)"></use>
-                                            <use xlink:href="#card-wave" x="48" y="16" fill="rgba(255,255,255,0.99)"></use>
-                                            </g>
-                                        </svg>
-                                    </div>
+                            <div class="card card-pricing h-100 shadow-lg">
+                                <div class="card-header pt-4 pb-5 position-relative" style="height: 200px">
+                                    <h5>Featured</h5>
+                                    <h3 class="text-primary text-gradient">{{ post.title }}</h3>
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         <a href="{% pageurl post %}">{{ post.title }}</a>
                                     </h5>
                                     <p class="card-text text-xs">Read Time 3 mins</p>
-                                    <p class="card-text">{{ post.intro }}</p>
+                                    <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
                                     <a href="{% pageurl post %}" class="card-link text-darker icon-move-right">Read Now
-                                        <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                                        <i class="bi bi-arrow-right ms-1"></i>
                                     </a>
                                 </div>
                             </div>
@@ -87,36 +65,33 @@
     <section class="pt-5 pb-0">
         <div class="container">
             <div class="d-flex justify-content-center my-5">
-                <h2>Latest Articles</h2>
+                <h1 class="display-6">Latest Articles</h1>
             </div>
             <div class="row">
                 {% for post in posts %}
                     {% with post=post.specific %}
                         <div class="col-md-4 mt-4">
                             <div class="card h-100">
-                                <img src="{% static 'assets/img/curved-images/curved6-small.jpg' %}" class="card-img-top" alt="Card Header">
+                                {% image post.feed_image width-400 class="card-img-top" %}
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         <a href="{% pageurl post %}">{{ post.title }}</a>
                                     </h5>
-                                    <p class="card-text text-xs">Read Time 3 mins</p>
-                                    <p class="card-text">{{ post.intro }}</p>
-                                    <a href="{% pageurl post %}" class="card-link text-darker icon-move-right">Read Now
-                                        <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                                    <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
+                                    <a href="{% pageurl post %}" class="card-link">Read Now
+                                        <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
                     {% endwith %}
                 {% empty %}
-                    <h5>There are no posts yet.</h5>
+                    <h1 class="display-6">There are no posts yet.</h1>
                 {% endfor %}
             </div>
         </div>
     </section>
-
     {% include "includes/pagination.html" %}
-
     {% comment "Call to Action" %}{% endcomment %}
     <section class="py-sm-7" id="download-soft-ui">
         <div class="bg-gradient-dark position-relative m-3 border-radius-xl overflow-hidden">
