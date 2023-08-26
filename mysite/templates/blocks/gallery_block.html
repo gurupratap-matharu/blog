@@ -1,0 +1,11 @@
+{% load wagtailimages_tags %}
+
+{% comment %} <p>self: {{ self }}</p>
+<p>self.images: {{ self.images }}</p>
+<p>self.value: {{ self.value }}</p> {% endcomment %}
+{% comment %} {% for img in self %}
+    <figure class="figure">
+        {% image img fill-645x480-c100 loading="lazy" class="figure-img img-fluid rounded-3" %}
+        <figcaption class="figure-caption">{{ img.title }}</figcaption>
+    </figure>
+{% endfor %} {% endcomment %}
