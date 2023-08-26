@@ -1,6 +1,7 @@
 from wagtail.blocks import (
     CharBlock,
     ChoiceBlock,
+    ListBlock,
     RichTextBlock,
     StreamBlock,
     StructBlock,
@@ -59,6 +60,14 @@ class BlockQuote(StructBlock):
         template = "blocks/blockquote.html"
 
 
+class GalleryBlock(StructBlock):
+    images = ListBlock(ImageBlock())
+
+    class Meta:
+        icon = "image"
+        template = "blocks/gallery_block.html"
+
+
 class BaseStreamBlock(StreamBlock):
     """
     Define a custom block that `StreamField` will utilize.
@@ -70,6 +79,7 @@ class BaseStreamBlock(StreamBlock):
     )
 
     image_block = ImageBlock()
+    gallery = ListBlock(ImageBlock(), template="blocks/gallery_block.html")
     block_quote = BlockQuote()
     embed_block = EmbedBlock(
         help_text="Insert an embed URL e.g https://www.youtube.com/watch?v=SGJFWirQ3ks",
