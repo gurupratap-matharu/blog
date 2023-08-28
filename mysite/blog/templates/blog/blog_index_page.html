@@ -5,30 +5,32 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    {% comment "Header 1 with text and image on right" %}{% endcomment %}
-    {% include "includes/header-card.html" %}
-    {% include "includes/header-chips.html" %}
-    <header>
-        <div class="page-header min-vh-75">
-            <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
-                <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
-                     style="background-image:url({% static 'assets/img/curved-images/curved11.jpg' %})"></div>
-            </div>
+    {% comment "Hero" %}{% endcomment %}
+    <div class="page-header min-vh-100">
+        {% with featured=featured.specific %}
+            {% image featured.feed_image original as tmp_photo %}
+            <div class="position-absolute fixed-top ms-auto w-50 h-100 z-index-0 d-none d-sm-none d-md-block"
+                 style="background-image: url({{ tmp_photo.url }});
+                        background-size:cover"></div>
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-                        <p class="lead text-primary text-gradient">The Falcon Blog</p>
-                        <h1 class="mb-4">{{ featured.title }}</h1>
-                        <a href="{{ featured.url }}" class="card-link text-darker icon-move-right">Read article
-                            <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
-                        </a>
+                    <div class="col-lg-7 d-flex justify-content-center flex-column">
+                        <div class="card card-body blur d-flex justify-content-center shadow-lg p-5 mt-5">
+                            <h1>{{ featured.title }}</h1>
+                            <p class="lead pe-5 me-5">{{ featured.subtitle }}</p>
+                            <div class="buttons">
+                                <a href="{% pageurl featured %}" class="btn bg-gradient-primary">
+                                    Read Now<i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
+        {% endwith %}
+    </div>
     {% comment "Top Articles" %}{% endcomment %}
-    <section class="py-5 my-5 bg-gray-100">
+    <section class="py-5 bg-gray-100">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-8 mx-auto my-5 text-center">
