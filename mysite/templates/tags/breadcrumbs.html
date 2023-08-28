@@ -1,27 +1,25 @@
 {% load wagtailcore_tags %}
 
 {% if ancestors %}
-    <div class="container pt-7 mt-2">
-        <div class="row">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb bg-white">
-                    {% for ancestor in ancestors %}
-                        {% if forloop.last %}
-                            <li class="breadcrumb-item active" aria-current="page">{{ ancestor }}</li>
-                        {% else %}
-                            <li class="breadcrumb-item">
-                                <a href="{% pageurl ancestor %}">
-                                    {% if forloop.first %}
-                                        Home
-                                    {% else %}
-                                        {{ ancestor }}
-                                    {% endif %}
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ol>
-            </nav>
-        </div>
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-white">
+                {% for ancestor in ancestors %}
+                    {% if forloop.last %}
+                        <li class="breadcrumb-item active" aria-current="page">{{ ancestor }}</li>
+                    {% else %}
+                        <li class="breadcrumb-item">
+                            <a href="{% pageurl ancestor %}">
+                                {% if forloop.first %}
+                                    Home
+                                {% else %}
+                                    {{ ancestor }}
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </nav>
     </div>
 {% endif %}
