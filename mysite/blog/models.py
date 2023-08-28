@@ -1,12 +1,14 @@
 import logging
 
 from django import forms
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import Count
+from django.shortcuts import redirect, render
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
-from wagtail.contrib.routable_page.models import RoutablePageMixin
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import StreamField
 from wagtail.models import Orderable, Page
 from wagtail.search import index
@@ -15,7 +17,7 @@ from wagtail.snippets.models import register_snippet
 from base.blocks import BaseStreamBlock
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
-from taggit.models import TaggedItemBase
+from taggit.models import Tag, TaggedItemBase
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +62,7 @@ class BlogIndexPage(RoutablePageMixin, Page):
     ]
 
     # Specify that only blog pages can be children of this blogindex page
-    subpage_types = ["BlogPage", "BlogTagIndexPage"]
+    subpage_types = ["BlogPage"]
 
     class Meta:
         verbose_name = "blogindexpage"
@@ -79,6 +81,44 @@ class BlogIndexPage(RoutablePageMixin, Page):
 
         return context
 
+    @route(r"^tags/$", name="tag_archive")
+    @route(r"^tags/([\w-]+)/$", name="tag_archive")
+    def tag_archive(self, request, tag=None):
+        """
+        Custom view that returns all BlogPages for a given tag and redirect back to the
+        BlogIndexPage.
+
+        Special thing is that it uses a different url structure as defined
+        the method decorator.
+
+        eg: /blog/tags/health/ <-- show all blog pages with `health` tag
+
+        More information on RoutablePages is at
+        https://docs.wagtail.org/en/stable/reference/contrib/routablepage.html
+        """
+
+        try:
+            tag = Tag.objects.get(slug=tag)
+        except Tag.DoesNotExist:
+            if tag:
+                msg = f'There are no blog posts tagged with "{tag}"'
+                messages.info(request, msg)
+            return redirect(self.url)
+
+        posts = self.get_posts(tag=tag)
+        context = {"tag": tag, "posts": posts}
+        return render(request, "blog/blog_index_page.html", context)
+
+    def get_posts(self, tag=None):
+        """
+        Returns the child BlogPage objects for this BlogIndexPage.
+        If a tag is used then it will filter the posts by tag.
+        """
+
+        posts = BlogPage.objects.live().descendant_of(self)
+        posts = posts.filter(tags=tag) if tag else posts
+        return posts
+
 
 class BlogPageTag(TaggedItemBase):
     """
@@ -90,22 +130,6 @@ class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey(
         "BlogPage", related_name="tagged_items", on_delete=models.CASCADE
     )
-
-
-class BlogTagIndexPage(Page):
-    page_description = "Use this page to list blog posts by a tag"
-
-    class Meta:
-        verbose_name = "Blog Tag Index Page"
-
-    def get_context(self, request, *args, **kwargs):
-        tag = request.GET.get("tag")
-        blogpages = BlogPage.objects.filter(tags__name=tag)
-
-        context = super().get_context(request, *args, **kwargs)
-        context["blogpages"] = blogpages
-
-        return context
 
 
 class BlogPage(Page):
