@@ -119,6 +119,7 @@ class BlogPage(Page):
 
     page_description = "Use this page to write a single blog post"
 
+    subtitle = models.CharField(max_length=255, blank=True)
     intro = models.CharField(
         help_text="Text to describe the page", max_length=255, blank=True
     )
@@ -133,7 +134,7 @@ class BlogPage(Page):
     body = StreamField(
         BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
     )
-    subtitle = models.CharField(max_length=255, blank=True)
+
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
     date = models.DateField("Post date", blank=True, null=True)
     categories = ParentalManyToManyField("blog.BlogCategory", blank=True)
