@@ -43,7 +43,7 @@ sections = "FUTURE,STDLIB,DJANGO, WAGTAIL,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 [tool.black]
 exclude = '''
 /(
-  | migrations
+  | migrations | docs
 )/
 '''
 
