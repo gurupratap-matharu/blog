@@ -17,7 +17,7 @@
                     <div class="col-lg-7 d-flex justify-content-center flex-column">
                         <div class="card card-body blur d-flex justify-content-center shadow-lg p-5 mt-5">
                             <h1>{{ featured.title }}</h1>
-                            <p class="lead pe-5 me-5">{{ featured.subtitle }}</p>
+                            <p class="lead pe-lg-5 me-lg-5">{{ featured.subtitle }}</p>
                             <div class="buttons">
                                 <a href="{% pageurl featured %}" class="btn bg-gradient-primary">
                                     Read Now<i class="bi bi-arrow-right ms-1"></i>
@@ -32,15 +32,15 @@
     {% comment "Top Articles" %}{% endcomment %}
     <section class="py-5 bg-gray-100">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-8 mx-auto my-5 text-center">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto mb-5 text-center">
                     <h1 class="display-6">Explore our top articles</h1>
                 </div>
             </div>
             <div class="row">
                 {% for post in posts|slice:":3" %}
                     {% with post=post.specific %}
-                        <div class="col-md-4 my-5">
+                        <div class="col-lg-4 mb-3">
                             <div class="card card-pricing h-100 shadow-lg">
                                 <div class="card-header pt-4 pb-5 position-relative" style="height: 200px">
                                     <h5>Featured</h5>
@@ -64,9 +64,9 @@
         </div>
     </section>
     {% comment "Latest Articles" %}{% endcomment %}
-    <section class="pt-5 pb-0">
+    <section class="py-5">
         <div class="container">
-            <div class="d-flex justify-content-center my-5">
+            <div class="d-flex justify-content-center py-lg-5">
                 <h1 class="display-6">Latest Articles</h1>
             </div>
             <div class="row">
@@ -74,7 +74,7 @@
                     {% with post=post.specific %}
                         <div class="col-md-4 mt-4">
                             <div class="card h-100">
-                                {% image post.feed_image width-400 class="card-img-top" %}
+                                {% image post.feed_image fill-400x300 class="card-img-top" %}
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         <a href="{% pageurl post %}">{{ post.title }}</a>
@@ -95,7 +95,7 @@
     </section>
     {% include "includes/pagination.html" %}
     {% comment "Call to Action" %}{% endcomment %}
-    <section class="py-sm-7" id="download-soft-ui">
+    <section>
         <div class="bg-gradient-dark position-relative m-3 border-radius-xl overflow-hidden">
             <img src="{% static 'assets/img/shapes/waves-white.svg' %}"
                  alt="pattern-lines"
@@ -112,7 +112,6 @@
                             new look!
                         </p>
                         <a href="" class="btn bg-gradient-primary mb-3 me-3 mb-sm-0">Sign up for free</a>
-                        <a href="" class="btn bg-white mb-3 mb-sm-0">Talk to Sales</a>
                     </div>
                 </div>
             </div>

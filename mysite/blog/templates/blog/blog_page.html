@@ -18,14 +18,14 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
                         {% comment %} {% breadcrumbs %} {% endcomment %}
-                        <h1 class="display-1">{{ page.title }}</h1>
-                        <p>{{ page.subtitle }}</p>
+                        <h1 class="display-3">{{ page.title }}</h1>
+                        <p class="lead">{{ page.subtitle }}</p>
                         <p>{{ page.date }}</p>
                         {% for author in page.authors %}
                             <div class="author">
                                 {% image author.image fill-50x50-c100 class="avatar rounded-circle" %}
                                 <div class="name ps-3 pt-3">
-                                    <p class="text-gradient text-primary">{{ author.first_name }} {{ author.last_name }}</p>
+                                    <p>{{ author.first_name }} {{ author.last_name }}</p>
                                 </div>
                             </div>
                         {% endfor %}
@@ -133,13 +133,13 @@
             {% endif %}
         </div>
     </section>
-    <div class="container d-flex justify-content-center mt-sm-5 pt-5">
+    <div class="container d-flex justify-content-center mt-sm-5 py-5">
         <a href="{{ page.get_parent.url }}" class="btn btn-lg bg-gradient-primary">
             View All Blog Posts<i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
         </a>
     </div>
     {% comment "Call to action" %}{% endcomment %}
-    <section class="py-sm-7" id="download-soft-ui">
+    <section>
         <div class="bg-gradient-dark position-relative m-3 border-radius-xl overflow-hidden">
             <img src="{% static 'assets/img/shapes/waves-white.svg' %}"
                  alt="pattern-lines"
@@ -155,10 +155,7 @@
                             in HTML. Start a new project or give an old Bootstrap project a
                             new look!
                         </p>
-                        <a href="" class="btn bg-gradient-primary mb-3 me-3 mb-sm-0">
-                            Sign up for free
-                            <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
-                        </a>
+                        <a href="" class="btn bg-gradient-primary mb-3 me-3 mb-sm-0">Sign up for free</a>
                     </div>
                 </div>
             </div>
