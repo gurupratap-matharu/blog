@@ -173,6 +173,7 @@ class FooterText(
     def get_preview_context(self, request, mode_name):
         return {"footer_text": self.body}
 
+
 class StandardPage(Page):
     """
     A generic content page which we can use for any page that only needs a title, image, introduction and a body field.
@@ -203,8 +204,10 @@ class StandardPage(Page):
         FieldPanel("image"),
         FieldPanel("body"),
     ]
+
     class Meta:
         verbose_name = "standardpage"
+
 
 class FormField(AbstractFormField):
     """
@@ -219,8 +222,8 @@ class FormField(AbstractFormField):
     )
 
     page = ParentalKey("FormPage", related_name="form_fields", on_delete=models.CASCADE)
-    
-    
+
+
 class CustomFormBuilder(FormBuilder):
     def create_image_field(self, field, options):
         return WagtailImageField(**options)
@@ -270,10 +273,10 @@ class FormPage(AbstractEmailForm):
             "Email",
         ),
     ]
-    
+
     class Meta:
         verbose_name = "formpage"
-    
+
     def get_context(self, request, *args, **kwargs):
         """
         Find if the form on this page instance has an image upload in it.
