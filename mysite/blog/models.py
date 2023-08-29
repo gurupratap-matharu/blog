@@ -41,6 +41,9 @@ class BlogPersonRelationship(Orderable, models.Model):
 
     panels = [FieldPanel("person")]
 
+    class Meta:
+        verbose_name = "blogpersonrelationship"
+
 
 class BlogIndexPage(RoutablePageMixin, Page):
     page_description = "Use this page to show a list of blog posts"
@@ -206,6 +209,7 @@ class BlogPage(Page):
 
     class Meta:
         verbose_name = "blogpage"
+        verbose_name_plural = "blogpages"
 
     def main_image(self):
         gallery_item = self.gallery_images.first()
@@ -272,6 +276,10 @@ class BlogPageGalleryImage(Orderable):
         FieldPanel("caption"),
     ]
 
+    class Meta:
+        verbose_name = "blogpagegallery"
+        verbose_name_plural = "blogpagegalleries"
+
 
 class BlogPageRelatedLink(Orderable):
     page = ParentalKey(BlogPage, on_delete=models.CASCADE, related_name="related_links")
@@ -282,6 +290,10 @@ class BlogPageRelatedLink(Orderable):
         FieldPanel("name"),
         FieldPanel("url"),
     ]
+
+    class Meta:
+        verbose_name = "blogpagerelatedlink"
+        verbose_name_plural = "blogpagerelatedlinks"
 
     def __str__(self):
         return f"{self.name} | {self.url}"
@@ -306,4 +318,5 @@ class BlogCategory(models.Model):
         return self.name
 
     class Meta:
+        verbose_name = "blogcategory"
         verbose_name_plural = "blog categories"
