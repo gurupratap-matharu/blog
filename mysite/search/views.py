@@ -1,13 +1,20 @@
+import logging
+
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.template.response import TemplateResponse
+from django.shortcuts import render
 
 from wagtail.models import Page
 from wagtail.search.models import Query
+
+logger = logging.getLogger(__name__)
 
 
 def search(request):
     search_query = request.GET.get("query", None)
     page = request.GET.get("page", 1)
+
+    logger.info("search query:%s" % search_query)
+    logger.info("page:%s" % page)
 
     # Search
     if search_query:
@@ -28,11 +35,8 @@ def search(request):
     except EmptyPage:
         search_results = paginator.page(paginator.num_pages)
 
-    return TemplateResponse(
-        request,
-        "search/search.html",
-        {
-            "search_query": search_query,
-            "search_results": search_results,
-        },
-    )
+    context = dict()
+    context["search_query"] = search_query
+    context["search_results"] = search_results
+
+    return render(request, "search/search.html", context)

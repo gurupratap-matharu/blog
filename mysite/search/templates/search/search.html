@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% load static wagtailcore_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}
     template-searchresults
@@ -11,22 +11,85 @@
 {% endblock title %}
 
 {% block content %}
-    <h1>Search</h1>
-    <form action="{% url 'search' %}" method="get">
-        <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-        <input type="submit" value="Search" class="button">
-    </form>
+    <header class="position-relative">
+        <div class="page-header min-vh-75" style="background-image: url('{% static 'assets/img/curved-images/curved14.jpg' %}');">
+            <span class="mask bg-gradient-dark opacity-6"></span>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-sm-9 text-center mx-auto mb-4">
+                        <h2 class="text-white mb-3">How can we help you?</h2>
+                        <form action="{% url 'search' %}" method="get">
+                            <div class="row">
+                                <div class="col-md-8 col-7">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
+                                        <input type="search"
+                                               class="form-control form-control-lg"
+                                               name="query"
+                                               value="{{ search_query|default:"" }}"
+                                               placeholder="Search after">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-5 text-start ps-0">
+                                    <input type="submit" value="Search" class="btn bg-gradient-primary w-100 h-100 mb-0">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="position-absolute w-100 z-index-1 bottom-0">
+            <svg class="waves"
+                 xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 viewBox="0 24 150 40"
+                 preserveAspectRatio="none"
+                 shape-rendering="auto">
+                <defs>
+                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+                </defs>
+                <g class="moving-waves">
+                <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.40"></use>
+                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.35)"></use>
+                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.25)"></use>
+                <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.20)"></use>
+                <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.15)"></use>
+                <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0.95"></use>
+                </g>
+            </svg>
+        </div>
+    </header>
     {% if search_results %}
-        <ul>
-            {% for result in search_results %}
-                <li>
-                    <h4>
-                        <a href="{% pageurl result %}">{{ result }}</a>
-                    </h4>
-                    {% if result.search_description %}{{ result.search_description }}{% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+        <section class="py-5">
+            <div class="container">
+                <div class="d-flex justify-content-center py-lg-5">
+                    <h1 class="display-6">Search Results</h1>
+                </div>
+                <div class="row">
+                    {% for post in search_results %}
+                        {% with post=post.specific %}
+                            <div class="col-md-4 mt-4">
+                                <div class="card h-100">
+                                    {% image post.feed_image fill-400x300 class="card-img-top" %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <a href="{% pageurl post %}">{{ post.title }}</a>
+                                        </h5>
+                                        <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
+                                        <a href="{% pageurl post %}" class="card-link">Read Now
+                                            <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endwith %}
+                    {% empty %}
+                        <h1 class="display-6">There are no posts yet.</h1>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
         {% if search_results.has_previous %}
             <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
         {% endif %}
@@ -34,6 +97,6 @@
             <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
         {% endif %}
     {% elif search_query %}
-        No results found
+        <h6 class="display-6 text-center">No results found</h6>
     {% endif %}
 {% endblock content %}
