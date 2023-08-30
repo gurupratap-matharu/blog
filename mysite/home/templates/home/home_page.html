@@ -1,7 +1,280 @@
 {% extends "layouts/base.html" %}
 
-{% load wagtailcore_tags %}
+{% load static %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    {{ page.body|richtext }}
+    <header class="header-2">
+        <div class="page-header min-vh-75 relative"
+             style="background-image: url({% static 'assets/img/curved-images/curved1.jpg' %})">
+            <span class="mask bg-gradient-primary"></span>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 text-center mx-auto">
+                        <h1 class="text-white pt-3 mt-n5">{{ page.title }}</h1>
+                        <p class="lead text-white mt-3">{{ page.hero_text }}</p>
+                        {% if page.hero_cta_link %}
+                            <a href="{% pageurl page.hero_cta_link %}" class="btn btn-white">{{ page.hero_cta }}</a>
+                        {% else %}
+                            <a href="" class="btn btn-white text-primary">{{ page.hero_cta }} <i class="bi bi-arrow-right ms-2"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="position-absolute w-100 z-index-1 bottom-0">
+                <svg class="waves"
+                     xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink"
+                     viewBox="0 24 150 40"
+                     preserveAspectRatio="none"
+                     shape-rendering="auto">
+                    <defs>
+                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+                    </defs>
+                    <g class="moving-waves">
+                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.40"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.35)"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.25)"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.20)"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.15)"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0.95"></use>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </header>
+    <section class="pt-3 pb-4" id="count-stats">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
+                    <div class="row">
+                        <div class="col-md-4 position-relative">
+                            <div class="p-3 text-center">
+                                <h1 class="text-gradient text-primary">
+                                    <span id="state1" countto="300">300</span>+
+                                </h1>
+                                <h5 class="mt-3">Coded Elements</h5>
+                                <p class="text-sm">From buttons, to inputs, navbars, alerts or cards, you are covered</p>
+                            </div>
+                            <hr class="vertical dark">
+                        </div>
+                        <div class="col-md-4 position-relative">
+                            <div class="p-3 text-center">
+                                <h1 class="text-gradient text-primary">
+                                    <span id="state2" countto="100">100</span>+
+                                </h1>
+                                <h5 class="mt-3">Design Blocks</h5>
+                                <p class="text-sm">Mix the sections, change the colors and unleash your creativity</p>
+                            </div>
+                            <hr class="vertical dark">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 text-center">
+                                <h1 class="text-gradient text-primary" id="state3" countto="39">39</h1>
+                                <h5 class="mt-3">Pages</h5>
+                                <p class="text-sm">Save 3-4 weeks of work when you use our pre-made pages</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="mt-lg-10 pb-4 bg-gray-900 m-3 border-radius-xl">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 my-auto">
+                    <h2 class="text-gradient text-primary mb-0 mt-6">Account Pages</h2>
+                    <h2 class="mb-4 text-white">For beautiful webapps</h2>
+                    <p class="text-white opacity-8">
+                        We created many examples for pages like Signup, Signin, Forgot Password, 2FA Authentification and so on. Just choose between a Basic Design, an illustration or a cover and you are good to go!
+                    </p>
+                    <div class="buttons">
+                        <a href="./pages/sign-in/sign-in-cover.html" target="_blank" class="btn bg-gradient-primary mt-4">View Pages</a>
+                        <a href="./pages/sign-up/sign-up-basic.html" target="_blank" class="btn text-white shadow-none mt-4">View Signup Pages</a>
+                    </div>
+                </div>
+                <div class="col-lg-8 ps-5 pe-0">
+                    <div class="row mt-lg-n7">
+                        <div class="col-lg-4 col-6 mt-5">
+                            <div class="card move-on-hover">
+                                <a href="./pages/sign-up/sign-up-basic.html">
+                                    <img class="w-100 border-radius-xl"
+                                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/presentation/section-account/sign-up-cover.jpg"
+                                         alt="">
+                                </a>
+                            </div>
+                            <div class="card move-on-hover mt-4">
+                                <a href="./pages/reset/reset-cover.html">
+                                    <img class="w-100 border-radius-xl"
+                                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/presentation/section-account/reset-password-1.jpg"
+                                         alt="">
+                                </a>
+                            </div>
+                            <div class="card move-on-hover mt-4 p-1">
+                                <a href="./pages/sign-up/sign-up-illustration.html">
+                                    <img class="w-100 border-radius-xl"
+                                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/presentation/section-account/signup-1.jpg"
+                                         alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-6">
+                            <div class="card move-on-hover">
+                                <a href="./pages/2fa-security.html">
+                                    <img class="w-100 border-radius-xl"
+                                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/presentation/section-account/2fa.jpg"
+                                         alt="">
+                                </a>
+                            </div>
+                            <div class="card move-on-hover mt-4">
+                                <a href="./pages/coming-soon.html">
+                                    <img class="w-100 border-radius-xl"
+                                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/presentation/section-account/coming-soon.jpg"
+                                         alt="">
+                                </a>
+                            </div>
+                            <div class="card move-on-hover mt-4">
+                                <a href="./pages/reset/reset-basic.html">
+                                    <img class="w-100 border-radius-xl"
+                                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/presentation/section-account/reset-password-3.jpg"
+                                         alt="">
+                                </a>
+                            </div>
+                            <div class="card move-on-hover mt-4">
+                                <a href="./pages/error-500.html">
+                                    <img class="w-100 border-radius-xl"
+                                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/presentation/section-account/500-error.jpg"
+                                         alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-6 mt-5 d-lg-block d-none">
+                            <div class="card move-on-hover">
+                                <a href="./pages/error-404.html">
+                                    <img class="w-100 border-radius-xl"
+                                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/presentation/section-account/404-error.jpg"
+                                         alt="">
+                                </a>
+                            </div>
+                            <div class="card move-on-hover p-1 mt-4">
+                                <a href="./pages/sign-in/sign-in-illustration.html">
+                                    <img class="w-100 border-radius-xl"
+                                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/presentation/section-account/sign-in.jpg"
+                                         alt="">
+                                </a>
+                            </div>
+                            <div class="card move-on-hover p-1 mt-4">
+                                <a href="./pages/sign-up/sign-up-cover.html">
+                                    <img class="w-100 border-radius-xl"
+                                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/presentation/section-account/signup-21.jpg"
+                                         alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% comment "Demo" %}{% endcomment %}
+    <section class="my-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-12 my-auto">
+                    <h3 class="text-gradient text-primary mb-0">You can check our</h3>
+                    <h3>Free Demo</h3>
+                    <p class="pe-md-5 mb-4">
+                        Do you want to test and see the benefits of this Design System before purchasing it? It features enough basic components and sections for you to get a feel of the design and also test the quality of the code. Get it free on GitHub!
+                    </p>
+                    <div class="github-buttons">
+                        <a href="https://github.com/creativetimofficial/soft-ui-design-system"
+                           target="_blank"
+                           rel="nofollow"
+                           class="btn bg-gradient-primary mb-5 mb-sm-0">View Demo on Github</a>
+                        <div class="github-button">
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 col-12 my-auto">
+                    <a href="https://www.creative-tim.com/product/soft-ui-design-system">
+                        <img class="w-100 border-radius-lg shadow-lg"
+                             src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/opt_sds_free_thumbnail.jpg"
+                             alt="Product Image">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="homepage">
+        <div class="container-fluid hero">{% image page.image fill-1920x600 class="hero-image" alt="" %}</div>
+        <div class="container">
+            <div class="row promo-row">
+                <div class="featured-cards col-sm-5 col-sm-offset-1">
+                    {% if page.featured_section_1 %}
+                        <h2 class="featured-cards__title">{{ page.featured_section_1_title }}</h2>
+                        <ul class="featured-cards__list">
+                            {% for childpage in page.featured_section_1.specific.children|slice:"3" %}
+                                <li>{% include "includes/card/listing-card.html" with page=childpage %}</li>
+                            {% endfor %}
+                        </ul>
+                        <a class="featured-cards__link" href="/breads">
+                            <span>View more of our breads</span>
+                            {% include "includes/chevron-icon.html" with class="featured-cards__chevron-icon" %}
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="col-sm-6 promo">
+                    {% if page.promo_image or page.promo_title or page.promo_text %}
+                        <div class="col-lg-10 promo-text">
+                            {% if page.promo_title %}<h2>{{ page.promo_title }}</h2>{% endif %}
+                            {% if page.promo_text %}{{ page.promo_text|richtext }}{% endif %}
+                        </div>
+                    {% endif %}
+                    {% if page.promo_image %}
+                        <figure>
+                            {% image page.promo_image fill-590x413-c100 %}
+                        </figure>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if page.body %}
+            <div class="container-fluid streamfield">
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 streamfield-column">{{ page.body }}</div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 locations-section">
+                    {% if page.featured_section_2 %}
+                        <h2 class="locations-section__title">{{ page.featured_section_2_title }}</h2>
+                        {% for childpage in page.featured_section_2.specific.children|slice:"3" %}
+                            {% include "includes/card/location-card.html" with page=childpage %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if page.featured_section_3 %}
+            <div class="blog-section__background">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 blog-section">
+                            <h2 class="blog-section__title">{{ page.featured_section_3_title }}</h2>
+                            <div class="blog-section__grid">
+                                {% for childpage in page.featured_section_3.specific.children|slice:"6" %}
+                                    {% include "includes/card/picture-card.html" with page=childpage portrait=True %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock content %}
