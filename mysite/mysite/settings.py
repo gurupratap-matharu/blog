@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "home",
     "search",
     "blog.apps.BlogConfig",
+    "partners.apps.PartnersConfig",
     # Wagtail contrib
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
