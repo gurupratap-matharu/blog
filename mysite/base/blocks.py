@@ -60,14 +60,6 @@ class BlockQuote(StructBlock):
         template = "blocks/blockquote.html"
 
 
-class GalleryBlock(StructBlock):
-    images = ListBlock(ImageBlock())
-
-    class Meta:
-        icon = "image"
-        template = "blocks/gallery_block.html"
-
-
 class BaseStreamBlock(StreamBlock):
     """
     Define a custom block that `StreamField` will utilize.
