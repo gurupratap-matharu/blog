@@ -1,0 +1,21 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+    <h1>{{ partner }}</h1>
+    <h2>Logo</h2>
+    {% image page.logo original %}
+    <h2>Body</h2>
+    {{ page.body }}
+    <h2>Tags</h2>
+    <ul>
+        {% for tag in page.tags.all %}<li>{{ tag }}</li>{% endfor %}
+    </ul>
+    <h2>Amenities</h2>
+    <ul>
+        {% for amenity in page.amenities.all %}<li>{{ amenity }}</li>{% endfor %}
+    </ul>
+{% endblock content %}

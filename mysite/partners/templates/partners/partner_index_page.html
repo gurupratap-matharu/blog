@@ -1,0 +1,16 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+    <h1>Partner index</h1>
+    <h2>Intro</h2>
+    {{ page.intro }}
+    <h2>Image</h2>
+    {% image page.image original %}
+    {% for partner in partners %}
+        <a href="{% pageurl partner %}">{{ partner }}</a>
+    {% endfor %}
+{% endblock content %}
