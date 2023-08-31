@@ -209,6 +209,8 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ("es", "Spanish"),
 ]
 
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")
+
 
 CSRF_TRUSTED_ORIGINS = ["https://*.falconhunt.xyz", "https://*.127.0.0.1"]
 
@@ -259,6 +261,7 @@ LOGGING = {
 
 
 if not DEBUG:
+    WAGTAILADMIN_BASE_URL = "https://falconhunt.xyz"
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = "smtp.mailgun.org"
     EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
