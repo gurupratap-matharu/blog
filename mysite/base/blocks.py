@@ -60,6 +60,18 @@ class BlockQuote(StructBlock):
         template = "blocks/blockquote.html"
 
 
+class FAQItemBlock(StructBlock):
+    question = CharBlock(required=True)
+    answer = TextBlock(required=True)
+
+
+class FAQBlock(StructBlock):
+    item = ListBlock(FAQItemBlock())
+
+    class Meta:
+        template = "blocks/faq_block.html"
+
+
 class BaseStreamBlock(StreamBlock):
     """
     Define a custom block that `StreamField` will utilize.
@@ -78,3 +90,4 @@ class BaseStreamBlock(StreamBlock):
         icon="media",
         template="blocks/embed_block.html",
     )
+    faq = FAQBlock()

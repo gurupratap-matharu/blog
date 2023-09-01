@@ -10,7 +10,7 @@ from wagtail.models import Page
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
-from base.blocks import BaseStreamBlock
+from base.blocks import BaseStreamBlock, FAQBlock
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
@@ -96,7 +96,13 @@ class PartnerPage(Page):
     tags = ClusterTaggableManager(through="partners.PartnerPageTag", blank=True)
 
     amenities = ParentalManyToManyField("partners.Amenity", blank=True)
-
+    faq = StreamField(
+        [("faq", FAQBlock())],
+        verbose_name="FAQ Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
     search_fields = Page.search_fields + [
         index.SearchField("body"),
     ]
@@ -104,6 +110,7 @@ class PartnerPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel("logo"),
         FieldPanel("body"),
+        FieldPanel("faq"),
         MultiFieldPanel(
             [
                 FieldPanel("tags"),

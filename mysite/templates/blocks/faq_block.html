@@ -1,0 +1,10 @@
+<div class="row py-5">
+    <div class="list-group">
+        {% for element in self.item %}
+        <a href="javascript:;" class="list-group-item list-group-item-action">
+            <h3>{{ element.question }}</h3>
+            <p>{{ element.answer }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
