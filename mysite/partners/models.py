@@ -144,7 +144,8 @@ class PartnerPage(Page):
 @register_snippet
 class Amenity(models.Model):
     """
-    An Amenity that a partner provides. Generally common across many partners and typically represented in a badge with an icon and optional text.
+    An Amenity that a partner provides. Generally common across many partners and typically
+    represented in a badge with an icon and optional text.
     """
 
     name = models.CharField(max_length=255)
