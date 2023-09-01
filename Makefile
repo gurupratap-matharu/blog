@@ -61,7 +61,7 @@ format:
 	git ls-files '*.html' | xargs djlint --reformat
 
 lint:
-	black --target-version py37 --check --diff .
+	black --check --diff .
 	ruff .
 	isort --check-only --diff .
 	git ls-files '*.html' | xargs djlint --check
