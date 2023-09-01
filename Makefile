@@ -56,7 +56,7 @@ runserver:
 build: install makemigrations migrate runserver
 
 format:
-	black --target-version py37 .
+	black .
 	isort .
 	git ls-files '*.html' | xargs djlint --reformat
 
