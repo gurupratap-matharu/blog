@@ -7,20 +7,24 @@
 {% block content %}
     {% include "includes/header-slant.html" %}
     <div class="container">
-        <h1>{{ partner }}</h1>
-        <h2>Logo</h2>
-        {% image page.logo original %}
-        <h2>Body</h2>
-        {{ page.body }}
-        <h2>FAQ</h2>
-        {{ page.faq }}
-        <h2>Tags</h2>
-        <ul>
-            {% for tag in page.tags.all %}<li>{{ tag }}</li>{% endfor %}
-        </ul>
-        <h2>Amenities</h2>
-        <ul>
-            {% for amenity in page.amenities.all %}<li>{{ amenity }}</li>{% endfor %}
-        </ul>
+        <div class="row">
+            <div class="col-12 col-md-8 mx-auto">
+                <h1>{{ partner }}</h1>
+                <h2>Logo</h2>
+                {% image page.logo original %}
+                <h2>Body</h2>
+                {{ page.body }}
+                <h2>FAQ</h2>
+                {{ page.faq }}
+                <h2>Tags</h2>
+                <ul>
+                    {% for tag in page.tags.all %}<li>{{ tag }}</li>{% endfor %}
+                </ul>
+                <h2>Amenities</h2>
+                <ul>
+                    {% for amenity in page.amenities.all %}<li>{{ amenity }}</li>{% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 {% endblock content %}

@@ -1,4 +1,5 @@
 {% load static %}
+{% load wagtailimages_tags %}
 
 <header>
     <div class="page-header min-vh-75 mb-5">
@@ -9,14 +10,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-                    <h1 class="text-gradient text-primary">Your Work With</h1>
-                    <h1 class="mb-4">Soft Design System</h1>
+                    {% image page.logo original %}
+                    <h1 class="mb-4">{{ page.title }}</h1>
                     <p class="lead pe-5 me-5">
                         The time is now for it be okay to be great. People in this world shun people for being nice.
                     </p>
                     <div class="buttons">
-                        <button type="button" class="btn bg-gradient-primary mt-4">Get Started</button>
-                        <button type="button" class="btn text-primary shadow-none mt-4">Read more</button>
+                        <button type="button" class="btn bg-gradient-primary mt-4">Visit Site</button>
+                        <button type="button" class="btn text-primary shadow-none mt-4">
+                            Book Tickets<i class="bi bi-arrow-right ms-2"></i>
+                        </button>
                     </div>
                 </div>
             </div>
