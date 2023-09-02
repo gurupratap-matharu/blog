@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+
 from django.utils.translation import gettext_lazy as _
+
 import sentry_sdk
 from dotenv import load_dotenv
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -159,11 +161,20 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en"
+LANGUAGE_CODE = "es"
 
-LOCALE_PATHS = [ BASE_DIR / 'locale', ]
+WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
+    ("en", _("English")),
+    ("es", _("Spanish")),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
 
 TIME_ZONE = "UTC"
+
+WAGTAIL_I18N_ENABLED = True
 
 USE_I18N = True
 
@@ -207,13 +218,6 @@ WAGTAILSEARCH_BACKENDS = {
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 WAGTAILADMIN_BASE_URL = "http://localhost:8000"
 
-WAGTAIL_I18N_ENABLED = True
-
-WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
-    ("en", _("English")),
-    ("es", _("Spanish")),
-]
-
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")
 
 
@@ -223,43 +227,32 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "simple": {"format": "%(levelname)s %(message)s"},
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s:%(lineno)d %(message)s"
-        },
-        "superverbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s:%(lineno)d %(process)d %(thread)d %(message)s"
-        },
-        "elegant": {
-            "format": (
-                "%(asctime)s [%(levelname)-8s] " "(%(module)s.%(funcName)s) %(message)s"
-            ),
-            "datefmt": "%Y-%m-%d %H:%M:%S",
+            "format": "[%(asctime)s][%(process)d][%(levelname)s][%(name)s] %(message)s"
         },
     },
     "handlers": {
         "console": {
-            "level": "DEBUG",
+            "level": "INFO",
             "class": "logging.StreamHandler",
-            "formatter": "elegant",
+            "formatter": "verbose",
         },
-        "file": {
-            "level": "WARNING",
-            "class": "logging.FileHandler",
-            "filename": "./wagtail.log",
-            "formatter": "elegant",
-        },
-    },
-    "root": {
-        "handlers": ["console"],
-        "level": "INFO",
-        "formatter": "elegant",
     },
     "loggers": {
-        "django": {
-            "level": os.getenv("DJANGO_LOG_LEVEL", default="INFO"),
+        "wagtail": {
+            "level": "INFO",
             "handlers": ["console"],
-            "propagate": True,
+            "propagate": False,
+        },
+        "django.request": {
+            "level": "WARNING",
+            "handlers": ["console"],
+            "propagate": False,
+        },
+        "django.security": {
+            "level": "WARNING",
+            "handlers": ["console"],
+            "propagate": False,
         },
     },
 }

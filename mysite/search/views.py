@@ -3,8 +3,8 @@ import logging
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import render
 
+from wagtail.contrib.search_promotions.models import Query
 from wagtail.models import Page
-from wagtail.search.models import Query
 
 logger = logging.getLogger(__name__)
 
