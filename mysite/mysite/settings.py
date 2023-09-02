@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
-
+from django.utils.translation import gettext_lazy as _
 import sentry_sdk
 from dotenv import load_dotenv
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -71,6 +71,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -158,7 +159,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
+
+LOCALE_PATHS = [ BASE_DIR / 'locale', ]
 
 TIME_ZONE = "UTC"
 
@@ -207,8 +210,8 @@ WAGTAILADMIN_BASE_URL = "http://localhost:8000"
 WAGTAIL_I18N_ENABLED = True
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
-    ("en", "English"),
-    ("es", "Spanish"),
+    ("en", _("English")),
+    ("es", _("Spanish")),
 ]
 
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")
