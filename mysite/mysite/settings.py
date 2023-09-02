@@ -14,9 +14,7 @@ from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
 
-import sentry_sdk
 from dotenv import load_dotenv
-from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
@@ -166,6 +164,7 @@ LANGUAGE_CODE = "es"
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ("en", _("English")),
     ("es", _("Spanish")),
+    ("pt", _("Portuguese")),
 ]
 
 LOCALE_PATHS = [
@@ -282,6 +281,10 @@ if not DEBUG:
     X_FRAME_OPTIONS = "DENY"
 
     # Sentry
+
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
     sentry_sdk.init(
         dsn=os.getenv("SENTRY_DSN"),
         integrations=[DjangoIntegration()],
