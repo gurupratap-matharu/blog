@@ -5,12 +5,22 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    <h1>Partner index</h1>
-    <h2>Intro</h2>
-    {{ page.intro }}
-    <h2>Image</h2>
-    {% image page.image original %}
-    {% for partner in partners %}
-        <a href="{% pageurl partner %}">{{ partner }}</a>
-    {% endfor %}
+    {% include "includes/header-hero.html" %}
+    <div class="container">
+        <div class="row">
+            {% for partner in partners %}
+                <div class="col-md-3">
+                    <div class="card card-plain mx-3 mx-md-0">
+                        <div class="card-body px-1 pt-3">
+                            <h5>
+                                <a href="{% pageurl partner %}">{{ partner }}</a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% include "includes/pagination.html" %}
+    </div>
 {% endblock content %}
