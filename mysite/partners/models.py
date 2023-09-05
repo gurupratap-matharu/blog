@@ -65,7 +65,7 @@ class PartnerIndexPage(Page):
             self.get_children().live().order_by("-first_published_at")
         )  # <-- change this to by country
 
-        paginator = Paginator(qs, 9)
+        paginator = Paginator(qs, 12)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
 
