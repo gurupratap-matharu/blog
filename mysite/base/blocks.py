@@ -1,12 +1,12 @@
 from wagtail.blocks import (
     CharBlock,
     ChoiceBlock,
+    EmailBlock,
     ListBlock,
     RichTextBlock,
     StreamBlock,
     StructBlock,
     TextBlock,
-    EmailBlock,
     URLBlock,
 )
 from wagtail.embeds.blocks import EmbedBlock
@@ -83,6 +83,7 @@ class ContactBlock(StructBlock):
 
     class Meta:
         template = "blocks/contact_block.html"
+
 
 class BaseStreamBlock(StreamBlock):
     """
