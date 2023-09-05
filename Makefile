@@ -62,14 +62,14 @@ runserver:
 build: install makemigrations migrate runserver
 
 format:
-	black .
-	isort .
+	poetry run isort . --profile django
+	poetry run black .
 	git ls-files '*.html' | xargs djlint --reformat
 
 lint:
-	black --check --diff .
-	ruff .
-	isort --check-only --diff .
+	poetry run isort --check-only --diff --profile django .
+	poetry run black --check --diff .
+	poetry run ruff .
 	git ls-files '*.html' | xargs djlint --check
 
 test: check migrations-check
