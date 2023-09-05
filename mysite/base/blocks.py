@@ -6,6 +6,8 @@ from wagtail.blocks import (
     StreamBlock,
     StructBlock,
     TextBlock,
+    EmailBlock,
+    URLBlock,
 )
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
@@ -71,6 +73,16 @@ class FAQBlock(StructBlock):
     class Meta:
         template = "blocks/faq_block.html"
 
+
+class ContactBlock(StructBlock):
+    phone = CharBlock()
+    whatsapp = CharBlock()
+    email = EmailBlock()
+    address = TextBlock()
+    website = URLBlock()
+
+    class Meta:
+        template = "blocks/contact_block.html"
 
 class BaseStreamBlock(StreamBlock):
     """
