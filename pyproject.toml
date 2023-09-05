@@ -37,8 +37,7 @@ exclude = [
 profile = "black"
 skip = ["docs", "migrations"]
 known_django = "django"
-known_wagtail = "wagtail"
-sections = "FUTURE,STDLIB,DJANGO, WAGTAIL,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+sections = "FUTURE,STDLIB,DJANGO,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 
 [tool.black]
 exclude = '''
