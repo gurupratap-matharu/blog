@@ -6,7 +6,9 @@
                     <div class="col-10">
                         <div class="numbers">
                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Phone</p>
-                            <h5 class="font-weight-bolder mb-0">{{ self.phone }}</h5>
+                            <h5 class="font-weight-bolder mb-0">
+                                <a href="tel:{{ self.phone }}" target="_blank">Call {{ self.phone }}</a>
+                            </h5>
                         </div>
                     </div>
                     <div class="col-2 text-end">
@@ -25,7 +27,9 @@
                     <div class="col-10">
                         <div class="numbers">
                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Whatsapp</p>
-                            <h5 class="font-weight-bolder mb-0">{{ self.whatsapp }}</h5>
+                            <h5 class="font-weight-bolder mb-0">
+                                <a href="https://wa.me/{{ self.whatsapp }}" target="_blank">{{ self.whatsapp }}</a>
+                            </h5>
                         </div>
                     </div>
                     <div class="col-2 text-end">
@@ -44,7 +48,9 @@
                     <div class="col-10">
                         <div class="numbers">
                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Email</p>
-                            <h5 class="font-weight-bolder mb-0">{{ self.email }}</h5>
+                            <h5 class="font-weight-bolder mb-0">
+                                <a href="mailto:{{ self.email }}" target="_blank">{{ self.email }}</a>
+                            </h5>
                         </div>
                     </div>
                     <div class="col-2 text-end">
@@ -63,7 +69,9 @@
                     <div class="col-10">
                         <div class="numbers">
                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Website</p>
-                            <h5 class="font-weight-bolder mb-0">{{ self.website }}</h5>
+                            <h5 class="font-weight-bolder mb-0">
+                                <a href="{{ self.website }}" target="_blank">{{ self.website }}</a>
+                            </h5>
                         </div>
                     </div>
                     <div class="col-2 text-end">
