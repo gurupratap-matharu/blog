@@ -10,7 +10,7 @@ from wagtail.models import Page
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
-from base.blocks import BaseStreamBlock, FAQBlock
+from base.blocks import BaseStreamBlock, FAQBlock, ContactBlock
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
@@ -97,6 +97,8 @@ class PartnerPage(Page):
         related_name="+",
     )
 
+    contact = StreamField([("contact", ContactBlock())], verbose_name="Contact Information", blank=True, max_num=1, use_json_field=True)
+
     body = StreamField(
         BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
     )
@@ -117,6 +119,7 @@ class PartnerPage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel("logo"),
+        FieldPanel("contact"),
         FieldPanel("body"),
         FieldPanel("faq"),
         MultiFieldPanel(
