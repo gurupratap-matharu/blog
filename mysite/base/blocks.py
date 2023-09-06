@@ -66,11 +66,15 @@ class FAQItemBlock(StructBlock):
     question = CharBlock(required=True)
     answer = TextBlock(required=True)
 
+    class Meta:
+        icon = "comment-add"
+
 
 class FAQBlock(StructBlock):
     item = ListBlock(FAQItemBlock())
 
     class Meta:
+        icon = "comment"
         template = "blocks/faq_block.html"
 
 

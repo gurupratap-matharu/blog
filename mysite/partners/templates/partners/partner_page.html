@@ -25,7 +25,7 @@
                 <section class="py-3 py-md-5">
                     <h2 class="text-center mb-3">Amenities</h2>
                     {% for amenity in page.amenities.all %}
-                        <span class="badge bg-light text-dark me-2">{{ amenity|title }}</span>
+                    <span class="badge bg-light text-dark me-2"><i class="bi bi-{{ amenity.icon_name }} me-1"></i> {{ amenity|title }}</span>
                     {% endfor %}
                 </section>
             </div>

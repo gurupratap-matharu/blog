@@ -174,9 +174,12 @@ class Amenity(models.Model):
         related_name="+",
     )
 
+    icon_name = models.CharField(max_length=20, help_text="Name of the bootstrap icon", blank=True, null=True)
+
     panels = [
         FieldPanel("name"),
         FieldPanel("icon"),
+        FieldPanel("icon_name"),
     ]
 
     class Meta:
