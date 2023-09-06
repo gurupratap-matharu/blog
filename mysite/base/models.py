@@ -40,6 +40,7 @@ from wagtail.models import (
     WorkflowMixin,
 )
 from wagtail.search import index
+from wagtail.snippets.models import register_snippet
 
 from base.blocks import BaseStreamBlock
 from base.views import CustomSubmissionsListView
@@ -49,6 +50,25 @@ from modelcluster.models import ClusterableModel
 logger = logging.getLogger(__name__)
 
 ImageModel = get_image_model()
+
+
+class Country(models.Model):
+    """
+    A Django model to store set of countries of origin.
+
+    In the PartnerPage, StatioPage models we'll use a ForeignKey to create the relationship between
+    Country and other models. This allows a single relationship (e.g only one
+    Country can be added) that is one-way (e.g. Country will have no way to
+    access related objects).
+    """
+
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = "Countries of Origin"
 
 
 class Person(
