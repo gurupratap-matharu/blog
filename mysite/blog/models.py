@@ -299,7 +299,6 @@ class BlogPageRelatedLink(Orderable):
         return f"{self.name} | {self.url}"
 
 
-@register_snippet
 class BlogCategory(models.Model):
     name = models.CharField(max_length=255)
     icon = models.ForeignKey(

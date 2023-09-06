@@ -158,7 +158,6 @@ class PartnerPage(Page):
         return tags
 
 
-@register_snippet
 class Amenity(models.Model):
     """
     An Amenity that a partner provides. Generally common across many partners and typically
@@ -174,7 +173,9 @@ class Amenity(models.Model):
         related_name="+",
     )
 
-    icon_name = models.CharField(max_length=20, help_text="Name of the bootstrap icon", blank=True, null=True)
+    icon_name = models.CharField(
+        max_length=20, help_text="Name of the bootstrap icon", blank=True, null=True
+    )
 
     panels = [
         FieldPanel("name"),
