@@ -101,7 +101,7 @@ class BlogIndexPage(RoutablePageMixin, Page):
         """
 
         try:
-            tag = Tag.objects.get(slug=tag)
+            tag = Tag.objects.get(slug__iexact=tag)
         except Tag.DoesNotExist:
             if tag:
                 msg = f'There are no blog posts tagged with "{tag}"'
@@ -110,6 +110,26 @@ class BlogIndexPage(RoutablePageMixin, Page):
 
         posts = self.get_posts(tag=tag)
         context = {"tag": tag, "posts": posts}
+        return render(request, "blog/blog_index_page.html", context)
+
+    @route(r"^categories/$", name="category_archive")
+    @route(r"^categories/([\w-]+)/$", name="category_archive")
+    def category_archive(self, request, category=None):
+        """
+        Show posts only for a certain category.
+        """
+
+        try:
+            category = BlogCategory.objects.get(name__iexact=category)
+        except BlogCategory.DoesNotExist:
+            if category:
+                msg = f'There are no blog posts of category "{category}"'
+                messages.info(request, msg)
+            return redirect(self.url)
+
+        posts = self.get_posts().filter(categories=category)
+
+        context = {"category": category, "posts": posts}
         return render(request, "blog/blog_index_page.html", context)
 
     def get_posts(self, tag=None):

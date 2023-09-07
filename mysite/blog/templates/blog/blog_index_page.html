@@ -7,8 +7,8 @@
 {% block content %}
     {% comment "Hero" %}{% endcomment %}
     <div class="page-header min-vh-100">
-        {% with featured=featured.specific %}
-            {% image featured.feed_image original as tmp_photo %}
+        {% with posts|first as featured %}
+            {% image featured.specific.feed_image original as tmp_photo %}
             <div class="position-absolute fixed-top ms-auto w-50 h-100 z-index-0 d-none d-sm-none d-md-block"
                  style="background-image: url({{ tmp_photo.url }});
                         background-size:cover"></div>
@@ -16,8 +16,8 @@
                 <div class="row">
                     <div class="col-lg-7 d-flex justify-content-center flex-column">
                         <div class="card card-body blur d-flex justify-content-center shadow-lg p-5 mt-5">
-                            <h1>{{ featured.title }}</h1>
-                            <p class="lead pe-lg-5 me-lg-5">{{ featured.subtitle }}</p>
+                            <h1>{{ featured.specific.title }}</h1>
+                            <p class="lead pe-lg-5 me-lg-5">{{ featured.specific.subtitle }}</p>
                             <div class="buttons">
                                 <a href="{% pageurl featured %}" class="btn bg-gradient-primary">
                                     Read Now<i class="bi bi-arrow-right ms-1"></i>
@@ -93,7 +93,11 @@
             </div>
         </div>
     </section>
+
     {% include "includes/pagination.html" %}
+
     {% comment "Call to Action" %}{% endcomment %}
+
     {% include "includes/cta.html" %}
+
 {% endblock content %}
