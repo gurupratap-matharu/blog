@@ -40,7 +40,6 @@ from wagtail.models import (
     WorkflowMixin,
 )
 from wagtail.search import index
-from wagtail.snippets.models import register_snippet
 
 from base.blocks import BaseStreamBlock
 from base.views import CustomSubmissionsListView
@@ -421,6 +420,7 @@ class GenericSettings(ClusterableModel, BaseGenericSetting):
     twitter_url = models.URLField(verbose_name="Twitter URL", blank=True)
     facebook_url = models.URLField(verbose_name="Facebook URL", blank=True)
     instagram_url = models.URLField(verbose_name="Instagram URL", blank=True)
+    youtube_url = models.URLField(verbose_name="Youtube URL", blank=True)
     organisation_url = models.URLField(verbose_name="Organisation URL", blank=True)
 
     panels = [

@@ -15,42 +15,54 @@
                     <h6 class="mt-3 mb-2 opacity-8">Social</h6>
                     <ul class="d-flex flex-row ms-n3 nav">
                         <li class="nav-item">
-                            <a class="nav-link pe-1" href="">
+                            <a class="nav-link pe-1"
+                               target="_blank"
+                               href="{{ settings.base.GenericSettings.facebook_url }}">
                                 <i class="bi bi-facebook text-lg opacity-8"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pe-1" href="">
+                            <a class="nav-link pe-1"
+                               target="_blank"
+                               href="{{ settings.base.GenericSettings.twitter_url }}">
                                 <i class="bi bi-twitter text-lg opacity-8"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pe-1" href="">
+                            <a class="nav-link pe-1"
+                               target="_blank"
+                               href="{{ settings.base.GenericSettings.instagram_url }}">
                                 <i class="bi bi-instagram text-lg opacity-8"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pe-1" href="">
+                            <a class="nav-link pe-1"
+                               target="_blank"
+                               href="{{ settings.base.GenericSettings.youtube_url }}">
                                 <i class="bi bi-youtube text-lg opacity-8"></i>
                             </a>
                         </li>
                     </ul>
                     <div class="d-flex mt-3 mb-2">
-                        <form action="{% url 'set_language' %}" method="post">
+                        <form action="{% url 'set_language' %}"
+                              method="post">
                             {% csrf_token %}
-                            <input name="next" type="hidden" value="{{ redirect_to }}">
+                            <input name="next"
+                                   type="hidden"
+                                   value="{{ redirect_to }}" />
                             <div class="input-group input-group-sm mb-3">
-                                <select name="language" class="form-select form-select-sm bg-transparent">
+                                <select name="language"
+                                        class="form-select form-select-sm bg-transparent">
                                     {% get_current_language as LANGUAGE_CODE %}
                                     {% get_available_languages as LANGUAGES %}
                                     {% get_language_info_list for LANGUAGES as languages %}
                                     {% for language in languages %}
-                                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                                            {{ language.name }}
-                                        </option>
+                                        <option value="{{ language.code }}"
+                                                {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name }}</option>
                                     {% endfor %}
                                 </select>
-                                <button class="btn btn-outline-primary mb-0" type="submit">Go</button>
+                                <button class="btn btn-outline-primary mb-0"
+                                        type="submit">Go</button>
                             </div>
                         </form>
                     </div>
@@ -61,16 +73,20 @@
                     <h6 class="text-gradient text-primary text-sm">Company</h6>
                     <ul class="flex-column ms-n3 nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% slugurl 'about' %}">About Us</a>
+                            <a class="nav-link"
+                               href="{% slugurl 'about' %}">About Us</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Freebies</a>
+                            <a class="nav-link"
+                               href="">Freebies</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% slugurl 'partners' %}">Partners</a>
+                            <a class="nav-link"
+                               href="{% slugurl 'partners' %}">Partners</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% slugurl 'blog' %}">Blog</a>
+                            <a class="nav-link"
+                               href="{% slugurl 'blog' %}">Blog</a>
                         </li>
                     </ul>
                 </div>
@@ -80,13 +96,16 @@
                     <h6 class="text-gradient text-primary text-sm">Resources</h6>
                     <ul class="flex-column ms-n3 nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="">Illustrations</a>
+                            <a class="nav-link"
+                               href="">Illustrations</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Bits & Snippets</a>
+                            <a class="nav-link"
+                               href="">Bits & Snippets</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Affiliate Program</a>
+                            <a class="nav-link"
+                               href="">Affiliate Program</a>
                         </li>
                     </ul>
                 </div>
@@ -96,16 +115,20 @@
                     <h6 class="text-gradient text-primary text-sm">Help & Support</h6>
                     <ul class="flex-column ms-n3 nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% slugurl 'contact-us' %}">Contact Us</a>
+                            <a class="nav-link"
+                               href="{% slugurl 'contact-us' %}">Contact Us</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Knowledge Center</a>
+                            <a class="nav-link"
+                               href="">Knowledge Center</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Custom Development</a>
+                            <a class="nav-link"
+                               href="">Custom Development</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Sponsorships</a>
+                            <a class="nav-link"
+                               href="">Sponsorships</a>
                         </li>
                     </ul>
                 </div>
@@ -115,13 +138,16 @@
                     <h6 class="text-gradient text-primary text-sm">Legal</h6>
                     <ul class="flex-column ms-n3 nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% slugurl 'terms' %}">Terms &amp; Conditions</a>
+                            <a class="nav-link"
+                               href="{% slugurl 'terms' %}">Terms &amp; Conditions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% slugurl 'privacy' %}">Privacy Policy</a>
+                            <a class="nav-link"
+                               href="{% slugurl 'privacy' %}">Privacy Policy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Licenses (EULA)</a>
+                            <a class="nav-link"
+                               href="">Licenses (EULA)</a>
                         </li>
                     </ul>
                 </div>
