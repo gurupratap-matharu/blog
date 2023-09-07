@@ -8,6 +8,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
+from base.views import RobotsView
 from search import views as search_views
 
 urlpatterns = [
@@ -16,6 +17,7 @@ urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path("documents/", include(wagtaildocs_urls)),
     path("sitemap.xml", sitemap),
+    path("robots.txt", RobotsView.as_view()),
     path("__debug__/", include("debug_toolbar.urls")),
 ]
 
