@@ -49,17 +49,21 @@ exclude = '''
 '''
 
 [tool.djlint]
+blank_line_before_tag = "load,extends,block,include"
+blank_line_after_tag = "load,extends,endblock,include"
+close_void_tags = true
+custom_blocks = "toc,example"
+custom_html = "mjml"
 exclude = ".venv,venv,.tox,.eggs,.git"
 extend_exclude = ".custom"
-blank_line_before_tag = "load,extends,block"
-blank_line_after_tag = "load,extends,endblock"
-profile = "django"
-max_line_length = 120
-max_attribute_length = 120
-use_gitignore = true
 format_attribute_template_tags = true
-format_js = true
 format_css = true
+format_js = true
+# ignore = "H006"
+max_attribute_length = 120
+max_line_length = 120
+profile = "django"
+use_gitignore = true
 
 [tool.djlint.css]
 indent_size = 5
