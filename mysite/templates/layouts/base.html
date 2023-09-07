@@ -1,11 +1,14 @@
-{% load static wagtailcore_tags wagtailuserbar wagtailimages_tags navigation_tags %}
+{% load static wagtailcore_tags wagtailuserbar wagtailimages_tags navigation_tags i18n %}
 
 <!DOCTYPE html>
-<html lang="en">
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
     <head>
         <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="{% if page.search_description %}{{ page.search_description }}{% endif %}">
+        <meta name="description" content="{% if page.search_description %} {{ page.search_description }} {% endif %}" />
+        <meta name="author" content="Falcon Team" />
         <link rel="apple-touch-icon" sizes="76x76" href="{% static "assets/img/apple-icon.png" %}" />
         <link rel="icon" type="image/png" href="{% static "assets/img/favicon.png" %}" />
         <title>
@@ -23,14 +26,15 @@
             {% endblock title_suffix %}
 
         </title>
+        {% if page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{% endif %}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
         {# Force all links in the live preview panel to be opened in a new tab #}
-        {% if request.in_preview_panel %}<base target="_blank">{% endif %}
+        {% if request.in_preview_panel %}<base target="_blank" />{% endif %}
         {% if not request.is_preview %}<!-- Veer add analytics here -->{% endif %}
         {# Global stylesheets #}
-        <link href="{% static 'assets/css/soft-design-system.css' %}" rel="stylesheet" type="text/css"   id="pagestyle" />
-        <link href="{% static 'assets/css/mysite.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'assets/css/soft-design-system.css' %}" rel="stylesheet" type="text/css" id="pagestyle" />
+        <link href="{% static 'assets/css/mysite.css' %}" rel="stylesheet" type="text/css" />
 
         {% block extra_css %}
         {% endblock extra_css %}
@@ -42,11 +46,15 @@
         {% wagtailuserbar %}
 
         {% block header %}
+
             {% include "includes/navigation.html" %}
+
         {% endblock header %}
 
         {% block messages %}
+
             {% include "includes/messages.html" %}
+
         {% endblock messages %}
 
         <main>
@@ -57,12 +65,17 @@
         </main>
 
         {% block footer %}
+
             {% include "includes/footer.html" %}
+
         {% endblock footer %}
 
         <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
         <script type="text/javascript" src="{% static "assets/js/soft-design-system.js" %}"></script>
         <script type="text/javascript" src="{% static "assets/js/mysite.js" %}"></script>
+
+        {% block modal %}
+        {% endblock modal %}
 
         {% block extra_js %}
         {% endblock extra_js %}
