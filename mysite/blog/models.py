@@ -6,13 +6,13 @@ from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import Count
 from django.shortcuts import redirect, render
+from django.utils.functional import cached_property
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import StreamField
 from wagtail.models import Orderable, Page
 from wagtail.search import index
-from wagtail.snippets.models import register_snippet
 
 from base.blocks import BaseStreamBlock
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -216,6 +216,7 @@ class BlogPage(Page):
 
         return gallery_item.image if gallery_item else None
 
+    @cached_property
     def get_tags(self):
         """
         Find all the tags that

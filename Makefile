@@ -70,6 +70,7 @@ lint:
 	poetry run isort --check-only --diff --profile django .
 	poetry run black --check --diff .
 	poetry run ruff .
+	git ls-files '*.html' | xargs djlint --lint
 	git ls-files '*.html' | xargs djlint --check
 
 test: check migrations-check

@@ -8,7 +8,6 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
 from wagtail.models import Page
 from wagtail.search import index
-from wagtail.snippets.models import register_snippet
 
 from base.blocks import BaseStreamBlock, ContactBlock, FAQBlock
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -51,7 +50,6 @@ class PartnerIndexPage(Page):
         FieldPanel("image"),
     ]
 
-    # Specify that only blog pages can be children of this blogindex page
     subpage_types = ["PartnerPage"]
 
     class Meta:
@@ -145,8 +143,8 @@ class PartnerPage(Page):
 
     def get_tags(self):
         """
-        Find all the tags that are related to the blog post into a list we can access on the template.
-        We're additionally adding a URL to access BlogPage objects with that tag
+        Find all the tags that are related to the partner into a list we can access on the template.
+        We're additionally adding a URL to access ParterPage objects with that tag
         """
 
         base_url = self.get_parent().url
