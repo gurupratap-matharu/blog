@@ -1,0 +1,44 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+
+    {% include "includes/header-hero.html" %}
+
+    <section class="py-3 py-md-5">
+        <div class="container">
+            <div class="row">
+                {% for city in cities %}
+                    <div class="col-md-3 mb-3">
+                        <div class="card card-blog card-plain mx-3 mx-md-0">
+                            <div class="position-relative">
+                                <a class="d-block blur-shadow-image"
+                                   href="{% pageurl city %}">
+                                    <img src="{% static 'assets/img/curved-images/curved1.jpg' %}"
+                                         alt="img-blur-shadow"
+                                         class="img-fluid shadow-lg border-radius-xl" />
+                                </a>
+                            </div>
+                            <div class="card-body px-1 pt-3">
+                                <p class="text-gradient text-primary mb-2 text-sm">Luxury Suite • 12 Buses • 3 Trips</p>
+                                <h5>
+                                    <a href="{% pageurl city %}">{{ city }}</a>
+                                </h5>
+                                <p>Statement we could that. Actually evidence choose. Consumer street on…</p>
+                                <div class="d-flex justify-content-end">
+                                    <a type="button"
+                                       href="{% pageurl city %}"
+                                       class="btn btn-outline-primary btn-sm">
+                                    More <i class="bi bi-arrow-right ms-2"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock content %}
