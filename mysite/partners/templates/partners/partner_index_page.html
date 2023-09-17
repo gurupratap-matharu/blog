@@ -5,7 +5,9 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
+
     {% include "includes/header-hero.html" %}
+
     <section class="pt-3 pb-4" id="count-stats">
         <div class="container">
             <div class="row">
@@ -19,7 +21,7 @@
                                 <h5 class="mt-3">Bus Companies</h5>
                                 <p class="text-sm">From intercity bus operators, tour operators and corporate suppliers, you are covered</p>
                             </div>
-                            <hr class="vertical dark">
+                            <hr class="vertical dark" />
                         </div>
                         <div class="col-md-4 position-relative">
                             <div class="p-3 text-center">
@@ -29,7 +31,7 @@
                                 <h5 class="mt-3">Agencies</h5>
                                 <p class="text-sm">Expand the reach of your inventory all across the globe</p>
                             </div>
-                            <hr class="vertical dark">
+                            <hr class="vertical dark" />
                         </div>
                         <div class="col-md-4">
                             <div class="p-3 text-center">
@@ -53,7 +55,7 @@
                                 <a class="d-block blur-shadow-image" href="{% pageurl partner %}">
                                     <img src="{% static 'assets/img/curved-images/curved1.jpg' %}"
                                          alt="img-blur-shadow"
-                                         class="img-fluid shadow-lg border-radius-xl">
+                                         class="img-fluid shadow-lg border-radius-xl" />
                                 </a>
                             </div>
                             <div class="card-body px-1 pt-3">
@@ -71,7 +73,9 @@
                     </div>
                 {% endfor %}
             </div>
+
             {% include "includes/pagination.html" %}
+
         </div>
     </section>
 {% endblock content %}
