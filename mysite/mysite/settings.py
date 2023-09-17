@@ -260,7 +260,7 @@ LOGGING = {
 
 if not DEBUG:
     WAGTAILADMIN_BASE_URL = "https://falconhunt.xyz"
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     EMAIL_HOST = "smtp.mailgun.org"
     EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
     EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
