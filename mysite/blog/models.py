@@ -64,6 +64,8 @@ class BlogIndexPage(RoutablePageMixin, Page):
         FieldPanel("image"),
     ]
 
+    parent_page_types = ["home.HomePage"]
+
     # Specify that only blog pages can be children of this blogindex page
     subpage_types = ["BlogPage"]
 
