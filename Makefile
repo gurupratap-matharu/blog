@@ -76,7 +76,7 @@ lint:
 	git ls-files '*.html' | xargs djlint --check
 
 test: check migrations-check
-	coverage run --source='.' mysite/manage.py test
+	cd mysite && coverage run --source='.' manage.py test
 	coverage html
 
 security:
