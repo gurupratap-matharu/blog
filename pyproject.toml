@@ -1,17 +1,17 @@
 [tool.poetry]
 name = "blog"
 version = "0.1.0"
-description = "This is my Falcon's marketing site"
+description = "This is Kpiola's marketing site"
 authors = ["Gurupratap Matharu <gurupratap.matharu@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-wagtail = "^5.0.2"
 python-dotenv = "^0.21.0"
-sentry-sdk = "^1.11.1"
-gunicorn = "^20.1.0"
+wagtail = "^6.1"
+gunicorn = "^22.0.0"
 psycopg2 = "^2.9.9"
+sentry-sdk = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.12.0"
