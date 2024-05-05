@@ -17,6 +17,7 @@ class CityIndexPage(Page):
         FieldPanel("intro"),
     ]
 
+    parent_page_types = ["home.HomePage"]
     subpage_types = ["CityPage"]
 
     class Meta:
