@@ -11,6 +11,9 @@ help:
 	@echo "lint - check style with black, flake8, sort python with isort, and indent html"
 	@echo "format - enforce a consistent code style across the codebase and sort python files with isort"
 
+tags:
+	ctags --recurse=yes --exclude=.git --exclude=docs --exclude=static --exclude=staticfiles
+
 collectstatic:
 	python mysite/manage.py collectstatic --noinput
 
@@ -34,10 +37,10 @@ install:
 
 update:
 	poetry update
-	
+
 setup_test_data:
 	python mysite/manage.py setup_test_data
-	
+
 shellplus:
 	python mysite/manage.py shell_plus --print-sql
 
@@ -62,15 +65,14 @@ runserver:
 build: install makemigrations migrate runserver
 
 format:
-	poetry run isort . --profile django
 	poetry run black .
+	poetry run isort . --profile black
 	git ls-files '*.html' | xargs djlint --reformat
 
 lint:
-	poetry run isort --check-only --diff --profile django .
 	poetry run black --check --diff .
-	poetry run ruff .
-	git ls-files '*.html' | xargs djlint --lint
+	poetry run isort --check-only --diff --profile black .
+	poetry run ruff check .
 	git ls-files '*.html' | xargs djlint --check
 
 test: check migrations-check
@@ -81,7 +83,7 @@ security:
 	poetry run bandit -r .
 	poetry run safety check
 
-ci: lint security test
+ci: format lint security test
 
 superuser:
 	python mysite/manage.py createsuperuser
@@ -106,14 +108,11 @@ reload:
 
 	@echo "🦄 restarting gunicorn service..."
 	@sudo systemctl restart wagtail.service
-	
+
 	@echo "⚙️ reloading nginx..."
 	@sudo nginx -s reload
-	
+
 	@echo "All done! 💅💫💖"
 
 logs:
 	@sudo journalctl -fu wagtail.service
-	
-
-	
