@@ -15,7 +15,6 @@ sentry-sdk = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.12.0"
-black = "^23.7.0"
 djlint = "^1.31.1"
 safety = "^2.3.5"
 bandit = "^1.7.5"
@@ -24,6 +23,7 @@ django-extensions = "^3.2.3"
 django-debug-toolbar = "^4.1.0"
 ruff = "^0.4.3"
 coverage = "^7.5.1"
+black = "^24.4.2"
 
 [build-system]
 requires = ["poetry-core"]
@@ -42,6 +42,9 @@ skip = ["docs", "migrations"]
 known_django = "django"
 known_wagtail = "wagtail"
 sections = "FUTURE,STDLIB,DJANGO,WAGTAIL,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+
+[tool.bandit]
+exclude_dirs = ["docs", "path/to/file"]
 
 [tool.black]
 exclude = '''
