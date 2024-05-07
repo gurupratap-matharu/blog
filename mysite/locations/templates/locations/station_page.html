@@ -1,0 +1,17 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ page.title }}</title>
+    </head>
+    <body>
+        <h1>City: {{ page.title }}</h1>
+        <ul>
+            <li>Image: {% image page.image width-800 %}</li>
+            <li>Address: {{ page.address }}</li>
+            <li>Lat: {{ lat }} Long: {{ long }}</li>
+            <li>Intro: {{ page.intro }}</li>
+            <li>Body: {{ page.body }}</li>
+        </ul>
+    </body>
+</html>
