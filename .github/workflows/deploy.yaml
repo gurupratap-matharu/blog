@@ -11,6 +11,7 @@ on:
 
 jobs:
   deploy:
+    name: Deploy
     strategy:
       fail-fast: false
       matrix:
@@ -35,9 +36,6 @@ jobs:
             echo "Veer: running git pull..."
             git pull origin main
 
-            echo "Veer: running poetry install..."
-            /home/veer/.local/bin/poetry install --verbose
-
             echo "Veer: collecting static..."
             /home/veer/.pyenv/versions/blog/bin/python mysite/manage.py collectstatic --noinput
 
@@ -46,9 +44,6 @@ jobs:
 
             echo "Veer: applying migrations..."
             /home/veer/.pyenv/versions/blog/bin/python mysite/manage.py migrate
-
-            echo "Veer: running tests..."
-            /home/veer/.pyenv/versions/blog/bin/python mysite/manage.py test -v 2
 
             echo "Veer: reloading daemon..."
             sudo systemctl daemon-reload

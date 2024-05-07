@@ -1,0 +1,86 @@
+name: Tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Cancel any running workflow if the CI gets triggered again.
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        database: [postgres]
+        os: [ubuntu-latest]
+        python-version: ["3.10"]
+        poetry-version: ["1.2.2"]
+
+    steps:
+      - name: Checkout git repo
+        uses: actions/checkout@v3
+      
+      - name: Add environment variables to .env file
+        run: |
+          echo DEBUG=1 >> .env
+          echo DJANGO_ALLOWED_HOSTS=* >> .env
+          echo DATABASE_NAME=postgres >> .env
+          echo DATABASE_USER=postgres >> .env
+          echo DATABASE_PASSWORD=postgres >> .env
+          echo DATABASE_HOST=localhost >> .env
+          echo SECRET_KEY=sEcReTKeYtORuNTeSts >> .env
+      
+      - name: Setup postgres database
+        uses: harmon758/postgresql-action@v1
+        if: matrix.database == 'postgres'
+        with:
+          postgresql version: "14.6"
+          postgresql db: "postgres"
+          postgresql user: "postgres"
+          postgresql password: "postgres"
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.1.6
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+
+      - name: Install the dependencies
+        run: poetry install
+
+      - name: Run tests
+        run: poetry run coverage run --source='.' manage.py test -v 2
+
+      # run the next steps even if some tests fail. see `if: always()`
+      # we do this to upload the coverage report to codecov
+
+      - name: Generate xml report
+        run: poetry run coverage xml
+        if: always()
+      
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v3
+        if: always()
+        with: 
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          flags: unittests
+          name: Wagtail coverage
+          verbose: true
+
+
+      - name: Run ruff
+        run: poetry run ruff .
