@@ -172,7 +172,7 @@ class StationPage(RoutablePageMixin, Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        context["lat"] = self.lat_long.split(",")[0]
-        context["long"] = self.lat_long.split(",")[1]
+        lat, long = self.lat_long.split(",")
+        context["lat_long"] = {"lat": lat, "long": long}
 
         return context
