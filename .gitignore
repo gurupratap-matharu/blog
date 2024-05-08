@@ -2,6 +2,8 @@
 ssl/
 docs/
 static/
+.tidyrc
+
 
 # Macos
 .DS_Store

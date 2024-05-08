@@ -10,6 +10,7 @@ on:
 
 jobs:
   security-check:
+    name: Security
     strategy:
       fail-fast: false
       matrix:
