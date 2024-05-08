@@ -1,11 +1,9 @@
+{% extends "layouts/base.html" %}
+
 {% load wagtailcore_tags wagtailimages_tags %}
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{{ page.title }}</title>
-    </head>
-    <body>
+{% block content %}
+    <div class="container-fluid pt-7">
         <h1>City: {{ page.title }}</h1>
         <ul>
             <li>
@@ -22,5 +20,5 @@
                 </li>
             {% endfor %}
         </ul>
-    </body>
-</html>
+    </div>
+{% endblock content %}
