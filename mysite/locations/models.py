@@ -86,7 +86,6 @@ class CityPage(Page):
     )
 
     content_panels = Page.content_panels + [
-        FieldPanel("title"),
         FieldPanel("intro"),
         FieldPanel("image"),
         FieldPanel("country"),
@@ -153,8 +152,7 @@ class StationPage(RoutablePageMixin, Page):
         index.SearchField("body"),
     ]
 
-    content_panels = [
-        FieldPanel("title"),
+    content_panels = Page.content_panels + [
         FieldPanel("intro"),
         FieldPanel("image"),
         FieldPanel("body"),
