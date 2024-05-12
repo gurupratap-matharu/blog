@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import include, path
 
@@ -45,7 +46,7 @@ if settings.DEBUG:
         path("test500/", TemplateView.as_view(template_name="500.html")),
     ]
 
-urlpatterns += [
+urlpatterns += i18n_patterns(
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
     # the list:
@@ -54,4 +55,4 @@ urlpatterns += [
     # Alternatively, if you want Wagtail pages to be served from a subpath
     # of your site, rather than the site root:
     # path("pages/", include(wagtail_urls)),
-]
+)
