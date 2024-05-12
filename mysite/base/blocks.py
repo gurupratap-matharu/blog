@@ -9,6 +9,7 @@ from wagtail.blocks import (
     TextBlock,
     URLBlock,
 )
+from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 
@@ -108,3 +109,4 @@ class BaseStreamBlock(StreamBlock):
         template="blocks/embed_block.html",
     )
     faq = FAQBlock()
+    document = DocumentChooserBlock(template="blocks/document_block.html")
