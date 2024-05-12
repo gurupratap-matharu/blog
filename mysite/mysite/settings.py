@@ -3,7 +3,9 @@ from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
 
+import sentry_sdk
 from dotenv import load_dotenv
+from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
@@ -16,6 +18,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = int(os.getenv("DEBUG", default=0))
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="").split(" ")
+
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", default="").split(" ")
 
 INSTALLED_APPS = [
     # Local
@@ -40,7 +44,8 @@ INSTALLED_APPS = [
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
-    "wagtail.locales",
+    "wagtail_localize",
+    "wagtail_localize.locales",
     "wagtail",
     "modelcluster",
     # Django
@@ -79,9 +84,9 @@ ROOT_URLCONF = "mysite.urls"
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "noreply@falconhunt.xyz"
+DEFAULT_FROM_EMAIL = "noreply@kpiola.com.ar"
 DEFAULT_TO_EMAIL = "gurupratap.matharu@gmail.com"
-SERVER_EMAIL = "wagtail@falconhunt.xyz"
+SERVER_EMAIL = "wagtail@kpiola.com.ar"
 RECIPIENT_LIST = [
     "gurupratap.matharu@gmail.com",
     "veerplaying@gmail.com",
@@ -197,7 +202,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "Falcon"
+WAGTAIL_SITE_NAME = "Kpiola"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
@@ -209,12 +214,10 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "http://localhost:8000"
+WAGTAILADMIN_BASE_URL = os.getenv("WAGTAILADMIN_BASE_URL")
 
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")
 
-
-CSRF_TRUSTED_ORIGINS = ["https://*.falconhunt.xyz", "https://*.127.0.0.1"]
 
 LOGGING = {
     "version": 1,
@@ -230,21 +233,22 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": "./wagtail.log",
+            "formatter": "verbose",
+        },
     },
     "loggers": {
         "wagtail": {
-            "level": "INFO",
-            "handlers": ["console"],
+            "level": os.getenv("WAGTAIL_LOG_LEVEL", default="INFO"),
+            "handlers": ["console", "file"],
             "propagate": False,
         },
         "django.request": {
             "level": "WARNING",
-            "handlers": ["console"],
-            "propagate": False,
-        },
-        "django.security": {
-            "level": "WARNING",
-            "handlers": ["console"],
+            "handlers": ["console", "file"],
             "propagate": False,
         },
     },
@@ -252,7 +256,6 @@ LOGGING = {
 
 
 if not DEBUG:
-    WAGTAILADMIN_BASE_URL = "https://falconhunt.xyz"
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     EMAIL_HOST = "smtp.mailgun.org"
     EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
@@ -275,9 +278,6 @@ if not DEBUG:
     X_FRAME_OPTIONS = "DENY"
 
     # Sentry
-
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
 
     sentry_sdk.init(
         dsn=os.getenv("SENTRY_DSN"),
