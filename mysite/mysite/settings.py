@@ -236,8 +236,12 @@ LOGGING = {
         "file": {
             "level": "INFO",
             "class": "logging.FileHandler",
-            "filename": "./wagtail.log",
+            "filename": BASE_DIR / "wagtail.log",
             "formatter": "verbose",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
         },
     },
     "loggers": {
@@ -248,7 +252,7 @@ LOGGING = {
         },
         "django.request": {
             "level": "WARNING",
-            "handlers": ["console", "file"],
+            "handlers": ["console", "file", "mail_admins"],
             "propagate": False,
         },
     },
