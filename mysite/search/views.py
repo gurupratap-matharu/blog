@@ -4,7 +4,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import render
 
 from wagtail.contrib.search_promotions.models import Query
-from wagtail.models import Page
+from wagtail.models import Locale, Page
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,9 @@ def search(request):
 
     # Search
     if search_query:
-        search_results = Page.objects.live().search(search_query)
+        search_results = (
+            Page.objects.live().filter(locale=Locale.get_active()).search(search_query)
+        )
         query = Query.get(search_query)
 
         # Record hit
