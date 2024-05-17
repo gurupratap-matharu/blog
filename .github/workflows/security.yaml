@@ -8,8 +8,14 @@ on:
       - main
   workflow_dispatch:
 
+# Cancel any running workflow if the CI gets triggered again.
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+
 jobs:
-  security-check:
+  security:
     name: Security
     strategy:
       fail-fast: false
