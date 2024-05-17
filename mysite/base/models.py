@@ -55,7 +55,7 @@ class Country(models.Model):
     """
     A Django model to store set of countries of origin.
 
-    In the PartnerPage, StatioPage models we'll use a ForeignKey to create the relationship between
+    In the PartnerPage, StationPage models we'll use a ForeignKey to create the relationship between
     Country and other models. This allows a single relationship (e.g only one
     Country can be added) that is one-way (e.g. Country will have no way to
     access related objects).
@@ -63,11 +63,12 @@ class Country(models.Model):
 
     title = models.CharField(max_length=100)
 
+    class Meta:
+        verbose_name = "Country of Origin"
+        verbose_name_plural = "Countries of Origin"
+
     def __str__(self):
         return self.title
-
-    class Meta:
-        verbose_name_plural = "Countries of Origin"
 
 
 class Person(
@@ -133,6 +134,9 @@ class Person(
         verbose_name = "Person"
         verbose_name_plural = "People"
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
     @property
     def thumb_image(self):
         """
@@ -147,9 +151,6 @@ class Person(
     @property
     def preview_modes(self):
         return PreviewableMixin.DEFAULT_PREVIEW_MODES + [("blog_post", _("Blog post"))]
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
 
     def get_preview_template(self, request, mode_name):
         """Html template to render the person model in UI"""
@@ -225,7 +226,11 @@ class StandardPage(Page):
     ]
 
     class Meta:
-        verbose_name = "standardpage"
+        verbose_name = "standard page"
+        verbose_name_plural = "standard pages"
+
+    def __str__(self):
+        return self.title
 
 
 class FormField(AbstractFormField):
