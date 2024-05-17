@@ -6,39 +6,39 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    {% comment "Header 1 with text and image on right" %}{% endcomment %}
-    <header>
-        <div class="page-header min-vh-75">
-            {% image page.feed_image original as tmp_photo %}
-            <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
-                <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
-                     style="background-image:url({{ tmp_photo.url }})"></div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-                        {% comment %} {% breadcrumbs %} {% endcomment %}
-                        <h1 class="display-3">{{ page.title }}</h1>
-                        <p class="lead">{{ page.subtitle }}</p>
-                        <p>{{ page.date }}</p>
-                        {% for author in page.authors %}
-                            <div class="author">
-                                {% image author.image fill-50x50-c100 class="avatar rounded-circle" %}
-                                <div class="name ps-3 pt-3">
-                                    <p>{{ author.first_name }} {{ author.last_name }}</p>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+  {% comment "Header 1 with text and image on right" %}{% endcomment %}
+  <header>
+    <div class="page-header min-vh-75">
+      {% image page.feed_image original as tmp_photo %}
+      <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
+        <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
+             style="background-image:url({{ tmp_photo.url }})"></div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
+            {% comment %} {% breadcrumbs %} {% endcomment %}
+            <h1 class="display-3">{{ page.title }}</h1>
+            <p class="lead">{{ page.subtitle }}</p>
+            <p>{{ page.date }}</p>
+            {% for author in page.authors %}
+              <div class="author">
+                {% image author.image fill-50x50-c100 class="avatar rounded-circle" %}
+                <div class="name ps-3 pt-3">
+                  <p>{{ author.first_name }} {{ author.last_name }}</p>
                 </div>
-            </div>
+              </div>
+            {% endfor %}
+          </div>
         </div>
-    </header>
-    {% comment "Main content" %}{% endcomment %}
-    <section class="my-md-5 py-md-5">
-        <div class="container">
-            <div class="row">
-                <!--
+      </div>
+    </div>
+  </header>
+  {% comment "Main content" %}{% endcomment %}
+  <section class="my-md-5 py-md-5">
+    <div class="container">
+      <div class="row">
+        <!--
                 <div class="col-lg-3">
                     {% comment "Table of contents" %}{% endcomment %}
                     <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2 d-none d-md-block" style="top: 100px">
@@ -72,63 +72,63 @@
                     </div>
                 </div>
             -->
-                <div class="col-lg-9 mx-auto">
-                    <p>{{ page.intro }}</p>
-                    {{ page.body }}
-                </div>
-            </div>
+        <div class="col-lg-9 mx-auto">
+          <p>{{ page.intro }}</p>
+          {{ page.body }}
         </div>
-    </section>
-    {% comment "Related Articles" %}{% endcomment %}
-    <section class="pt-5 pb-0">
-        <div class="container">
-            <div class="d-flex justify-content-center my-5">
-                <h1 class="display-6">Related Articles</h1>
-            </div>
-            <div class="row">
-                {% for post in page.get_similar_posts %}
-                    <div class="col-md-4 mt-4">
-                        <div class="card h-100">
-                            {% image post.feed_image width-400 class="card-img-top" %}
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <a href="{% pageurl post %}">{{ post.title }}</a>
-                                </h5>
-                                <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
-                                <a href="{% pageurl post %}" class="card-link">Read Now
-                                    <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                {% empty %}
-                    <p class="text-center">There are no related posts yet.</p>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    {% comment "Posts with Similar Tags" %}{% endcomment %}
-    <section class="pt-md-5">
-        <div class="container">
-            {% if page.get_tags %}
-                <div class="d-flex justify-content-center my-5">
-                    <h1 class="display-6">Find more blog posts with similar tags</h1>
-                </div>
-                <div class="text-center">
-                    {% for tag in page.get_tags %}
-                        <a href="{{ tag.url }}" class="btn rounded-pill btn-outline-dark me-2">{{ tag }}</a>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-    </section>
-    <div class="container d-flex justify-content-center mt-sm-5 py-5">
-        <a href="{{ page.get_parent.url }}" class="btn btn-lg bg-gradient-primary">
-            View All Blog Posts<i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
-        </a>
+      </div>
     </div>
-    {% comment "Call to action" %}{% endcomment %}
+  </section>
+  {% comment "Related Articles" %}{% endcomment %}
+  <section class="pt-5 pb-0">
+    <div class="container">
+      <div class="d-flex justify-content-center my-5">
+        <h1 class="display-6">Related Articles</h1>
+      </div>
+      <div class="row">
+        {% for post in page.get_similar_posts %}
+          <div class="col-md-4 mt-4">
+            <div class="card h-100">
+              {% image post.feed_image width-400 class="card-img-top" %}
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="{% pageurl post %}">{{ post.title }}</a>
+                </h5>
+                <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
+                <a href="{% pageurl post %}" class="card-link">Read Now
+                  <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <p class="text-center">There are no related posts yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% comment "Posts with Similar Tags" %}{% endcomment %}
+  <section class="pt-md-5">
+    <div class="container">
+      {% if page.get_tags %}
+        <div class="d-flex justify-content-center my-5">
+          <h1 class="display-6">Find more blog posts with similar tags</h1>
+        </div>
+        <div class="text-center">
+          {% for tag in page.get_tags %}
+            <a href="{{ tag.url }}" class="btn rounded-pill btn-outline-dark me-2">{{ tag }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+  <div class="container d-flex justify-content-center mt-sm-5 py-5">
+    <a href="{{ page.get_parent.url }}" class="btn btn-lg bg-gradient-primary">
+      View All Blog Posts<i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+    </a>
+  </div>
+  {% comment "Call to action" %}{% endcomment %}
 
-    {% include "includes/cta.html" %}
+  {% include "includes/cta.html" %}
 
 {% endblock content %}

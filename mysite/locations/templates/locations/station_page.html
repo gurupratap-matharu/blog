@@ -5,31 +5,31 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block extra_css %}
-    <link rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossorigin="" />
+  <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin="" />
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="container-fluid pt-7">
-        {% breadcrumbs %}
-        <h1>Station: {{ page.title }}</h1>
-        {% image page.image width-800 %}
-        <ul>
-            <li>Intro: {{ page.intro }}</li>
-            <li>Body: {{ page.body }}</li>
-            <li>Address: {{ page.address }}</li>
-            <li>Coordinates: {{ lat_long }}</li>
-        </ul>
-        <div id="map" class="min-vh-55 mx-3 rounded-3"></div>
-        {{ lat_long|json_script:"coordinates" }}
-    </div>
+  <div class="container-fluid pt-7">
+    {% breadcrumbs %}
+    <h1>Station: {{ page.title }}</h1>
+    {% image page.image width-800 %}
+    <ul>
+      <li>Intro: {{ page.intro }}</li>
+      <li>Body: {{ page.body }}</li>
+      <li>Address: {{ page.address }}</li>
+      <li>Coordinates: {{ lat_long }}</li>
+    </ul>
+    <div id="map" class="min-vh-55 mx-3 rounded-3"></div>
+    {{ lat_long|json_script:"coordinates" }}
+  </div>
 {% endblock content %}
 
 {% block extra_js %}
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
-    <script type="text/javascript" src="{% static 'assets/js/maps/station.js' %}"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
+  <script type="text/javascript" src="{% static 'assets/js/maps/station.js' %}"></script>
 {% endblock extra_js %}

@@ -6,81 +6,81 @@
 
 {% block content %}
 
-    {% include "includes/header-hero.html" %}
+  {% include "includes/header-hero.html" %}
 
-    <section class="pt-3 pb-4" id="count-stats">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
-                    <div class="row">
-                        <div class="col-md-4 position-relative">
-                            <div class="p-3 text-center">
-                                <h1 class="text-gradient text-primary">
-                                    <span id="state1" countto="300">300</span>+
-                                </h1>
-                                <h5 class="mt-3">Bus Companies</h5>
-                                <p class="text-sm">From intercity bus operators, tour operators and corporate suppliers, you are covered</p>
-                            </div>
-                            <hr class="vertical dark" />
-                        </div>
-                        <div class="col-md-4 position-relative">
-                            <div class="p-3 text-center">
-                                <h1 class="text-gradient text-primary">
-                                    <span id="state2" countto="105">105</span>+
-                                </h1>
-                                <h5 class="mt-3">Agencies</h5>
-                                <p class="text-sm">Expand the reach of your inventory all across the globe</p>
-                            </div>
-                            <hr class="vertical dark" />
-                        </div>
-                        <div class="col-md-4">
-                            <div class="p-3 text-center">
-                                <h1 class="text-gradient text-primary" id="state3" countto="49">49</h1>
-                                <h5 class="mt-3">Preferred Suppliers</h5>
-                                <p class="text-sm">Save 3-4 weeks of work when you use our pre-made widgets for your website</p>
-                            </div>
-                        </div>
-                    </div>
+  <section class="pt-3 pb-4" id="count-stats">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
+          <div class="row">
+            <div class="col-md-4 position-relative">
+              <div class="p-3 text-center">
+                <h1 class="text-gradient text-primary">
+                  <span id="state1" countto="300">300</span>+
+                </h1>
+                <h5 class="mt-3">Bus Companies</h5>
+                <p class="text-sm">From intercity bus operators, tour operators and corporate suppliers, you are covered</p>
+              </div>
+              <hr class="vertical dark" />
+            </div>
+            <div class="col-md-4 position-relative">
+              <div class="p-3 text-center">
+                <h1 class="text-gradient text-primary">
+                  <span id="state2" countto="105">105</span>+
+                </h1>
+                <h5 class="mt-3">Agencies</h5>
+                <p class="text-sm">Expand the reach of your inventory all across the globe</p>
+              </div>
+              <hr class="vertical dark" />
+            </div>
+            <div class="col-md-4">
+              <div class="p-3 text-center">
+                <h1 class="text-gradient text-primary" id="state3" countto="49">49</h1>
+                <h5 class="mt-3">Preferred Suppliers</h5>
+                <p class="text-sm">Save 3-4 weeks of work when you use our pre-made widgets for your website</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-3 py-md-5">
+    <div class="container">
+      <div class="row">
+        {% for partner in partners %}
+          <div class="col-md-3 mb-3">
+            <div class="card card-blog card-plain mx-3 mx-md-0">
+              <div class="position-relative">
+                <a class="d-block blur-shadow-image" href="{% pageurl partner %}">
+                  <img src="{% static 'assets/img/curved-images/curved1.jpg' %}"
+                       alt="img-blur-shadow"
+                       class="img-fluid shadow-lg border-radius-xl" />
+                </a>
+              </div>
+              <div class="card-body px-1 pt-3">
+                <p class="text-gradient text-primary mb-2 text-sm">Luxury Suite • 12 Buses • 3 Trips</p>
+                <h5>
+                  <a href="{% pageurl partner %}">{{ partner }}</a>
+                </h5>
+                <p>Statement we could that. Actually evidence choose. Consumer street on…</p>
+                <div class="d-flex justify-content-end">
+                  <a type="button" href="{% pageurl partner %}" class="btn btn-outline-primary btn-sm">
+                  More <i class="bi bi-arrow-right ms-2"></i></a>
                 </div>
+              </div>
             </div>
-        </div>
-    </section>
-    <section class="py-3 py-md-5">
-        <div class="container">
-            <div class="row">
-                {% for partner in partners %}
-                    <div class="col-md-3 mb-3">
-                        <div class="card card-blog card-plain mx-3 mx-md-0">
-                            <div class="position-relative">
-                                <a class="d-block blur-shadow-image" href="{% pageurl partner %}">
-                                    <img src="{% static 'assets/img/curved-images/curved1.jpg' %}"
-                                         alt="img-blur-shadow"
-                                         class="img-fluid shadow-lg border-radius-xl" />
-                                </a>
-                            </div>
-                            <div class="card-body px-1 pt-3">
-                                <p class="text-gradient text-primary mb-2 text-sm">Luxury Suite • 12 Buses • 3 Trips</p>
-                                <h5>
-                                    <a href="{% pageurl partner %}">{{ partner }}</a>
-                                </h5>
-                                <p>Statement we could that. Actually evidence choose. Consumer street on…</p>
-                                <div class="d-flex justify-content-end">
-                                    <a type="button" href="{% pageurl partner %}" class="btn btn-outline-primary btn-sm">
-                                    More <i class="bi bi-arrow-right ms-2"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
+          </div>
+        {% endfor %}
+      </div>
 
-            {% include "includes/pagination.html" %}
+      {% include "includes/pagination.html" %}
 
-        </div>
-    </section>
+    </div>
+  </section>
 {% endblock content %}
 
 {% block extra_js %}
-    <script type="module" src="{% static "assets/js/plugins/countup/countUp.js" %}"></script>
-    <script type="module" src="{% static "assets/js/plugins/countup/main.js" %}"></script>
+  <script type="module" src="{% static "assets/js/plugins/countup/countUp.js" %}"></script>
+  <script type="module" src="{% static "assets/js/plugins/countup/main.js" %}"></script>
 {% endblock extra_js %}

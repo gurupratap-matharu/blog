@@ -1,12 +1,12 @@
 {% load wagtailimages_tags %}
 
 <div class="row py-5">
-    {% for element in self %}
-        <div class="col-12 col-md-6">
-            <figure class="figure">
-                {% image element.image fill-645x480-c100 loading="lazy" class="figure-img img-fluid rounded-3" %}
-                <figcaption class="figure-caption">{{ element.caption }} - {{ element.attribution }}</figcaption>
-            </figure>
-        </div>
-    {% endfor %}
+  {% for element in self %}
+    <div class="col-12 col-md-6">
+      <figure class="figure">
+        {% image element.image fill-645x480-c100 loading="lazy" class="figure-img img-fluid rounded-3" %}
+        <figcaption class="figure-caption">{{ element.caption }} - {{ element.attribution }}</figcaption>
+      </figure>
+    </div>
+  {% endfor %}
 </div>

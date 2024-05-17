@@ -3,14 +3,14 @@
 {% load wagtailimages_tags %}
 
 {% block breadcrumb %}
-    {# Don't show breadcrumbs in standard pages #}
+  {# Don't show breadcrumbs in standard pages #}
 {% endblock breadcrumb %}
 
 {% block content %}
 
-    {% include "base/includes/header-hero.html" %}
+  {% include "base/includes/header-hero.html" %}
 
-    <div class="row">
-        <div class="col-10 col-md-8 mx-auto">{{ page.body }}</div>
-    </div>
+  <div class="row">
+    <div class="col-10 col-md-8 mx-auto">{{ page.body }}</div>
+  </div>
 {% endblock content %}

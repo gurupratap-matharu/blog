@@ -3,22 +3,22 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    <div class="container-fluid pt-7">
-        <h1>City: {{ page.title }}</h1>
-        <ul>
-            <li>
-                Image:
-                {% image page.image width-800 %}
-            </li>
-            <li>Country: {{ page.country }}</li>
-            <li>Intro: {{ page.intro }}</li>
-        </ul>
-        <ul>
-            {% for station in stations %}
-                <li>
-                    Station: <a href="{% pageurl station %}">{{ station }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+  <div class="container-fluid pt-7">
+    <h1>City: {{ page.title }}</h1>
+    <ul>
+      <li>
+        Image:
+        {% image page.image width-800 %}
+      </li>
+      <li>Country: {{ page.country }}</li>
+      <li>Intro: {{ page.intro }}</li>
+    </ul>
+    <ul>
+      {% for station in stations %}
+        <li>
+          Station: <a href="{% pageurl station %}">{{ station }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 {% endblock content %}

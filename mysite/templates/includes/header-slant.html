@@ -2,27 +2,27 @@
 {% load wagtailimages_tags %}
 
 <header>
-    <div class="page-header min-vh-75 mb-5">
-        <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
-            <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
-                 style="background-image:url({% static 'assets/img/curved-images/curved11.jpg' %})"></div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-                    {% image page.logo original %}
-                    <h1 class="mb-4">{{ page.title }}</h1>
-                    <p class="lead pe-5 me-5">
-                        The time is now for it be okay to be great. People in this world shun people for being nice.
-                    </p>
-                    <div class="buttons">
-                        <button type="button" class="btn bg-gradient-primary mt-4">Visit Site</button>
-                        <button type="button" class="btn text-primary shadow-none mt-4">
-                            Book Tickets<i class="bi bi-arrow-right ms-2"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="page-header min-vh-75 mb-5">
+    <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
+      <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
+           style="background-image:url({% static 'assets/img/curved-images/curved11.jpg' %})"></div>
     </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
+          {% image page.logo original %}
+          <h1 class="mb-4">{{ page.title }}</h1>
+          <p class="lead pe-5 me-5">
+            The time is now for it be okay to be great. People in this world shun people for being nice.
+          </p>
+          <div class="buttons">
+            <button type="button" class="btn bg-gradient-primary mt-4">Visit Site</button>
+            <button type="button" class="btn text-primary shadow-none mt-4">
+              Book Tickets<i class="bi bi-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </header>

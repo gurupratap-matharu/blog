@@ -3,29 +3,29 @@
 {% load static %}
 
 {% block title %}
-    404 Not found
+  404 Not found
 {% endblock title %}
 
 {% block body_class %}
-    template-404
+  template-404
 {% endblock body_class %}
 
 {% block content %}
-    <main class="main-content">
-        <section class="pt-9">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 my-auto">
-                        <h1 class="display-1 text-bolder text-gradient text-primary">Error 404</h1>
-                        <h2>Erm. Page not found</h2>
-                        <p class="lead">We suggest you to go to the homepage while we solve this issue.</p>
-                        <a href="/" type="button" class="btn bg-gradient-primary mt-4">Go to Homepage</a>
-                    </div>
-                    <div class="col-lg-6 my-auto position-relative d-none d-md-block">
-                        <img class="w-100 position-relative" src="{% static 'assets/img/illustrations/error-404.png' %}" alt="404-error" />
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+  <main class="main-content">
+    <section class="pt-9">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 my-auto">
+            <h1 class="display-1 text-bolder text-gradient text-primary">Error 404</h1>
+            <h2>Erm. Page not found</h2>
+            <p class="lead">We suggest you to go to the homepage while we solve this issue.</p>
+            <a href="/" type="button" class="btn bg-gradient-primary mt-4">Go to Homepage</a>
+          </div>
+          <div class="col-lg-6 my-auto position-relative d-none d-md-block">
+            <img class="w-100 position-relative" src="{% static 'assets/img/illustrations/error-404.png' %}" alt="404-error" />
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 {% endblock content %}
