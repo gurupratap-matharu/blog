@@ -80,7 +80,7 @@ test: check migrations-check
 	coverage html
 
 security:
-	poetry run bandit -r .
+	poetry run bandit -rc pyproject.toml .
 	poetry run safety check
 
 ci: format lint security test

@@ -46,6 +46,7 @@ sections = "FUTURE,STDLIB,DJANGO,WAGTAIL,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 
 [tool.bandit]
 exclude_dirs = ["docs", "path/to/file"]
+skips = ["B310", "B311"]
 
 [tool.black]
 exclude = '''
@@ -66,6 +67,8 @@ format_attribute_template_tags = true
 format_css = true
 format_js = true
 # ignore = "H006"
+ignore_blocks="raw,example"
+indent=2
 max_attribute_length = 120
 max_line_length = 120
 profile = "django"
