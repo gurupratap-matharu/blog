@@ -5,60 +5,18 @@
 {% load wagtailcore_tags wagtailimages_tags wagtailadmin_tags navigation_tags %}
 
 {% block content %}
-  <header>
-    <div class="page-header min-vh-75 mb-5">
-      <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
-        <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
-             style="background-image:url({% static 'assets/img/curved-images/curved11.jpg' %})"></div>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-            {% icon name="snow" classname="..." title="..." %}
-            {% image page.logo original %}
-            <p class="lead pe-5 me-5">
-              The time is now for it be okay to be great. People in this world shun people for being nice.
-            </p>
-            <div class="buttons">
-              <button type="button" class="btn bg-gradient-primary mt-4">Visit Site</button>
-              <button type="button" class="btn text-primary shadow-none mt-4">
-                Book Tickets<i class="bi bi-arrow-right ms-2"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 col-md-8 mx-auto">
-        <h1 class="text-center">{{ page.title }}</h1>
-        <section class="py-3 py-md-5">
-          {{ page.contact }}
-        </section>
-        {{ page.body }}
-        <section class="py-3 py-md-5">
-          <h2 class="text-center">FAQ</h2>
-          {{ page.faq }}
-        </section>
-        <section class="py-3 py-md-5">
-          <h2 class="text-center mb-3">Tags</h2>
-          {% for tag in page.tags.all %}<span class="badge bg-light text-dark">{{ tag|title }}</span>{% endfor %}
-        </section>
-        <section class="py-3 py-md-5">
-          <h2 class="text-center mb-3">Amenities</h2>
-          {% for amenity in page.amenities.all %}
-            <span class="badge bg-light text-dark me-2"><i class="bi bi-{{ amenity.icon_name }} me-1"></i> {{ amenity|title }}</span>
-          {% endfor %}
-        </section>
-      </div>
-    </div>
-    <section>
-      {% breadcrumbs %}
+  <div class="container pt-7">
+    {% breadcrumbs %}
+    {% image page.logo original %}
+    <section class="py-3 py-md-5">
+      {{ page.contact }}
     </section>
+    {{ page.body }}
+    {% if page.faq %}
+      <section class="py-3 py-md-5">
+        <h2 class="text-center">FAQ</h2>
+        {{ page.faq }}
+      </section>
+    {% endif %}
   </div>
-
-  {% include "includes/cta.html" %}
-
 {% endblock content %}
