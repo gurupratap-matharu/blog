@@ -17,7 +17,7 @@
         <h2 class="text-white mb-3">How can we help you?</h2>
         <form action="{% url 'search' %}" method="get">
           <div class="row">
-            <div class="col-md-8 col-7">
+            <div class="col-12 col-md-8">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
                 <input type="search"
@@ -27,8 +27,8 @@
                        placeholder="Search" />
               </div>
             </div>
-            <div class="col-md-4 col-5 text-start ps-0">
-              <input type="submit" value="Search" class="btn bg-gradient-primary w-100 h-100 mb-0" />
+            <div class="col-md-4 ps-0">
+              <button type="submit" class="btn bg-gradient-primary w-100 h-100 mb-0 d-none d-md-inline">Search</button>
             </div>
           </div>
         </form>
