@@ -300,6 +300,7 @@ class FormPage(AbstractEmailForm):
 
     class Meta:
         verbose_name = "formpage"
+        verbose_name_plural = "formpages"
 
     def get_context(self, request, *args, **kwargs):
         """
@@ -318,6 +319,9 @@ class FormPage(AbstractEmailForm):
         for name, field in form.fields.items():
             if isinstance(field.widget, widgets.Textarea):
                 field.widget.attrs.update({"rows": "5"})
+
+            if isinstance(field.widget, widgets.Select):
+                field.widget.attrs.update({"class": "form-select"})
 
             attrs = field.widget.attrs
             css_classes = attrs.get("class", "").split()
@@ -359,8 +363,6 @@ class FormPage(AbstractEmailForm):
         """
 
         cleaned_data = form.cleaned_data
-
-        logger.info("cleaned_data:%s" % cleaned_data)
 
         for name, field in form.fields.items():
             if isinstance(field, WagtailImageField):

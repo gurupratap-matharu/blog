@@ -170,7 +170,7 @@ class BlogPage(Page):
 
     subtitle = models.CharField(max_length=255, blank=True)
     intro = models.CharField(
-        help_text="Text to describe the page", max_length=255, blank=True
+        help_text="Text to describe the page", max_length=500, blank=True
     )
     feed_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -206,6 +206,7 @@ class BlogPage(Page):
                     label="Author",
                     panels=None,
                     min_num=1,
+                    help_text="Select between one and three authors",
                 ),
                 FieldPanel("date"),
                 FieldPanel("tags"),

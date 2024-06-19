@@ -229,12 +229,12 @@ LOGGING = {
     },
     "handlers": {
         "console": {
-            "level": "INFO",
+            "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
         "file": {
-            "level": "INFO",
+            "level": "WARNING",
             "class": "logging.FileHandler",
             "filename": BASE_DIR / "wagtail.log",
             "formatter": "verbose",
@@ -244,14 +244,19 @@ LOGGING = {
             "class": "django.utils.log.AdminEmailHandler",
         },
     },
+    "root": {
+        "handlers": ["console", "file"],
+        "level": "INFO",
+        "formatter": "verbose",
+    },
     "loggers": {
         "wagtail": {
             "level": os.getenv("WAGTAIL_LOG_LEVEL", default="INFO"),
             "handlers": ["console", "file"],
             "propagate": False,
         },
-        "django.request": {
-            "level": "WARNING",
+        "django": {
+            "level": "INFO",
             "handlers": ["console", "file", "mail_admins"],
             "propagate": False,
         },
