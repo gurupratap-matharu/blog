@@ -34,8 +34,7 @@
     {% if request.in_preview_panel %}<base target="_blank" />{% endif %}
     {% if not request.is_preview %}<!-- Veer add analytics here -->{% endif %}
     {# Global stylesheets #}
-    <link href="{% static 'assets/css/soft-design-system.css' %}" rel="stylesheet" type="text/css" id="pagestyle" />
-    <link href="{% static 'assets/css/mysite.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'assets/css/styles.min.css' %}" rel="stylesheet" type="text/css" />
 
     {% block extra_css %}
     {% endblock extra_css %}

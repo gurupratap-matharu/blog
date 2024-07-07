@@ -85,6 +85,9 @@ security:
 
 ci: format lint security test
 
+css:
+	sass mysite/static/assets/scss/soft-design-system.scss -s compressed mysite/static/assets/css/styles.min.css
+
 superuser:
 	python mysite/manage.py createsuperuser
 
