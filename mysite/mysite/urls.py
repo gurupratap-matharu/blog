@@ -26,19 +26,10 @@ if settings.DEBUG:
     from django.conf.urls.static import static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
     from django.views.generic import TemplateView
-    from django.views.generic.base import RedirectView
 
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-    # Serve favicon at /favicon.ico
-    urlpatterns += [
-        path(
-            "favicon.ico",
-            RedirectView.as_view(url=settings.STATIC_URL + "assets/img/favicon.png"),
-        )
-    ]
 
     # Add routes to test error templates
     urlpatterns += [
