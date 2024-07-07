@@ -1,9 +1,9 @@
 {% extends "layouts/base.html" %}
 
-{% load static %}
+{% load static i18n %}
 
 {% block title %}
-  500 Server Error
+  {% translate "500 Server Error" %}
 {% endblock title %}
 
 {% block body_class %}
@@ -11,21 +11,20 @@
 {% endblock body_class %}
 
 {% block content %}
-  <main class="main-content">
-    <section class="d-flex align-items-center pt-9">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-5 my-auto">
-            <h1 class="display-1 text-bolder text-gradient text-primary fadeIn1 fadeInBottom mt-5">Error 500</h1>
-            <h2 class="fadeIn3 fadeInBottom opacity-8">Something went wrong</h2>
-            <p class="lead opacity-6 fadeIn2 fadeInBottom">We suggest you to go to the homepage while we solve this issue.</p>
-            <a href="/" type="button" class="btn bg-gradient-primary mt-4 fadeIn2 fadeInBottom">Go to Homepage</a>
-          </div>
-          <div class="col-lg-7 my-auto d-none d-md-block">
-            <img class="w-100 fadeIn1 fadeInBottom" src="{% static 'assets/img/illustrations/error-500.png' %}" alt="500-error" />
-          </div>
+  <div class="container pt-7 min-vh-50">
+    <div class="row">
+      <div class="col-lg-6 mx-auto">
+        <div class="alert alert-danger" role="alert">
+          <h1 class="alert-heading">{% translate "Error 500" %}</h1>
+          <p>{% translate "Something went wrong" %}</p>
+          <p>{% translate "We suggest you to go to the homepage while we solve this issue." %}</p>
+          <a href="{% url 'wagtail_serve' '' %}" class="alert-link icon-link icon-link-hover">
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-left" />
+            </svg>
+          {% translate "Go back Home" %}</a>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
 {% endblock content %}

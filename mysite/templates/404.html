@@ -1,9 +1,9 @@
 {% extends "layouts/base.html" %}
 
-{% load static %}
+{% load i18n static %}
 
 {% block title %}
-  404 Not found
+  {% translate "404 Not found" %}
 {% endblock title %}
 
 {% block body_class %}
@@ -11,21 +11,20 @@
 {% endblock body_class %}
 
 {% block content %}
-  <main class="main-content">
-    <section class="pt-9">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 my-auto">
-            <h1 class="display-1 text-bolder text-gradient text-primary">Error 404</h1>
-            <h2>Erm. Page not found</h2>
-            <p class="lead">We suggest you to go to the homepage while we solve this issue.</p>
-            <a href="/" type="button" class="btn bg-gradient-primary mt-4">Go to Homepage</a>
-          </div>
-          <div class="col-lg-6 my-auto position-relative d-none d-md-block">
-            <img class="w-100 position-relative" src="{% static 'assets/img/illustrations/error-404.png' %}" alt="404-error" />
-          </div>
+  <div class="container pt-7 min-vh-50">
+    <div class="row">
+      <div class="col-lg-6 mx-auto">
+        <div class="alert alert-warning" role="alert">
+          <h1 class="alert-heading">{% translate "Error 404" %}</h1>
+          <p>{% translate "Uff. Page not found" %}</p>
+          <p>{% translate "We suggest you to go to the homepage while we solve this issue." %}</p>
+          <a href="{% url 'wagtail_serve' '' %}" class="alert-link icon-link icon-link-hover">
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-left" />
+            </svg>
+          {% translate "Go back Home" %}</a>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
 {% endblock content %}
