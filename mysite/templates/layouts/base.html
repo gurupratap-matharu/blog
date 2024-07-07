@@ -28,7 +28,6 @@
 
     </title>
     {% if page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{% endif %}
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
     {# Force all links in the live preview panel to be opened in a new tab #}
     {% if request.in_preview_panel %}<base target="_blank" />{% endif %}
@@ -70,8 +69,7 @@
     {% endblock footer %}
 
     <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "assets/js/soft-design-system.js" %}"></script>
-    <script type="text/javascript" src="{% static "assets/js/mysite.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/main.js" %}"></script>
 
     {% block modal %}
     {% endblock modal %}
