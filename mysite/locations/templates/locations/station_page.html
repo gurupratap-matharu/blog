@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% load static navigation_tags %}
+{% load static navigation_tags i18n %}
 
 {% load wagtailcore_tags wagtailimages_tags %}
 
@@ -14,12 +14,12 @@
 {% block content %}
   <div class="container pt-7">
     {% breadcrumbs %}
-    <h1>Station: {{ page.title }}</h1>
+    <h1>{% translate "Station: " %}{{ page.title }}</h1>
     {% image page.image width-800 %}
     <ul>
       <li>Intro: {{ page.intro }}</li>
       <li>Body: {{ page.body }}</li>
-      <li>Address: {{ page.address }}</li>
+      <li>{% translate "Address: " %}{{ page.address }}</li>
       <li>Coordinates: {{ lat_long }}</li>
     </ul>
     <div id="map" class="min-vh-55 mx-3 rounded-3"></div>
