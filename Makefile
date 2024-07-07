@@ -27,10 +27,12 @@ check-deploy:
 	python mysite/manage.py check --deploy
 
 makemessages:
-	django-admin makemessages --all
+	cd mysite && django-admin makemessages --all
 
 compilemessages:
-	django-admin compilemessages
+	cd mysite && django-admin compilemessages
+
+translations: makemessages compilemessages
 
 install:
 	poetry install
