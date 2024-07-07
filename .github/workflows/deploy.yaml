@@ -12,13 +12,13 @@ on:
 jobs:
   deploy:
     name: Deploy
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.10"]
         poetry-version: ["1.2.2"]
         os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Deploy to server
@@ -44,6 +44,9 @@ jobs:
 
             echo "Veer: applying migrations..."
             /home/veer/.pyenv/versions/blog/bin/python mysite/manage.py migrate
+
+            echo "Veer: compiling translations..."
+            /home/veer/.pyenv/versions/blog/bin/django-admin compilemessages
 
             echo "Veer: reloading daemon..."
             sudo systemctl daemon-reload
