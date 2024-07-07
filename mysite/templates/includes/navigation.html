@@ -26,11 +26,11 @@
         <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
           <ul class="navbar-nav navbar-nav-hover ms-lg-12 ps-lg-5 w-100">
             <li class="nav-item ms-lg-auto">
-              <a class="nav-link nav-link-icon me-2" href="{% url 'search' %}">
-                <i class="bi bi-search me-1"></i>
-                <p class="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Search">
-                  Search
-                </p>
+              <a class="nav-link icon-link icon-link-hover" href="{% url 'search' %}">
+                <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#search" />
+                </svg>
+                Search
               </a>
             </li>
             <li class="nav-item my-auto ms-3 ms-lg-0">

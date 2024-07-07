@@ -95,8 +95,10 @@
                   <a href="{% pageurl post %}">{{ post.title }}</a>
                 </h5>
                 <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
-                <a href="{% pageurl post %}" class="card-link">Read Now
-                  <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+                <a href="{% pageurl post %}" class="card-link icon-link icon-link-hover">Read Now
+                  <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+                  </svg>
                 </a>
               </div>
             </div>
@@ -123,8 +125,10 @@
     </div>
   </section>
   <div class="container d-flex justify-content-center mt-sm-5 py-5">
-    <a href="{{ page.get_parent.url }}" class="btn btn-lg bg-gradient-primary">
-      View All Blog Posts<i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+    <a href="{{ page.get_parent.url }}" class="btn btn-lg bg-gradient-primary icon-link icon-link-hover">
+      View All Blog Posts<svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+        <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+      </svg>
     </a>
   </div>
   {% comment "Call to action" %}{% endcomment %}

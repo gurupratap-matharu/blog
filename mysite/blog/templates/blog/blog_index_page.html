@@ -19,8 +19,11 @@
               <h1>{{ featured.specific.title }}</h1>
               <p class="lead pe-lg-5 me-lg-5">{{ featured.specific.subtitle }}</p>
               <div class="buttons">
-                <a href="{% pageurl featured %}" class="btn bg-gradient-primary">
-                  Read Now<i class="bi bi-arrow-right ms-1"></i>
+                <a href="{% pageurl featured %}" class="btn bg-gradient-primary icon-link icon-link-hover">
+                  Read Now
+                  <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+                  </svg>
                 </a>
               </div>
             </div>
@@ -52,8 +55,10 @@
                   </h5>
                   <p class="card-text text-xs">Read Time 3 mins</p>
                   <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
-                  <a href="{% pageurl post %}" class="card-link text-darker icon-move-right">Read Now
-                    <i class="bi bi-arrow-right ms-1"></i>
+                  <a href="{% pageurl post %}" class="card-link text-darker icon-link icon-link-hover">Read Now
+                    <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+                    </svg>
                   </a>
                 </div>
               </div>
@@ -80,8 +85,10 @@
                     <a href="{% pageurl post %}">{{ post.title }}</a>
                   </h5>
                   <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
-                  <a href="{% pageurl post %}" class="card-link">Read Now
-                    <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+                  <a href="{% pageurl post %}" class="card-link icon-link icon-link-hover">Read Now
+                    <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+                    </svg>
                   </a>
                 </div>
               </div>
