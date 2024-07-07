@@ -1,4 +1,4 @@
-{% load wagtailcore_tags %}
+{% load static wagtailcore_tags %}
 
 {% if ancestors %}
   <div class="row">
@@ -11,7 +11,9 @@
             <li class="breadcrumb-item">
               <a href="{% pageurl ancestor %}">
                 {% if forloop.first %}
-                  <i class="bi bi-house-door" aria-label="Home"></i>
+                  <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#house" />
+                  </svg>
                 {% else %}
                   {{ ancestor }}
                 {% endif %}
