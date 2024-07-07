@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 
 import sentry_sdk
@@ -199,6 +200,7 @@ STATICFILES_FINDERS = [
 MEDIA_URL = "/mediab/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+MESSAGE_TAGS = {messages.ERROR: "danger"}
 
 # Wagtail settings
 
