@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import TemplateView
 
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
@@ -19,13 +20,13 @@ urlpatterns = [
     path("sitemap.xml", sitemap),
     path("robots.txt", RobotsView.as_view()),
     path("__debug__/", include("debug_toolbar.urls")),
+    path("styleguide/", TemplateView.as_view(template_name="styleguide.html")),
 ]
 
 
 if settings.DEBUG:
     from django.conf.urls.static import static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-    from django.views.generic import TemplateView
 
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
