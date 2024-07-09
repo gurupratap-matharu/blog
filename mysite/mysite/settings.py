@@ -83,9 +83,14 @@ SITE_ID = 1
 
 ROOT_URLCONF = "mysite.urls"
 
+# Mailpit
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "127.0.0.1"
+EMAIL_PORT = 1025
+
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "noreply@kpiola.com.ar"
+DEFAULT_FROM_EMAIL = "'Kpiola' <noreply@kpiola.com.ar>"
 DEFAULT_TO_EMAIL = "gurupratap.matharu@gmail.com"
 SERVER_EMAIL = "wagtail@kpiola.com.ar"
 RECIPIENT_LIST = [
@@ -225,15 +230,20 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
         "verbose": {
-            "format": "[%(asctime)s][%(process)d][%(levelname)s][%(name)s] %(message)s"
+            "format": "%(levelname)s %(asctime)s %(module)s:%(lineno)d %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
         },
     },
     "handlers": {
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
-            "formatter": "verbose",
+            "formatter": "simple",
         },
         "file": {
             "level": "WARNING",
@@ -259,7 +269,12 @@ LOGGING = {
         },
         "django": {
             "level": "INFO",
-            "handlers": ["console", "file", "mail_admins"],
+            "handlers": ["console", "file"],
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["mail_admins"],
+            "level": "ERROR",
             "propagate": False,
         },
     },
@@ -267,12 +282,12 @@ LOGGING = {
 
 
 if not DEBUG:
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-    EMAIL_HOST = "smtp.mailgun.org"
-    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
+    # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    # EMAIL_HOST = "smtp.mailgun.org"
+    # EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+    # EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+    # EMAIL_PORT = 587
+    # EMAIL_USE_TLS = True
 
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
