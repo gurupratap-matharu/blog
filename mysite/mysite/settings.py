@@ -89,7 +89,6 @@ EMAIL_HOST = "127.0.0.1"
 EMAIL_PORT = 1025
 
 # Email
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "'Kpiola' <noreply@kpiola.com.ar>"
 DEFAULT_TO_EMAIL = "gurupratap.matharu@gmail.com"
 SERVER_EMAIL = "wagtail@kpiola.com.ar"
