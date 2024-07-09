@@ -1,9 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% load static %}
-
-{% load navigation_tags %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load static i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
   {% comment "Header 1 with text and image on right" %}{% endcomment %}
@@ -126,7 +123,8 @@
   </section>
   <div class="container d-flex justify-content-center mt-sm-5 py-5">
     <a href="{{ page.get_parent.url }}" class="btn btn-lg bg-gradient-primary icon-link icon-link-hover">
-      View All Blog Posts<svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+      View All Blog Posts
+      <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
         <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
       </svg>
     </a>
