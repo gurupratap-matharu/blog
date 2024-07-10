@@ -3,7 +3,7 @@ ssl/
 docs/
 static/
 .tidyrc
-
+*.csv
 
 # Macos
 .DS_Store
