@@ -1,5 +1,6 @@
 import csv
 import logging
+import pdb
 import random
 import time
 from urllib.request import urlopen
@@ -75,13 +76,19 @@ class Command(BaseCommand):
 
         with open(filename, "w", newline="") as f:
             writer = csv.writer(
-                f, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
+                f,
+                delimiter=" ",
+                quotechar="|",
+                quoting=csv.QUOTE_MINIMAL,
+                escapechar="\\",
             )
             for row in data:
                 writer.writerow(row)
 
     def handle(self, **options):
         logger.info("running scraper...")
+
+        # Cities
 
         html = urlopen(cities_url)  # nosec
         bs = BeautifulSoup(html, "html.parser")
@@ -94,31 +101,31 @@ class Command(BaseCommand):
         self.write_csv("cities.csv", cities)
         logger.info("cities.csv saved...")
 
-        # Station Scraping Logic
-
+        # Stations
         stations = []
 
-        for name, url in random.sample(cities, k=5):
+        for name, url in cities:
             # act like human
-            time.sleep(random.randint(1, 5))  # nosec
+            time.sleep(random.randint(1, 3))  # nosec
 
             city_url = f"https://busbud.com{url}"
             city_stations = self.get_stations(city_url=city_url)
             stations.extend(city_stations)
 
-        logger.info("scraping stations...")
+        self.write_csv(filename="city_stations.csv", data=stations)
 
-        stations_data = []
+        # logger.info("scraping stations...")
+        # stations_data = []
 
-        for city, station, url in stations:
-            time.sleep(random.randint(1, 5))
+        # for city, station, url in stations:
+        #     time.sleep(random.randint(1, 3))
 
-            station_url = f"https://busbud.com{url}"
-            station_data = self.get_station_data(station_url=station_url)
-            chunk = (city,) + station_data + (station_url,)
-            stations_data.append(chunk)
+        #     station_url = f"https://busbud.com{url}"
+        #     station_data = self.get_station_data(station_url=station_url)
+        #     chunk = (city,) + station_data + (station_url,)
+        #     stations_data.append(chunk)
 
-        self.write_csv("stations.csv", stations_data)
-        logger.info("stations.csv saved...")
+        # self.write_csv("stations.csv", stations_data)
+        # logger.info("stations.csv saved...")
 
         self.stdout.write("All Done ✨🚀")
