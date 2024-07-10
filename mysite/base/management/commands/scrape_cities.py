@@ -1,6 +1,5 @@
 import csv
 import logging
-import pdb
 import random
 import time
 from urllib.request import urlopen
