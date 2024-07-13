@@ -75,9 +75,15 @@ class Command(BaseCommand):
         """
         Scrapes the data for a single bus station
         """
+        try:
 
-        response = requests.get(station_url, headers=HEADERS)
-        bs = BeautifulSoup(response.text, "html.parser")
+            response = requests.get(station_url, headers=HEADERS)
+            bs = BeautifulSoup(response.text, "html.parser")
+
+        except requests.exceptions.RequestException as e:
+            logger.warning(e)
+            logger.warning("skipping url:%s" % station_url)
+            return ("", "", "")
 
         name = (
             bs.find("h1")
