@@ -1,8 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% load static navigation_tags i18n %}
-
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load static i18n navigation_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block extra_css %}
   <link rel="stylesheet"
@@ -15,7 +13,7 @@
   <div class="container pt-7">
     {% breadcrumbs %}
     <h1>{% translate "Station: " %}{{ page.title }}</h1>
-    {% image page.image width-800 %}
+    {% picture page.image format-{avif,webp,jpeg} width-800 class="img-fluid border-radius-xl" %}
     <ul>
       <li>Intro: {{ page.intro }}</li>
       <li>Body: {{ page.body }}</li>
