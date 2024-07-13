@@ -7,6 +7,7 @@ from urllib.request import urlopen
 from django.core.management.base import BaseCommand
 
 import requests
+from base.scrapers.base import HEADERS
 from bs4 import BeautifulSoup
 
 logging.basicConfig(level=logging.INFO)
@@ -31,34 +32,13 @@ class Command(BaseCommand):
     """
 
     @classmethod
-    def get_station_data(cls, station_url=None) -> tuple:
-        """
-        Scrapes the data for a single bus station.
-        """
-
-        html = urlopen(station_url)
-        bs = BeautifulSoup(html, "html.parser")
-        name = (
-            bs.find("h1")
-            .get_text()
-            .lstrip("Find cheap bus tickets from ")
-            .replace("\xa0", " ")
-        )
-        address = bs.find("address").get_text().strip()
-        lat_long = bs.find("address").a.attrs["href"].split("query=")[1]
-
-        logger.info("station:%s" % name)
-
-        return name, address, lat_long
-
-    @classmethod
     def get_stations(cls, city_url=None) -> list:
         """
         Parses a city url and builds a list of (terminal_name, terminal_url)
         """
 
-        html = urlopen(city_url)
-        bs = BeautifulSoup(html, "html.parser")
+        response = requests.get(city_url, headers=HEADERS)
+        bs = BeautifulSoup(response.text, "html.parser")
 
         city = bs.find("h1").get_text().lstrip("Stations in ")
         links = bs.find_all("li", {"class": "suggestion"})
@@ -89,8 +69,8 @@ class Command(BaseCommand):
 
         # Cities
 
-        html = urlopen(cities_url)  # nosec
-        bs = BeautifulSoup(html, "html.parser")
+        response = requests.get(cities_url, headers=HEADERS)
+        bs = BeautifulSoup(response.text, "html.parser")
         links = bs.find_all("li", {"class": "suggestion"})
         cities = [
             (link.a.get_text().lstrip("Stations in "), link.a.attrs["href"])
