@@ -20,7 +20,10 @@
       <li>{% translate "Address: " %}{{ page.address }}</li>
       <li>Coordinates: {{ lat_long }}</li>
     </ul>
-    <div id="map" class="min-vh-55 mx-3 rounded-3"></div>
+    <article>
+      <h3>{% translate "Where is " %}{{ page.title }}?</h3>
+      <div id="map" class="min-vh-50 rounded-3"></div>
+    </article>
     {{ lat_long|json_script:"coordinates" }}
   </div>
 {% endblock content %}
