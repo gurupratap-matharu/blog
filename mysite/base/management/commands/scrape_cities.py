@@ -2,18 +2,12 @@ import csv
 import logging
 import random
 import time
-from urllib.request import urlopen
 
 from django.core.management.base import BaseCommand
 
 import requests
 from base.scrapers.base import HEADERS
 from bs4 import BeautifulSoup
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("Busbud Scraper")
-
-session = requests.Session()
 
 headers = {
     "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_2 like Mac OS X)"
@@ -24,6 +18,9 @@ headers = {
 }
 
 cities_url = "https://www.busbud.com/en/sitemap/cs/AR"
+
+logger = logging.getLogger(__name__)
+session = requests.Session()
 
 
 class Command(BaseCommand):
@@ -67,10 +64,9 @@ class Command(BaseCommand):
     def handle(self, **options):
         logger.info("running scraper...")
 
-        # Cities
-
         response = requests.get(cities_url, headers=HEADERS)
         bs = BeautifulSoup(response.text, "html.parser")
+
         links = bs.find_all("li", {"class": "suggestion"})
         cities = [
             (link.a.get_text().lstrip("Stations in "), link.a.attrs["href"])
@@ -92,19 +88,4 @@ class Command(BaseCommand):
             stations.extend(city_stations)
 
         self.write_csv(filename="city_stations.csv", data=stations)
-
-        # logger.info("scraping stations...")
-        # stations_data = []
-
-        # for city, station, url in stations:
-        #     time.sleep(random.randint(1, 3))
-
-        #     station_url = f"https://busbud.com{url}"
-        #     station_data = self.get_station_data(station_url=station_url)
-        #     chunk = (city,) + station_data + (station_url,)
-        #     stations_data.append(chunk)
-
-        # self.write_csv("stations.csv", stations_data)
-        # logger.info("stations.csv saved...")
-
         self.stdout.write("All Done ✨🚀")

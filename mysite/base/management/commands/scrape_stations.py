@@ -9,13 +9,12 @@ import requests
 from base.scrapers.base import HEADERS
 from bs4 import BeautifulSoup
 
-logger = logging.getLogger(__name__)
-session = requests.Session()
-
-
 INPUT_CSV = "city_stations.csv"
 OUTPUT_CSV = "stations.csv"
 BATCH_SIZE = 5
+
+logger = logging.getLogger(__name__)
+session = requests.Session()
 
 
 class Command(BaseCommand):
@@ -79,14 +78,22 @@ class Command(BaseCommand):
 
         response = requests.get(station_url, headers=HEADERS)
         bs = BeautifulSoup(response.text, "html.parser")
+
         name = (
             bs.find("h1")
             .get_text()
             .lstrip("Find cheap bus tickets from ")
             .replace("\xa0", " ")
         )
-        address = bs.find("address").get_text().strip()
-        lat_long = bs.find("address").a.attrs["href"].split("query=")[1]
+
+        try:
+            address = bs.find("address").get_text().strip()
+            lat_long = bs.find("address").a.attrs["href"].split("query=")[1]
+
+        except AttributeError as e:
+            logger.warn(e)
+            logger.warn("Address element not found for station:%s" % name)
+            address = lat_long = ""
 
         logger.info("station:%s" % name)
 
