@@ -21,7 +21,12 @@
       <li>Coordinates: {{ lat_long }}</li>
     </ul>
     <article>
-      <h3>{% translate "Where is " %}{{ page.title }}?</h3>
+      <div class="d-flex flex-column align-items-center">
+        <svg class="bi" width="100" height="100" fill="currentColor" aria-hidden="true">
+          <use xlink:href="{% static 'assets/icons/icons.svg' %}#color-map" />
+        </svg>
+        <h3 class="py-3">{% translate "Where is " %}{{ page.title }}?</h3>
+      </div>
       <div id="map" class="min-vh-50 rounded-3"></div>
     </article>
     {{ lat_long|json_script:"coordinates" }}

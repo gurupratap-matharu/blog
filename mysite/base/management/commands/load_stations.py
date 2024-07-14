@@ -50,6 +50,6 @@ class Command(BaseCommand):
     def read_stations(self):
         with open("stations.csv", newline="") as csv_file:
             station_reader = csv.reader(csv_file, delimiter=" ", quotechar="|")
-            stations = [tuple(row) for row in station_reader]
+            stations = [tuple(row) for row in station_reader if row]
 
         return stations
