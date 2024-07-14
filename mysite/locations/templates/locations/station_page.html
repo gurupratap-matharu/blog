@@ -12,14 +12,9 @@
 {% block content %}
   <div class="container pt-7">
     {% breadcrumbs %}
-    <h1>{% translate "Station: " %}{{ page.title }}</h1>
+    <h1>{{ page.title }}</h1>
     {% picture page.image format-{avif,webp,jpeg} width-800 class="img-fluid border-radius-xl" %}
-    <ul>
-      <li>Intro: {{ page.intro }}</li>
-      <li>Body: {{ page.body }}</li>
-      <li>{% translate "Address: " %}{{ page.address }}</li>
-      <li>Coordinates: {{ lat_long }}</li>
-    </ul>
+    <article>{{ page.intro }}</article>
     <article>
       <div class="d-flex flex-column align-items-center">
         <svg class="bi" width="100" height="100" fill="currentColor" aria-hidden="true">
@@ -28,7 +23,9 @@
         <h3 class="py-3">{% translate "Where is " %}{{ page.title }}?</h3>
       </div>
       <div id="map" class="min-vh-50 rounded-3"></div>
+      <h3 class="py-3 text-center">{% translate "Address: " %}{{ page.address }}</h3>
     </article>
+    <article>{{ page.body }}</article>
     {{ lat_long|json_script:"coordinates" }}
   </div>
 {% endblock content %}

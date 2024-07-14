@@ -1,25 +1,24 @@
 {% extends "layouts/base.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags navigation_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
   <div class="container pt-7">
     {% breadcrumbs %}
-    <h1>City: {{ page.title }}</h1>
-    <ul>
-      <li>
-        Image:
-        {% image page.image width-800 %}
-      </li>
-      <li>Country: {{ page.country }}</li>
-      <li>Intro: {{ page.intro }}</li>
-    </ul>
-    <ul>
-      {% for station in stations %}
-        <li>
-          Station: <a href="{% pageurl station %}">{{ station }}</a>
-        </li>
-      {% endfor %}
-    </ul>
+    <div class="row">
+      <div class="col-lg-9 mx-auto">
+        <h1>{{ page.title }}</h1>
+        {% picture page.image format-{avif,webp,jpeg} width-800 class="img-fluid border-radius-xl" %}
+        {{ page.intro }}
+        <h3>{% translate "Stations in" %} {{ page.title }}</h3>
+        <ul class="list-group list-group-flush">
+          {% for station in stations %}
+            <li class="list-group-item list-group-item-action">
+              <a href="{% pageurl station %}">{{ station }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
   </div>
 {% endblock content %}
