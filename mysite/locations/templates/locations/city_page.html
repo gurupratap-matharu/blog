@@ -1,23 +1,33 @@
 {% extends "layouts/base.html" %}
 
-{% load i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
+{% load static i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
-  <div class="container pt-7">
+  <div class="container pt-7 min-vh-75">
     {% breadcrumbs %}
     <div class="row">
       <div class="col-lg-9 mx-auto">
-        <h1>{{ page.title }}</h1>
-        {% picture page.image format-{avif,webp,jpeg} width-800 class="img-fluid border-radius-xl" %}
-        {{ page.intro }}
-        <h3>{% translate "Stations in" %} {{ page.title }}</h3>
-        <ul class="list-group list-group-flush">
-          {% for station in stations %}
-            <li class="list-group-item list-group-item-action">
-              <a href="{% pageurl station %}">{{ station }}</a>
-            </li>
-          {% endfor %}
-        </ul>
+        <h1 class="display-3">{{ page.title }}</h1>
+        {% if page.image %}
+          <section class="py-3">
+            {% picture page.image format-{avif,webp,jpeg} width-800 class="img-fluid border-radius-xl" %}
+          </section>
+        {% endif %}
+        {% if page.intro %}<article class="py-3">{{ page.intro }}</article>{% endif %}
+        <section>
+          <h3 class="display-6 mb-3">{% translate "Stations" %}</h3>
+          <ul class="list-group list-group-flush">
+            {% for station in stations %}
+              <li class="list-group-item list-group-item-action">
+                <a href="{% pageurl station %}" class="icon-link icon-link-hover">{{ station }}
+                  <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+                  </svg>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
       </div>
     </div>
   </div>
