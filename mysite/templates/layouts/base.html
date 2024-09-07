@@ -38,7 +38,18 @@
     {% if page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{% endif %}
     {# Force all links in the live preview panel to be opened in a new tab #}
     {% if request.in_preview_panel %}<base target="_blank" />{% endif %}
-    {% if not request.is_preview %}{# Veer add analytics here #}{% endif %}
+    {% if not request.is_preview %}
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FXKFW99W2Z"></script>
+      <script>
+           window.dataLayer = window.dataLayer || [];
+
+           function gtag() {
+                dataLayer.push(arguments);
+           }
+           gtag('js', new Date());
+           gtag('config', 'G-FXKFW99W2Z');
+      </script>
+    {% endif %}
     {# Global stylesheets #}
     <link href="{% static 'assets/css/styles.min.css' %}" rel="stylesheet" type="text/css" />
 
@@ -70,7 +81,9 @@
     </main>
 
     {% block footer %}
+
       {% include "includes/footer.html" %}
+
     {% endblock footer %}
 
     <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>

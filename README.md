@@ -1,12 +1,12 @@
 <h1 align="center">
   <br>
-  <a href="https://kpiola.com.ar/blog/"><img src="https://kpiola.com.ar/static/assets/img/logos/logo-color.svg" alt="Kpiola" width="200"></a>
+  <a href="https://ventanita.com.ar/blog/"><img src="https://ventanita.com.ar/static/assets/img/logos/logo-color.svg" alt="Ventanita" width="200"></a>
   <br>
-  Kpiola
+  Ventanita
   <br>
 </h1>
 
-<h4 align="center">Kpiola Marketing site built with ❤️ using wagtail.</h4>
+<h4 align="center">Ventanita Marketing site built with ❤️ using wagtail.</h4>
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
@@ -57,4 +57,4 @@ This software uses the following open source packages:
 
 ## Live
 
-[Online Here](https://kpiola.com.ar/blog/) - Web version of the app
+[Online Here](https://ventanita.com.ar/blog/) - Web version of the app
