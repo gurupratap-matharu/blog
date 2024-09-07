@@ -17,15 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: locations/templates/locations/city_page.html:18
-msgid "Stations"
+#: search/templates/search/search.html:17
+msgid "How can we help you?"
 msgstr ""
 
-#: locations/templates/locations/station_page.html:23
-msgid "Where is "
-msgstr ""
-
-#: locations/templates/locations/station_page.html:26
-msgid "Address: "
+#: search/templates/search/search.html:37
+msgid "Go"
 msgstr ""

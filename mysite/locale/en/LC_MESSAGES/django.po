@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-06 23:19-0300\n"
+"POT-Creation-Date: 2024-09-07 17:04-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +18,54 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mysite/settings.py:165
+#: mysite/settings.py:170
 msgid "English"
 msgstr ""
 
-#: mysite/settings.py:166
+#: mysite/settings.py:171
 msgid "Spanish"
 msgstr ""
 
-#: mysite/settings.py:167
+#: mysite/settings.py:172
 msgid "Portuguese"
+msgstr ""
+
+#: templates/404.html:6
+msgid "404 Not found"
+msgstr ""
+
+#: templates/404.html:18
+msgid "Error 404"
+msgstr ""
+
+#: templates/404.html:19
+msgid "Uff. Page not found"
+msgstr ""
+
+#: templates/404.html:20 templates/500.html:20
+msgid "We suggest you to go to the homepage while we solve this issue."
+msgstr ""
+
+#: templates/404.html:25 templates/500.html:25
+msgid "Go back Home"
+msgstr ""
+
+#: templates/500.html:6
+msgid "500 Server Error"
+msgstr ""
+
+#: templates/500.html:18
+msgid "Error 500"
+msgstr ""
+
+#: templates/500.html:19
+msgid "Something went wrong"
+msgstr ""
+
+#: templates/includes/navigation.html:27
+msgid "Search"
+msgstr ""
+
+#: templates/includes/navigation.html:31
+msgid "Book"
 msgstr ""

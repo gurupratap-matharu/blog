@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-06 23:19-0300\n"
+"POT-Creation-Date: 2024-09-07 17:04-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,10 +18,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
-#: locations/templates/locations/station_page.html:17
-msgid "Station: "
+
+#: locations/templates/locations/city_page.html:18
+#, fuzzy
+#| msgid "Station: "
+msgid "Stations"
 msgstr "Terminal: "
 
-#: locations/templates/locations/station_page.html:22
+#: locations/templates/locations/station_page.html:23
+msgid "Where is "
+msgstr ""
+
+#: locations/templates/locations/station_page.html:26
 msgid "Address: "
 msgstr "Dirección: "
