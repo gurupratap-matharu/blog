@@ -89,9 +89,9 @@ EMAIL_HOST = "127.0.0.1"
 EMAIL_PORT = 1025
 
 # Email
-DEFAULT_FROM_EMAIL = "'Kpiola' <noreply@kpiola.com.ar>"
+DEFAULT_FROM_EMAIL = "'Ventanita' <noreply@ventanita.com.ar>"
 DEFAULT_TO_EMAIL = "gurupratap.matharu@gmail.com"
-SERVER_EMAIL = "wagtail@kpiola.com.ar"
+SERVER_EMAIL = "wagtail@ventanita.com.ar"
 RECIPIENT_LIST = [
     "gurupratap.matharu@gmail.com",
     "veerplaying@gmail.com",
@@ -208,7 +208,7 @@ MESSAGE_TAGS = {messages.ERROR: "danger"}
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "Kpiola"
+WAGTAIL_SITE_NAME = "Ventanita"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html

@@ -448,7 +448,7 @@ class SiteSettings(BaseSiteSetting):
     title_suffix = models.CharField(
         verbose_name="Title suffix",
         max_length=255,
-        help_text="The suffix for the title meta tag e.g. ' | The Kpiola Blog'",
+        help_text="The suffix for the title meta tag e.g. ' | Blog'",
         default="Book Bus tickets",
     )
 

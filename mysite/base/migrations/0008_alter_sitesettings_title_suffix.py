@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name="title_suffix",
             field=models.CharField(
                 default="Book Bus tickets",
-                help_text="The suffix for the title meta tag e.g. ' | The Kpiola Blog'",
+                help_text="The suffix for the title meta tag e.g. ' | The Blog'",
                 max_length=255,
                 verbose_name="Title suffix",
             ),
