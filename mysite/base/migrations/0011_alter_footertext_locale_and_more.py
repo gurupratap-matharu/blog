@@ -8,7 +8,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("base", "0010_alter_formpage_options"),
-        ("wagtailcore", "0095_query_searchpromotion_querydailyhits"),
     ]
 
     operations = [

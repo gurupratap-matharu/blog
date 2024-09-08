@@ -13,8 +13,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("base", "0011_alter_footertext_locale_and_more"),
-        ("wagtailcore", "0095_query_searchpromotion_querydailyhits"),
-        ("wagtailimages", "0026_delete_uploadedimage"),
     ]
 
     operations = [
