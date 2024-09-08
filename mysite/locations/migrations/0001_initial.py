@@ -11,9 +11,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ("base", "0011_alter_footertext_locale_and_more"),
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
