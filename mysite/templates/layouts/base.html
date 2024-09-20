@@ -38,7 +38,7 @@
     {% if page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{% endif %}
     {# Force all links in the live preview panel to be opened in a new tab #}
     {% if request.in_preview_panel %}<base target="_blank" />{% endif %}
-    {% if not request.is_preview %}
+    {% if not debug %}
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-FXKFW99W2Z"></script>
       <script>
            window.dataLayer = window.dataLayer || [];
@@ -73,7 +73,7 @@
 
     {% endblock messages %}
 
-    <main>
+    <main class="min-vh-50">
 
       {% block content %}
       {% endblock content %}
