@@ -1,11 +1,13 @@
 {% extends "layouts/base.html" %}
 
+{% load static %}
+
 {% block title %}
   Styleguide
 {% endblock title %}
 
 {% block content %}
-  <div class="container pt-7">
+  <section class="container pt-7">
     <h1 class="text-center">Styleguide 🌈</h1>
     <h3>Headers</h3>
 
@@ -52,5 +54,40 @@
         <hr />
       </div>
     </div>
-  </div>
+    <article class="mt-3">
+      <h3>Shadows</h3>
+      <div class="d-flex flex-wrap gap-3">
+        <div class="card shadow-none">
+          <div class="card-header">
+            <h5>Shadow None</h5>
+          </div>
+          <div class="card-body">{% lorem %}</div>
+        </div>
+        <div class="card shadow-xs">
+          <div class="card-header">
+            <h5>Shadow XS</h5>
+          </div>
+          <div class="card-body">{% lorem %}</div>
+        </div>
+        <div class="card shadow-lg">
+          <div class="card-header">
+            <h5>Shadow Large</h5>
+          </div>
+          <div class="card-body">{% lorem %}</div>
+        </div>
+        <div class="card shadow-xl">
+          <div class="card-header">
+            <h5>Shadow XL</h5>
+          </div>
+          <div class="card-body">{% lorem %}</div>
+        </div>
+        <div class="card blur">
+          <div class="card-header">
+            <h5>Shadow Blur</h5>
+          </div>
+          <div class="card-body">{% lorem %}</div>
+        </div>
+      </div>
+    </article>
+  </section>
 {% endblock content %}
