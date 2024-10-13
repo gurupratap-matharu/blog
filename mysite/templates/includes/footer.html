@@ -7,7 +7,7 @@
     <div class="row">
       <div class="col-md-3 mb-4 ms-auto">
         <p class="font-weight-bolder">
-          <a href="{% url 'wagtail_serve' '' %}">Ventanita</a>
+          <a href="{% url 'wagtail_serve' '' %}" class="text-primary text-gradient">Ventanita</a>
         </p>
         <ul class="d-flex flex-row ms-n3 nav">
           <li class="nav-item">
@@ -60,60 +60,60 @@
         </div>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
-        <p class="text-gradient text-primary text-sm">Company</p>
+        <p class="text-gradient text-primary text-sm">{% translate "Company" %}</p>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/about/">About Us</a>
+            <a class="nav-link" href="https://ventanita.com.ar/about/">{% translate "About Us" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'partners' %}">Partners</a>
+            <a class="nav-link" href="{% slugurl 'partners' %}">{% translate "Partners" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'blog' %}">Blog</a>
+            <a class="nav-link" href="{% slugurl 'blog' %}">{% translate "Blog" %}</a>
           </li>
         </ul>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
-        <p class="text-gradient text-primary text-sm">Resources</p>
+        <p class="text-gradient text-primary text-sm">{% translate "Resources" %}</p>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'cities' %}">Cities</a>
+            <a class="nav-link" href="{% slugurl 'cities' %}">{% translate "Cities" %}</a>
           </li>
         </ul>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
-        <p class="text-gradient text-primary text-sm">Help & Support</p>
+        <p class="text-gradient text-primary text-sm">{% translate "Help & Support" %}</p>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/contact/">Contact Us</a>
+            <a class="nav-link" href="https://ventanita.com.ar/contact/">{% translate "Contact Us" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/help/">Help Center</a>
+            <a class="nav-link" href="https://ventanita.com.ar/help/">{% translate "Help Center" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/help/">Customer Support</a>
+            <a class="nav-link" href="https://ventanita.com.ar/help/">{% translate "Customer Support" %}</a>
           </li>
         </ul>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4 me-auto">
-        <p class="text-gradient text-primary text-sm">Legal</p>
+        <p class="text-gradient text-primary text-sm">{% translate "Legal" %}</p>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/terms/">Terms &amp; Conditions</a>
+            <a class="nav-link" href="https://ventanita.com.ar/terms/">{% translate "Terms &amp; Conditions" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/privacy/">Privacy Policy</a>
+            <a class="nav-link" href="https://ventanita.com.ar/privacy/">{% translate "Privacy Policy" %}</a>
           </li>
         </ul>
       </div>
       <div class="col-12">
         <div class="text-center">
           <p class="mt-4 nav-link">
-            Copyright ©
+            {% translate "Copyright" %} ©
             <script>
                  document.write(new Date().getFullYear());
             </script>
-            Made with ❤️ in Argentina 🇦🇷
+            {% translate " Made with ❤️ in Argentina 🇦🇷" %}
           </p>
           {% get_footer_text %}
         </div>
