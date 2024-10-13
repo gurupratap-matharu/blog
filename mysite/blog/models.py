@@ -286,6 +286,10 @@ class BlogPage(Page):
             ).select_related("person")
         ]
 
+    def canonical_url(self):
+        # Veer customise this incase of multiple routes
+        return self.get_full_url()
+
 
 class BlogPageGalleryImage(Orderable):
     page = ParentalKey(
