@@ -14,6 +14,8 @@
     <meta name="keywords" content="Bus, Argentina, Tickets, Travel, Pasajes" />
     <meta name="author" content="Ventanita Team" />
     <meta name="color-scheme" content="light dark" />
+    <meta property="theme-color" content="#ffffff" />
+    <meta name="msapplication-config" content="{% static 'assets/img/logos/browserconfig.xml' %}" />
     <meta name="description" content="{% if page.search_description %}{{ page.search_description }}{% endif %}" />
     {# djlint:off #}
     {% block og_tags %}
@@ -30,23 +32,24 @@
     <meta property="og:site_name" content="Ventanita" />
     <meta property="og:locale" content="{{ LANGUAGE_CODE }}" />
 
-    <meta property="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock twitter_card %}">
-    <meta property="twitter:creator" content="Ventanita" />
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:creator" content="@Ventanita" />
     <meta property="twitter:site" content="@Ventanita" />
-    <meta name="twitter:title" content="{{ page.title|default:"Explore Argentina by Bus" }}" />
+    <meta name="twitter:title" content="{% block og_title %}{{ page.title|default:"Explore Argentina by Bus" }}{% endblock og_title %}" />
     <meta name="twitter:image" content="{{ tmp_photo.full_url }}" />
-    <meta name="twitter:description" content="{% spaceless %}{{ page.search_description|default:"Ventanita provides information about bus routes and their availability all over Argentina with easy booking service on both web and mobile." }}{% endspaceless %}" />
+    <meta name="twitter:description" content="{% block og_description %}{% spaceless %}{{ page.search_description|default:"Ventanita provides information about bus routes and their availability all over Argentina with easy booking service on both web and mobile." }}{% endspaceless %}{% endblock og_description %}" />
     {% endblock og_tags %}
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/logos/apple-touch-icon.png' %}" />
+    <meta name="apple-mobile-web-app-title" content="Ventanita" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta property="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/logos/favicon-32x32.png' %}" />
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/logos/favicon-16x16.png' %}" />
     <link rel="manifest" href="{% static 'assets/img/logos/site.webmanifest' %}" />
     <link rel="mask-icon" href="{% static 'assets/img/logos/safari-pinned-tab.svg' %}" color="#5bbad5" />
     <link rel="shortcut icon" href="{% static 'assets/img/logos/favicon.ico' %}" />
-    <meta name="msapplication-TileColor" content="#2d89ef" />
-    <meta name="msapplication-config" content="{% static 'assets/img/logos/browserconfig.xml' %}" />
-    <meta name="theme-color" content="#ffffff" />
+
     <link rel="icon" href="{% static "assets/img/logos/ventanita.svg" %}" sizes="any" type="image/svg+xml" />
     <title>{% spaceless %}{% block title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}{% endblock title %}{% block title_suffix %} | {{ settings.base.SiteSettings.title_suffix }}{% endblock title_suffix %}{% endspaceless %}</title>
     {# djlint:on #}
