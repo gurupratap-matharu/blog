@@ -35,9 +35,9 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:creator" content="@Ventanita" />
     <meta property="twitter:site" content="@Ventanita" />
-    <meta name="twitter:title" content="{% block og_title %}{{ page.title|default:"Explore Argentina by Bus" }}{% endblock og_title %}" />
+    <meta name="twitter:title" content="{% block tw_title %}{{ page.title|default:"Explore Argentina by Bus" }}{% endblock tw_title %}" />
     <meta name="twitter:image" content="{{ tmp_photo.full_url }}" />
-    <meta name="twitter:description" content="{% block og_description %}{% spaceless %}{{ page.search_description|default:"Ventanita provides information about bus routes and their availability all over Argentina with easy booking service on both web and mobile." }}{% endspaceless %}{% endblock og_description %}" />
+    <meta name="twitter:description" content="{% block tw:description %}{% spaceless %}{{ page.search_description|default:"Ventanita provides information about bus routes and their availability all over Argentina with easy booking service on both web and mobile." }}{% endspaceless %}{% endblock tw:description %}" />
     {% endblock og_tags %}
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/logos/apple-touch-icon.png' %}" />
