@@ -3,9 +3,14 @@
 # https://docs.gunicorn.org/en/stable/settings.html
 
 # import multiprocessing
+import gunicorn
 
-# restart workers after so many requests with some variability
-max_requests = 1000
+# Replace gunicorn server http header to avoid leak to attackers
+gunicorn.SERVER = ""
+
+
+# restart workers every 1200-1250 requests
+max_requests = 1200
 max_requests_jitter = 50
 
 # Bind to a unix socket (created by systemd)
@@ -35,3 +40,9 @@ capture_output = True
 loglevel = "info"
 
 enable_stdio_inheritance = True
+
+# Load app pre-fork to save memory and worker startup time
+preload_app = True
+
+# Timeout after 25 seconds
+timeout = 25
