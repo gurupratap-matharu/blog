@@ -5,17 +5,18 @@ from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
 
 from base.blocks import BaseStreamBlock
+from base.models import BasePage
 
 
-class HomePage(Page):
+class HomePage(BasePage):
     """
-    The Home Page. This looks slightly more complicated than it is. You can
-    see if you visit your site and edit the homepage that it is split between
-    a:
-    - Hero area
-    - Body area
-    - A promotional area
-    - Moveable featured site sections
+    The Home Page is a dynamic page which has different sections that link to other pages
+    on the site. Broadly it has the following sections
+        - Hero area + search form
+        - Featured sections
+        - A promotional area
+        - Body area
+        - CTA section
     """
 
     page_description = "Use this page to build the home page"
@@ -48,7 +49,6 @@ class HomePage(Page):
     # Body section of the HomePage
     body = StreamField(
         BaseStreamBlock(),
-        verbose_name="Home content block",
         blank=True,
         use_json_field=True,
     )
@@ -163,6 +163,7 @@ class HomePage(Page):
 
     class Meta:
         verbose_name = "homepage"
+        verbose_name_plural = "homepages"
 
     def __str__(self):
         return self.title

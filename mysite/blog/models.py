@@ -242,8 +242,7 @@ class BlogPage(Page):
     @cached_property
     def get_tags(self):
         """
-        Find all the tags that
-        are related to the blog post into a list we can access on the template.
+        Find all the tags that are related to the blog post into a list we can access on the template.
         We're additionally adding a URL to access BlogPage objects with that tag
         """
 
