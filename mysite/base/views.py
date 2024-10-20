@@ -34,7 +34,7 @@ def favicon(request: HttpRequest) -> FileResponse:
     """
 
     file = (
-        settings.BASE_DIR / "static" / "assets" / "img" / "logos" / "favicon.ico"
+        settings.BASE_DIR / "staticfiles" / "assets" / "img" / "logos" / "favicon.ico"
     ).open("rb")
     return FileResponse(file, headers={"Content-Type": "image/x-icon"})
 
