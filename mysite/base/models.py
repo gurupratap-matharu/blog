@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.db import models
 from django.forms import widgets
 from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.panels import (
@@ -42,6 +43,7 @@ from wagtail.models import (
 from wagtail.search import index
 
 from base.blocks import BaseStreamBlock
+from base.cache import get_cache_control_kwargs
 from base.views import CustomSubmissionsListView
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -192,6 +194,105 @@ class FooterText(
 
     def get_preview_context(self, request, mode_name):
         return {"footer_text": self.body}
+
+
+class SocialFields(models.Model):
+    """
+    Used to store an image and title which can be used when a page is shared on social networks.
+    """
+
+    social_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Choose an image you wish to display when this page appears on social media",
+    )
+    social_text = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        abstract = True
+
+    promote_panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("social_image"),
+                FieldPanel("social_text"),
+            ],
+            "Social networks",
+        )
+    ]
+
+
+class ListingFields(models.Model):
+    """
+    Abstract class to add listing field and text to any new content type easily.
+    """
+
+    listing_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Choose an image you wish to be displayed when this page appears on listings",
+    )
+    listing_title = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Override the page title when this page appears on listings",
+    )
+    listing_summary = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="The text description used when this page appears on listings. It's also used if meta description is absent",
+    )
+
+    class Meta:
+        abstract = True
+
+    promote_panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("listing_image"),
+                FieldPanel("listing_title"),
+                FieldPanel("listing_summary"),
+            ],
+            "Listing information",
+        )
+    ]
+
+
+# @method_decorator(get_cache_control_kwargs(), name="serve")
+class BasePage(SocialFields, ListingFields, Page):
+    """
+    An abstract base page which is optimised and can be inherited by any content page in our project.
+    """
+
+    show_in_menus_default = True
+
+    appear_in_search_results = models.BooleanField(
+        default=True,
+        help_text="Make this page indexable by search engines."
+        "If unchecked this page will no longer be indexed by search engines.",
+    )
+
+    promote_panels = (
+        Page.promote_panels
+        + SocialFields.promote_panels
+        + ListingFields.promote_panels
+        + [
+            FieldPanel("appear_in_search_results"),
+        ]
+    )
+
+    class Meta:
+        abstract = True
+
+
+BasePage._meta.get_field("seo_title").verbose_name = "Title tag"
+BasePage._meta.get_field("search_description").verbose_name = "Meta description"
 
 
 class StandardPage(Page):
