@@ -113,7 +113,7 @@ class HomePage(BasePage):
         verbose_name="Featured section 3",
     )
 
-    content_panels = Page.content_panels + [
+    content_panels = BasePage.content_panels + [
         MultiFieldPanel(
             [
                 FieldPanel("image"),

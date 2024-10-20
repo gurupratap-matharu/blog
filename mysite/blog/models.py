@@ -11,10 +11,11 @@ from django.utils.functional import cached_property
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import StreamField
-from wagtail.models import Orderable, Page
+from wagtail.models import Orderable
 from wagtail.search import index
 
 from base.blocks import BaseStreamBlock
+from base.models import BasePage
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import Tag, TaggedItemBase
@@ -45,8 +46,9 @@ class BlogPersonRelationship(Orderable, models.Model):
         verbose_name = "blogpersonrelationship"
 
 
-class BlogIndexPage(RoutablePageMixin, Page):
+class BlogIndexPage(RoutablePageMixin, BasePage):
     page_description = "Use this page to show a list of blog posts"
+    max_count = 1
 
     intro = models.TextField(help_text="Text to describe the page", blank=True)
 
@@ -59,7 +61,7 @@ class BlogIndexPage(RoutablePageMixin, Page):
         help_text="Landscape mode only; horizontal width between 1000px to 3000px.",
     )
 
-    content_panels = Page.content_panels + [
+    content_panels = BasePage.content_panels + [
         FieldPanel("intro"),
         FieldPanel("image"),
     ]
@@ -157,7 +159,7 @@ class BlogPageTag(TaggedItemBase):
     )
 
 
-class BlogPage(Page):
+class BlogPage(BasePage):
     """
     A Blog Page or a single Blog Post
 
@@ -188,13 +190,13 @@ class BlogPage(Page):
     date = models.DateField("Post date", blank=True, null=True)
     categories = ParentalManyToManyField("blog.BlogCategory", blank=True)
 
-    search_fields = Page.search_fields + [
+    search_fields = BasePage.search_fields + [
         index.SearchField("intro"),
         index.SearchField("body"),
         index.FilterField("date"),
     ]
 
-    content_panels = Page.content_panels + [
+    content_panels = BasePage.content_panels + [
         FieldPanel("subtitle"),
         FieldPanel("intro"),
         FieldPanel("body"),
@@ -219,7 +221,7 @@ class BlogPage(Page):
     ]
 
     promote_panels = [
-        MultiFieldPanel(Page.promote_panels, "Common page configuration"),
+        MultiFieldPanel(BasePage.promote_panels, "Common page configuration"),
         FieldPanel("feed_image"),
     ]
 

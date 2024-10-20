@@ -6,15 +6,15 @@ from django.db import models
 from wagtail.admin.panels import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin
 from wagtail.fields import StreamField
-from wagtail.models import Page
 from wagtail.search import index
 
 from base.blocks import BaseStreamBlock
+from base.models import BasePage
 
 logger = logging.getLogger(__name__)
 
 
-class CityIndexPage(Page):
+class CityIndexPage(BasePage):
     """
     A Page model that creates an index page (a listview)
     """
@@ -31,7 +31,7 @@ class CityIndexPage(Page):
         help_text="Landscape model only; horizontal width between 1000px and 3000px.",
     )
 
-    content_panels = Page.content_panels + [
+    content_panels = BasePage.content_panels + [
         FieldPanel("intro"),
         FieldPanel("image"),
     ]
@@ -61,7 +61,7 @@ class CityIndexPage(Page):
         return context
 
 
-class CityPage(Page):
+class CityPage(BasePage):
     """
     Detail page for a specific city or town.
     """
@@ -85,7 +85,7 @@ class CityPage(Page):
         related_name="cities",
     )
 
-    content_panels = Page.content_panels + [
+    content_panels = BasePage.content_panels + [
         FieldPanel("intro"),
         FieldPanel("image"),
         FieldPanel("country"),
@@ -112,7 +112,7 @@ class CityPage(Page):
         return context
 
 
-class StationPage(RoutablePageMixin, Page):
+class StationPage(RoutablePageMixin, BasePage):
     """
     A station detail view which represent a stop | terminal | station
     This is a leaf page and the hierarchy is country -> city -> station
@@ -147,12 +147,12 @@ class StationPage(RoutablePageMixin, Page):
         ],
     )
 
-    search_fields = Page.search_fields + [
+    search_fields = BasePage.search_fields + [
         index.SearchField("address"),
         index.SearchField("body"),
     ]
 
-    content_panels = Page.content_panels + [
+    content_panels = BasePage.content_panels + [
         FieldPanel("intro"),
         FieldPanel("image"),
         FieldPanel("body"),

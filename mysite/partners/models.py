@@ -10,6 +10,7 @@ from wagtail.models import Page
 from wagtail.search import index
 
 from base.blocks import BaseStreamBlock, ContactBlock, FAQBlock
+from base.models import BasePage
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
@@ -31,7 +32,7 @@ class PartnerPageTag(TaggedItemBase):
     )
 
 
-class PartnerIndexPage(Page):
+class PartnerIndexPage(BasePage):
     page_description = "Use this page to show a list of partners"
 
     intro = models.TextField(help_text="Text to describe the page", blank=True)
@@ -45,7 +46,7 @@ class PartnerIndexPage(Page):
         help_text="Landscape mode only; horizontal width between 1000px to 3000px.",
     )
 
-    content_panels = Page.content_panels + [
+    content_panels = BasePage.content_panels + [
         FieldPanel("intro"),
         FieldPanel("image"),
     ]
@@ -72,7 +73,7 @@ class PartnerIndexPage(Page):
         return context
 
 
-class PartnerPage(Page):
+class PartnerPage(BasePage):
     """
     A partner page to describe the details of a single partner.
     """
@@ -117,11 +118,11 @@ class PartnerPage(Page):
         max_num=1,
         use_json_field=True,
     )
-    search_fields = Page.search_fields + [
+    search_fields = BasePage.search_fields + [
         index.SearchField("body"),
     ]
 
-    content_panels = Page.content_panels + [
+    content_panels = BasePage.content_panels + [
         FieldPanel("logo"),
         FieldPanel("contact"),
         FieldPanel("body"),

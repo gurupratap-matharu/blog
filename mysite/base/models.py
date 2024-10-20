@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.db import models
 from django.forms import widgets
 from django.shortcuts import redirect
-from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.panels import (
@@ -16,17 +15,9 @@ from wagtail.admin.panels import (
     PublishingPanel,
 )
 from wagtail.contrib.forms.forms import FormBuilder
-from wagtail.contrib.forms.models import (
-    FORM_FIELD_CHOICES,
-    AbstractEmailForm,
-    AbstractFormField,
-)
+from wagtail.contrib.forms.models import FORM_FIELD_CHOICES, AbstractEmailForm, AbstractFormField
 from wagtail.contrib.forms.panels import FormSubmissionsPanel
-from wagtail.contrib.settings.models import (
-    BaseGenericSetting,
-    BaseSiteSetting,
-    register_setting,
-)
+from wagtail.contrib.settings.models import BaseGenericSetting, BaseSiteSetting, register_setting
 from wagtail.fields import RichTextField, StreamField
 from wagtail.images import get_image_model
 from wagtail.images.fields import WagtailImageField
@@ -43,7 +34,6 @@ from wagtail.models import (
 from wagtail.search import index
 
 from base.blocks import BaseStreamBlock
-from base.cache import get_cache_control_kwargs
 from base.views import CustomSubmissionsListView
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -295,7 +285,7 @@ BasePage._meta.get_field("seo_title").verbose_name = "Title tag"
 BasePage._meta.get_field("search_description").verbose_name = "Meta description"
 
 
-class StandardPage(Page):
+class StandardPage(BasePage):
     """
     A generic content page which we can use for any page that only needs a title, image, introduction and a body field.
 
@@ -320,7 +310,7 @@ class StandardPage(Page):
         BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
     )
 
-    content_panels = Page.content_panels + [
+    content_panels = BasePage.content_panels + [
         FieldPanel("introduction"),
         FieldPanel("image"),
         FieldPanel("body"),
