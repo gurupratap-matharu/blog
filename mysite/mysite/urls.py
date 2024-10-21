@@ -48,4 +48,5 @@ urlpatterns += i18n_patterns(
     # Alternatively, if you want Wagtail pages to be served from a subpath
     # of your site, rather than the site root:
     # path("pages/", include(wagtail_urls)),
+    prefix_default_language=False,
 )
