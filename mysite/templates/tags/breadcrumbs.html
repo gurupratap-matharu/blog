@@ -1,7 +1,6 @@
 {% load static wagtailcore_tags %}
 
 {% if ancestors %}
-  <div class="row">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb bg-white">
         {% for ancestor in ancestors %}
@@ -24,5 +23,4 @@
         {% endfor %}
       </ol>
     </nav>
-  </div>
 {% endif %}
