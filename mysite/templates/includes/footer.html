@@ -41,7 +41,7 @@
         <div class="d-flex mt-3 mb-2">
           <form action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
-            <input name="next" type="hidden" value="{{ redirect_to }}" />
+            <input name="next" type="hidden" value="/" />
             <div class="input-group input-group-sm mb-3">
               <select name="language" class="form-select form-select-sm bg-transparent">
                 {% get_current_language as LANGUAGE_CODE %}
@@ -56,6 +56,7 @@
               <button class="btn btn-outline-primary mb-0" type="submit">Go</button>
             </div>
           </form>
+
         </div>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
