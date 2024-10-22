@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-07 17:04-0300\n"
+"POT-Creation-Date: 2024-10-22 17:53-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,6 +60,66 @@ msgstr ""
 
 #: templates/500.html:19
 msgid "Something went wrong"
+msgstr ""
+
+#: templates/includes/footer.html:62
+msgid "Company"
+msgstr ""
+
+#: templates/includes/footer.html:65
+msgid "About Us"
+msgstr ""
+
+#: templates/includes/footer.html:68
+msgid "Partners"
+msgstr ""
+
+#: templates/includes/footer.html:71
+msgid "Blog"
+msgstr ""
+
+#: templates/includes/footer.html:76
+msgid "Resources"
+msgstr ""
+
+#: templates/includes/footer.html:79
+msgid "Cities"
+msgstr ""
+
+#: templates/includes/footer.html:84
+msgid "Help & Support"
+msgstr ""
+
+#: templates/includes/footer.html:87
+msgid "Contact Us"
+msgstr ""
+
+#: templates/includes/footer.html:90
+msgid "Help Center"
+msgstr ""
+
+#: templates/includes/footer.html:93
+msgid "Customer Support"
+msgstr ""
+
+#: templates/includes/footer.html:98
+msgid "Legal"
+msgstr ""
+
+#: templates/includes/footer.html:101
+msgid "Terms &amp; Conditions"
+msgstr ""
+
+#: templates/includes/footer.html:104
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/includes/footer.html:111
+msgid "Copyright"
+msgstr ""
+
+#: templates/includes/footer.html:115
+msgid " Made with ❤️ in Argentina 🇦🇷"
 msgstr ""
 
 #: templates/includes/navigation.html:27
