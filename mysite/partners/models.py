@@ -6,7 +6,6 @@ from django.db import models
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
-from wagtail.models import Page
 from wagtail.search import index
 
 from base.blocks import BaseStreamBlock, ContactBlock, FAQBlock
