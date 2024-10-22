@@ -1,26 +1,26 @@
 {% load static wagtailcore_tags %}
 
 {% if ancestors %}
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-white">
-        {% for ancestor in ancestors %}
-          {% if forloop.last %}
-            <li class="breadcrumb-item active" aria-current="page">{{ ancestor }}</li>
-          {% else %}
-            <li class="breadcrumb-item">
-              <a href="{% pageurl ancestor %}">
-                {% if forloop.first %}
-                  <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#house" />
-                  </svg>
-                  <span class="visually-hidden">Home</span>
-                {% else %}
-                  {{ ancestor }}
-                {% endif %}
-              </a>
-            </li>
-          {% endif %}
-        {% endfor %}
-      </ol>
-    </nav>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-white">
+      {% for ancestor in ancestors %}
+        {% if forloop.last %}
+          <li class="breadcrumb-item active" aria-current="page">{{ ancestor }}</li>
+        {% else %}
+          <li class="breadcrumb-item">
+            <a href="{% pageurl ancestor %}">
+              {% if forloop.first %}
+                <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#house" />
+                </svg>
+                <span class="visually-hidden">Home</span>
+              {% else %}
+                {{ ancestor }}
+              {% endif %}
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+  </nav>
 {% endif %}
