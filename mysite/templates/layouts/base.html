@@ -90,14 +90,16 @@
       {% block content %}{% endblock content %}
     </main>
 
+    {% block modal %}{% endblock modal %}
+
     {% block footer %}
       {% include "includes/footer.html" %}
     {% endblock footer %}
 
     <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/main.js" %}"></script>
+    {{ LANGUAGE_CODE|json_script:'locale' }}
 
-    {% block modal %}{% endblock modal %}
     {% block extra_js %}{% endblock extra_js %}
   </body>
   {# djlint:on #}
