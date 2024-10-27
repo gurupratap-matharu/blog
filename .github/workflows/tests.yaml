@@ -1,4 +1,5 @@
 name: Tests
+
 on:
   push:
     branches:
@@ -22,13 +23,13 @@ jobs:
       matrix:
         database: [postgres]
         os: [ubuntu-latest]
-        python-version: ["3.10"]
-        poetry-version: ["1.2.2"]
+        python-version: ["3.12"]
+        poetry-version: ["1.7.1"]
 
     steps:
       - name: Checkout git repo
-        uses: actions/checkout@v3
-      
+        uses: actions/checkout@v4
+
       - name: Add environment variables to .env file
         run: |
           echo DEBUG=1 >> .env
@@ -38,7 +39,7 @@ jobs:
           echo DATABASE_PASSWORD=postgres >> .env
           echo DATABASE_HOST=localhost >> .env
           echo SECRET_KEY=sEcReTKeYtORuNTeSts >> .env
-      
+
       - name: Setup postgres database
         uses: harmon758/postgresql-action@v1
         if: matrix.database == 'postgres'
@@ -49,12 +50,12 @@ jobs:
           postgresql password: "postgres"
 
       - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.1.6
+        uses: abatilo/actions-poetry@v2
         with:
           poetry-version: ${{ matrix.poetry-version }}
 
@@ -70,11 +71,11 @@ jobs:
       - name: Generate xml report
         run: cd mysite && poetry run coverage xml
         if: always()
-      
+
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3
         if: always()
-        with: 
+        with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: mysite/coverage.xml
           flags: unittests
