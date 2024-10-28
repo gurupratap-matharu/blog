@@ -34,7 +34,7 @@ class Command(BaseCommand):
         Parses a city url and builds a list of (terminal_name, terminal_url)
         """
 
-        response = requests.get(city_url, headers=HEADERS)
+        response = requests.get(city_url, headers=HEADERS, timeout=10)
         bs = BeautifulSoup(response.text, "html.parser")
 
         city = bs.find("h1").get_text().lstrip("Stations in ")
@@ -64,7 +64,7 @@ class Command(BaseCommand):
     def handle(self, **options):
         logger.info("running scraper...")
 
-        response = requests.get(cities_url, headers=HEADERS)
+        response = requests.get(cities_url, headers=HEADERS, timeout=10)
         bs = BeautifulSoup(response.text, "html.parser")
 
         links = bs.find_all("li", {"class": "suggestion"})

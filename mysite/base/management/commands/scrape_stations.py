@@ -77,7 +77,7 @@ class Command(BaseCommand):
         """
         try:
 
-            response = requests.get(station_url, headers=HEADERS)
+            response = requests.get(station_url, headers=HEADERS, timeout=10)
             bs = BeautifulSoup(response.text, "html.parser")
 
         except requests.exceptions.RequestException as e:
