@@ -88,6 +88,9 @@
 
     <main class="min-vh-50">
       {% block content %}{% endblock content %}
+      <div class="fixed-bottom bg-transparent d-flex justify-content-end">
+        <a href="https://ventanita.com.ar/feedback/" class="bg-white cursor-pointer border rounded-top me-3 me-md-5 p-2">{% translate "Feedback" %}</a>
+        </div>
     </main>
 
     {% block modal %}{% endblock modal %}
