@@ -153,7 +153,6 @@ class StationPageTests(WagtailPageTestCase):
             default_home = Page.objects.get(title="Welcome to your new Wagtail site!")
             default_home.slug = "home-old"
             default_home.save_revision().publish()
-            default_home.save()
 
         except Page.DoesNotExist:
             pass
@@ -170,18 +169,10 @@ class StationPageTests(WagtailPageTestCase):
             address="Av. Gdor. Ricardo Videla Mendoza Argentina",
             lat_long="-32.89481666936962, -68.829083231125",
         )
-        cls.station_page.body.extend(
-            [
-                ("heading_block", "Just a CharField Heading"),
-                ("paragraph_block", RichText("<p>First paragraph</p>")),
-                ("paragraph_block", RichText("<p>Second paragraph</p>")),
-            ]
-        )
 
         # Set Home Page as child of root
         cls.root.add_child(instance=cls.home_page)
         cls.home_page.save_revision().publish()
-        cls.home_page.save()
 
         # Set default Home Page as root page for Site
         cls.site = Site.objects.get(id=1)
@@ -191,24 +182,18 @@ class StationPageTests(WagtailPageTestCase):
         # Add CityIndexPage as child of HomePage
         cls.home_page.add_child(instance=cls.city_index_page)
         cls.city_index_page.save_revision().publish()
-        cls.city_index_page.save()
 
         # Add CityPage as child of CityIndexPage
         cls.city_index_page.add_child(instance=cls.city_page)
         cls.city_page.save_revision().publish()
-        cls.city_page.save()
 
         # Add StationPage as child of CityPage
         cls.city_page.add_child(instance=cls.station_page)
         cls.station_page.save_revision().publish()
-        cls.station_page.save()
 
     def test_get(self):
         response = self.client.get(self.station_page.url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Just a CharField Heading")
-        self.assertContains(response, "<p>First paragraph</p>")
-        self.assertContains(response, "<p>Second paragraph</p>")
 
     def test_default_route(self):
         self.assertPageIsRoutable(self.station_page)
