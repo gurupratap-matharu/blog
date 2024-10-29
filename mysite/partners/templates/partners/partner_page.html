@@ -3,9 +3,8 @@
 {% load i18n static wagtailimages_tags navigation_tags %}
 
 {% block content %}
-  <div class="container pt-7">
-    {% breadcrumbs %}
-    {% image page.logo original %}
+  <div class="container pt-7 col-lg-9">
+    {% image page.logo original class="img-fluid" %}
     <section class="py-3 py-md-5">
       <div class="row">
         <div class="col border-radius-xl mx-3 py-3 bg-white shadow-xl">
@@ -120,13 +119,16 @@
         </div>
       </div>
     </section>
+    <section class="py-3">
+      {% breadcrumbs %}
+    </section>
     <section class="py-3 py-md-5">
       {{ page.contact }}
     </section>
     {{ page.body }}
     {% if page.faq %}
       <section class="py-3 py-md-5">
-        <h2>{% translate "Frequently Asked Questions " %}</h2>
+        <h2 class="fs-5">{% translate "Frequently Asked Questions " %}</h2>
         {{ page.faq }}
       </section>
     {% endif %}
