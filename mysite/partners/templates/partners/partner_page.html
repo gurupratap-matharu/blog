@@ -3,11 +3,20 @@
 {% load i18n static wagtailimages_tags navigation_tags %}
 
 {% block content %}
-  <div class="container pt-7 col-lg-9">
-    {% image page.logo original class="img-fluid" %}
+  <div class="container pt-7 col-12 col-xl-9">
+    <div class="row">
+      <div class="col col-md-8">
+        <h1>
+          <span class="display-4">Comprá tus pasajes en</span>
+          <br />
+          {{ page.title }}
+        </h1>
+      </div>
+      <div class="col col-md-4">{% image page.logo original class="img-fluid" loading="lazy" %}</div>
+    </div>
     <section class="py-3 py-md-5">
       <div class="row">
-        <div class="col border-radius-xl mx-3 py-3 bg-white shadow-xl">
+        <div class="col border border-radius-xl mx-3 py-3 shadow-xl">
           <form action="/trips/" method="get" autocomplete="on">
             <div class="row gx-md-3 mb-1 mb-md-3">
               <div class="col-8 col-sm-3 col-lg-2">
@@ -46,7 +55,6 @@
                          id="origin"
                          value="{{ request.session.q.origin }}"
                          placeholder='{% translate "Leaving from" %}'
-                         autofocus
                          required />
                 </div>
               </div>
@@ -123,69 +131,117 @@
       {% breadcrumbs %}
     </section>
     <section class="py-3 py-md-5">
-      {{ page.contact }}
+      <h2 class="fs-5 pb-3">{% translate "About " %}{{ page.title }}</h2>
+      <div class="row">
+        <div class="col-md-7 rounded-3">{{ page.body }}</div>
+        <div class="col-md-5 rounded-3 my-auto">
+          {% image page.hero_image original class="img-fluid rounded-3" loading="lazy" %}
+        </div>
+      </div>
     </section>
-    {{ page.body }}
     {% if page.faq %}
       <section class="py-3 py-md-5">
-        <h2 class="fs-5">{% translate "Frequently Asked Questions " %}</h2>
+        <h2 class="fs-5 pb-3">{% translate "Frequently asked questions about " %}{{ page.title }}</h2>
         {{ page.faq }}
       </section>
     {% endif %}
-  </div>
-{% endblock content %}
+    <section class="py-3 py-md-5">
+      <h2 class="fs-5 pb-3">Empresas destacadas</h2>
+      <div class="row gy-3">
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-andesmar.png' %}" alt="Logo of Andesmar" />
+        </div>
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid"
+               loading="lazy"
+               src="{% static 'assets/img/company-logos/logo-costera-criolla.png' %}"
+               alt="Logo of Costera Criolla" />
+        </div>
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid"
+               loading="lazy"
+               src="{% static 'assets/img/company-logos/logo-chevallier.png' %}"
+               alt="Logo of Chevallier" />
+        </div>
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid"
+               loading="lazy"
+               src="{% static 'assets/img/company-logos/logo-empresa-argentina.png' %}"
+               alt="Logo of Empresa Argentina" />
+        </div>
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid"
+               loading="lazy"
+               src="{% static 'assets/img/company-logos/logo-flecha-bus.png' %}"
+               alt="Logo of Flecha Bus" />
+        </div>
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-plusmar.png' %}" alt="Logo of Plusmar" />
+        </div>
+      </section>
+      <section class="py-3 py-md-5">
+        <h2 class="fs-5 pb-3">¿Por que Ventanita?</h2>
+        <div class="d-flex">
+          <p>
+            Nuestra misión es brindarles a todos la oportunidad de viajar y mostrarles el mundo.
+            Creemos que todos merecen viajar y que el mundo es un lugar mejor cuando experimentamos, compartimos y construimos una vida a través de nuestras historias.
+          </p>
+        </div>
+      </section>
+    </div>
+  {% endblock content %}
 
-{% block modal %}
-  {% comment "Offcanvas trigger buttons" %}
+  {% block modal %}
+    {% comment "Offcanvas trigger buttons" %}
   <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDeparture" aria-controls="offcanvasDeparture">Departure</button>
   <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasReturn" aria-controls="offcanvasReturn">Return</button>
-  {% endcomment %}
-  {# Offcanvas Departure #}
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDeparture" aria-labelledby="offcanvasDepartureLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasDepartureLabel">{% translate "Departure" %}</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    {% endcomment %}
+    {# Offcanvas Departure #}
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDeparture" aria-labelledby="offcanvasDepartureLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasDepartureLabel">{% translate "Departure" %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <input class="form-control form-control-lg offcanvas-departure-date bg-white"
+               type="text"
+               name="offcanvas-departure"
+               id="offcanvas-departure"
+               autocorrect="off"
+               autocapitalize="off"
+               autocomplete="off"
+               spellcheck="false"
+               maxlength="2048"
+               value="{{ request.session.q.departure }}"
+               required />
+      </div>
     </div>
-    <div class="offcanvas-body">
-      <input class="form-control form-control-lg offcanvas-departure-date bg-white"
-             type="text"
-             name="offcanvas-departure"
-             id="offcanvas-departure"
-             autocorrect="off"
-             autocapitalize="off"
-             autocomplete="off"
-             spellcheck="false"
-             maxlength="2048"
-             value="{{ request.session.q.departure }}"
-             required />
+    {# Offcanvas Return #}
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasReturn" aria-labelledby="offcanvasReturnLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasReturnLabel">{% translate "Return" %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <input class="form-control form-control-lg offcanvas-return-date bg-white"
+               type="text"
+               name="offcanvas-return"
+               id="offcanvas-return"
+               autocorrect="off"
+               autocapitalize="off"
+               autocomplete="off"
+               spellcheck="false"
+               maxlength="2048"
+               value="{{ request.session.q.return }}"
+               required />
+      </div>
     </div>
-  </div>
-  {# Offcanvas Return #}
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasReturn" aria-labelledby="offcanvasReturnLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasReturnLabel">{% translate "Return" %}</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <input class="form-control form-control-lg offcanvas-return-date bg-white"
-             type="text"
-             name="offcanvas-return"
-             id="offcanvas-return"
-             autocorrect="off"
-             autocapitalize="off"
-             autocomplete="off"
-             spellcheck="false"
-             maxlength="2048"
-             value="{{ request.session.q.return }}"
-             required />
-    </div>
-  </div>
-{% endblock modal %}
+  {% endblock modal %}
 
-{% block extra_js %}
-  <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
-{% endblock extra_js %}
+  {% block extra_js %}
+    <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
+  {% endblock extra_js %}

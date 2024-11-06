@@ -1,8 +1,8 @@
-<div class="accordion" id="accordionFAQ">
+<div class="accordion accordion-flush" id="accordionFAQ">
   {% for element in self.item %}
     <div class="accordion-item">
       <h3 class="accordion-header">
-        <button class="accordion-button
+        <button class="accordion-button ps-0
                        {% if not forloop.first %}collapsed{% endif %}
                        font-weight-bold"
                 type="button"
@@ -19,7 +19,7 @@
            class="accordion-collapse collapse
                   {% if forloop.first %}show{% endif %}"
            data-bs-parent="#accordionFAQ">
-        <div class="accordion-body">{{ element.answer }}</div>
+        <div class="accordion-body ps-0">{{ element.answer }}</div>
       </div>
     </div>
   {% endfor %}

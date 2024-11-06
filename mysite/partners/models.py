@@ -123,6 +123,7 @@ class PartnerPage(BasePage):
 
     content_panels = BasePage.content_panels + [
         FieldPanel("logo"),
+        FieldPanel("hero_image"),
         FieldPanel("contact"),
         FieldPanel("body"),
         FieldPanel("faq"),
