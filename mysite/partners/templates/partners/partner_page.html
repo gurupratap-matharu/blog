@@ -3,7 +3,7 @@
 {% load i18n static wagtailimages_tags navigation_tags %}
 
 {% block content %}
-  <div class="container pt-7 col-12 col-xl-9">
+  <div class="container pt-7 col-12 col-xl-9" id="content">
     <div class="row">
       <div class="col col-md-8">
         <h1>
@@ -133,7 +133,7 @@
     <section class="py-3 py-md-5">
       <h2 class="fs-5 pb-3">{% translate "About " %}{{ page.title }}</h2>
       <div class="row">
-        <div class="col-md-7 rounded-3">{{ page.body }}</div>
+        <div class="col-md-7 rounded-3">{{ page.intro }}</div>
         <div class="col-md-5 rounded-3 my-auto">
           {% image page.hero_image original class="img-fluid rounded-3" loading="lazy" %}
         </div>
@@ -141,10 +141,12 @@
     </section>
     {% if page.faq %}
       <section class="py-3 py-md-5">
-        <h2 class="fs-5 pb-3">{% translate "Frequently asked questions about " %}{{ page.title }}</h2>
         {{ page.faq }}
       </section>
     {% endif %}
+    <section class="py-3 py-md-5">
+      {{ page.body }}
+    </section>
     <section class="py-3 py-md-5">
       <h2 class="fs-5 pb-3">Empresas destacadas</h2>
       <div class="row gy-3">
@@ -178,6 +180,9 @@
         <div class="col-4 col-sm-3 col-lg-2">
           <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-plusmar.png' %}" alt="Logo of Plusmar" />
         </div>
+      </section>
+      <section class="py-3 py-md-5">
+        {{ page.links }}
       </section>
       <section class="py-3 py-md-5">
         <h2 class="fs-5 pb-3">¿Por que Ventanita?</h2>
