@@ -39,6 +39,7 @@ jobs:
           echo DATABASE_PASSWORD=postgres >> .env
           echo DATABASE_HOST=localhost >> .env
           echo SECRET_KEY=sEcReTKeYtORuNTeSts >> .env
+          echo WAGTAILADMIN_BASE_URL=ventanita.com.ar >> .env
 
       - name: Setup postgres database
         uses: harmon758/postgresql-action@v1
