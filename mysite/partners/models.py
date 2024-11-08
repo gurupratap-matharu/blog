@@ -8,7 +8,7 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
 from wagtail.search import index
 
-from base.blocks import BaseStreamBlock, ContactBlock, FAQBlock
+from base.blocks import BaseStreamBlock, ContactBlock, FAQBlock, LinkBlock
 from base.models import BasePage
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ParentalKey, ParentalManyToManyField
@@ -87,6 +87,10 @@ class PartnerPage(BasePage):
         related_name="+",
     )
 
+    intro = models.TextField(
+        help_text="A brief introduction about the company", blank=True
+    )
+
     hero_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -117,16 +121,27 @@ class PartnerPage(BasePage):
         max_num=1,
         use_json_field=True,
     )
+
+    links = StreamField(
+        [("Links", LinkBlock())],
+        verbose_name="Links Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
     search_fields = BasePage.search_fields + [
         index.SearchField("body"),
     ]
 
     content_panels = BasePage.content_panels + [
         FieldPanel("logo"),
+        FieldPanel("intro"),
         FieldPanel("hero_image"),
         FieldPanel("contact"),
         FieldPanel("body"),
         FieldPanel("faq"),
+        FieldPanel("links"),
         MultiFieldPanel(
             [
                 FieldPanel("tags"),
