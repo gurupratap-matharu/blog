@@ -3,6 +3,7 @@ from wagtail.blocks import (
     ChoiceBlock,
     EmailBlock,
     ListBlock,
+    PageChooserBlock,
     RichTextBlock,
     StreamBlock,
     StructBlock,
@@ -12,6 +13,8 @@ from wagtail.blocks import (
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
+
+from .struct_values import LinkStructValue
 
 
 class HeadingBlock(StructBlock):
@@ -50,6 +53,42 @@ class ImageBlock(StructBlock):
         template = "blocks/image_block.html"
 
 
+class InternalLinkBlock(StructBlock):
+    title = CharBlock(
+        required=False,
+        help_text="Leave blank to use page's listing title.",
+    )
+    page = PageChooserBlock()
+
+    class Meta:
+        icon = "link"
+        value_class = LinkStructValue
+
+
+class ExternalLinkBlock(StructBlock):
+    title = CharBlock()
+    link = URLBlock()
+
+    class Meta:
+        icon = "link"
+        value_class = LinkStructValue
+
+
+class LinkStreamBlock(StreamBlock):
+    """
+    Allow editors to an internal page link or an external web link.
+    """
+
+    internal_link = InternalLinkBlock()
+    external_link = ExternalLinkBlock()
+
+    class Meta:
+        label = "Link"
+        icon = "link"
+        min_num = 1
+        max_num = 1
+
+
 class BlockQuote(StructBlock):
     """
     Custom `StructBlock` that allows the user to attribute a quote to the author.
@@ -68,15 +107,26 @@ class FAQItemBlock(StructBlock):
     answer = TextBlock(required=True)
 
     class Meta:
-        icon = "comment-add"
+        label = "Section"
+        icon = "title"
 
 
 class FAQBlock(StructBlock):
+    title = CharBlock(default="Frequently asked questions")
     item = ListBlock(FAQItemBlock())
 
     class Meta:
-        icon = "comment"
+        icon = "list-ol"
         template = "blocks/faq_block.html"
+
+
+class LinkBlock(StructBlock):
+    heading_text = CharBlock(required=True)
+    item = ListBlock(InternalLinkBlock())
+
+    class Meta:
+        icon = "list-ol"
+        template = "blocks/link_block.html"
 
 
 class ContactBlock(StructBlock):
@@ -110,3 +160,4 @@ class BaseStreamBlock(StreamBlock):
     )
     faq = FAQBlock()
     document = DocumentChooserBlock(template="blocks/document_block.html")
+    link = LinkStreamBlock()

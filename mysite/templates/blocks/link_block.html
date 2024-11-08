@@ -1,0 +1,8 @@
+<h2 class="fs-5 pb-3">{{ self.heading_text }}</h2>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+  {% for link in self.item %}
+  <div class="col mb-1">
+  <a href={{ link.get_url }}>{{ link.get_title }}</a>
+  </div>
+  {% endfor %}
+</div>
