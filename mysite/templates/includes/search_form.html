@@ -4,24 +4,20 @@
   <div class="col border-radius-xl py-3 shadow-xl">
     <form action="/trips/" method="get" autocomplete="on">
       <div class="row gx-md-3 mb-1 mb-md-3">
-        <div class="col-8 col-sm-3 col-lg-2">
+        <div class="col-7 col-sm-4 col-lg-2">
           <select class="form-select bg-transparent" name="trip_type" id="trip_type" aria-label="Trip type" required>
-            <option value="round_trip" {% if not request.session.q.trip_type == "one_way" %}selected{% endif %}>
-              {% translate "Round trip" %}
-            </option>
-            <option value="one_way" {% if request.session.q.trip_type == "one_way" %}selected{% endif %}>
-              {% translate "One way" %}
-            </option>
+            <option value="one_way" selected>{% translate "Solo Ida" %}</option>
+            <option value="round_trip">{% translate "Ida y Vuelta" %}</option>
           </select>
         </div>
-        <div class="col-4 col-sm-2 col-lg-1">
+        <div class="col-5 col-sm-4 col-lg-2">
           <select class="form-select bg-transparent"
                   name="num_of_passengers"
                   id="num_of_passengers"
                   aria-label="Num of passengers"
                   required>
             {% for i in '12345'|make_list %}
-              <option value="{{ i }}" {% if request.session.q.num_of_passengers == i %}selected{% endif %}>{{ i }}</option>
+              <option value="{{ i }}" {% if request.session.q.num_of_passengers == i %}selected{% endif %}>Pasajeros {{ i }}</option>
             {% endfor %}
           </select>
         </div>
@@ -29,7 +25,7 @@
       <div class="row gx-1 gx-md-3">
         <div class="col-12 col-md-3">
           <div class="form-group mb-1 mb-md-3">
-            <label for="origin" class="form-label">{% translate "Origin" %}</label>
+            <label for="origin" class="form-label">{% translate "Origen" %}</label>
             <input class="form-control"
                    type="search"
                    name="origin"
@@ -45,7 +41,7 @@
         </div>
         <div class="col-12 col-md-3">
           <div class="form-group mb-1 mb-md-3">
-            <label for="destination" class="form-label">{% translate "Destination" %}</label>
+            <label for="destination" class="form-label">{% translate "Destino" %}</label>
             <input class="form-control"
                    type="search"
                    name="destination"
@@ -61,7 +57,7 @@
         </div>
         <div class="col-12 col-md-3">
           <div class="form-group mb-1 mb-md-3">
-            <label for="departure" class="form-label">{% translate "Departure" %}</label>
+            <label for="departure" class="form-label">{% translate "Salida" %}</label>
             <input class="form-control form-control-lg departure-date bg-white"
                    type="text"
                    name="departure"
@@ -77,7 +73,7 @@
         </div>
         <div class="col-12 col-md-3">
           <div class="form-group mb-3">
-            <label for="return" class="form-label">{% translate "Return (Optional)" %}</label>
+            <label for="return" class="form-label">{% translate "Retorno (Opcional)" %}</label>
             <input class="form-control form-control-lg return-date bg-white"
                    type="text"
                    name="return"
@@ -105,7 +101,7 @@
           <svg class="bi me-2" width="16" height="16" fill="currentColor" aria-hidden="true">
             <use xlink:href="{% static 'assets/icons/icons.svg' %}#search" />
           </svg>
-          {% translate "Explore" %}
+          {% translate "Buscar" %}
         </button>
       </div>
     </form>
