@@ -8,7 +8,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin
 from wagtail.fields import StreamField
 from wagtail.search import index
 
-from base.blocks import BaseStreamBlock
+from base.blocks import BaseStreamBlock, FAQBlock, LinkBlock
 from base.models import BasePage
 
 logger = logging.getLogger(__name__)
@@ -77,6 +77,49 @@ class CityPage(BasePage):
         related_name="+",
         help_text="Landscape mode only; horizontal width between 1000px and 3000px.",
     )
+
+    lat_long = models.CharField(
+        max_length=36,
+        blank=True,
+        help_text="Comma separated lat/long. (Ex. 64.144367, -21.939182) \
+                   Right click Google Maps and select 'What's Here'",
+        validators=[
+            RegexValidator(
+                regex=r"^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$",
+                message="Lat Long must be a comma-separated numeric lat and long",
+                code="invalid_lat_long",
+            ),
+        ],
+    )
+
+    body = StreamField(
+        BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
+    )
+
+    faq = StreamField(
+        [("faq", FAQBlock())],
+        verbose_name="FAQ Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
+    links = StreamField(
+        [("Links", LinkBlock())],
+        verbose_name="Links Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
+    companies = StreamField(
+        [("Links", LinkBlock())],
+        verbose_name="Companies Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
     country = models.ForeignKey(
         "base.Country",
         on_delete=models.SET_NULL,
@@ -85,9 +128,16 @@ class CityPage(BasePage):
         related_name="cities",
     )
 
+    search_fields = BasePage.search_fields + [index.SearchField("body")]
+
     content_panels = BasePage.content_panels + [
         FieldPanel("intro"),
         FieldPanel("image"),
+        FieldPanel("lat_long"),
+        FieldPanel("body"),
+        FieldPanel("faq"),
+        FieldPanel("links"),
+        FieldPanel("companies"),
         FieldPanel("country"),
     ]
 
@@ -107,8 +157,13 @@ class CityPage(BasePage):
         alphabetical order.
         """
 
+        lat_long = self.lat_long or ","
+        lat, long = lat_long.split(",")
+
         context = super().get_context(request, *args, **kwargs)
+        context["lat_long"] = {"lat": lat, "long": long}
         context["stations"] = self.get_children().live().order_by("title")
+
         return context
 
 
