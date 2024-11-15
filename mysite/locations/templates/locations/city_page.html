@@ -2,33 +2,133 @@
 
 {% load static i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
 
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'assets/css/leaflet.css' %}" />
+{% endblock extra_css %}
+
 {% block content %}
-  <div class="container pt-7 min-vh-75">
-    {% breadcrumbs %}
-    <div class="row">
-      <div class="col-lg-9 mx-auto">
-        <h1 class="display-3">{{ page.title }}</h1>
-        {% if page.image %}
-          <section class="py-3">
-            {% picture page.image format-{avif,webp,jpeg} width-800 class="img-fluid border-radius-xl" %}
-          </section>
-        {% endif %}
-        {% if page.intro %}<article class="py-3">{{ page.intro }}</article>{% endif %}
-        <section>
-          <h3 class="display-6 mb-3">{% translate "Stations" %}</h3>
-          <ul class="list-group list-group-flush">
-            {% for station in stations %}
-              <li class="list-group-item list-group-item-action">
-                <a href="{% pageurl station %}" class="icon-link icon-link-hover">{{ station }}
-                  <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
-                  </svg>
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
-        </section>
-      </div>
-    </div>
-  </div>
-{% endblock content %}
+  <article class="container col-12 col-xl-9 pt-7 min-vh-75">
+    <h1 class="fs-2">
+      <span class="text-primary text-gradient">Busca pasajes baratos a</span>
+      <br />
+      {{ page.title }}
+    </h1>
+    <section class="py-3 py-md-5">
+
+      {% include 'includes/search_form.html' %}
+
+    </section>
+    <section class="py-3">
+      {% breadcrumbs %}
+    </section>
+    <section class="py-3">
+      <h2 class="fs-4 pb-3">Comprá tus pasajes a {{ page.title }}</h2>
+    </section>
+    {% if page.image %}
+      <section class="py-3">
+        {% picture page.image original class="img-fluid shadow-xl border-radius-xl" %}
+      </section>
+    {% endif %}
+    {% if page.intro %}
+      <section class="pt-3">
+        <p class="lead">{{ page.intro }}</p>
+      </section>
+    {% endif %}
+    {% if page.body %}
+      <section class="pb-3 pb-md-5">
+        {{ page.body }}
+      </section>
+    {% endif %}
+    <section class="py-3 py-md-5 rounded-3 min-vh-50 shadow-xl" id="map">
+    </section>
+    <section class="py-3 py-md-5">
+      <h2 class="fs-5 pb-3">{% translate "Terminal De Bus" %}</h2>
+      <ul class="list-group list-group-flush">
+        {% for station in stations %}
+          <li class="list-group-item list-group-item-action ps-0">
+            <a href="{% pageurl station %}" class="icon-link icon-link-hover">{{ station }}
+              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+              </svg>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% if page.faq %}
+      <section class="py-3 py-md-5">
+        {{ page.faq }}
+      </section>
+    {% endif %}
+    <section class="py-3 py-md-5">
+      <h2 class="fs-5 pb-3">¡Comprá tu pasaje a {{ page.title }}!</h2>
+      <p>
+        En <a href="https://ventanita.com.ar">ventanita.com.ar</a> podés encontrar todas las opciones para tu viaje en micro a {{ page.title }}. Compará precios y horarios de las empresas de bus que te llevan a {{ page.title }} y encontrá pasajes baratos con las mejores promociones.
+      </p>
+    </section>
+    {% if page.links %}
+      <section class="py-3 py-md-5">
+        {{ page.links }}
+      </section>
+    {% endif %}
+    {% if page.companies %}
+      <section class="py-3 py-md-5">
+        {{ page.companies }}
+      </section>
+    {% endif %}
+    <section class="py-3 py-md-5">
+      <h2 class="fs-5 pb-3">Empresas destacadas</h2>
+      <div class="row gy-3">
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-andesmar.png' %}" alt="Logo of Andesmar" />
+        </div>
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid"
+               loading="lazy"
+               src="{% static 'assets/img/company-logos/logo-costera-criolla.png' %}"
+               alt="Logo of Costera Criolla" />
+        </div>
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid"
+               loading="lazy"
+               src="{% static 'assets/img/company-logos/logo-chevallier.png' %}"
+               alt="Logo of Chevallier" />
+        </div>
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid"
+               loading="lazy"
+               src="{% static 'assets/img/company-logos/logo-empresa-argentina.png' %}"
+               alt="Logo of Empresa Argentina" />
+        </div>
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid"
+               loading="lazy"
+               src="{% static 'assets/img/company-logos/logo-flecha-bus.png' %}"
+               alt="Logo of Flecha Bus" />
+        </div>
+        <div class="col-4 col-sm-3 col-lg-2">
+          <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-plusmar.png' %}" alt="Logo of Plusmar" />
+        </div>
+      </section>
+      <section class="py-3 py-md-5">
+        <h2 class="fs-5 pb-3">¿Por que Ventanita?</h2>
+        <div class="d-flex">
+          <p>
+            Nuestra misión es brindarles a todos la oportunidad de viajar y mostrarles el mundo.
+            Creemos que todos merecen viajar y que el mundo es un lugar mejor cuando experimentamos, compartimos y construimos una vida a través de nuestras historias.
+          </p>
+        </div>
+      </section>
+    </article>
+  {% endblock content %}
+
+  {% block extra_js %}
+    {{ lat_long|json_script:"coordinates" }}
+    <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/maps/leaflet.js' %}" defer></script>
+    <script type="text/javascript" src="{% static 'assets/js/maps/city_page.js' %}" defer></script>
+  {% endblock extra_js %}

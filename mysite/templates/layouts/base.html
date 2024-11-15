@@ -1,13 +1,18 @@
 {% load static wagtailcore_tags wagtailimages_tags navigation_tags i18n %}
 
 {% get_current_language as LANGUAGE_CODE %}
-{% image page.feed_image original as tmp_photo %}
+{% image page.social_image original as tmp_photo %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    {% if page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{% endif %}
+    {# djlint:off #}
+    <title>{% block title %}{% firstof page.seo_title page.title %}{% endblock title %}{% block title_suffix %} | {{ settings.base.SiteSettings.title_suffix }}{% endblock title_suffix %}</title>
+    {# djlint:on #}
+    <meta name="description" content="{% if page.search_description %}{{ page.search_description }}{% endif %}" />
     <meta name="ROBOTS" content="ALL" />
     <meta name="MSSmartTagsPreventParsing" content="true" />
     <meta name="Copyright" content="Ventanita Team" />
@@ -16,14 +21,13 @@
     <meta name="color-scheme" content="light dark" />
     <meta property="theme-color" content="#ffffff" />
     <meta name="msapplication-config" content="{% static 'assets/img/logos/browserconfig.xml' %}" />
-    <meta name="description" content="{% if page.search_description %}{{ page.search_description }}{% endif %}" />
     {# djlint:off #}
     {% block og_tags %}
 
-    <meta property="og:title" content="{% block og_title %}{{ page.title|default:"Explore Argentina by Bus" }}{% endblock og_title %}" />
+    <meta property="og:title" content="{% block og_title %}{% firstof page.seo_title page.title "Explore Argentina by Bus" %}{% endblock og_title %}" />
     <meta property="og:url" content="{% block og_url %}{{ page.get_full_url }}{% endblock og_url %}" />
     <meta property="og:type" content="website" />
-    <meta property="og:description" content="{% block og_description %}{% spaceless %}{{ page.search_description|default:"Ventanita provides information about bus routes and their availability all over Argentina with easy booking service on both web and mobile." }}{% endspaceless %}{% endblock og_description %}" />
+    <meta property="og:description" content="{% block og_description %}{% spaceless %}{% firstof page.search_description "Ventanita provides information about bus routes and their availability all over Argentina with easy booking service on both web and mobile." %}{% endspaceless %}{% endblock og_description %}" />
     <meta property="og:image" content="{% block og_img %}{{ tmp_photo.full_url }}{% endblock og_img %}" />
     <meta property="og:image:alt" content="{% block og_img_alt %}{{ tmp_photo.alt }}{% endblock og_img_alt %}" />
     <meta property="og:image:width" content="{% block og_img_w %}{{ tmp_photo.width }}{% endblock og_img_w %}" />
@@ -35,9 +39,9 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:creator" content="@Ventanita" />
     <meta property="twitter:site" content="@Ventanita" />
-    <meta name="twitter:title" content="{% block tw_title %}{{ page.title|default:"Explore Argentina by Bus" }}{% endblock tw_title %}" />
+    <meta name="twitter:title" content="{% block tw_title %}{% firstof page.seo_title page.title %}{% endblock tw_title %}" />
     <meta name="twitter:image" content="{{ tmp_photo.full_url }}" />
-    <meta name="twitter:description" content="{% block tw:description %}{% spaceless %}{{ page.search_description|default:"Ventanita provides information about bus routes and their availability all over Argentina with easy booking service on both web and mobile." }}{% endspaceless %}{% endblock tw:description %}" />
+    <meta name="twitter:description" content="{% block tw:description %}{% spaceless %}{% firstof page.search_description "Ventanita provides information about bus routes and their availability all over Argentina with easy booking service on both web and mobile." %}{% endspaceless %}{% endblock tw:description %}" />
     {% endblock og_tags %}
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/logos/apple-touch-icon.png' %}" />
@@ -51,9 +55,7 @@
     <link rel="shortcut icon" href="{% static 'assets/img/logos/favicon.ico' %}" />
 
     <link rel="icon" href="{% static "assets/img/logos/ventanita.svg" %}" sizes="any" type="image/svg+xml" />
-    <title>{% spaceless %}{% block title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}{% endblock title %}{% block title_suffix %} | {{ settings.base.SiteSettings.title_suffix }}{% endblock title_suffix %}{% endspaceless %}</title>
     {# djlint:on #}
-    {% if page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{% endif %}
     {# Force all links in the live preview panel to be opened in a new tab #}
     {% if request.in_preview_panel %}<base target="_blank" />{% endif %}
     {% if not debug %}
