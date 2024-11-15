@@ -288,6 +288,9 @@ class BasePage(SocialFields, ListingFields, Page):
     class Meta:
         abstract = True
 
+    def canonical_url(self):
+        return self.full_url
+
 
 BasePage._meta.get_field("seo_title").verbose_name = "Title tag"
 BasePage._meta.get_field("search_description").verbose_name = "Meta description"
