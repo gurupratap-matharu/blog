@@ -58,6 +58,7 @@
         <div class="col-12 col-md-3">
           <div class="form-group mb-1 mb-md-3">
             <label for="departure" class="form-label">{% translate "Salida" %}</label>
+            <label for="flat-departure" class="form-label visually-hidden">{% translate "Salida" %}</label>
             <input class="form-control form-control-lg departure-date bg-white"
                    type="text"
                    name="departure"
@@ -74,6 +75,7 @@
         <div class="col-12 col-md-3">
           <div class="form-group mb-3">
             <label for="return" class="form-label">{% translate "Retorno (Opcional)" %}</label>
+            <label for="flat-return" class="form-label visually-hidden">{% translate "Retorno (Opcional)" %}</label>
             <input class="form-control form-control-lg return-date bg-white"
                    type="text"
                    name="return"
@@ -116,10 +118,11 @@
   {# Offcanvas Departure #}
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDeparture" aria-labelledby="offcanvasDepartureLabel">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasDepartureLabel">{% translate "Departure" %}</h5>
+      <h2 class="offcanvas-title fs-5" id="offcanvasDepartureLabel">{% translate "Salida" %}</h2>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
+      <label for="flat-offcanvas-departure" class="form-label visually-hidden">{% translate "Salida" %}</label>
       <input class="form-control form-control-lg offcanvas-departure-date bg-white"
              type="text"
              name="offcanvas-departure"
@@ -136,10 +139,11 @@
   {# Offcanvas Return #}
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasReturn" aria-labelledby="offcanvasReturnLabel">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasReturnLabel">{% translate "Return" %}</h5>
+      <h2 class="offcanvas-title fs-5" id="offcanvasReturnLabel">{% translate "Retorno(Opcional)" %}</h2>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
+      <label for="flat-offcanvas-return" class="form-label visually-hidden">{% translate "Retorno" %}</label>
       <input class="form-control form-control-lg offcanvas-return-date bg-white"
              type="text"
              name="offcanvas-return"

@@ -31,7 +31,7 @@
     {% endif %}
     {% if page.intro %}
       <section class="pt-3">
-        <p class="lead">{{ page.intro }}</p>
+        <h2 class="lead">{{ page.intro }}</h2>
       </section>
     {% endif %}
     {% if page.body %}
@@ -63,7 +63,8 @@
     <section class="py-3 py-md-5">
       <h2 class="fs-5 pb-3">¡Comprá tu pasaje a {{ page.title }}!</h2>
       <p>
-        En <a href="https://ventanita.com.ar">ventanita.com.ar</a> podés encontrar todas las opciones para tu viaje en micro a {{ page.title }}. Compará precios y horarios de las empresas de bus que te llevan a {{ page.title }} y encontrá pasajes baratos con las mejores promociones.
+        En <a href="https://ventanita.com.ar" class="fw-bold">ventanita.com.ar</a> podes buscar y
+        comparar los mejores precios de micros a {{ page.title }}, así como también obtener información detallada sobre las rutas y los horarios de partida.Averigua los promociones vigentes y comience a disfrutar de su viaje sin complicaciones."
       </p>
     </section>
     {% if page.links %}

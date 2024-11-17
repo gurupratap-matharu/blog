@@ -5,9 +5,9 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3 mb-4 ms-auto">
-        <p class="font-weight-bolder">
-          <a href="{% url 'wagtail_serve' '' %}" class="text-primary text-gradient">Ventanita</a>
-        </p>
+        <h3 class="font-weight-bolder">
+          <a href="{% url 'wagtail_serve' '' %}" class="text-primary text-gradient fs-5">Ventanita</a>
+        </h3>
         <ul class="d-flex flex-row ms-n3 nav">
           <li class="nav-item">
             <a class="nav-link" target="_blank" href="{{ settings.base.GenericSettings.facebook_url }}" aria-label="Facebook Page">
@@ -42,8 +42,9 @@
           <form action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
             <input name="next" type="hidden" value="/" />
+            <label class="form-label" for="choose-language">Choose Language</label>
             <div class="input-group input-group-sm mb-3">
-              <select name="language" class="form-select form-select-sm bg-transparent">
+              <select name="language" id="choose-language" class="form-select form-select-sm bg-transparent">
                 {% get_current_language as LANGUAGE_CODE %}
                 {% get_available_languages as LANGUAGES %}
                 {% get_language_info_list for LANGUAGES as languages %}
@@ -88,9 +89,6 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="https://ventanita.com.ar/help/">{% translate "Help Center" %}</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/help/">{% translate "Customer Support" %}</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="https://ventanita.com.ar/feedback/">{% translate "Feedback" %}</a>
