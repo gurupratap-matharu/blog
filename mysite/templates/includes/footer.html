@@ -5,9 +5,9 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3 mb-4 ms-auto">
-        <h3 class="font-weight-bolder">
-          <a href="{% url 'wagtail_serve' '' %}" class="text-primary text-gradient fs-5">Ventanita</a>
-        </h3>
+        <p class="font-weight-bolder">
+          <a href="{% url 'wagtail_serve' '' %}" class="text-primary text-gradient">Ventanita</a>
+        </p>
         <ul class="d-flex flex-row ms-n3 nav">
           <li class="nav-item">
             <a class="nav-link" target="_blank" href="{{ settings.base.GenericSettings.facebook_url }}" aria-label="Facebook Page">
@@ -77,7 +77,7 @@
         <p class="text-gradient text-primary text-sm">{% translate "Resources" %}</p>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'cities' %}">{% translate "Cities" %}</a>
+            <a class="nav-link" href="{% slugurl 'pasajes-de-micro' %}">{% translate "Cities" %}</a>
           </li>
         </ul>
       </div>

@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% load i18n static wagtailimages_tags navigation_tags %}
+{% load i18n static wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
   <div class="container pt-7 col-12 col-xl-9" id="content">
@@ -45,102 +45,74 @@
       <h2 class="fs-5 pb-3">Empresas destacadas</h2>
       <div class="row gy-3">
         <div class="col-4 col-sm-3 col-lg-2">
-          <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-andesmar.png' %}" alt="Logo of Andesmar" />
+          <a href="{% slugurl 'andesmar' %}">
+            <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-andesmar.png' %}" alt="Logo of Andesmar" />
+          </a>
         </div>
         <div class="col-4 col-sm-3 col-lg-2">
-          <img class="img-fluid"
-               loading="lazy"
-               src="{% static 'assets/img/company-logos/logo-costera-criolla.png' %}"
-               alt="Logo of Costera Criolla" />
+          <a href="{% slugurl 'costera-criolla' %}">
+            <img class="img-fluid"
+                 loading="lazy"
+                 src="{% static 'assets/img/company-logos/logo-costera-criolla.png' %}"
+                 alt="Logo of Costera Criolla" />
+          </a>
         </div>
         <div class="col-4 col-sm-3 col-lg-2">
-          <img class="img-fluid"
-               loading="lazy"
-               src="{% static 'assets/img/company-logos/logo-chevallier.png' %}"
-               alt="Logo of Chevallier" />
+          <a href="{% slugurl 'chevallier' %}">
+            <img class="img-fluid"
+                 loading="lazy"
+                 src="{% static 'assets/img/company-logos/logo-chevallier.png' %}"
+                 alt="Logo of Chevallier" />
+          </a>
         </div>
         <div class="col-4 col-sm-3 col-lg-2">
-          <img class="img-fluid"
-               loading="lazy"
-               src="{% static 'assets/img/company-logos/logo-empresa-argentina.png' %}"
-               alt="Logo of Empresa Argentina" />
+          <a href="{% slugurl 'empresa-argentina' %}">
+            <img class="img-fluid"
+                 loading="lazy"
+                 src="{% static 'assets/img/company-logos/logo-empresa-argentina.png' %}"
+                 alt="Logo of Empresa Argentina" />
+          </a>
         </div>
         <div class="col-4 col-sm-3 col-lg-2">
-          <img class="img-fluid"
-               loading="lazy"
-               src="{% static 'assets/img/company-logos/logo-flecha-bus.png' %}"
-               alt="Logo of Flecha Bus" />
+          <a href="{% slugurl 'flecha-bus' %}">
+            <img class="img-fluid"
+                 loading="lazy"
+                 src="{% static 'assets/img/company-logos/logo-flecha-bus.png' %}"
+                 alt="Logo of Flecha Bus" />
+          </a>
         </div>
         <div class="col-4 col-sm-3 col-lg-2">
-          <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-plusmar.png' %}" alt="Logo of Plusmar" />
+          <a href="{% slugurl 'plusmar' %}">
+            <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-plusmar.png' %}" alt="Logo of Plusmar" />
+          </a>
         </div>
-      </section>
-      <section class="py-3 py-md-5">
-        {{ page.links }}
-      </section>
-      <section class="py-3 py-md-5">
-        <h2 class="fs-5 pb-3">¿Por que Ventanita?</h2>
-        <div class="d-flex">
-          <p>
-            Nuestra misión es brindarles a todos la oportunidad de viajar y mostrarles el mundo.
-            Creemos que todos merecen viajar y que el mundo es un lugar mejor cuando experimentamos, compartimos y construimos una vida a través de nuestras historias.
-          </p>
-        </div>
-      </section>
-    </div>
-  {% endblock content %}
+      </div>
+    </section>
+    <section class="py-3 py-md-5">
+      {{ page.links }}
+    </section>
+    <section class="py-3 py-md-5">
+      <h2 class="fs-5 pb-3">¿Por que Ventanita?</h2>
+      <div class="d-flex">
+        <p>
+          Nuestra misión es brindarles a todos la oportunidad de viajar y mostrarles el mundo.
+          Creemos que todos merecen viajar y que el mundo es un lugar mejor cuando experimentamos, compartimos y construimos una vida a través de nuestras historias.
+        </p>
+      </div>
+    </section>
+  </div>
+{% endblock content %}
 
-  {% block modal %}
-    {% comment "Offcanvas trigger buttons" %}
-  <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDeparture" aria-controls="offcanvasDeparture">Departure</button>
-  <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasReturn" aria-controls="offcanvasReturn">Return</button>
-    {% endcomment %}
-    {# Offcanvas Departure #}
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDeparture" aria-labelledby="offcanvasDepartureLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasDepartureLabel">{% translate "Departure" %}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <input class="form-control form-control-lg offcanvas-departure-date bg-white"
-               type="text"
-               name="offcanvas-departure"
-               id="offcanvas-departure"
-               autocorrect="off"
-               autocapitalize="off"
-               autocomplete="off"
-               spellcheck="false"
-               maxlength="2048"
-               value="{{ request.session.q.departure }}"
-               required />
-      </div>
-    </div>
-    {# Offcanvas Return #}
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasReturn" aria-labelledby="offcanvasReturnLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasReturnLabel">{% translate "Return" %}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <input class="form-control form-control-lg offcanvas-return-date bg-white"
-               type="text"
-               name="offcanvas-return"
-               id="offcanvas-return"
-               autocorrect="off"
-               autocapitalize="off"
-               autocomplete="off"
-               spellcheck="false"
-               maxlength="2048"
-               value="{{ request.session.q.return }}"
-               required />
-      </div>
-    </div>
-  {% endblock modal %}
+{% block modal %}
 
-  {% block extra_js %}
-    <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
-  {% endblock extra_js %}
+  {% include 'includes/offcanvas.html' %}
+
+{% endblock modal %}
+
+{% block extra_js %}
+  <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
+{% endblock extra_js %}

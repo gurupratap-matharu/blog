@@ -1,0 +1,48 @@
+{% load i18n static %}
+
+{% comment "offcanvas buttons" %}
+  <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDeparture" aria-controls="offcanvasDeparture">Departure</button>
+  <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasReturn" aria-controls="offcanvasReturn">Return</button>
+{% endcomment %}
+{# Offcanvas Departure #}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDeparture" aria-labelledby="offcanvasDepartureLabel">
+  <div class="offcanvas-header">
+    <label class="fs-5" for="offcanvas-departure">{% translate "Salida" %}</label>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <label for="flat-offcanvas-departure" class="form-label visually-hidden">{% translate "Salida" %}</label>
+    <input class="form-control form-control-lg offcanvas-departure-date bg-white"
+           type="text"
+           name="offcanvas-departure"
+           id="offcanvas-departure"
+           autocorrect="off"
+           autocapitalize="off"
+           autocomplete="off"
+           spellcheck="false"
+           maxlength="2048"
+           value="{{ request.session.q.departure }}"
+           required />
+  </div>
+</div>
+{# Offcanvas Return #}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasReturn" aria-labelledby="offcanvasReturnLabel">
+  <div class="offcanvas-header">
+    <label class="fs-5" for="offcanvas-return">{% translate "Retorno(Opcional)" %}</label>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <label for="flat-offcanvas-return" class="form-label visually-hidden">{% translate "Retorno" %}</label>
+    <input class="form-control form-control-lg offcanvas-return-date bg-white"
+           type="text"
+           name="offcanvas-return"
+           id="offcanvas-return"
+           autocorrect="off"
+           autocapitalize="off"
+           autocomplete="off"
+           spellcheck="false"
+           maxlength="2048"
+           value="{{ request.session.q.return }}"
+           required />
+  </div>
+</div>
