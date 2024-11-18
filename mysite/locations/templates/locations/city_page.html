@@ -26,7 +26,7 @@
     </section>
     {% if page.image %}
       <section class="py-3">
-        {% picture page.image original class="img-fluid shadow-xl border-radius-xl" %}
+        {% picture page.image format-{avif,webp,jpeg} original class="img-fluid shadow-xl border-radius-xl" %}
       </section>
     {% endif %}
     {% if page.intro %}
