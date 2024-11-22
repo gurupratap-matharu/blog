@@ -1,6 +1,7 @@
-{% load static wagtailcore_tags wagtailimages_tags navigation_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags navigation_tags schema_tags i18n %}
 
 {% get_current_language as LANGUAGE_CODE %}
+{% wagtail_site as current_site %}
 {% image page.social_image original as tmp_photo %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -49,7 +50,7 @@
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/logos/apple-touch-icon.png' %}" />
     <meta name="apple-mobile-web-app-title" content="Ventanita" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta property="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/logos/favicon-32x32.png' %}" />
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/logos/favicon-16x16.png' %}" />
@@ -79,6 +80,14 @@
     {% block extra_css %}
     {% endblock extra_css %}
 
+    {# Href Lang Attributes #}
+    {% if page %}
+      <link rel="alternate" hreflang="{{ LANGUAGE_CODE }}" href="{{ page.full_url }}" />
+      {% for translation in page.get_translations.live %}
+        {% get_language_info for translation.locale.language_code as lang %}
+        <link rel="alternate" hreflang="{{ lang.code }}" href="{% fullpageurl translation %}" />
+      {% endfor %}
+    {% endif %}
   </head>
   {# djlint:off #}
   <body class="{% block body_class %}template-{{ self.get_verbose_name|slugify }}{% endblock body_class %}">
@@ -94,8 +103,9 @@
     <main class="min-vh-50">
       {% block content %}{% endblock content %}
       <div class="fixed-bottom bg-transparent d-flex justify-content-end">
-        <a href="https://ventanita.com.ar/feedback/" class="bg-white cursor-pointer border rounded-top me-3 me-md-5 p-2">{% translate "Feedback" %}</a>
-        </div>
+        <a href="https://ventanita.com.ar/feedback/" class="bg-white cursor-pointer border rounded-top me-3 me-md-5 p-2">
+          {% translate "Feedback" %}</a>
+      </div>
     </main>
 
     {% block modal %}{% endblock modal %}
@@ -107,8 +117,8 @@
     <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/main.js" %}"></script>
     {{ LANGUAGE_CODE|json_script:'locale' }}
-
     {% block extra_js %}{% endblock extra_js %}
+    <script type="application/ld+json">{"@context": "http://schema.org","@graph":[{% global_schema_markup current_site %}{% block page_schema %}{% endblock page_schema %}]}</script>
   </body>
   {# djlint:on #}
 </html>
