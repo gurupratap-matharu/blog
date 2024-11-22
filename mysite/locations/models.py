@@ -169,12 +169,13 @@ class CityPage(BasePage):
         return context
 
     def ld_entity(self):
+        image_url = self.listing_image.file.url if self.listing_image else ""
         image_schema = {
             "@type": "ImageObject",
             "inLanguage": "en-US",
             "@id": f"{self.full_url}#primaryimage",
-            "url": f"https://ventanita.com.ar{self.listing_image.file.url}",
-            "contentUrl": f"https://ventanita.com.ar{self.listing_image.file.url}",
+            "url": f"https://ventanita.com.ar{image_url}",
+            "contentUrl": f"https://ventanita.com.ar{image_url}",
             "width": 1920,
             "height": 1010,
             "caption": self.listing_title,
@@ -193,7 +194,7 @@ class CityPage(BasePage):
                     "@type": "ListItem",
                     "position": 2,
                     "name": "Argentina",
-                    "item": "https://ventanita.com.ar/pasajes-de-micro/",
+                    "item": self.get_parent().full_url,
                 },
                 {
                     "@type": "ListItem",

@@ -13,12 +13,6 @@
       <br />
       {{ page.title }}
     </h1>
-    {% if page %}
-      {% for translation in page.get_translations.live %}
-        {% get_language_info for translation.locale.language_code as lang %}
-        <a href="{% pageurl translation %}" rel="alternate" hreflang="{{ lang.code }}">{{ lang.name_local }}</a>
-      {% endfor %}
-    {% endif %}
     <section class="py-3 py-md-5">
 
       {% include 'includes/search_form.html' %}
@@ -147,9 +141,9 @@
 
   {% endblock modal %}
 
-  {% block page_schema %}
-    {{ page.ld_entity }}
-  {% endblock page_schema %}
+  {# djlint:off #}
+  {% block page_schema %}{{ page.ld_entity }}{% endblock page_schema %}
+  {# djlint:on #}
 
   {% block extra_js %}
     {{ lat_long|json_script:"coordinates" }}
