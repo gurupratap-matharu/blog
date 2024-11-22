@@ -1,7 +1,9 @@
+import json
 import logging
 
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils.html import mark_safe
 
 from wagtail.admin.panels import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin
@@ -165,6 +167,44 @@ class CityPage(BasePage):
         context["stations"] = self.get_children().live().order_by("title")
 
         return context
+
+    def ld_entity(self):
+        image_schema = {
+            "@type": "ImageObject",
+            "inLanguage": "en-US",
+            "@id": f"{self.full_url}#primaryimage",
+            "url": f"https://ventanita.com.ar{self.listing_image.file.url}",
+            "contentUrl": f"https://ventanita.com.ar{self.listing_image.file.url}",
+            "width": 1920,
+            "height": 1010,
+            "caption": self.listing_title,
+        }
+
+        breadcrumb_schema = {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Pasajes de Micro",
+                    "item": "https://ventanita.com.ar/",
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Argentina",
+                    "item": "https://ventanita.com.ar/pasajes-de-micro/",
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": self.title,
+                    "item": self.full_url,
+                },
+            ],
+        }
+        page_schema = f"{json.dumps(breadcrumb_schema)}, {json.dumps(image_schema)}"
+        return mark_safe(page_schema)
 
 
 class StationPage(RoutablePageMixin, BasePage):
