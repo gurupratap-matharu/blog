@@ -169,19 +169,21 @@ class CityPage(BasePage):
         return context
 
     def ld_entity(self):
-        image_url = self.listing_image.file.url if self.listing_image else ""
+        image = self.listing_image or self.social_image
+        image_url = image.file.url if image else ""
         image_schema = {
+            "@context": "https://schema.org",
             "@type": "ImageObject",
-            "inLanguage": "en-US",
-            "@id": f"{self.full_url}#primaryimage",
-            "url": f"https://ventanita.com.ar{image_url}",
             "contentUrl": f"https://ventanita.com.ar{image_url}",
-            "width": 1920,
-            "height": 1010,
-            "caption": self.listing_title,
+            "license": "https://ventanita.com.ar/terms/",
+            "acquireLicensePage": "https://ventanita.com.ar/contact/",
+            "creditText": self.listing_title or self.social_text,
+            "creator": {"@type": "Person", "name": "Ventanita"},
+            "copyrightNotice": "Ventanita",
         }
 
         breadcrumb_schema = {
+            "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
                 {
@@ -204,7 +206,7 @@ class CityPage(BasePage):
                 },
             ],
         }
-        page_schema = f"{json.dumps(breadcrumb_schema)}, {json.dumps(image_schema)}"
+        page_schema = f"[{json.dumps(breadcrumb_schema)}, {json.dumps(image_schema)}]"
         return mark_safe(page_schema)
 
 

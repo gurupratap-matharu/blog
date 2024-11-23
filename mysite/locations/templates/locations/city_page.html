@@ -141,10 +141,6 @@
 
   {% endblock modal %}
 
-  {# djlint:off #}
-  {% block page_schema %}{{ page.ld_entity }}{% endblock page_schema %}
-  {# djlint:on #}
-
   {% block extra_js %}
     {{ lat_long|json_script:"coordinates" }}
     <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
@@ -154,4 +150,7 @@
     <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
     <script type="text/javascript" src="{% static 'assets/js/maps/leaflet.js' %}" defer></script>
     <script type="text/javascript" src="{% static 'assets/js/maps/city_page.js' %}" defer></script>
+    {# djlint:off #}
+    <script type="application/ld+json">{{ page.ld_entity }}</script>
+    {# djlint:on #}
   {% endblock extra_js %}

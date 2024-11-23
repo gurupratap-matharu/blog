@@ -117,7 +117,6 @@
     <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/main.js" %}"></script>
     {% block extra_js %}{% endblock extra_js %}
-    <script type="application/ld+json">{"@context": "http://schema.org","@graph":[{% global_schema_markup current_site %}{% block page_schema %}{% endblock page_schema %}]}</script>
   </body>
   {# djlint:on #}
 </html>
