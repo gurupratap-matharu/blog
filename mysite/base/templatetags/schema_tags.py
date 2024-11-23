@@ -14,33 +14,30 @@ def global_schema_markup(site):
     """
 
     organisation_schema = {
+        "@context": "http://schema.org",
         "@type": "Organization",
-        "@id": "https://ventanita.com.ar/#organization",
         "name": "Ventanita",
         "url": "https://ventanita.com.ar",
-        "logo": {
-            "@type": "ImageObject",
-            "inLanguage": "es",
-            "@id": "https://ventanita.com.ar/blog/#/schema/logo/image/",
-            "url": "https://ventanita.com.ar/static/assets/img/logos/logo.avif",
-            "contentUrl": "https://ventanita.com.ar/static/assets/img/logos/logo.avif",
-            "width": 2048,
-            "height": 768,
-            "caption": "Ventanita",
+        "logo": "https://ventanita.com.ar/static/assets/img/logos/logo.avif",
+        "image": "https://ventanita.com.ar/static/assets/img/logos/logo.avif",
+        "description": "Plataforma de viajes en Argentina 🇦🇷",
+        "email": "support@ventanita.com.ar",
+        "telephone": "+54-11-5025-4191",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Uspallata 471",
+            "addressLocality": "Buenos Aires",
+            "addressCountry": "AR",
+            "addressRegion": "CABA",
+            "postalCode": "1143",
         },
-        "image": {"@id": "https://ventanita.com.ar/blog/#/schema/logo/image/"},
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+54-911-5025-4191",
+            "email": "support@ventanita.com.ar",
+        },
         "sameAs": [],
     }
 
-    website_schema = {
-        "@type": "WebSite",
-        "@id": "https://ventanita.com.ar/#website",
-        "url": "https://ventanita.com.ar/",
-        "name": "Ventanita",
-        "description": "Plataforma de viajes en Argentina",
-        "publisher": {"@id": "https://ventanita.com.ar/#organization"},
-        "inLanguage": "es",
-    }
-
-    schema = f"{json.dumps(organisation_schema)}, {json.dumps(website_schema)},"
+    schema = f"{json.dumps(organisation_schema)}"
     return mark_safe(schema)
