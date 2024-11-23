@@ -42,7 +42,7 @@
           <form action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
             <input name="next" type="hidden" value="/" />
-            <label class="form-label" for="choose-language">Choose Language</label>
+            <label class="form-label" for="choose-language">{% translate "Idioma" %}</label>
             <div class="input-group input-group-sm mb-3">
               <select name="language" id="choose-language" class="form-select form-select-sm bg-transparent">
                 {% get_current_language as LANGUAGE_CODE %}
@@ -60,10 +60,10 @@
         </div>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
-        <p class="text-gradient text-primary text-sm">{% translate "Company" %}</p>
+        <p class="text-gradient text-primary text-sm">{% translate "Empresa" %}</p>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/about/">{% translate "About Us" %}</a>
+            <a class="nav-link" href="https://ventanita.com.ar/about/">{% translate "Sobre nosotros" %}</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% slugurl 'empresas-de-bus' %}">{% translate "Partners" %}</a>
@@ -74,24 +74,24 @@
         </ul>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
-        <p class="text-gradient text-primary text-sm">{% translate "Resources" %}</p>
+        <p class="text-gradient text-primary text-sm">{% translate "Recursos" %}</p>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'pasajes-de-micro' %}">{% translate "Cities" %}</a>
+            <a class="nav-link" href="{% slugurl 'pasajes-de-micro' %}">{% translate "Terminales" %}</a>
           </li>
         </ul>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
-        <p class="text-gradient text-primary text-sm">{% translate "Help & Support" %}</p>
+        <p class="text-gradient text-primary text-sm">{% translate "Soporte" %}</p>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/contact/">{% translate "Contact Us" %}</a>
+            <a class="nav-link" href="https://ventanita.com.ar/contact/">{% translate "Contacto" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/help/">{% translate "Help Center" %}</a>
+            <a class="nav-link" href="https://ventanita.com.ar/help/">{% translate "Ayuda" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/feedback/">{% translate "Feedback" %}</a>
+            <a class="nav-link" href="https://ventanita.com.ar/feedback/">{% translate "Comentarios" %}</a>
           </li>
         </ul>
       </div>
@@ -99,10 +99,10 @@
         <p class="text-gradient text-primary text-sm">{% translate "Legal" %}</p>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/terms/">{% translate "Terms &amp; Conditions" %}</a>
+            <a class="nav-link" href="https://ventanita.com.ar/terms/">{% translate "Terminos y Condiciones" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/privacy/">{% translate "Privacy Policy" %}</a>
+            <a class="nav-link" href="https://ventanita.com.ar/privacy/">{% translate "Politica de Privacidad" %}</a>
           </li>
         </ul>
       </div>
