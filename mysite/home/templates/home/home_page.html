@@ -1,11 +1,76 @@
 {% extends "layouts/base.html" %}
 
-{% load static %}
-
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load static i18n wagtailcore_tags wagtailimages_tags schema_tags %}
 
 {% block content %}
-  <div class="d-flex flex-column justify-content-center min-vh-50">
-    <h1 class="text-center">CMS Home</h1>
-  </div>
+  <article class="container col-12 col-xl-9 pt-7 min-vh-75">
+    <h1 class="display-2 text-center">Bus</h1>
+    <section class="py-3 py-md-5">
+
+      {% include 'includes/search_form.html' %}
+
+    </section>
+    <section class="py-3 py-md-5">
+      {{ page.body }}
+    </section>
+    <section class="py-3 py-md-5">
+      <h2 class="fs-5 pb-3">{{ page.featured_section_1_title }}</h2>
+      <ul class='list-group list-group-flush'>
+        {% for childpage in page.featured_section_1.specific.get_children|slice:'3' %}
+          <li class="list-group-item list-group-item-action ps-0">
+            <a href="{% pageurl childpage %}" class="icon-link icon-link-hover">{{ childpage }}
+              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+              </svg>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+    <section class="py-3 py-md-5">
+      <h2 class="fs-5 pb-3">{{ page.featured_section_2_title }}</h2>
+      <ul class="list-group list-group-flush">
+        {% for childpage in page.featured_section_2.specific.get_children|slice:'3' %}
+          <li class="list-group-item list-group-item-action ps-0">
+            <a href="{% pageurl childpage %}" class="icon-link icon-link-hover">{{ childpage }}
+              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+              </svg>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+    <section class="py-3 py-md-5">
+      <h2 class="fs-5 pb-3">{{ page.featured_section_3_title }}</h2>
+      <ul class="list-group list-group-flush">
+        {% for childpage in page.featured_section_3.specific.get_children|slice:'3' %}
+          <li class="list-group-item list-group-item-action ps-0">
+            <a href="{% pageurl childpage %}" class="icon-link icon-link-hover">{{ childpage }}
+              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+              </svg>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  </article>
 {% endblock content %}
+
+{% block modal %}
+
+  {% include 'includes/offcanvas.html' %}
+
+{% endblock modal %}
+
+{% block extra_js %}
+  <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
+  {# djlint:off #}
+    <script type="application/ld+json">{% global_schema_markup wagtail_site %}</script>
+  {# djlint:on #}
+{% endblock extra_js %}
