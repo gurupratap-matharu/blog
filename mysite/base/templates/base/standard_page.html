@@ -14,3 +14,9 @@
     <div class="col-10 col-md-8 mx-auto">{{ page.body }}</div>
   </div>
 {% endblock content %}
+
+{% block extra_js %}
+  {# djlint:off #}
+    <script type="application/ld+json">{% global_schema_markup wagtail_site %}</script>
+  {# djlint:on #}
+{% endblock extra_js %}
