@@ -206,7 +206,13 @@ class CityPage(BasePage):
                 },
             ],
         }
-        page_schema = f"[{json.dumps(breadcrumb_schema)}, {json.dumps(image_schema)}]"
+
+        page_schema = json.dumps(
+            {
+                "@context": "http://schema.org",
+                "@graph": [breadcrumb_schema, image_schema],
+            }
+        )
         return mark_safe(page_schema)
 
 
