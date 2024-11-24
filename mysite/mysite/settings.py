@@ -287,6 +287,8 @@ LOGGING = {
     },
 }
 
+SHELL_PLUS_PRINT_SQL = True
+SHELL_PLUS_PRINT_SQL_TRUNCATE = None
 
 if not DEBUG:
     # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
