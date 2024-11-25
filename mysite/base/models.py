@@ -15,17 +15,9 @@ from wagtail.admin.panels import (
     PublishingPanel,
 )
 from wagtail.contrib.forms.forms import FormBuilder
-from wagtail.contrib.forms.models import (
-    FORM_FIELD_CHOICES,
-    AbstractEmailForm,
-    AbstractFormField,
-)
+from wagtail.contrib.forms.models import FORM_FIELD_CHOICES, AbstractEmailForm, AbstractFormField
 from wagtail.contrib.forms.panels import FormSubmissionsPanel
-from wagtail.contrib.settings.models import (
-    BaseGenericSetting,
-    BaseSiteSetting,
-    register_setting,
-)
+from wagtail.contrib.settings.models import BaseGenericSetting, BaseSiteSetting, register_setting
 from wagtail.fields import RichTextField, StreamField
 from wagtail.images import get_image_model
 from wagtail.images.fields import WagtailImageField
@@ -39,6 +31,7 @@ from wagtail.models import (
     TranslatableMixin,
     WorkflowMixin,
 )
+from wagtail.models.i18n import Locale
 from wagtail.search import index
 
 from base.blocks import BaseStreamBlock
@@ -290,6 +283,12 @@ class BasePage(SocialFields, ListingFields, Page):
 
     def canonical_url(self):
         return self.full_url
+
+    def get_default_locale_url(self):
+        es = Locale.objects.get(language_code="es")
+        page = self.get_translation_or_none(locale=es)
+        if page and page.live:
+            return page.full_url
 
 
 BasePage._meta.get_field("seo_title").verbose_name = "Title tag"
