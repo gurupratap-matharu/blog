@@ -251,6 +251,30 @@ class StationPage(RoutablePageMixin, BasePage):
         ],
     )
 
+    faq = StreamField(
+        [("faq", FAQBlock())],
+        verbose_name="FAQ Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
+    links = StreamField(
+        [("Links", LinkBlock())],
+        verbose_name="Links Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
+    companies = StreamField(
+        [("Links", LinkBlock())],
+        verbose_name="Companies Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
     search_fields = BasePage.search_fields + [
         index.SearchField("address"),
         index.SearchField("body"),
@@ -259,9 +283,12 @@ class StationPage(RoutablePageMixin, BasePage):
     content_panels = BasePage.content_panels + [
         FieldPanel("intro"),
         FieldPanel("image"),
-        FieldPanel("body"),
-        FieldPanel("address"),
         FieldPanel("lat_long"),
+        FieldPanel("address"),
+        FieldPanel("body"),
+        FieldPanel("faq"),
+        FieldPanel("links"),
+        FieldPanel("companies"),
     ]
 
     parent_page_types = ["locations.CityPage"]
@@ -280,3 +307,56 @@ class StationPage(RoutablePageMixin, BasePage):
         context["lat_long"] = {"lat": lat, "long": long}
 
         return context
+
+    def ld_entity(self):
+        image = self.listing_image or self.social_image
+        image_url = image.file.url if image else ""
+        image_schema = {
+            "@context": "https://schema.org",
+            "@type": "ImageObject",
+            "contentUrl": f"https://ventanita.com.ar{image_url}",
+            "license": "https://ventanita.com.ar/terms/",
+            "acquireLicensePage": "https://ventanita.com.ar/contact/",
+            "creditText": self.listing_title or self.social_text,
+            "creator": {"@type": "Person", "name": "Ventanita"},
+            "copyrightNotice": "Ventanita",
+        }
+
+        breadcrumb_schema = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Pasajes de Micro",
+                    "item": "https://ventanita.com.ar/",
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Argentina",
+                    "item": self.get_parent().get_parent().full_url,
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": self.get_parent().title,
+                    "item": self.get_parent().full_url,
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 4,
+                    "name": self.title,
+                    "item": self.full_url,
+                },
+            ],
+        }
+
+        page_schema = json.dumps(
+            {
+                "@context": "http://schema.org",
+                "@graph": [breadcrumb_schema, image_schema],
+            }
+        )
+        return mark_safe(page_schema)
