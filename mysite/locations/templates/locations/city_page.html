@@ -64,7 +64,7 @@
       <h2 class="fs-5 pb-3">¡Comprá tu pasaje a {{ page.title }}!</h2>
       <p>
         En <a href="https://ventanita.com.ar" class="fw-bold">ventanita.com.ar</a> podes buscar y
-        comparar los mejores precios de micros a {{ page.title }}, así como también obtener información detallada sobre las rutas y los horarios de partida.Averigua los promociones vigentes y comience a disfrutar de su viaje sin complicaciones."
+        comparar los mejores precios de micros a {{ page.title }}, así como también obtener información detallada sobre las rutas y los horarios de partida. Averigua los promociones vigentes y comience a disfrutar de su viaje sin complicaciones.
       </p>
     </section>
     {% if page.links %}
@@ -122,35 +122,36 @@
             <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-plusmar.png' %}" alt="Logo of Plusmar" />
           </a>
         </div>
-      </section>
-      <section class="py-3 py-md-5">
-        <h2 class="fs-5 pb-3">¿Por que Ventanita?</h2>
-        <div class="d-flex">
-          <p>
-            Nuestra misión es brindarles a todos la oportunidad de viajar y mostrarles el mundo.
-            Creemos que todos merecen viajar y que el mundo es un lugar mejor cuando experimentamos, compartimos y construimos una vida a través de nuestras historias.
-          </p>
-        </div>
-      </section>
-    </article>
-  {% endblock content %}
+      </div>
+    </section>
+    <section class="py-3 py-md-5">
+      <h2 class="fs-5 pb-3">¿Por que Ventanita?</h2>
+      <div class="d-flex">
+        <p>
+          Nuestra misión es brindarles a todos la oportunidad de viajar y mostrarles el mundo.
+          Creemos que todos merecen viajar y que el mundo es un lugar mejor cuando experimentamos, compartimos y construimos una vida a través de nuestras historias.
+        </p>
+      </div>
+    </section>
+  </article>
+{% endblock content %}
 
-  {% block modal %}
+{% block modal %}
 
-    {% include 'includes/offcanvas.html' %}
+  {% include 'includes/offcanvas.html' %}
 
-  {% endblock modal %}
+{% endblock modal %}
 
-  {% block extra_js %}
-    {{ lat_long|json_script:"coordinates" }}
-    <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/maps/leaflet.js' %}" defer></script>
-    <script type="text/javascript" src="{% static 'assets/js/maps/city_page.js' %}" defer></script>
-    {# djlint:off #}
+{% block extra_js %}
+  {{ lat_long|json_script:"coordinates" }}
+  <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/maps/leaflet.js' %}" defer></script>
+  <script type="text/javascript" src="{% static 'assets/js/maps/city_page.js' %}" defer></script>
+  {# djlint:off #}
     <script type="application/ld+json">{{ page.ld_entity }}</script>
-    {# djlint:on #}
-  {% endblock extra_js %}
+  {# djlint:on #}
+{% endblock extra_js %}
