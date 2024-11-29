@@ -2,7 +2,7 @@
 
 {% if ancestors %}
   <nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-white">
+    <ol class="breadcrumb bg-white ps-0">
       {% for ancestor in ancestors %}
         {% if forloop.last %}
           <li class="breadcrumb-item active" aria-current="page">{{ ancestor }}</li>
