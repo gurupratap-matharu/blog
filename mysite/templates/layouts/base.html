@@ -12,8 +12,8 @@
     {% if page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{% endif %}
     {# djlint:off #}
     <title>{% block title %}{% firstof page.seo_title page.title %}{% endblock title %}{% block title_suffix %} | {{ settings.base.SiteSettings.title_suffix }}{% endblock title_suffix %}</title>
+    <meta name="description" content="{% block meta_description %}{% firstof page.search_description "Reserva tus pasajes de micro al mejor precio con Ventanita. Compara, elige y viaja con tranquiliadad por toda Argentina 🇦🇷. ¡Tu próxima aventura empieza aquí!" %}{% endblock meta_description %}" />
     {# djlint:on #}
-    <meta name="description" content="{% if page.search_description %}{{ page.search_description }}{% endif %}" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="MSSmartTagsPreventParsing" content="true" />
     <meta name="Copyright" content="Ventanita Team" />
@@ -24,10 +24,10 @@
     {# djlint:off #}
     {% block og_tags %}
 
-    <meta property="og:title" content="{% block og_title %}{% firstof page.seo_title page.title "Explore Argentina by Bus" %}{% endblock og_title %}" />
+    <meta property="og:title" content="{% block og_title %}{% firstof page.seo_title page.title "Pasajes de Micro en Argentina" %}{% endblock og_title %}" />
     <meta property="og:url" content="{% block og_url %}{{ page.get_full_url }}{% endblock og_url %}" />
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="{% block og_description %}{% spaceless %}{% firstof page.search_description "Ventanita provides information about bus routes and their availability all over Argentina with easy booking service on both web and mobile." %}{% endspaceless %}{% endblock og_description %}" />
+    <meta property="og:description" content="{% block og_description %}{% spaceless %}{% firstof page.search_description "Reserva tus pasajes de micro al mejor precio con Ventanita. Compara, elige y viaja con tranquiliadad por toda Argentina 🇦🇷. ¡Tu próxima aventura empieza aquí!" %}{% endspaceless %}{% endblock og_description %}" />
     <meta property="og:image" content="{% block og_img %}{{ tmp_photo.full_url }}{% endblock og_img %}" />
     <meta property="og:image:alt" content="{% block og_img_alt %}{{ tmp_photo.alt }}{% endblock og_img_alt %}" />
     <meta property="og:image:width" content="{% block og_img_w %}{{ tmp_photo.width }}{% endblock og_img_w %}" />
