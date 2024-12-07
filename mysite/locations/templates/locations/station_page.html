@@ -8,7 +8,6 @@
 
 {% block content %}
   <article class="container col-12 col-xl-9 pt-7 min-vh-75">
-    {% breadcrumbs %}
     <h1 class="fs-2">
       <span class="text-primary text-gradient">Busca pasajes baratos a</span>
       <br />
@@ -18,6 +17,9 @@
 
       {% include 'includes/search_form.html' %}
 
+    </section>
+    <section class="py-3">
+      {% breadcrumbs %}
     </section>
     <section class="py-3">
       <h2 class="fs-4 pb-3">Comprá tus pasajes a {{ page.title }}</h2>
