@@ -1,0 +1,15 @@
+{% load wagtailimages_tags %}
+
+<h2 class="fs-5 pb-3">{{ self.heading_text }}</h2>
+<div class="row row-cols-2 row-cols-sm-3">
+  {% for element in self.item %}
+    <div class="col">
+      <div class="card card-plain">
+        {% image element.image format-avif original loading="lazy" class="img-fluid shadow-xl rounded" %}
+        <div class="ps-1 pt-1">
+          <a href="{{ element.page.url }}" class="card-title text-sm stretched-link">{{ element.title }}</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>

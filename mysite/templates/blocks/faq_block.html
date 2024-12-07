@@ -3,9 +3,7 @@
   {% for element in self.item %}
     <div class="accordion-item">
       <h3 class="accordion-header">
-        <button class="accordion-button ps-0
-                       {% if not forloop.first %}collapsed{% endif %}
-                       font-weight-bold"
+        <button class="accordion-button ps-0 collapsed font-weight-bold"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapse{{ forloop.counter }}"
@@ -16,10 +14,7 @@
                                {% endif %}"
                 aria-controls="collapse{{ forloop.counter }}">{{ element.question }}</button>
       </h3>
-      <div id="collapse{{ forloop.counter }}"
-           class="accordion-collapse collapse
-                  {% if forloop.first %}show{% endif %}"
-           data-bs-parent="#accordionFAQ">
+      <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
         <div class="accordion-body ps-0">{{ element.answer }}</div>
       </div>
     </div>

@@ -83,10 +83,54 @@ class LinkStreamBlock(StreamBlock):
     external_link = ExternalLinkBlock()
 
     class Meta:
+        template = "blocks/link_stream_block.html"
         label = "Link"
         icon = "link"
         min_num = 1
         max_num = 1
+
+
+class FurtherReadingBlock(StreamBlock):
+    """
+    Used to show a list of internal | external links for further perusal.
+    """
+
+    internal_link = InternalLinkBlock()
+    external_link = ExternalLinkBlock()
+
+    class Meta:
+        template = "blocks/further_reading_block.html"
+        label = "Further Reading"
+        icon = "tasks"
+        min_num = 1
+        max_num = 5
+
+
+class ImageLinkItemBlock(StructBlock):
+    title = CharBlock(required=False, help_text="Keep it to one word only")
+    image = ImageChooserBlock(required=True)
+    page = PageChooserBlock()
+
+    class Meta:
+        icon = "image"
+
+
+class ImageLinkBlock(StructBlock):
+    heading_text = CharBlock(required=True)
+    item = ListBlock(ImageLinkItemBlock())
+
+    class Meta:
+        icon = "list-ol"
+        template = "blocks/image_link_block.html"
+
+
+class PromotionsBlock(ImageLinkBlock):
+    """
+    Same as Image link block but renders a different template.
+    """
+
+    class Meta:
+        template = "blocks/promotions_block.html"
 
 
 class BlockQuote(StructBlock):
@@ -161,3 +205,4 @@ class BaseStreamBlock(StreamBlock):
     faq = FAQBlock()
     document = DocumentChooserBlock(template="blocks/document_block.html")
     link = LinkStreamBlock()
+    further_reading = FurtherReadingBlock()

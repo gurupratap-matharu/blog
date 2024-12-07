@@ -10,10 +10,22 @@
       {% include 'includes/search_form.html' %}
 
     </section>
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       {{ page.body }}
     </section>
-    <section class="py-3 py-md-5">
+    <section class="py-3">
+      {{ page.promotions }}
+    </section>
+    <section class="py-3">
+      {{ page.featured_pages }}
+    </section>
+    <section class="py-3">
+      {{ page.faq }}
+    </section>
+    <section class="py-3">
+      {{ page.links }}
+    </section>
+    <section class="py-3">
       <h2 class="fs-5 pb-3">{{ page.featured_section_1_title }}</h2>
       <ul class='list-group list-group-flush'>
         {% for childpage in page.featured_section_1.specific.get_children|slice:'3' %}
@@ -27,7 +39,7 @@
         {% endfor %}
       </ul>
     </section>
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       <h2 class="fs-5 pb-3">{{ page.featured_section_2_title }}</h2>
       <ul class="list-group list-group-flush">
         {% for childpage in page.featured_section_2.specific.get_children|slice:'3' %}
@@ -41,7 +53,7 @@
         {% endfor %}
       </ul>
     </section>
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       <h2 class="fs-5 pb-3">{{ page.featured_section_3_title }}</h2>
       <ul class="list-group list-group-flush">
         {% for childpage in page.featured_section_3.specific.get_children|slice:'3' %}
@@ -55,7 +67,28 @@
         {% endfor %}
       </ul>
     </section>
-  </article>
+    <section class="py-3">
+      <h2 class="fs-5 pb-3 text-center">Ventanita - Tu Travel Partner</h2>
+      <p class="text-sm text-center">
+        En Ventanita, te ofrecemos una plataforma sencilla y segura para la compra de pasajes de micros en Argentina.
+        Con nuestra amplia variedad de opciones de rutas, podrás planificar tu próximo viaje con facilidad.
+        Desde Buenos Aires hasta el norte, sur y oeste del país, selecciona entre las principales empresas de transporte,
+        compara precios y horarios, y adquiere tus boletos en solo unos clics.
+      </p>
+      <p class="text-sm text-center">
+        Descubre destinos como Córdoba, Mendoza,
+        Rosario y muchos más, y viaja cómodamente a precios competitivos.
+      </p>
+    </p>
+    <p class="text-sm text-center">
+      Además de la compra de pasajes, en Ventanita también encontrarás información detallada sobre las empresas de colectivos
+      y sus servicios, como las comodidades a bordo, políticas de equipaje, y promociones especiales. Si eres un viajero
+      frecuente, consulta nuestras opciones de billetes flexibles y descuentos para grupos. Accede a nuestra plataforma desde
+      cualquier dispositivo, ya sea para reservar tu viaje o para obtener detalles sobre los horarios y las mejores
+      conexiones de bus entre las principales ciudades de Argentina.
+    </p>
+  </section>
+</article>
 {% endblock content %}
 
 {% block modal %}

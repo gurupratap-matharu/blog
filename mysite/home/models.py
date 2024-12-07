@@ -1,9 +1,9 @@
 from django.db import models
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
-from wagtail.fields import RichTextField, StreamField
+from wagtail.fields import StreamField
 
-from base.blocks import BaseStreamBlock
+from base.blocks import BaseStreamBlock, FAQBlock, ImageLinkBlock, LinkBlock, PromotionsBlock
 from base.models import BasePage
 
 
@@ -45,27 +45,18 @@ class HomePage(BasePage):
         help_text="Choose a page to link to for the Call to Action",
     )
 
-    # Body section of the HomePage
     body = StreamField(
         BaseStreamBlock(),
         blank=True,
         use_json_field=True,
     )
 
-    # Promo section of the HomePage
-    promo_image = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
+    promotions = StreamField(
+        [("promotions", PromotionsBlock())],
+        verbose_name="Promotions Section",
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text="Promo image",
-    )
-    promo_title = models.CharField(
-        blank=True, max_length=255, help_text="Title to display above the promo copy"
-    )
-    promo_text = RichTextField(
-        null=True, blank=True, max_length=1000, help_text="Write some promotional copy"
+        max_num=1,
+        use_json_field=True,
     )
 
     # Featured sections on the HomePage
@@ -112,6 +103,30 @@ class HomePage(BasePage):
         verbose_name="Featured section 3",
     )
 
+    featured_pages = StreamField(
+        [("featured", ImageLinkBlock())],
+        verbose_name="Popular Destinations Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
+    faq = StreamField(
+        [("faq", FAQBlock())],
+        verbose_name="FAQ Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
+    links = StreamField(
+        [("Links", LinkBlock())],
+        verbose_name="Links Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
     content_panels = BasePage.content_panels + [
         MultiFieldPanel(
             [
@@ -126,14 +141,7 @@ class HomePage(BasePage):
             ],
             heading="Hero section",
         ),
-        MultiFieldPanel(
-            [
-                FieldPanel("promo_image"),
-                FieldPanel("promo_title"),
-                FieldPanel("promo_text"),
-            ],
-            heading="Promo section",
-        ),
+        FieldPanel("promotions"),
         FieldPanel("body"),
         MultiFieldPanel(
             [
@@ -158,6 +166,9 @@ class HomePage(BasePage):
             ],
             heading="Featured homepage sections",
         ),
+        FieldPanel("featured_pages"),
+        FieldPanel("faq"),
+        FieldPanel("links"),
     ]
 
     class Meta:
