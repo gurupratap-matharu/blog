@@ -1,0 +1,28 @@
+{% extends "layouts/base.html" %}
+
+{% load i18n wagtailcore_tags navigation_tags %}
+
+{% block content %}
+  <section class="container col-12 col-xl-9 pt-7 pb-2">
+    <form method="get" action="{% url 'search' %}">
+      {% csrf_token %}
+      <label for="search" class="form-label visually-hidden">{% translate "Buscar" %}</label>
+      <input name="query" id="search" class="form-control form-control-lg" placeholder="{% translate "Buscar articulos..." %}" />
+      <input type="submit" value="Go" tabindex="-1" hidden />
+    </form>
+  </section>
+  <article class="container col-12 col-xl-9">
+    {% breadcrumbs %}
+    <h1 class="fs-2">{{ page.title }}</h1>
+    <p class="lead">{{ page.subtitle }}</p>
+    <section class="py-3">
+      <ul class="list-group list-group-flush">
+        {% for article in page.get_articles %}
+          <li class="list-group-item">
+            <a href="{% pageurl article %}">{{ article.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  </article>
+{% endblock content %}

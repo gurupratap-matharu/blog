@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+
+{% load i18n wagtailcore_tags navigation_tags %}
+
+{% block content %}
+  <article class="container col-12 col-xl-9 pt-7 min-vh-75">
+    {% breadcrumbs %}
+    <h1 class="display-6">{{ page.title }}</h1>
+    <p>{{ page.subtitle }}</p>
+    <section class="py-3">
+      {{ page.body }}
+    </section>
+    <section class="py-3">
+      <h2 class="fs-4 pb-3">{% translate "Relacionados" %}</h2>
+      <ul>
+        {% for sibling in page.get_related_articles %}
+          {% with sibling=sibling.specific %}
+            <li>
+              <a href="{% pageurl sibling %}">{{ sibling.title }}</a>
+            </li>
+          {% endwith %}
+        {% endfor %}
+      </ul>
+    </section>
+    <section class="py-3">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           fill="currentColor"
+           class="bi bi-chat-left-dots"
+           viewBox="0 0 16 16">
+        <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+        <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+      </svg>
+      <a href="#" class="text-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal">{% translate "Envía tus comentarios sobre este artículo" %}</a>
+      <!-- Modal -->
+      <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="feedbackModalLabel">{% translate "Comentarios" %}</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action={{ article_feedback_page.url }} method="post">
+              <div class="modal-body">
+                {% csrf_token %}
+                {{ article_feedback_form.as_p }}
+                <div class="modal-footer border-0 p-1">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{% translate "Cancel" %}</button>
+                <button type="submit" class="btn btn-outline-success">{% translate "Enviar" %}</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </article>
+  {% endblock content %}
