@@ -7,61 +7,47 @@
 {% endblock body_class %}
 
 {% block title %}
-  Search
+  {% translate "Buscar" %}
 {% endblock title %}
 
 {% block content %}
-  <div class="container pt-7 min-vh-50">
-    <div class="row justify-content-center">
-      <div class="col-sm-9 col-lg-6 text-center mx-auto mb-4">
-        <h1 class="fs-2 mb-3">{% translate "How can we help you?" %}</h1>
-        <form action="{% url 'search' %}" method="get">
-          <div class="row">
-            <div class="col-12 col-md-10">
-              <div class="input-group">
-                <span class="input-group-text">
-                  <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#search" />
-                  </svg>
-                </span>
-                <input type="search"
-                       class="form-control form-control-lg"
-                       name="query"
-                       value="{{ search_query|default:"" }}"
-                       placeholder="Search"
-                       autofocus />
-              </div>
-            </div>
-            <div class="col-md-2 ps-0">
-              <button type="submit" class="btn bg-gradient-primary w-100 h-100 mb-0 d-none d-md-inline icon-link icon-link-hover">
-                {% translate "Go" %}
-                <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-    {% if search_results %}
-      <section class="py-5">
-        <div class="container">
-          <h3>
-            You searched
-            {% if search_query %}for "{{ search_query }}"{% endif %}
-            , {{ search_results.paginator.count }} result{{ search_results.paginator.count|pluralize }} found.
-          </h3>
-          <ul class="list-group list-group-flush list-group-numbered">
-            {% for result in search_results %}
-              <li class="list-group-item">
-                <a href="{% pageurl result %}">{{ result }}</a>
-                {% if result.search_description %}{{ result.search_description }}{% endif %}
-              </li>
-            {% endfor %}
-          </ul>
+  <div class="container col-12 col-xl-9 pt-7 min-vh-75">
+    <section class="pb-3">
+      <h1 class="fs-5 mb-3">{% translate "Respuestas desde el equipo de Ventanita" %}</h1>
+      <form action="{% url 'search' %}" method="get">
+        <div class="input-group">
+          <span class="input-group-text">
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#search" />
+            </svg>
+          </span>
+          <input type="search"
+                 class="form-control form-control-lg ps-2"
+                 name="query"
+                 value="{{ search_query|default:"" }}"
+                 placeholder="Buscar"
+                 autofocus
+                 required />
         </div>
-      </section>
+        <input type="submit" hidden />
+      </form>
+    </section>
+    {% if search_results %}
+      <article class="py-3">
+        <p>
+          You searched
+          {% if search_query %}for "{{ search_query }}"{% endif %}
+          , {{ search_results.paginator.count }} result{{ search_results.paginator.count|pluralize }} found.
+        </p>
+        <ul class="list-group list-group-flush">
+          {% for result in search_results %}
+            <li class="list-group-item list-group-item-action">
+              <a href="{% pageurl result %}">{{ result }}</a>
+              {% if result.search_description %}<p class="text-sm">{{ result.search_description }}</p>{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </article>
       {% if search_results.has_previous %}
         <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
       {% endif %}
@@ -69,7 +55,9 @@
         <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
       {% endif %}
     {% elif search_query %}
-      <h3>No results found</h3>
+      <article class="py-3">
+        <p>No results found</p>
+      </article>
     {% endif %}
   </div>
 {% endblock content %}

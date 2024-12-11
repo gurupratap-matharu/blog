@@ -564,3 +564,31 @@ class SiteSettings(BaseSiteSetting):
     panels = [
         FieldPanel("title_suffix"),
     ]
+
+
+@register_setting(icon="placeholder")
+class GenericImportantPages(BaseGenericSetting):
+
+    # Fetch these pages when looking up GenericImportantPages for or a site
+    select_related = ["contact_page", "feedback_page", "article_feedback_page"]
+
+    contact_page = models.ForeignKey(
+        "wagtailcore.Page", null=True, on_delete=models.SET_NULL, related_name="+"
+    )
+
+    feedback_page = models.ForeignKey(
+        "wagtailcore.Page", null=True, on_delete=models.SET_NULL, related_name="+"
+    )
+
+    article_feedback_page = models.ForeignKey(
+        "wagtailcore.Page", null=True, on_delete=models.SET_NULL, related_name="+"
+    )
+
+    panels = [
+        FieldPanel("contact_page"),
+        FieldPanel("feedback_page"),
+        FieldPanel("article_feedback_page"),
+    ]
+
+    class Meta:
+        verbose_name = "Important pages"

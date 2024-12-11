@@ -10,101 +10,99 @@
     {% with posts|first as featured %}
       {% image featured.specific.feed_image original as tmp_photo %}
       <div class="position-absolute fixed-top ms-auto w-50 h-100 z-index-0 d-none d-sm-none d-md-block"
-           style="background-image: url({{ tmp_photo.url }});
-                  background-size:cover"></div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-7 d-flex justify-content-center flex-column">
-            <div class="card card-body blur d-flex justify-content-center shadow-lg p-5 mt-5">
-              <h1>{{ featured.specific.title }}</h1>
-              <p class="lead pe-lg-5 me-lg-5">{{ featured.specific.subtitle }}</p>
-              <div class="buttons">
-                <a href="{% pageurl featured %}" class="btn bg-gradient-primary icon-link icon-link-hover">
-                  Read Now
-                  <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
-                  </svg>
-                </a>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-7 d-flex justify-content-center flex-column">
+              <div class="card card-body blur d-flex justify-content-center shadow-lg p-5 mt-5">
+                <h1>{{ featured.specific.title }}</h1>
+                <p class="lead pe-lg-5 me-lg-5">{{ featured.specific.subtitle }}</p>
+                <div class="buttons">
+                  <a href="{% pageurl featured %}" class="btn bg-gradient-primary icon-link icon-link-hover">
+                    Read Now
+                    <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    {% endwith %}
-  </div>
-  {% comment "Top Articles" %}{% endcomment %}
-  <section class="py-5 bg-gray-100">
-    <div class="container">
-      <div class="row py-lg-5">
-        <div class="col-lg-6 col-md-8 mx-auto mb-5 text-center">
-          <h1 class="display-6">Explore our top articles</h1>
+      {% endwith %}
+    </div>
+    {% comment "Top Articles" %}{% endcomment %}
+    <section class="py-5 bg-gray-100">
+      <div class="container">
+        <div class="row py-lg-5">
+          <div class="col-lg-6 col-md-8 mx-auto mb-5 text-center">
+            <h1 class="display-6">Explore our top articles</h1>
+          </div>
+        </div>
+        <div class="row">
+          {% for post in posts|slice:":3" %}
+            {% with post=post.specific %}
+              <div class="col-lg-4 mb-3">
+                <div class="card card-pricing h-100 shadow-lg">
+                  <div class="card-header pt-4 pb-5 position-relative" style="height: 200px">
+                    <h5>Featured</h5>
+                    <h3 class="text-primary text-gradient">{{ post.title }}</h3>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <a href="{% pageurl post %}">{{ post.title }}</a>
+                    </h5>
+                    <p class="card-text text-xs">Read Time 3 mins</p>
+                    <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
+                    <a href="{% pageurl post %}" class="card-link text-darker icon-link icon-link-hover">Read Now
+                      <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                        <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endwith %}
+          {% endfor %}
         </div>
       </div>
-      <div class="row">
-        {% for post in posts|slice:":3" %}
-          {% with post=post.specific %}
-            <div class="col-lg-4 mb-3">
-              <div class="card card-pricing h-100 shadow-lg">
-                <div class="card-header pt-4 pb-5 position-relative" style="height: 200px">
-                  <h5>Featured</h5>
-                  <h3 class="text-primary text-gradient">{{ post.title }}</h3>
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">
-                    <a href="{% pageurl post %}">{{ post.title }}</a>
-                  </h5>
-                  <p class="card-text text-xs">Read Time 3 mins</p>
-                  <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
-                  <a href="{% pageurl post %}" class="card-link text-darker icon-link icon-link-hover">Read Now
-                    <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                      <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-          {% endwith %}
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-  {% comment "Latest Articles" %}{% endcomment %}
-  <section class="py-5">
-    <div class="container">
-      <div class="d-flex justify-content-center py-lg-5">
-        <h1 class="display-6">Latest Articles</h1>
-      </div>
-      <div class="row">
-        {% for post in posts %}
-          {% with post=post.specific %}
-            <div class="col-md-4 mt-4">
-              <div class="card h-100">
-                {% image post.feed_image fill-400x300 class="card-img-top" %}
-                <div class="card-body">
-                  <h5 class="card-title">
-                    <a href="{% pageurl post %}">{{ post.title }}</a>
-                  </h5>
-                  <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
-                  <a href="{% pageurl post %}" class="card-link icon-link icon-link-hover">Read Now
-                    <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                      <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
-                    </svg>
-                  </a>
+    </section>
+    {% comment "Latest Articles" %}{% endcomment %}
+    <section class="py-5">
+      <div class="container">
+        <div class="d-flex justify-content-center py-lg-5">
+          <h1 class="display-6">Latest Articles</h1>
+        </div>
+        <div class="row">
+          {% for post in posts %}
+            {% with post=post.specific %}
+              <div class="col-md-4 mt-4">
+                <div class="card h-100">
+                  {% image post.feed_image fill-400x300 class="card-img-top" %}
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <a href="{% pageurl post %}">{{ post.title }}</a>
+                    </h5>
+                    <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
+                    <a href="{% pageurl post %}" class="card-link icon-link icon-link-hover">Read Now
+                      <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                        <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+                      </svg>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          {% endwith %}
-        {% empty %}
-          <h1 class="display-6">There are no posts yet.</h1>
-        {% endfor %}
+            {% endwith %}
+          {% empty %}
+            <h1 class="display-6">There are no posts yet.</h1>
+          {% endfor %}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  {% include "includes/pagination.html" %}
+    {% include "includes/pagination.html" %}
 
-  {% comment "Call to Action" %}{% endcomment %}
+    {% comment "Call to Action" %}{% endcomment %}
 
-  {% include "includes/cta.html" %}
+    {% include "includes/cta.html" %}
 
-{% endblock content %}
+  {% endblock content %}

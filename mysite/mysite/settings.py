@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "blog.apps.BlogConfig",
     "partners.apps.PartnersConfig",
     "locations.apps.LocationsConfig",
+    "help.apps.HelpConfig",
     # Wagtail contrib
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
