@@ -102,10 +102,22 @@
 
     <main class="min-vh-55" id="main-content">
       {% block content %}{% endblock content %}
-      <div class="fixed-bottom bg-transparent d-flex justify-content-end">
-        <a href="https://ventanita.com.ar/feedback/" class="bg-white cursor-pointer border rounded-top me-3 me-md-5 p-2">
-          {% translate "Feedback" %}</a>
-      </div>
+      <div class="dropup position-fixed bottom-0 end-0 mb-3 me-3">
+      <button type="button" class="btn bg-white dropdown-toggle border mb-0 px-3" data-bs-toggle="dropdown" aria-expanded=
+      "false" aria-haspopup="true" data-bs-offset="0,20" aria-label="Help Section">
+            <svg class="bi" width="20" height="20" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#question" />
+            </svg>
+      </button>
+      <ul class="dropdown-menu bg-white border shadow-lg">
+        <li>
+          <a class="dropdown-item" href="https://ventanita.com.ar/feedback/">{% translate "Comentarios" %}</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="https://ventanita.com.ar/contact/">{% translate "Contacto" %}</a>
+        </li>
+      </ul>
+    </div>
     </main>
 
     {% block modal %}{% endblock modal %}
