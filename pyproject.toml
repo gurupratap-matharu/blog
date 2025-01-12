@@ -39,7 +39,7 @@ exclude = [
 [tool.isort]
 profile = "black"
 multi_line_output = 3
-skip = ["docs", "migrations"]
+skip = ["docs", "migrations", "static", "staticfiles", "media", "htmlcov"]
 known_django = "django"
 known_wagtail = "wagtail"
 sections = "FUTURE,STDLIB,DJANGO,WAGTAIL,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
