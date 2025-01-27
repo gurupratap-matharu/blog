@@ -26,9 +26,10 @@
         <div class="col-12 col-md-3">
           <div class="form-group mb-1 mb-md-3">
             <label for="origin" class="form-label">{% translate "Origen" %}</label>
+            <input name="origin" id="originId" type="hidden" />
             <input class="form-control"
                    type="search"
-                   name="origin"
+                   data-for="originId"
                    autocorrect="off"
                    autocapitalize="off"
                    autocomplete="off"
@@ -42,9 +43,10 @@
         <div class="col-12 col-md-3">
           <div class="form-group mb-1 mb-md-3">
             <label for="destination" class="form-label">{% translate "Destino" %}</label>
+            <input name="destination" id="destinationId" type="hidden" />
             <input class="form-control"
                    type="search"
-                   name="destination"
+                   data-for="destinationId"
                    autocorrect="off"
                    autocapitalize="off"
                    autocomplete="off"
