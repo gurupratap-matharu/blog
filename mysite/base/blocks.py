@@ -148,7 +148,7 @@ class BlockQuote(StructBlock):
 
 class FAQItemBlock(StructBlock):
     question = CharBlock(required=True)
-    answer = TextBlock(required=True)
+    answer = RichTextBlock(required=True)
 
     class Meta:
         label = "Section"
@@ -162,6 +162,26 @@ class FAQBlock(StructBlock):
     class Meta:
         icon = "list-ol"
         template = "blocks/faq_block.html"
+
+
+class NavTabItemBlock(StructBlock):
+    title = CharBlock(required=True)
+    content = RichTextBlock(
+        required=True, icon="pilcrow", template="blocks/paragraph_block.html"
+    )
+
+    class Meta:
+        label = "Section"
+        icon = "title"
+
+
+class NavTabBlock(StructBlock):
+    title = CharBlock(required=True)
+    item = ListBlock(NavTabItemBlock())
+
+    class Meta:
+        icon = "list-ol"
+        template = "blocks/nav_tab_block.html"
 
 
 class LinkBlock(StructBlock):
@@ -206,3 +226,4 @@ class BaseStreamBlock(StreamBlock):
     document = DocumentChooserBlock(template="blocks/document_block.html")
     link = LinkStreamBlock()
     further_reading = FurtherReadingBlock()
+    nav_tab = NavTabBlock()

@@ -45,8 +45,11 @@
       <h2 class="fs-5 pb-3">{% translate "Terminal De Bus" %}</h2>
       <ul class="list-group list-group-flush">
         {% for station in stations %}
-          <li class="list-group-item list-group-item-action ps-0">
-            <a href="{% pageurl station %}" class="icon-link icon-link-hover">{{ station }}
+          <li class="list-group-item list-group-item-action py-3">
+            <svg class="bi" width="32" height="32" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#geo-alt" />
+            </svg>
+            <a href="{% pageurl station %}" class="icon-link icon-link-hover ps-2">{{ station }}
               <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
                 <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
               </svg>
@@ -145,13 +148,13 @@
 
 {% block extra_js %}
   {{ lat_long|json_script:"coordinates" }}
-  <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/maps/leaflet.js' %}" defer></script>
-  <script type="text/javascript" src="{% static 'assets/js/maps/city_page.js' %}" defer></script>
+  <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/autocomplete/config.js' %}"></script>
+  <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
+  <script defer src="{% static 'assets/js/dates/picker.js' %}"></script>
+  <script defer src="{% static 'assets/js/maps/leaflet.js' %}"></script>
+  <script defer src="{% static 'assets/js/maps/city_page.js' %}"></script>
   {# djlint:off #}
     <script type="application/ld+json">{{ page.ld_entity }}</script>
   {# djlint:on #}
