@@ -164,6 +164,15 @@ class FAQBlock(StructBlock):
         template = "blocks/faq_block.html"
 
 
+class LinkBlock(StructBlock):
+    heading_text = CharBlock(required=True)
+    item = ListBlock(InternalLinkBlock())
+
+    class Meta:
+        icon = "list-ol"
+        template = "blocks/link_block.html"
+
+
 class NavTabItemBlock(StructBlock):
     title = CharBlock(required=True)
     content = RichTextBlock(
@@ -184,13 +193,24 @@ class NavTabBlock(StructBlock):
         template = "blocks/nav_tab_block.html"
 
 
-class LinkBlock(StructBlock):
-    heading_text = CharBlock(required=True)
+class NavTabLinksItemBlock(StructBlock):
+    title = CharBlock(required=True)
     item = ListBlock(InternalLinkBlock())
 
     class Meta:
+        label = "Tab"
+        icon = "title"
+
+
+class NavTabLinksBlock(StructBlock):
+    """Similar to Nav Tab block but purely used to show SEO links"""
+
+    title = CharBlock(required=True)
+    item = ListBlock(NavTabLinksItemBlock())
+
+    class Meta:
         icon = "list-ol"
-        template = "blocks/link_block.html"
+        template = "blocks/nav_tab_links_block.html"
 
 
 class ContactBlock(StructBlock):

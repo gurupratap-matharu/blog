@@ -10,7 +10,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin
 from wagtail.fields import StreamField
 from wagtail.search import index
 
-from base.blocks import BaseStreamBlock, FAQBlock, LinkBlock
+from base.blocks import BaseStreamBlock, FAQBlock, LinkBlock, NavTabLinksBlock
 from base.models import BasePage
 
 logger = logging.getLogger(__name__)
@@ -107,7 +107,7 @@ class CityPage(BasePage):
     )
 
     links = StreamField(
-        [("Links", LinkBlock())],
+        [("Links", NavTabLinksBlock())],
         verbose_name="Links Section",
         blank=True,
         max_num=1,
