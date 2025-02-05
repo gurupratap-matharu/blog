@@ -4,6 +4,7 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'assets/css/leaflet.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/leaflet.fullscreen.css' %}" />
 {% endblock extra_css %}
 
 {% block content %}
@@ -154,6 +155,7 @@
   <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
   <script defer src="{% static 'assets/js/dates/picker.js' %}"></script>
   <script defer src="{% static 'assets/js/maps/leaflet.js' %}"></script>
+  <script defer src="{% static 'assets/js/maps/Leaflet.fullscreen.min.js' %}"></script>
   <script defer src="{% static 'assets/js/maps/city_page.js' %}"></script>
   {# djlint:off #}
     <script type="application/ld+json">{{ page.ld_entity }}</script>

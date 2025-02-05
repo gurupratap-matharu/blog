@@ -4,6 +4,7 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'assets/css/leaflet.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/leaflet.fullscreen.css' %}" />
 {% endblock extra_css %}
 
 {% block content %}
@@ -84,13 +85,14 @@
 
 {% block extra_js %}
   {{ lat_long|json_script:"coordinates" }}
-  <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/maps/leaflet.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/maps/station_page.js' %}"></script>
+  <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/autocomplete/config.js' %}"></script>
+  <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
+  <script defer src="{% static 'assets/js/dates/picker.js' %}"></script>
+  <script defer src="{% static 'assets/js/maps/leaflet.js' %}"></script>
+  <script defer src="{% static 'assets/js/maps/Leaflet.fullscreen.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/maps/station_page.js' %}"></script>
   {# djlint:off #}
   <script type="application/ld+json">{{ page.ld_entity }}</script>
   {# djlint:on #}
