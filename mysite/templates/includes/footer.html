@@ -1,7 +1,7 @@
 {% load i18n static %}
 {% load wagtailcore_tags navigation_tags %}
 
-<footer class="footer pt-5">
+<footer class="footer mt-5">
   <div class="container">
     <div class="row">
       <div class="col-md-2 mb-4 ms-auto">
@@ -60,10 +60,10 @@
         </div>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
-        <p class="text-gradient text-primary text-sm">{% translate "Empresa" %}</p>
+        <h6 class="text-gradient text-primary text-sm">{% translate "Empresa" %}</h6>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/about/">{% translate "Sobre nosotros" %}</a>
+            <a class="nav-link" href="#">{% translate "Sobre nosotros" %}</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% slugurl 'empresas-de-bus' %}">{% translate "Partners" %}</a>
@@ -74,7 +74,7 @@
         </ul>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
-        <p class="text-gradient text-primary text-sm">{% translate "Recursos" %}</p>
+        <h6 class="text-gradient text-primary text-sm">{% translate "Info Útil" %}</h6>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
             <a class="nav-link" href="{% slugurl 'pasajes-de-micro' %}">{% translate "Terminales" %}</a>
@@ -82,27 +82,27 @@
         </ul>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
-        <p class="text-gradient text-primary text-sm">{% translate "Soporte" %}</p>
+        <h6 class="text-gradient text-primary text-sm">{% translate "Soporte" %}</h6>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/contact/">{% translate "Contacto" %}</a>
+            <a class="nav-link" href="#">{% translate "Contacto" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/help/">{% translate "Ayuda" %}</a>
+            <a class="nav-link" href="#">{% translate "Ayuda" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/feedback/">{% translate "Comentarios" %}</a>
+            <a class="nav-link" href="#">{% translate "Comentarios" %}</a>
           </li>
         </ul>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4 me-auto">
-        <p class="text-gradient text-primary text-sm">{% translate "Legal" %}</p>
+        <h6 class="text-gradient text-primary text-sm">{% translate "Enlaces Útiles" %}</h6>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/terms/">{% translate "Terminos y Condiciones" %}</a>
+            <a class="nav-link" href="#">{% translate "Condiciones Generales" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://ventanita.com.ar/privacy/">{% translate "Politica de Privacidad" %}</a>
+            <a class="nav-link" href="#">{% translate "Politicas de Privacidad" %}</a>
           </li>
         </ul>
       </div>

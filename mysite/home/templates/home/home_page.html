@@ -22,7 +22,7 @@
     <section class="py-3">
       {{ page.links }}
     </section>
-    <section class="py-3">
+    <section class="py-3 py-md-5">
       <h2 class="fs-5 pb-3 text-center">Ventanita - Tu Travel Partner</h2>
       <p class="text-sm text-center">
         En Ventanita, te ofrecemos una plataforma sencilla y segura para la compra de pasajes de micros en Argentina.
@@ -34,21 +34,20 @@
         Descubre destinos como Córdoba, Mendoza,
         Rosario y muchos más, y viaja cómodamente a precios competitivos.
       </p>
-    </p>
-    <p class="text-sm text-center">
-      Además de la compra de pasajes, en Ventanita también encontrarás información detallada sobre las empresas de colectivos
-      y sus servicios, como las comodidades a bordo, políticas de equipaje, y promociones especiales. Si eres un viajero
-      frecuente, consulta nuestras opciones de billetes flexibles y descuentos para grupos. Accede a nuestra plataforma desde
-      cualquier dispositivo, ya sea para reservar tu viaje o para obtener detalles sobre los horarios y las mejores
-      conexiones de bus entre las principales ciudades de Argentina.
-    </p>
-  </section>
-  {% if page.body %}
-    <section class="py-3">
-      {{ page.body }}
+      <p class="text-sm text-center">
+        Además de la compra de pasajes, en Ventanita también encontrarás información detallada sobre las empresas de colectivos
+        y sus servicios, como las comodidades a bordo, políticas de equipaje, y promociones especiales. Si eres un viajero
+        frecuente, consulta nuestras opciones de billetes flexibles y descuentos para grupos. Accede a nuestra plataforma desde
+        cualquier dispositivo, ya sea para reservar tu viaje o para obtener detalles sobre los horarios y las mejores
+        conexiones de bus entre las principales ciudades de Argentina.
+      </p>
     </section>
-  {% endif %}
-</article>
+    {% if page.body %}
+      <section class="py-3">
+        {{ page.body }}
+      </section>
+    {% endif %}
+  </article>
 {% endblock content %}
 
 {% block extra_js %}
