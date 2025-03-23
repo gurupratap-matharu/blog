@@ -69,13 +69,14 @@ build: install makemigrations migrate runserver
 format:
 	poetry run black .
 	poetry run isort . --profile black
-	git ls-files '*.html' | xargs djlint --reformat
+	poetry run ruff check --fix .
+	djlint --reformat .
 
 lint:
 	poetry run black --check --diff .
 	poetry run isort --check-only --diff --profile black .
 	poetry run ruff check .
-	git ls-files '*.html' | xargs djlint --check
+	djlint --check .
 
 test: check migrations-check
 	cd mysite && coverage run --source='.' manage.py test
