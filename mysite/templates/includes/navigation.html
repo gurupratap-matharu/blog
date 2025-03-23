@@ -3,37 +3,40 @@
 <header>
   {% wagtailuserbar %}
   <a href="#main-content" class="skip-link">Skip to main content</a>
-  <div class="container position-sticky z-index-sticky top-0">
-    <nav class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-fixed shadow position-absolute my-3 py-2 start-0 end-0 mx-2">
-      <div class="container-fluid px-0">
-        <a class="navbar-brand fs-6" href="{% url 'wagtail_serve' '' %}">
-          <img src="{% static 'assets/img/logos/ventanita.svg' %}" alt="Ventanita Logo" width="30" height="24" class="d-inline-block" />
-        Ventanita</a>
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navigation"
-                aria-controls="navigation"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
-          <ul class="navbar-nav navbar-nav-hover ms-lg-12 ps-lg-5 w-100">
-            <li class="nav-item ms-lg-auto me-3">
-              <a class="nav-link icon-link icon-link-hover" href="{% url 'search' %}">
-                <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#search" />
-                </svg>
-                {% translate "Search" %}
-              </a>
-            </li>
-            <li class="nav-item my-auto ms-3 ms-lg-0">
-              <a href="/ayuda/" class="btn btn-sm btn-outline-primary btn-round mb-0 me-1 mt-2 mt-md-0">{% translate "Ayuda" %}</a>
-            </li>
+  <nav class="navbar navbar-expand-lg bg-white fixed-top shadow-none">
+    <div class="container">
+      <a class="navbar-brand h1 mb-0" href="{% url 'wagtail_serve' '' %}">Ventanita</a>
+      <button class="navbar-toggler"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasNavbar"
+              aria-controls="navigation"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Ventanita</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav ms-auto align-items-center">
+            {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="#">Log Out</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link me-2" href="#">Log In</a>
+              </li>
+              <li class="nav-item">
+                <a class="btn bg-gradient-primary btn-sm btn-round mb-0" href="#">Sign Up</a>
+              </li>
+            {% endif %}
           </ul>
         </div>
       </div>
-    </nav>
-  </div>
+    </div>
+  </nav>
 </header>

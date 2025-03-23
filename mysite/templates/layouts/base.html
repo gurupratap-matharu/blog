@@ -73,7 +73,6 @@
            gtag('config', 'G-FXKFW99W2Z');
       </script>
     {% endif %}
-    {# Global stylesheets #}
     <link href="{% static 'assets/css/styles.min.css' %}" rel="stylesheet" type="text/css" />
 
     {% block extra_css %}
@@ -92,39 +91,13 @@
   {# djlint:off #}
   <body class="{% block body_class %}template-{{ self.get_verbose_name|slugify }}{% endblock body_class %}">
 
-    {% block header %}
-      {% include "includes/navigation.html" %}
-    {% endblock header %}
+    {% block header %}{% include "includes/navigation.html" %}{% endblock header %}
+    {% block messages %}{% include "includes/messages.html" %}{% endblock messages %}
 
-    {% block messages %}
-      {% include "includes/messages.html" %}
-    {% endblock messages %}
-
-    <main class="min-vh-55" id="main-content">
-      {% block content %}{% endblock content %}
-      <div class="dropup position-fixed bottom-0 end-0 mb-3 me-3">
-      <button type="button" class="btn bg-white dropdown-toggle border mb-0 px-3" data-bs-toggle="dropdown" aria-expanded=
-      "false" aria-haspopup="true" data-bs-offset="0,20" aria-label="Help Section">
-            <svg class="bi" width="20" height="20" fill="currentColor" aria-hidden="true">
-              <use xlink:href="{% static 'assets/icons/icons.svg' %}#question" />
-            </svg>
-      </button>
-      <ul class="dropdown-menu bg-white border shadow-lg">
-        <li>
-          <a class="dropdown-item" href="https://ventanita.com.ar/feedback/">{% translate "Comentarios" %}</a>
-        </li>
-        <li>
-          <a class="dropdown-item" href="https://ventanita.com.ar/contact/">{% translate "Contacto" %}</a>
-        </li>
-      </ul>
-    </div>
-    </main>
+    <main class="min-vh-55 mt-6" id="main-content">{% block content %}{% endblock content %}</main>
 
     {% block modal %}{% endblock modal %}
-
-    {% block footer %}
-      {% include "includes/footer.html" %}
-    {% endblock footer %}
+    {% block footer %}{% include "includes/footer.html" %}{% endblock footer %}
 
     <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/main.js" %}"></script>
