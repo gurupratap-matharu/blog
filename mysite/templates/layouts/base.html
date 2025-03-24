@@ -99,8 +99,8 @@
     {% block modal %}{% endblock modal %}
     {% block footer %}{% include "includes/footer.html" %}{% endblock footer %}
 
-    <script type="text/javascript" src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "assets/js/main.js" %}"></script>
+    <script defer src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
+    <script defer src="{% static "assets/js/main.js" %}"></script>
     {% block extra_js %}{% endblock extra_js %}
   </body>
   {# djlint:on #}

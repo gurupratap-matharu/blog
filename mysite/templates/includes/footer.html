@@ -42,7 +42,7 @@
           <form action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
             <input name="next" type="hidden" value="/" />
-            <label class="form-label" for="choose-language">{% translate "Idioma" %}</label>
+            <label class="form-label visually-hidden" for="choose-language">{% translate "Idioma" %}</label>
             <div class="input-group input-group-sm mb-3">
               <select name="language" id="choose-language" class="form-select form-select-sm bg-transparent">
                 {% get_current_language as LANGUAGE_CODE %}

@@ -8,7 +8,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-  <article class="container col-12 col-xl-9 pt-7 min-vh-75">
+  <article class="container col-12 col-xl-9 mt-3 min-vh-75">
     <h1 class="fs-2">
       <span class="text-primary text-gradient">Busca pasajes baratos a</span>
       <br />
@@ -71,7 +71,7 @@
     </section>
     <section class="py-3 py-md-5">
 
-      {% include 'includes/why-us.html' %}
+      {% include 'includes/mission.html' %}
 
     </section>
   </article>
@@ -86,10 +86,9 @@
 {% block extra_js %}
   {{ lat_long|json_script:"coordinates" }}
   <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/autocomplete/config.js' %}"></script>
   <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
   <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/picker.js' %}"></script>
+  <script defer src="{% static 'assets/js/search.js' %}"></script>
   <script defer src="{% static 'assets/js/maps/leaflet.js' %}"></script>
   <script defer src="{% static 'assets/js/maps/Leaflet.fullscreen.min.js' %}"></script>
   <script defer src="{% static 'assets/js/maps/station_page.js' %}"></script>

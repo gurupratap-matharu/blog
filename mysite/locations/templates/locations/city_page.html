@@ -8,7 +8,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-  <article class="container col-12 col-xl-9 pt-7 min-vh-75">
+  <article class="container col-12 col-xl-9 mt-3 min-vh-75">
     <h1 class="fs-2">
       <span class="text-primary text-gradient">Busca pasajes baratos a</span>
       <br />
@@ -42,23 +42,22 @@
     {% endif %}
     <section class="py-3 py-md-5 rounded-3 min-vh-50 shadow-xl" id="map">
     </section>
-    <section class="py-3 py-md-5">
-      <h2 class="fs-5 pb-3">{% translate "Terminal De Bus" %}</h2>
-      <ul class="list-group list-group-flush">
-        {% for station in stations %}
-          <li class="list-group-item list-group-item-action py-3">
-            <svg class="bi" width="32" height="32" fill="currentColor" aria-hidden="true">
-              <use xlink:href="{% static 'assets/icons/icons.svg' %}#geo-alt" />
-            </svg>
-            <a href="{% pageurl station %}" class="icon-link icon-link-hover ps-2">{{ station }}
-              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
-              </svg>
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    </section>
+    {% if stations %}
+      <section class="py-3 py-md-5">
+        <h2 class="fs-5 pb-3">{% translate "Terminal De Bus" %}</h2>
+        <ul class="list-group list-group-flush">
+          {% for station in stations %}
+            <li class="list-group-item py-3">
+              <a href="{% pageurl station %}" class="icon-link icon-link-hover ps-2">{{ station }}
+                <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+                </svg>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
     {% if page.faq %}
       <section class="py-3 py-md-5">
         {{ page.faq }}
@@ -82,63 +81,16 @@
       </section>
     {% endif %}
     <section class="py-3 py-md-5">
-      <h2 class="fs-5 pb-3">Empresas destacadas</h2>
-      <div class="row gy-3">
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'andesmar' %}">
-            <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-andesmar.png' %}" alt="Logo of Andesmar" />
-          </a>
-        </div>
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'costera-criolla' %}">
-            <img class="img-fluid"
-                 loading="lazy"
-                 src="{% static 'assets/img/company-logos/logo-costera-criolla.png' %}"
-                 alt="Logo of Costera Criolla" />
-          </a>
-        </div>
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'chevallier' %}">
-            <img class="img-fluid"
-                 loading="lazy"
-                 src="{% static 'assets/img/company-logos/logo-chevallier.png' %}"
-                 alt="Logo of Chevallier" />
-          </a>
-        </div>
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'empresa-argentina' %}">
-            <img class="img-fluid"
-                 loading="lazy"
-                 src="{% static 'assets/img/company-logos/logo-empresa-argentina.png' %}"
-                 alt="Logo of Empresa Argentina" />
-          </a>
-        </div>
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'flecha-bus' %}">
-            <img class="img-fluid"
-                 loading="lazy"
-                 src="{% static 'assets/img/company-logos/logo-flecha-bus.png' %}"
-                 alt="Logo of Flecha Bus" />
-          </a>
-        </div>
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'plusmar' %}">
-            <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-plusmar.png' %}" alt="Logo of Plusmar" />
-          </a>
-        </div>
-      </div>
+
+      {% include "includes/featured-companies.html" %}
+
     </section>
     <section class="py-3 py-md-5">
-      <h2 class="fs-5 pb-3">¿Por que Ventanita?</h2>
-      <div class="d-flex">
-        <p>
-          Nuestra misión es brindarles a todos la oportunidad de viajar y mostrarles el mundo.
-          Creemos que todos merecen viajar y que el mundo es un lugar mejor cuando experimentamos, compartimos y construimos una vida a través de nuestras historias.
-        </p>
-      </div>
+
+      {% include "includes/mission.html" %}
+
     </section>
-  </div>
-</article>
+  </article>
 {% endblock content %}
 
 {% block modal %}
@@ -150,14 +102,13 @@
 {% block extra_js %}
   {{ lat_long|json_script:"coordinates" }}
   <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/autocomplete/config.js' %}"></script>
   <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
   <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/picker.js' %}"></script>
+  <script defer src="{% static 'assets/js/search.js' %}"></script>
   <script defer src="{% static 'assets/js/maps/leaflet.js' %}"></script>
   <script defer src="{% static 'assets/js/maps/Leaflet.fullscreen.min.js' %}"></script>
   <script defer src="{% static 'assets/js/maps/city_page.js' %}"></script>
   {# djlint:off #}
-    <script type="application/ld+json">{{ page.ld_entity }}</script>
+  <script type="application/ld+json">{{ page.ld_entity }}</script>
   {# djlint:on #}
 {% endblock extra_js %}
