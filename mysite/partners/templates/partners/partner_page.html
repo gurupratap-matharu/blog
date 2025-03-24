@@ -3,7 +3,7 @@
 {% load i18n static wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
-  <div class="container pt-7 col-12 col-xl-9" id="content">
+  <article id="content" class="container col-12 col-xl-9 mt-3">
     <div class="row">
       <div class="col-6 col-md-4 mx-auto">{% image page.logo original class="img-fluid" loading="lazy" %}</div>
     </div>
@@ -16,91 +16,48 @@
       {% breadcrumbs %}
     </section>
     <section class="py-3">
-      <h1 class="fs-2">
+      <h2 class="fs-4 pb-3">
         <span class="text-primary text-gradient">Comprá tus pasajes en</span>
         <br />
         {{ page.title }}
-      </h1>
+      </h2>
     </section>
-    <section class="py-3 py-md-5">
-      <h2 class="fs-5 pb-3">{% translate "About " %}{{ page.title }}</h2>
-      <div class="row">
-        <div class="col-md-7 rounded-3">{{ page.intro }}</div>
-        <div class="col-md-5 rounded-3 my-auto">
-          {% image page.hero_image original class="img-fluid rounded-3" loading="lazy" %}
-        </div>
-      </div>
-    </section>
+    {% if page.hero_image %}
+      <section class="py-3">
+        {% picture page.hero_image format-{avif,webp,jpeg} original class="img-fluid shadow-xl border-radius-xl" loading="lazy" %}
+      </section>
+    {% endif %}
+    {% if page.intro %}
+      <section class="pt-3">
+        <h2 class="lead">{{ page.intro }}</h2>
+      </section>
+    {% endif %}
+    {% if page.body %}
+      <section class="pb-3 pb-md-5">
+        {{ page.body }}
+      </section>
+    {% endif %}
     {% if page.faq %}
       <section class="py-3 py-md-5">
         {{ page.faq }}
       </section>
     {% endif %}
-    {% if page.body %}
-      <section class="py-3 py-md-5">
-        {{ page.body }}
-      </section>
-    {% endif %}
-    <section class="py-3 py-md-5">
-      <h2 class="fs-5 pb-3">Empresas destacadas</h2>
-      <div class="row gy-3">
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'andesmar' %}">
-            <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-andesmar.png' %}" alt="Logo of Andesmar" />
-          </a>
-        </div>
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'costera-criolla' %}">
-            <img class="img-fluid"
-                 loading="lazy"
-                 src="{% static 'assets/img/company-logos/logo-costera-criolla.png' %}"
-                 alt="Logo of Costera Criolla" />
-          </a>
-        </div>
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'chevallier' %}">
-            <img class="img-fluid"
-                 loading="lazy"
-                 src="{% static 'assets/img/company-logos/logo-chevallier.png' %}"
-                 alt="Logo of Chevallier" />
-          </a>
-        </div>
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'empresa-argentina' %}">
-            <img class="img-fluid"
-                 loading="lazy"
-                 src="{% static 'assets/img/company-logos/logo-empresa-argentina.png' %}"
-                 alt="Logo of Empresa Argentina" />
-          </a>
-        </div>
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'flecha-bus' %}">
-            <img class="img-fluid"
-                 loading="lazy"
-                 src="{% static 'assets/img/company-logos/logo-flecha-bus.png' %}"
-                 alt="Logo of Flecha Bus" />
-          </a>
-        </div>
-        <div class="col-4 col-sm-3 col-lg-2">
-          <a href="{% slugurl 'plusmar' %}">
-            <img class="img-fluid" loading="lazy" src="{% static 'assets/img/company-logos/logo-plusmar.png' %}" alt="Logo of Plusmar" />
-          </a>
-        </div>
-      </div>
-    </section>
+    {% if page.links %}
     <section class="py-3 py-md-5">
       {{ page.links }}
     </section>
+    {% endif %}
     <section class="py-3 py-md-5">
-      <h2 class="fs-5 pb-3">¿Por que Ventanita?</h2>
-      <div class="d-flex">
-        <p>
-          Nuestra misión es brindarles a todos la oportunidad de viajar y mostrarles el mundo.
-          Creemos que todos merecen viajar y que el mundo es un lugar mejor cuando experimentamos, compartimos y construimos una vida a través de nuestras historias.
-        </p>
-      </div>
+
+      {% include "includes/featured-companies.html" %}
+
     </section>
-  </div>
+    <section class="py-3 py-md-5">
+
+      {% include "includes/mission.html" %}
+
+    </section>
+  </article>
 {% endblock content %}
 
 {% block modal %}
@@ -110,9 +67,8 @@
 {% endblock modal %}
 
 {% block extra_js %}
-  <script type="text/javascript" src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/autocomplete/config.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/es.js' %}"></script>
-  <script type="text/javascript" src="{% static 'assets/js/dates/picker.js' %}"></script>
+  <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
+  <script defer src="{% static 'assets/js/search.js' %}"></script>
 {% endblock extra_js %}
