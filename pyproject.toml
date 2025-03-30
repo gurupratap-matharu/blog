@@ -8,10 +8,11 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 python-dotenv = "^0.21.0"
-psycopg2 = "^2.9.9"
 wagtail-localize = "^1.9"
 gunicorn = "^23.0.0"
 wagtail = "^6.2.2"
+django-allauth = {extras = ["socialaccount"], version = "^65.5.0"}
+psycopg2-binary = "^2.9.10"
 
 [tool.poetry.group.dev.dependencies]
 djlint = "^1.31.1"
