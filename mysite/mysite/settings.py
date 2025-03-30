@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "partners.apps.PartnersConfig",
     "locations.apps.LocationsConfig",
     "help.apps.HelpConfig",
+    "users.apps.UsersConfig",
     # Wagtail contrib
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -60,6 +61,11 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.sitemaps",
     # Third party
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.facebook",
     "debug_toolbar",
     "django_extensions",
     "taggit",
@@ -75,8 +81,83 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
+
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by email
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+
+AUTH_USER_MODEL = "users.CustomUser"
+
+
+# Django allauth
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True
+ACCOUNT_LOGOUT_REDIRECT = "/"
+ACCOUNT_PRESERVE_USERNAME_CASING = False
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+            "secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+            "key": "",
+        },
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+    },
+    "facebook": {
+        "APP": {
+            "client_id": os.getenv("FB_CLIENT_ID"),
+            "secret": os.getenv("FB_CLIENT_SECRET"),
+            "key": "",
+        },
+        "METHOD": "oauth2",
+        "SCOPE": [
+            "email",
+            "public_profile",
+        ],
+        "AUTH_PARAMS": {
+            "auth_type": "reauthenticate",
+        },
+        "INIT_PARAMS": {"cookie": True},
+        "FIELDS": [
+            "id",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "name",
+            "name_format",
+            "picture",
+            "short_name",
+        ],
+        "EXCHANGE_TOKEN": True,
+        "LOCALE_FUNC": lambda request: "en_US",
+        "VERIFIED_EMAIL": False,
+        "VERSION": "v13.0",
+        "GRAPH_API_URL": "https://graph.facebook.com/v13.0",
+    },
+}
 
 INTERNAL_IPS = ["127.0.0.1"]  # <-- Debug toolbar needs this
 
@@ -100,7 +181,7 @@ RECIPIENT_LIST = [
 
 ADMINS = [
     ("Veer", "veerplaying@gmail.com"),
-    ("Gurupratap", "gurupratap.matharu@gmail.com"),
+    # ("Gurupratap", "gurupratap.matharu@gmail.com"),
 ]
 
 
@@ -112,6 +193,9 @@ TEMPLATES = [
         ],
         "APP_DIRS": True,
         "OPTIONS": {
+            "builtins": [
+                "base.templatetags.debugging",
+            ],
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
@@ -188,10 +272,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = "/staticb/"
+STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -202,7 +283,7 @@ STATICFILES_FINDERS = [
 ]
 
 
-MEDIA_URL = "/mediab/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 MESSAGE_TAGS = {messages.ERROR: "danger"}
@@ -276,12 +357,12 @@ LOGGING = {
             "propagate": False,
         },
         "django.request": {
-            "handlers": ["file", "mail_admins"],
+            "handlers": ["console", "file"],
             "level": "WARNING",
             "propagate": False,
         },
         "django.security": {
-            "handlers": ["file", "mail_admins"],
+            "handlers": ["console", "file", "mail_admins"],
             "level": "WARNING",
             "propagate": False,
         },
@@ -292,12 +373,12 @@ SHELL_PLUS_PRINT_SQL = True
 SHELL_PLUS_PRINT_SQL_TRUNCATE = None
 
 if not DEBUG:
-    # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-    # EMAIL_HOST = "smtp.mailgun.org"
-    # EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-    # EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-    # EMAIL_PORT = 587
-    # EMAIL_USE_TLS = True
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "smtp.mailgun.org"
+    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
 
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
