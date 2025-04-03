@@ -1,9 +1,10 @@
 {% load static %}
 
 {% if messages %}
+  <div class="mt-7"></div>
   {% for message in messages %}
     {% with klass=message.tags %}
-      <div class="alert alert-{{ klass }} alert-dismissible fade show mx-4 mt-7" role="alert">
+      <div class="alert alert-{{ klass }} alert-dismissible fade show mx-4" role="alert">
         <svg class="bi me-2" width="16" height="16" fill="currentColor" aria-hidden="true">
           <use xlink:href="{% static 'assets/icons/icons.svg' %}#bell" />
         </svg>

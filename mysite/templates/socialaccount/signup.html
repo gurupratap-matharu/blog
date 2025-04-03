@@ -1,0 +1,62 @@
+{% extends "layouts/base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% translate "Signup" %}
+{% endblock title %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+  <div class="row">
+    <div class="col col-sm-8 col-md-6 col-lg-4 mx-auto">
+      <div class="card card-plain mt-7">
+        <div class="card-header pb-0">
+          <h5>{% translate "Sign Up" %}</h5>
+          <p class="text-dark">
+            {% blocktranslate with provider_name=account.get_provider.name site_name=site.name %}You are about to use your
+      {{provider_name}} account to login to
+      {{site_name}}.{% endblocktranslate %}
+          </p>
+        </div>
+        <div class="card-body">
+          <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}" role="form">
+            {% csrf_token %}
+            {% for field in form.visible_fields %}
+              {% if field.errors %}
+                <div class="alert alert-danger" role="alert">
+                  <span class="alert-text">{{ field.errors }}</span>
+                </div>
+              {% endif %}
+              <div class="mb-3">
+                {{ field }}
+                {{ field.help_text }}
+              </div>
+            {% endfor %}
+            {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <button type="submit" class="btn bg-gradient-primary btn-round w-100 mt-4 mb-0">{% translate "Sign Up" %}</button>
+          </form>
+        </div>
+        <div class="card-footer text-center pt-0 px-lg-2 px-1">
+          <p class="mb-4 text-sm mx-auto">
+            <a href="/">{% translate "Go back Home" %}</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block extra_js %}
+  <script>
+       const add_form_classes = () => {
+            const email = document.querySelector('#id_email');
+            email.classList.add('form-control');
+       }
+       document.addEventListener("DOMContentLoaded", add_form_classes);
+  </script>
+{% endblock extra_js %}

@@ -1,0 +1,46 @@
+{% extends "layouts/base.html" %}
+
+{% load i18n account %}
+
+{% block title %}
+  {% translate "Sign In" %}
+{% endblock title %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+  <div class="row vh-100">
+    <div class="col col-sm-8 col-md-6 col-lg-4 mx-auto">
+      <div class="card mt-7">
+        <div class="card-header pb-0">
+          {% if process == "connect" %}
+            <h5>
+              {% blocktrans with provider.name as provider %}Connect
+      {{ provider }}{% endblocktrans %}
+            </h5>
+            <p>
+              {% blocktrans with provider.name as provider %}You are about to connect a new third party account from
+      {{ provider }}.{% endblocktrans %}
+            </p>
+          {% else %}
+            <h5>
+              {% blocktrans with provider.name as provider %}Sign In Via
+      {{ provider }}{% endblocktrans %}
+            </h5>
+            <p>
+              {% blocktrans with provider.name as provider %}You are about to sign in using a third party account from
+      {{ provider }}.{% endblocktrans %}
+            </p>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <form method="post" role="form">
+            {% csrf_token %}
+            <button type="submit" class="btn bg-gradient-primary btn-round w-100 mt-4 mb-0">Continue</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
