@@ -26,13 +26,13 @@
       <h2 class="fs-4 pb-3">Comprá tus pasajes a {{ page.title }}</h2>
     </section>
     {% if page.image %}
-      <section class="py-3">
-        {% picture page.image format-{avif,webp,jpeg} original class="img-fluid shadow-xl border-radius-xl"
-        loading="lazy" %}
-      </section>
+      <figure class="figure d-block py-3">
+        {% image page.image max-1000x500 format-avif loading="lazy" class="figure-img img-fluid rounded-3 d-block shadow-xl" %}
+        <figcaption class="figure-caption text-center text-xs">{{ page.image.caption }}</figcaption>
+      </figure>
     {% endif %}
     {% if page.intro %}
-      <section class="pt-3">
+      <section class="py-3 py-md-5">
         <h2 class="lead">{{ page.intro }}</h2>
       </section>
     {% endif %}
@@ -42,6 +42,11 @@
       </section>
     {% endif %}
     <section class="py-3 py-md-5 rounded-3 min-vh-50 shadow-xl" id="map">
+    </section>
+    <section class="pt-3 pt-md-5 mt-3">
+
+      {% include "includes/advice.html" %}
+
     </section>
     {% if stations %}
       <section class="py-3 py-md-5">
