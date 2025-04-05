@@ -27,7 +27,7 @@
     </section>
     {% if page.image %}
       <figure class="figure d-block py-3">
-        {% image page.image max-1000x500 format-avif loading="lazy" class="figure-img img-fluid rounded-3 d-block shadow-xl" %}
+        {% image page.image original format-avif loading="lazy" class="figure-img img-fluid rounded-3 d-block shadow-xl" %}
         <figcaption class="figure-caption text-center text-xs">{{ page.image.caption }}</figcaption>
       </figure>
     {% endif %}
