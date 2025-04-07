@@ -2,7 +2,7 @@
 
 {% get_current_language as LANGUAGE_CODE %}
 {% wagtail_site as current_site %}
-{% image page.social_image original as tmp_photo %}
+{% image page.social_image width-400 as tmp_photo %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
   <head>
