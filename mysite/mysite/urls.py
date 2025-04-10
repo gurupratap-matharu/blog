@@ -10,6 +10,7 @@ from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
 from base.views import RobotsView, favicon
+from debug_toolbar.toolbar import debug_toolbar_urls
 from search import views as search_views
 
 urlpatterns = [
@@ -21,10 +22,12 @@ urlpatterns = [
     path("sitemap.xml", sitemap),
     path("favicon.ico", favicon),
     path("robots.txt", RobotsView.as_view()),
-    path("__debug__/", include("debug_toolbar.urls")),
     path("styleguide/", TemplateView.as_view(template_name="styleguide.html")),
 ]
 
+
+if not settings.TESTING:
+    urlpatterns = [*urlpatterns] + debug_toolbar_urls()
 
 if settings.DEBUG:
     from django.conf.urls.static import static

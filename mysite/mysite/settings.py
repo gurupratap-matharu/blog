@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 from django.contrib import messages
@@ -66,13 +67,11 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
-    "debug_toolbar",
     "django_extensions",
     "taggit",
 ]
 
 MIDDLEWARE = [
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -96,6 +95,13 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = "users.CustomUser"
 
+
+# Debug Toolbar
+INTERNAL_IPS = ["127.0.0.1"]
+TESTING = "test" in sys.argv
+if not TESTING:
+    INSTALLED_APPS = [*INSTALLED_APPS, "debug_toolbar"]
+    MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware", *MIDDLEWARE]
 
 # Django allauth
 ACCOUNT_LOGIN_METHODS = {"email"}
@@ -159,11 +165,11 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
-INTERNAL_IPS = ["127.0.0.1"]  # <-- Debug toolbar needs this
 
 SITE_ID = 1
 
 ROOT_URLCONF = "mysite.urls"
+
 
 # Mailpit
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
