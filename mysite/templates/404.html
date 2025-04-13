@@ -1,30 +1,54 @@
 {% extends "layouts/base.html" %}
 
-{% load i18n static %}
+{% load static i18n %}
 
 {% block title %}
-  {% translate "404 Not found" %}
+  {% translate "Pagina no encontrada" %}
 {% endblock title %}
 
-{% block body_class %}
-  template-404
-{% endblock body_class %}
+{% block header %}
+
+  {% include 'includes/navigation-basic.html' %}
+
+{% endblock header %}
+
+{% block body_class %}template-404{% endblock %}
 
 {% block content %}
-  <div class="container pt-7 min-vh-50">
-    <div class="row">
-      <div class="col-lg-6 mx-auto">
-        <div class="alert alert-warning" role="alert">
-          <h1 class="alert-heading">{% translate "Error 404" %}</h1>
-          <p>{% translate "Uff. Page not found" %}</p>
-          <p>{% translate "We suggest you to go to the homepage while we solve this issue." %}</p>
-          <a href="{% url 'wagtail_serve' '' %}" class="alert-link icon-link icon-link-hover">
-            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-              <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-left" />
-            </svg>
-          {% translate "Go back Home" %}</a>
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col col-sm-10 col-md-8 col-lg-6 mx-auto">
+        <div class="alert alert-light alert-dismissible fade show" role="alert">
+          <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="currentColor" aria-label="Info:">
+            <use xlink:href="{% static 'assets/icons/icons.svg' %}#bell" />
+          </svg>
+          {% translate "Bueno, esto es incómodo. Parece que esa página ya no existe. Intenta buscar algo similar abajo." %}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div class="d-flex flex-column text-center gap-3">
+          <h3>{% translate "¿Como podemos ayudarte?" %}</h3>
+          <form action="{% url 'search' %}" method="get" class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text" id="basic-addon1">🔍</span>
+              <input type="text"
+                     class="form-control"
+                     name="query"
+                     value="{{ search_query }}"
+                     placeholder="Buscar articulos"
+                     aria-label="search"
+                     aria-describedby="basic-addon1" />
+            </div>
+          </form>
+          {% if not user.is_authenticated %}
+            <h6>{% translate "Logueate para una experencia personalizada" %}</h6>
+            <a href="{% url 'account_login' %}" class="btn w-50 mx-auto btn-round bg-gradient-primary">Log in</a>
+            <a href="{% url 'account_reset_password' %}" class="text-sm link-dark">{% translate "¿Problemas con login?" %}</a>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
 {% endblock content %}
+
+{% block footer %}
+{% endblock footer %}

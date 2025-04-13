@@ -3,28 +3,39 @@
 {% load static i18n %}
 
 {% block title %}
-  {% translate "500 Server Error" %}
+  {% translate "Error de Plataforma 500" %}
 {% endblock title %}
+
+{% block header %}
+
+  {% include "includes/navigation-basic.html" %}
+
+{% endblock header %}
 
 {% block body_class %}
   template-500
 {% endblock body_class %}
 
 {% block content %}
-  <div class="container pt-7 min-vh-50">
+  <div class="container mt-3">
     <div class="row">
-      <div class="col-lg-6 mx-auto">
-        <div class="alert alert-danger" role="alert">
-          <h1 class="alert-heading">{% translate "Error 500" %}</h1>
-          <p>{% translate "Something went wrong" %}</p>
-          <p>{% translate "We suggest you to go to the homepage while we solve this issue." %}</p>
-          <a href="{% url 'wagtail_serve' '' %}" class="alert-link icon-link icon-link-hover">
-            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-              <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-left" />
-            </svg>
-          {% translate "Go back Home" %}</a>
+      <div class="col col-sm-10 col-md-8 col-lg-6 mx-auto">
+        <div class="alert alert-light alert-dismissible fade show" role="alert">
+          <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="currentColor" aria-label="Danger:">
+            <use xlink:href="{% static 'assets/icons/icons.svg' %}#bell" />
+          </svg>
+          {% translate "Uh Oh! Tenemos una problema. Lo estamos resolviendo" %}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        <p class="text-sm">
+          {% blocktranslate %}
+          Si deseas dejarnos un mensaje por favor <a href="/contact/">escribinos aquí</a> o ir al <a href="/">home</a>
+          {% endblocktranslate %}
+        </p>
       </div>
     </div>
   </div>
 {% endblock content %}
+
+{% block footer %}
+{% endblock footer %}
