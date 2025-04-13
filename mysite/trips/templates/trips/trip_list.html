@@ -1,0 +1,13 @@
+{% extends "layouts/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+  Trips
+{% endblock title %}
+
+{% block content %}
+  <div class="container col-12 col-xl-9 min-vh-75">
+    <a href="{% url 'trips:seats' %}">Cata Internacional | Mendoza -> Santiago | ARS 55000</a>
+  </div>
+{% endblock content %}
