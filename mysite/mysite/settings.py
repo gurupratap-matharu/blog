@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "locations.apps.LocationsConfig",
     "help.apps.HelpConfig",
     "users.apps.UsersConfig",
+    "trips.apps.TripsConfig",
     # Wagtail contrib
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
