@@ -373,6 +373,11 @@ LOGGING = {
             "level": "WARNING",
             "propagate": False,
         },
+        "zeep.transports": {
+            "level": "DEBUG",
+            "propagate": False,
+            "handlers": ["console"],
+        },
     },
 }
 
