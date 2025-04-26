@@ -22,6 +22,16 @@
         </div>
         <div class="offcanvas-body">
           <ul class="navbar-nav ms-auto align-items-center">
+            {% if request.user.is_superuser %}
+              <li class="nav-item mx-2">
+                <a class="nav-link ps-2 cursor-pointer" data-bs-toggle="modal" data-bs-target="#sessionModal">
+                  Session
+                  <svg class="bi ms-1" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-down" />
+                  </svg>
+                </a>
+              </li>
+            {% endif %}
             {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>

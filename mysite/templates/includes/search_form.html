@@ -6,8 +6,10 @@
       <div class="row gx-md-3 mb-1 mb-md-3">
         <div class="col-7 col-sm-4 col-lg-2">
           <select class="form-select bg-transparent" name="trip_type" id="trip_type" aria-label="Trip type" required>
-            <option value="one_way" selected>{% translate "Solo Ida" %}</option>
-            <option value="round_trip">{% translate "Ida y Vuelta" %}</option>
+            <option value="one_way">{% translate "Solo Ida" %}</option>
+            <option value="round_trip" {% if request.session.q.trip_type == 'round_trip' %}selected{% endif %}>
+              {% translate "Ida y Vuelta" %}
+            </option>
           </select>
         </div>
         <div class="col-5 col-sm-4 col-lg-2">
@@ -35,7 +37,7 @@
                    autocomplete="off"
                    spellcheck="false"
                    id="origin"
-                   value="{{ request.session.q.origin }}"
+                   value=""
                    placeholder='{% translate "¿Desde Donde?" %}'
                    required />
           </div>
@@ -52,7 +54,7 @@
                    autocomplete="off"
                    spellcheck="false"
                    id="destination"
-                   value="{{ request.session.q.destination }}"
+                   value=""
                    placeholder='{% translate "¿A donde queres ir?" %}'
                    required />
           </div>
