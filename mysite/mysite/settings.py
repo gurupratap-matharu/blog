@@ -316,6 +316,9 @@ DEFAULT_PER_PAGE = 8
 
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")
 
+PAYWAY_PUBLIC_KEY = os.getenv("PAYWAY_PUBLIC_KEY", "")
+PAYWAY_PRIVATE_KEY = os.getenv("PAYWAY_PRIVATE_KEY", "")
+
 
 LOGGING = {
     "version": 1,
