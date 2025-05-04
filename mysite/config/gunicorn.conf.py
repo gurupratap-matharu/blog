@@ -2,7 +2,8 @@
 # https://docs.gunicorn.org/en/stable/configure.html#configuration-file
 # https://docs.gunicorn.org/en/stable/settings.html
 
-# import multiprocessing
+import multiprocessing
+
 import gunicorn
 
 # Replace gunicorn server http header to avoid leak to attackers
@@ -18,8 +19,7 @@ bind = "unix:/run/wagtail.sock"
 
 
 # Define the number of workers
-# workers = multiprocessing.cpu_count() * 2 + 1
-workers = 1  # <-- Change this later but for testing 1 is enough
+workers = multiprocessing.cpu_count() * 2 + 1
 
 # Access log - records incoming HTTP requests
 accesslog = "-"
@@ -31,10 +31,8 @@ error_log_format = '%(h)s %(l)s %(u)s "%(r)s" %(s)s'
 
 log_file = "-"
 
-
 # Whether to send Django output to the error log
 capture_output = True
-
 
 # How verbose the Gunicorn error logs should be
 loglevel = "info"
