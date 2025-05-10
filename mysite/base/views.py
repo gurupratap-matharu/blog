@@ -33,8 +33,10 @@ def favicon(request: HttpRequest) -> FileResponse:
     This endpoint acts as a fall back to supply the necessary icon at /favicon.ico
     """
 
+    static = "static" if settings.DEBUG else "staticfiles"
+
     file = (
-        settings.BASE_DIR / "staticfiles" / "assets" / "img" / "logos" / "favicon.ico"
+        settings.BASE_DIR / static / "assets" / "img" / "logos" / "favicon.ico"
     ).open("rb")
     return FileResponse(file, headers={"Content-Type": "image/x-icon"})
 
