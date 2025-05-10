@@ -3,7 +3,7 @@ import logging
 
 from django.core.validators import RegexValidator
 from django.db import models
-from django.utils.html import mark_safe
+from django.utils.html import mark_safe, strip_tags
 
 from wagtail.admin.panels import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin
@@ -207,13 +207,40 @@ class CityPage(BasePage):
             ],
         }
 
+        faq_schema = {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": self.get_faq_entities(),
+        }
+
         page_schema = json.dumps(
             {
                 "@context": "http://schema.org",
-                "@graph": [breadcrumb_schema, image_schema],
-            }
+                "@graph": [breadcrumb_schema, image_schema, faq_schema],
+            },
+            ensure_ascii=False,
         )
         return mark_safe(page_schema)
+
+    def get_faq_entities(self):
+
+        entities = []
+
+        for block in self.faq:
+            for item in block.value["item"]:
+                question = item.get("question")
+                answer_html = item.get("answer")
+                answer_text = strip_tags(answer_html.source)
+
+                entity = {
+                    "@type": "Question",
+                    "name": question.strip(),
+                    "acceptedAnswer": {"@type": "Answer", "text": answer_text.strip()},
+                }
+
+                entities.append(entity)
+
+        return entities
 
 
 class StationPage(RoutablePageMixin, BasePage):
