@@ -79,8 +79,8 @@ lint:
 	djlint --check .
 
 test: check migrations-check
-	cd mysite && coverage run --source='.' manage.py test
-	coverage html
+	cd mysite && coverage run --source='.' manage.py test --noinput --shuffle -v 2
+	coverage html && open htmlcov/index.html
 
 security:
 	poetry run bandit -rc pyproject.toml .

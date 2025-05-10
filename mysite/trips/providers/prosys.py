@@ -38,12 +38,12 @@ STOPS_MAP = {
 
 
 class Prosys:
-    url = os.getenv("CATA_WSDL")
-    user = os.getenv("CATA_USER")
-    password = os.getenv("CATA_PASSWORD")
-    web_id = int(os.getenv("CATA_WEB_ID"))
-    web_agency_id = int(os.getenv("CATA_WEB_AGENCY_ID"))
-    key = os.getenv("CATA_KEY")
+    url = os.getenv("CATA_WSDL", "")
+    user = os.getenv("CATA_USER", "")
+    password = os.getenv("CATA_PASSWORD", "")
+    web_id = int(os.getenv("CATA_WEB_ID", 0))
+    web_agency_id = int(os.getenv("CATA_WEB_AGENCY_ID", 0))
+    key = os.getenv("CATA_KEY", "")
 
     history = HistoryPlugin()
 
@@ -137,9 +137,11 @@ class Prosys:
         logger.info(etree.tostring(response, pretty_print=True).decode())
 
         stops = response.findall("Parada")
-        data = [{k: v.strip() for k, v in stop.items()} for stop in stops]
+        route = [self._parse_stop(key) for key in stops]
 
-        return data
+        logger.info("Route:%s" % route)
+
+        return route
 
     def get_service_features(self, service_id):
         """
@@ -529,6 +531,18 @@ class Prosys:
         data["status"] = key.find("Status").text
         data["is_selectable"] = key.find("Selectable").text
         data["category"] = key.find("Type").text
+
+        return data
+
+    def _parse_stop(self, key):
+        data = dict()
+
+        data["id"] = key.get("id").strip().title()
+        data["name"] = key.get("localidad").strip().title()
+        data["state"] = key.get("provincia").strip().title()
+        data["country"] = key.get("pais").strip().title()
+        data["arrival"] = key.get("llega").strip()
+        data["departure"] = key.get("sale").strip()
 
         return data
 
