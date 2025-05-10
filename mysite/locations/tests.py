@@ -2,6 +2,7 @@ import logging
 
 from wagtail.models import Page, Site
 from wagtail.test.utils import WagtailPageTestCase
+from wagtail.test.utils.form_data import nested_form_data, streamfield
 
 from home.models import HomePage
 from locations.models import CityIndexPage, CityPage, StationPage
@@ -13,6 +14,8 @@ class CityIndexPageTests(WagtailPageTestCase):
     """
     Test suite for the city index page
     """
+
+    template_name = "locations/city_index_page.html"
 
     @classmethod
     def setUpTestData(cls):
@@ -51,9 +54,17 @@ class CityIndexPageTests(WagtailPageTestCase):
     def test_get(self):
         response = self.client.get(self.city_index_page.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, self.template_name)
+        self.assertNotContains(response, "Hi I should not be on this page")
 
     def test_default_route(self):
         self.assertPageIsRoutable(self.city_index_page)
+
+    def test_page_is_renderable(self):
+        self.assertPageIsRenderable(self.city_index_page)
+
+    def test_page_is_previewable(self):
+        self.assertPageIsPreviewable(self.city_index_page)
 
     def test_editability(self):
         self.assertPageIsEditable(self.city_index_page)
@@ -76,6 +87,8 @@ class CityPageTests(WagtailPageTestCase):
     """
     Test suite for City Page.
     """
+
+    template_name = "locations/city_page.html"
 
     @classmethod
     def setUpTestData(cls):
@@ -117,15 +130,36 @@ class CityPageTests(WagtailPageTestCase):
         cls.city_page.save_revision().publish()
         cls.city_page.save()
 
+    def _get_post_data(self):
+        return nested_form_data(
+            {
+                "title": "About us",
+                "body": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "faq": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "links": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "companies": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+            }
+        )
+
     def test_get(self):
         response = self.client.get(self.city_page.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, self.template_name)
+        self.assertNotContains(response, "Hi I should not be on this page")
 
     def test_default_route(self):
         self.assertPageIsRoutable(self.city_page)
 
+    def test_page_is_renderable(self):
+        self.assertPageIsRenderable(self.city_page)
+
+    def test_page_is_previewable(self):
+        post_data = self._get_post_data()
+        self.assertPageIsPreviewable(self.city_page, post_data=post_data)
+
     def test_editability(self):
-        self.assertPageIsEditable(self.city_page)
+        post_data = self._get_post_data()
+        self.assertPageIsEditable(self.city_page, post_data=post_data)
 
     def test_can_create_city_page_under_city_index(self):
         self.assertCanCreateAt(CityIndexPage, CityPage)
@@ -145,6 +179,8 @@ class StationPageTests(WagtailPageTestCase):
     """
     Test suite for Station Page.
     """
+
+    template_name = "locations/station_page.html"
 
     @classmethod
     def setUpTestData(cls):
@@ -190,18 +226,38 @@ class StationPageTests(WagtailPageTestCase):
         cls.city_page.add_child(instance=cls.station_page)
         cls.station_page.save_revision().publish()
 
+    def _get_post_data(self):
+        return nested_form_data(
+            {
+                "title": "Terminal de Retiro",
+                "address": "Buenos Aires Argentina CP 1143",
+                "lat_long": "-35.3421, -54.4488",
+                "body": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "faq": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "links": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "companies": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+            }
+        )
+
     def test_get(self):
         response = self.client.get(self.station_page.url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, self.template_name)
+        self.assertNotContains(response, "Hi I should not be on this page")
 
     def test_default_route(self):
         self.assertPageIsRoutable(self.station_page)
 
-    # def test_editability(self):
-    #     self.assertPageIsEditable(self.station_page)
+    def test_page_is_renderable(self):
+        self.assertPageIsRenderable(self.station_page)
 
-    # def test_general_previewability(self):
-    #     self.assertPageIsPreviewable(self.station_page)
+    def test_page_is_previewable(self):
+        post_data = self._get_post_data()
+        self.assertPageIsPreviewable(self.station_page, post_data=post_data)
+
+    def test_editability(self):
+        post_data = self._get_post_data()
+        self.assertPageIsEditable(self.station_page, post_data=post_data)
 
     def test_can_create_station_page_under_city_page(self):
         self.assertCanCreateAt(CityPage, StationPage)
