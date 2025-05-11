@@ -25,22 +25,28 @@
           </div>
         </form>
         {% if search_results %}
-          <ul>
+          <ul class="list-unstyled">
             {% for result in search_results %}
-              <li>
-                <h4>
-                  <a href="{% pageurl result %}">{{ result }}</a>
-                </h4>
-                {% if result.search_description %}{{ result.search_description }}{% endif %}
+              <li class="mb-3">
+                <h5><a href="{% pageurl result %}">{{ result }}</a></h5>
+                <p class="text-sm">
+                  {% if result.search_description %}{{ result.search_description }}{% endif %}
+                </p>
               </li>
             {% endfor %}
           </ul>
+          <ul class="pagination justify-content-center">
           {% if search_results.has_previous %}
+          <li class="page-item me-3">
             <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
+          </li>
           {% endif %}
           {% if search_results.has_next %}
+          <li class="page-item">
             <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
+          </li>
           {% endif %}
+          </ul>
         {% elif search_query %}
           No results found
         {% endif %}
