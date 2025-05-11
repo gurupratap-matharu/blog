@@ -319,6 +319,13 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")
 PAYWAY_PUBLIC_KEY = os.getenv("PAYWAY_PUBLIC_KEY", "")
 PAYWAY_PRIVATE_KEY = os.getenv("PAYWAY_PRIVATE_KEY", "")
 
+# CATA PROSYS
+CATA_WSDL = os.getenv("CATA_WSDL", "")
+CATA_USER = os.getenv("CATA_USER", "")
+CATA_PASSWORD = os.getenv("CATA_PASSWORD", "")
+CATA_WEB_ID = int(os.getenv("CATA_WEB_ID", 0))
+CATA_WEB_AGENCY_ID = int(os.getenv("CATA_WEB_AGENCY_ID", 0))
+CATA_KEY = os.getenv("CATA_KEY", "")
 
 LOGGING = {
     "version": 1,

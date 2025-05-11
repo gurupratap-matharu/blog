@@ -1,8 +1,8 @@
 import logging
-import os
 import random
 from datetime import datetime
 
+from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils import timezone
 
@@ -38,12 +38,12 @@ STOPS_MAP = {
 
 
 class Prosys:
-    url = os.getenv("CATA_WSDL", "")
-    user = os.getenv("CATA_USER", "")
-    password = os.getenv("CATA_PASSWORD", "")
-    web_id = int(os.getenv("CATA_WEB_ID", 0))
-    web_agency_id = int(os.getenv("CATA_WEB_AGENCY_ID", 0))
-    key = os.getenv("CATA_KEY", "")
+    url = settings.CATA_WSDL
+    user = settings.CATA_USER
+    password = settings.CATA_PASSWORD
+    web_id = settings.CATA_WEB_ID
+    web_agency_id = settings.CATA_WEB_AGENCY_ID
+    key = settings.CATA_KEY
 
     history = HistoryPlugin()
 
@@ -90,7 +90,10 @@ class Prosys:
 
     def search(self, origin, destination, departure):
         origin, destination = STOPS_MAP.get(origin, {}), STOPS_MAP.get(destination, {})
-        origin_id, destination_id = origin.get("IdParada"), destination.get("IdParada")
+
+        # added dummy id's below for which we don't have any map. Remove them later
+        origin_id = origin.get("IdParada", 123)
+        destination_id = destination.get("IdParada", 456)
 
         logger.info(
             "searching from:%s to:%s on:%s" % (origin_id, destination_id, departure)
@@ -113,9 +116,9 @@ class Prosys:
         trips = [self._parse_service(key) for key in keys]
 
         data = dict()
-        data["origin"] = origin.get("Descripcion").title()
-        data["destination"] = destination.get("Descripcion").title()
-        data["departure"] = response.get("Fecha")
+        data["origin"] = origin.get("Descripcion", "").title()
+        data["destination"] = destination.get("Descripcion", "").title()
+        data["departure"] = response.get("Fecha", "")
         data["trips"] = trips
 
         return data
