@@ -1,0 +1,56 @@
+{% extends "layouts/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+  {{ trip }}
+{% endblock title %}
+
+{% block content %}
+  <div class="container col-12 col-xl-9 min-vh-75">
+    <div class="card mt-3">
+      <div class="card-header pb-0 d-flex justify-content-between">
+        <a href="{{ request.META.HTTP_REFERER }}" class="icon-link icon-link-hover">
+          <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-left" />
+          </svg>
+        {% translate "Back" %}</a>
+        <img src="{{ trip.company.cover.url }}"
+             width="200"
+             height="100"
+             alt="Logo of bus company {{ company.name }}"
+             class="img-fluid"
+             loading="lazy" />
+      </div>
+      <div class="card-body px-0">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex">
+            <div class="col-2 fw-bolder text-sm text-secondary">{% translate "Nro" %}</div>
+            <div class="col-4 fw-bolder text-sm text-secondary">{% translate "Parada" %}</div>
+            <div class="col-3 fw-bolder text-sm text-secondary">{% translate "Llega" %}</div>
+            <div class="col-3 fw-bolder text-sm text-secondary">{% translate "Sale" %}</div>
+          </li>
+          {% for stop in route %}
+            <li class="list-group-item list-group-item-action d-flex">
+              <div class="col-2">{{ forloop.counter }}</div>
+              <div class="col-4">{{ stop.name }}</div>
+              <div class="col-3">{{ stop.arrival }}</div>
+              <div class="col-3">{{ stop.departure }}</div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="card-footer d-flex justify-content-end">
+        <form action="{{ trip.get_add_to_cart_url }}" method="post">
+          {% csrf_token %}
+          <button class="btn bg-gradient-primary btn-round icon-link icon-link-hover fs-6" type="submit">
+            ARS {{ trip.price }}
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
