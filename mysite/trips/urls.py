@@ -13,7 +13,7 @@ app_name = "trips"
 
 urlpatterns = [
     path("", TripSearchView.as_view(), name="trip-search"),
-    path("<int:service_id>/", TripDetailView.as_view(), name="trip-detail"),
+    path("<int:service_id>/stops/", TripDetailView.as_view(), name="trip-detail"),
     path("seats/", SeatsView.as_view(), name="seats"),
     path("order/", OrderView.as_view(), name="order"),
     path("payment/", PaymentView.as_view(), name="payment"),

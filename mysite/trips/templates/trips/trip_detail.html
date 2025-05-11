@@ -15,15 +15,15 @@
             <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-left" />
           </svg>
         {% translate "Back" %}</a>
-        <img src="{{ trip.company.cover.url }}"
-             width="200"
-             height="100"
+        <img src="{% static 'assets/img/company-logos/logo-cata-internacional.jpg' %}"
+             width="100"
+             height="33"
              alt="Logo of bus company {{ company.name }}"
              class="img-fluid"
              loading="lazy" />
       </div>
       <div class="card-body px-0">
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush text-center">
           <li class="list-group-item d-flex">
             <div class="col-2 fw-bolder text-sm text-secondary">{% translate "Nro" %}</div>
             <div class="col-4 fw-bolder text-sm text-secondary">{% translate "Parada" %}</div>
@@ -39,17 +39,6 @@
             </li>
           {% endfor %}
         </ul>
-      </div>
-      <div class="card-footer d-flex justify-content-end">
-        <form action="{{ trip.get_add_to_cart_url }}" method="post">
-          {% csrf_token %}
-          <button class="btn bg-gradient-primary btn-round icon-link icon-link-hover fs-6" type="submit">
-            ARS {{ trip.price }}
-            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-              <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
-            </svg>
-          </button>
-        </form>
       </div>
     </div>
   </div>
