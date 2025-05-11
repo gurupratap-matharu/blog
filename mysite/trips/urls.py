@@ -1,11 +1,19 @@
 from django.urls import path
 
-from .views import OrderView, PaymentSuccessView, PaymentView, SeatsView, TripSearchView
+from .views import (
+    OrderView,
+    PaymentSuccessView,
+    PaymentView,
+    SeatsView,
+    TripDetailView,
+    TripSearchView,
+)
 
 app_name = "trips"
 
 urlpatterns = [
     path("", TripSearchView.as_view(), name="trip-search"),
+    path("<int:service_id>/", TripDetailView.as_view(), name="trip-detail"),
     path("seats/", SeatsView.as_view(), name="seats"),
     path("order/", OrderView.as_view(), name="order"),
     path("payment/", PaymentView.as_view(), name="payment"),
