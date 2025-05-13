@@ -13,19 +13,25 @@
 {% block content %}
   <div class="row">
     <div class="col col-md-9 mx-auto">
-      <h5 class="text-center">Elegir Asiento</h5>
+      <h5 class="text-center">{% translate "Elegir Asiento" %}</h5>
       <div class="card card-plain">
         <div class="card-body seat-container"></div>
         <div class="card-footer d-flex justify-content-center">
-          <a href="{% url 'trips:trip-list' %}">Atras</a>
-          <a href="{% url 'trips:order' %}" class="ms-3">Confirmar</a>
+          <a href="{{ request.META.HTTP_REFERER }}">{% translate "Atras" %}</a>
+          <a href="{% url 'trips:order' %}" class="ms-3">{% translate "Confirmar" %}</a>
         </div>
       </div>
     </div>
   </div>
+  <p>
+    <code>
+      {% if request.user.is_superuser %}{{ trip }}{% endif %}
+    </code>
+  </p>
 {% endblock content %}
 
 {% block extra_js %}
   <script defer src="{% static 'assets/js/seatchart.min.js' %}"></script>
   <script defer src="{% static 'assets/js/seats.js' %}"></script>
+  {{ trip|json_script:"trip" }}
 {% endblock extra_js %}

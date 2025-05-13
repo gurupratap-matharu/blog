@@ -74,6 +74,67 @@ class TripDetailView(TemplateView):
 class SeatsView(TemplateView):
     template_name = "trips/seats.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        trip = self.get_trip(service_id=kwargs.get("service_id"))
+        trip["reserved"] = self.get_reserved(trip=trip)
+        trip["disabled"] = self.get_disabled(trip=trip)
+
+        context["trip"] = trip
+
+        return context
+
+    def get_trip(self, service_id):
+        """
+        Get the current seats availability for a trip from the API.
+        """
+
+        session = self.request.session
+        session["service_id"] = service_id
+
+        obj = Prosys(connection_id=session.get("connection_id"))
+        trip = obj.get_service(service_id)
+
+        return trip
+
+    def get_reserved(self, trip):
+        """
+        Build a map of reserved (or seats that are not allowed to be selected)
+        """
+
+        # build full seat map
+        all = [{"row": x, "col": y} for x in range(12) for y in range(5)]
+
+        # seats given by the api, subtract one since seats.js is zero indexed
+        active = [
+            {"row": int(x.get("row")) - 1, "col": int(x.get("col")) - 1}
+            for x in trip.get("seats")
+        ]
+
+        # mark rest as reserved
+        reserved = [x for x in all if x not in active]
+
+        return reserved
+
+    def get_disabled(self, trip):
+        """
+        Mark the central passage of the vehicle (col:2) as reserved.
+        """
+
+        # seats from api which are not free
+        unavailable = [
+            {"row": int(x.get("row")) - 1, "col": int(x.get("col")) - 1}
+            for x in trip.get("seats")
+            if x.get("status") != "Free"
+        ]
+
+        # central passage of the vehicle
+        passage = [{"row": x, "col": 2} for x in range(12)]
+        disabled = unavailable + passage
+
+        return disabled
+
 
 class OrderView(TemplateView):
     template_name = "trips/order.html"

@@ -71,22 +71,22 @@ class Prosys:
             self.connection_id = connection_id
             logger.info("using existing connection:%s" % connection_id)
         else:
-            self.start_session()
+            self.connection_id = self.start_session()
             logger.info("created new connection:%s" % self.connection_id)
 
     def start_session(self):
         response = self.client.service.StartSession(
             self.web_id, self.user, self.password, self.key
         )
-        self.connection_id = response.xpath("//ConnectionId")[0].text
+        connection_id = response.xpath("//ConnectionId")[0].text
         is_ok = response.xpath("//IsOk")[0].text
         has_warnings = response.xpath("//HasWarnings")[0].text
 
-        logger.info("connecton_id:%s" % self.connection_id)
+        logger.info("connecton_id:%s" % connection_id)
         logger.info("is_ok?:%s" % is_ok)
         logger.info("has_warnings?:%s" % has_warnings)
 
-        return self.connection_id
+        return connection_id
 
     def search(self, origin, destination, departure):
         origin, destination = STOPS_MAP.get(origin, {}), STOPS_MAP.get(destination, {})

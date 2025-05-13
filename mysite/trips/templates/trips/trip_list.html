@@ -70,15 +70,14 @@
                 </svg>
                 Info
               </a>
-              <form action="#" method="post">
-                {% csrf_token %}
+              <a href="{% url 'trips:seats' trip.service_id %}">
                 <button class="btn shadow-none icon-link icon-link-hover fs-6 mb-0 p-0 fw-bold" type="submit">
                   ARS {{ trip.price }}
                   <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
                     <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
                   </svg>
                 </button>
-              </form>
+              </a>
             </div>
           </div>
         </div>
