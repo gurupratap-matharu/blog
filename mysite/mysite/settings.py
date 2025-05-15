@@ -295,6 +295,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 MESSAGE_TAGS = {messages.ERROR: "danger"}
 
+SESSION_EXPIRED_MESSAGE = _("¡Tu sesión ha expirado! 😔")
+
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "Ventanita"

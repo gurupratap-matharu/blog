@@ -16,9 +16,18 @@
       <h5 class="text-center">{% translate "Elegir Asiento" %}</h5>
       <div class="card card-plain">
         <div class="card-body seat-container"></div>
-        <div class="card-footer d-flex justify-content-center">
-          <a href="{{ request.META.HTTP_REFERER }}">{% translate "Atras" %}</a>
-          <a href="{% url 'trips:order' %}" class="ms-3">{% translate "Confirmar" %}</a>
+        <div class="card-footer d-flex justify-content-between">
+          <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-round">{% translate "Atras" %}</a>
+          <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" class="btn btn-round bg-gradient-primary icon-link icon-link-hover" id="confirm" disabled>
+              {% translate "Confirmar" %}
+              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+              </svg>
+            </button>
+          </form>
         </div>
       </div>
     </div>

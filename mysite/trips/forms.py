@@ -2,6 +2,7 @@ import json
 import logging
 from datetime import datetime
 
+from django import forms
 from django.core.exceptions import ValidationError
 from django.http.request import QueryDict
 from django.utils.translation import gettext_lazy as _
@@ -165,3 +166,7 @@ class TripSearchForm:
 
     def __repr__(self):
         return json.dumps(self.data)
+
+
+class SeatForm(forms.Form):
+    seats = forms.CharField(max_length=20, widget=forms.HiddenInput)

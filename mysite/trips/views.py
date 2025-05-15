@@ -1,11 +1,13 @@
 import logging
 
+from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import TemplateView
+from django.views.generic import FormView, TemplateView
 
-from trips.forms import TripSearchForm
+from trips.forms import SeatForm, TripSearchForm
 from trips.providers.prosys import Prosys
 
 logger = logging.getLogger(__name__)
@@ -58,6 +60,18 @@ class TripSearchView(TemplateView):
 
 class TripDetailView(TemplateView):
     template_name = "trips/trip_detail.html"
+    session_keys = ("q", "connection_id")
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Verify that session is valid with all keys else redirect to home.
+        """
+
+        if not all(k in request.session for k in self.session_keys):
+            messages.info(request, settings.SESSION_EXPIRED_MESSAGE)
+            return redirect("/")
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -71,19 +85,36 @@ class TripDetailView(TemplateView):
         return route
 
 
-class SeatsView(TemplateView):
+class SeatsView(FormView):
     template_name = "trips/seats.html"
+    form_class = SeatForm
+    success_url = reverse_lazy("trips:order")
+    session_keys = ("q", "connection_id")
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Verify that session is valid with all keys else redirect to home.
+        """
+
+        if not all(k in request.session for k in self.session_keys):
+            messages.info(request, settings.SESSION_EXPIRED_MESSAGE)
+            return redirect("/")
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        trip = self.get_trip(service_id=kwargs.get("service_id"))
-        trip["reserved"] = self.get_reserved(trip=trip)
-        trip["disabled"] = self.get_disabled(trip=trip)
-
-        context["trip"] = trip
+        service_id = self.kwargs.get("service_id")
+        context["trip"] = self.get_trip(service_id=service_id)
 
         return context
+
+    def form_valid(self, form):
+        cd = form.cleaned_data
+        self.request.session["seats"] = cd.get("seats")
+
+        return super().form_valid(form)
 
     def get_trip(self, service_id):
         """
@@ -94,7 +125,10 @@ class SeatsView(TemplateView):
         session["service_id"] = service_id
 
         obj = Prosys(connection_id=session.get("connection_id"))
+
         trip = obj.get_service(service_id)
+        trip["reserved"] = self.get_reserved(trip=trip)
+        trip["disabled"] = self.get_disabled(trip=trip)
 
         return trip
 

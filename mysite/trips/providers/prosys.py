@@ -3,6 +3,7 @@ import random
 from datetime import datetime
 
 from django.conf import settings
+from django.core.mail import mail_admins
 from django.template.loader import render_to_string
 from django.utils import timezone
 
@@ -52,19 +53,23 @@ class Prosys:
             self.client = Client(self.url, transport=transport, plugins=[self.history])
 
         except requests.exceptions.ConnectionError as e:
-            logger.warn("Prosys connection error:%s" % e)
+            logger.warn("Prosys ConnectionError:%s" % e)
+            mail_admins("Prosys ConnectionError", f"Connection Id:{connection_id}")
             return
 
         except requests.exceptions.Timeout as e:
-            logger.warn("Prosys client timeout:%s" % e)
+            logger.warn("Prosys Timeout:%s" % e)
+            mail_admins("Prosys Timeout", f"Connection Id:{connection_id}")
             return
 
         except requests.exceptions.HTTPError as e:
-            logger.warn("Prosys HTTP error:%s" % e)
+            logger.warn("Prosys HTTPError:%s" % e)
+            mail_admins("Prosys HTTPError", f"Connection Id:{connection_id}")
             return
 
         except requests.exceptions.RequestException as e:
             logger.warn("Prosys Error:%s" % e)
+            mail_admins("Prosys Error", f"Connection Id:{connection_id}")
             return
 
         if connection_id:
@@ -114,7 +119,6 @@ class Prosys:
         logger.info(etree.tostring(response, pretty_print=True).decode())
         keys = response.findall("Servicio")
         trips = [self._parse_service(key) for key in keys]
-
         data = dict()
         data["origin"] = origin.get("Descripcion", "").title()
         data["destination"] = destination.get("Descripcion", "").title()
