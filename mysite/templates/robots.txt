@@ -1,17 +1,14 @@
 User-Agent: *
 User-agent: AdsBot-Google
 Disallow: /admin/
-Disallow: /django-admin/
-Disallow: /private/
-Disallow: /trips/
-Disallow: /account/
-Disallow: /accounts/
 Disallow: /captcha/
-Disallow: /trips/
 Disallow: /cart/
+Disallow: /coupons/
+Disallow: /django-admin/
 Disallow: /orders/
 Disallow: /payments/
-Disallow: /coupons/
+Disallow: /private/
+Disallow: /trips/
 
 User-agent: GPTBot
 Disallow: /

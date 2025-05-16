@@ -15,11 +15,12 @@ from search import views as search_views
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
-    path("admin/", include(wagtailadmin_urls)),
+    path("private/", include(wagtailadmin_urls)),
     path("accounts/", include("allauth.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
     path("documents/", include(wagtaildocs_urls)),
     path("trips/", include("trips.urls")),
+    path("orders/", include("orders.urls")),
     path("sitemap.xml", sitemap),
     path("favicon.ico", favicon),
     path("robots.txt", RobotsView.as_view()),
