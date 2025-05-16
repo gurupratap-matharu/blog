@@ -10,9 +10,9 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 
 from trips.forms import SeatForm
-from trips.views import SeatsView, TripDetailView
+from trips.views import SeatsView, TripDetailView, TripSearchView
 
-from .utils import SERVICE, STOPS
+from .utils import SEARCH_RESULTS, SERVICE, STOPS
 
 
 class TripSearchViewTests(TestCase):
@@ -23,9 +23,34 @@ class TripSearchViewTests(TestCase):
 
     template_name = "trips/trip_list.html"
     url = reverse_lazy("trips:trip-search")
+    search_results = SEARCH_RESULTS
 
-    def test_trip_search_view_resolves_correct_url(self):
-        pass
+    query_params = {
+        "trip_type": "one_way",
+        "num_of_passengers": 1,
+        "origin": "GYU",
+        "destination": "BUE",
+        "departure": "16-05-2025",
+        "return": "",
+        "company": "",
+    }
+
+    @patch("trips.views.Prosys")
+    def test_trip_search_view_resolves_correct_url(self, MockProsys):
+        # Arrange: mock the search() method get a dummy results
+
+        obj = MockProsys()
+        obj.search = MagicMock(return_value=self.search_results)
+
+        # Act
+        response = self.client.get(self.url, query_params=self.query_params)
+
+        # Assert
+        self.assertIs(response.resolver_match.func.view_class, TripSearchView)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(response, self.template_name)
+        self.assertContains(response, "")
+        self.assertNotContains(response, "Hi I should not be on this page")
 
     def test_trip_search_redirects_for_bad_query(self):
         self.fail()
@@ -140,7 +165,7 @@ class SeatViewTests(TestCase):
 
     template_name = "trips/seats.html"
     url = reverse_lazy("trips:seats", kwargs={"service_id": 1})
-    order_url = reverse_lazy("trips:order")
+    order_url = reverse_lazy("orders:order-create")
     home_url = "/"
     service = SERVICE
 
@@ -269,6 +294,6 @@ class SeatViewTests(TestCase):
         )
 
         # Verify content of final redirected page
-        self.assertTemplateUsed(response, "trips/order.html")
+        self.assertTemplateUsed(response, "orders/order_form.html")
         self.assertNotContains(response, "Hi I should not be on this page!")
         self.assertEqual(self.client.session["seats"], data.get("seats"))

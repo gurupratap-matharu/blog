@@ -1,3 +1,6 @@
+import datetime
+import zoneinfo
+
 START_SESSION_XML = """<?xml version="1.0" encoding="utf-8"?><soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><StartSessionResponse
@@ -124,3 +127,31 @@ STOPS = [
         "departure": "09:20",
     },
 ]
+
+
+SEARCH_RESULTS = {
+    "origin": "Gualeguaychú",
+    "destination": "Retiro",
+    "departure": "18-05-2025",
+    "trips": [
+        {
+            "service_id": "1",
+            "departure": datetime.datetime(
+                2025, 5, 18, 6, 0, tzinfo=zoneinfo.ZoneInfo(key="America/Buenos_Aires")
+            ),
+            "arrival": datetime.datetime(
+                2025, 5, 18, 9, 20, tzinfo=zoneinfo.ZoneInfo(key="America/Buenos_Aires")
+            ),
+            "seats_available": "20",
+            "can_select_seats": "1",
+            "category": "03",
+            "company": "GOQ",
+            "company_id": "95",
+            "price": 550044,
+            "price_promotional": 550044,
+            "has_discount": "*",
+            "currency_code": "ARS",
+            "is_international": "0",
+        }
+    ],
+}

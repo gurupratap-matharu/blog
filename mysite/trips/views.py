@@ -88,7 +88,7 @@ class TripDetailView(TemplateView):
 class SeatsView(FormView):
     template_name = "trips/seats.html"
     form_class = SeatForm
-    success_url = reverse_lazy("trips:order")
+    success_url = reverse_lazy("orders:order-create")
     session_keys = ("q", "connection_id")
 
     def dispatch(self, request, *args, **kwargs):
@@ -168,10 +168,6 @@ class SeatsView(FormView):
         disabled = unavailable + passage
 
         return disabled
-
-
-class OrderView(TemplateView):
-    template_name = "trips/order.html"
 
 
 class PaymentView(TemplateView):
