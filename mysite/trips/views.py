@@ -111,8 +111,17 @@ class SeatsView(FormView):
         return context
 
     def form_valid(self, form):
-        cd = form.cleaned_data
-        self.request.session["seats"] = cd.get("seats")
+        seats = form.cleaned_data.get("seats")
+        session = self.request.session
+
+        connection_id = session.get("connection_id")
+        service_id = session.get("service_id")
+
+        obj = Prosys(connection_id=connection_id)
+        prepare_sale = obj.prepare_sale(service_id=service_id, seats=seats)
+
+        session["seats"] = seats
+        session["guid"] = prepare_sale.get("guid")
 
         return super().form_valid(form)
 

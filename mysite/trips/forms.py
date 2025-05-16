@@ -170,3 +170,11 @@ class TripSearchForm:
 
 class SeatForm(forms.Form):
     seats = forms.CharField(max_length=20, widget=forms.HiddenInput)
+
+    def clean_seats(self):
+        seats = self.cleaned_data["seats"]
+        seats = [x.strip() for x in seats.split(",")]
+
+        logger.info("cleaning seat numbers to:%s" % seats)
+
+        return seats

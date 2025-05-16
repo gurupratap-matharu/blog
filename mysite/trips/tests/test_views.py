@@ -1,3 +1,4 @@
+import uuid
 from datetime import timedelta
 from http import HTTPStatus
 from unittest import skip
@@ -278,9 +279,23 @@ class SeatViewTests(TestCase):
         self.assertIn("service_id", self.client.session)
         self.assertEqual(self.client.session["service_id"], 1)
 
-    def test_seat_view_works_on_valid_post(self):
+    @patch("trips.views.Prosys")
+    def test_seat_view_works_on_valid_post(self, MockProsys):
+        """
+        On valid post the seat view calls the `prepare_sale` method on prosys
+        We'll mock it with a demo response.
+        """
+
         # Arrange
+        guid = str(uuid.uuid4())
         data = {"seats": "11, 12"}
+
+        obj = MockProsys()
+        obj.prepare_sale = MagicMock(return_value={"guid": guid})
+        obj.get_service = MagicMock(return_value=self.service)
+
+        # Act: hit the view via get so that service_id is set in session
+        response = self.client.get(self.url, follow=True)
 
         # Act: post will redirect to order-create so make `follow=True`
         response = self.client.post(path=self.url, data=data, follow=True)
@@ -296,4 +311,7 @@ class SeatViewTests(TestCase):
         # Verify content of final redirected page
         self.assertTemplateUsed(response, "orders/order_form.html")
         self.assertNotContains(response, "Hi I should not be on this page!")
-        self.assertEqual(self.client.session["seats"], data.get("seats"))
+
+        # Verify session values
+        self.assertEqual(self.client.session["seats"], ["11", "12"])
+        self.assertEqual(self.client.session["guid"], guid)

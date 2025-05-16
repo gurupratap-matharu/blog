@@ -3,9 +3,9 @@ from unittest import skip
 
 from django.core.exceptions import ValidationError
 from django.http import Http404
-from django.test import TestCase
+from django.test import SimpleTestCase, TestCase
 
-from trips.forms import TripSearchForm
+from trips.forms import SeatForm, TripSearchForm
 
 
 class TripSearchFormTests(TestCase):
@@ -247,3 +247,37 @@ class TripSearchFormTests(TestCase):
 
         with self.assertRaises(ValidationError):
             form_2.validate()
+
+
+class SeatFormTests(SimpleTestCase):
+    def test_seat_form_is_valid_for_valid_data(self):
+        data = {"seats": "11, 12"}
+        expected = {"seats": ["11", "12"]}
+        form = SeatForm(data=data)
+
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, expected)
+
+    def test_seat_form_with_single_seat(self):
+        actual = {"seats": "1"}
+        expected = {"seats": ["1"]}
+
+        form = SeatForm(data=actual)
+
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, expected)
+
+    def test_seat_form_cleans_up_spaces_in_data(self):
+        data = {"seats": " 3,  5,  9   "}
+        expected = {"seats": ["3", "5", "9"]}
+
+        form = SeatForm(data=data)
+
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, expected)
+
+    def test_seat_form_is_invalid_form_empty_data(self):
+        form = SeatForm(data={"seats": ""})
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.cleaned_data, {})
