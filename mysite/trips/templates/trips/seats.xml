@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<NewDataSet>
+  <Service><ID>{{ service_id }}</ID>
+    {% for seat in seats %}<Seats><Text>{{ seat }}</Text></Seats>{% endfor %}
+  </Service>
+</NewDataSet>
