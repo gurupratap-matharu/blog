@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
     "django_extensions",
+    "django_countries",
     "taggit",
 ]
 
@@ -330,6 +331,8 @@ CATA_WEB_ID = int(os.getenv("CATA_WEB_ID", 0))
 CATA_WEB_AGENCY_ID = int(os.getenv("CATA_WEB_AGENCY_ID", 0))
 CATA_KEY = os.getenv("CATA_KEY", "")
 
+# Django Countries
+COUNTRIES_FIRST = ["AR", "BO", "BR", "CL", "CO", "EC", "PY", "PE", "UY", "VE"]
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
