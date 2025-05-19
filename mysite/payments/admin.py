@@ -1,2 +1,8 @@
+from django.contrib import admin
 
-# Register your models here.
+from .models import WebhookMessage
+
+
+@admin.register(WebhookMessage)
+class WebhookMessage(admin.ModelAdmin):
+    list_display = ("received_at", "provider")
