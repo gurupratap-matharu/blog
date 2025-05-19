@@ -21,6 +21,7 @@ urlpatterns = [
     path("documents/", include(wagtaildocs_urls)),
     path("trips/", include("trips.urls")),
     path("orders/", include("orders.urls")),
+    path("payments/", include("payments.urls")),
     path("sitemap.xml", sitemap),
     path("favicon.ico", favicon),
     path("robots.txt", RobotsView.as_view()),

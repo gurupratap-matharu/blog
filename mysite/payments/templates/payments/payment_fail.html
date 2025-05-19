@@ -1,0 +1,46 @@
+{% extends "layouts/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+  {% translate "Pago sin éxito" %}
+{% endblock title %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-5 col-md-7 mx-auto">
+      <div class="alert alert-danger mt-3" role="alert">
+        <h4 class="alert-heading mb-3">
+          <svg class="bi flex-shrink-0 me-2"
+               width="32"
+               height="32"
+               fill="currentColor"
+               aria-hidden="true"
+               aria-label="Danger:"
+               role="img">
+            <use xlink:href="{% static 'assets/icons/icons.svg' %}#exclamation-triangle-fill" />
+          </svg>
+          {% translate "Pago sin éxito" %}
+        </h4>
+        <p>
+          {% blocktranslate %}
+          No pudimos recibir la confirmación de su pago. Si tiene algún problema, puede
+          <a href="/contact/" class="alert-link text-decoration-underline"><strong>contactarnos aquí</strong></a>
+          {% endblocktranslate %}
+        </p>
+        <div class="d-flex justify-content-between pt-3">
+          <a href="/" class="alert-link icon-link icon-link-hover">
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-left" />
+            </svg>
+          {% translate "Ir al home" %}</a>
+          <a href="{% url 'payments:home' %}" class="alert-link icon-link icon-link-hover">{% translate "Probar de nuevo" %}
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

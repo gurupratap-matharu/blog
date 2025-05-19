@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from django_countries.fields import CountryField
-from django_countries.widgets import CountrySelectWidget
 
 from .validators import phone_regex, validate_birth_date
 
@@ -80,8 +79,8 @@ class PassengerForm(forms.Form):
         ("O", _("Other")),
     ]
 
-    SELECT = forms.Select(attrs={"class": "form-select"})
-    TEXT = forms.TextInput(attrs={"class": "form-control"})
+    SELECT = forms.Select(attrs={"class": "form-select", "required": "required"})
+    TEXT = forms.TextInput(attrs={"class": "form-control", "required": "required"})
 
     document_type = forms.ChoiceField(
         label=_("Tipo de documento"), choices=DOCUMENT_TYPE_CHOICES, widget=SELECT
@@ -104,7 +103,7 @@ class PassengerForm(forms.Form):
     )
     birth_date = forms.DateField(
         label=_("Fecha de nacimiento"),
-        initial="mm/dd/yyyy",
+        initial="dd/mm/yyyy",
         validators=[validate_birth_date],
         widget=forms.DateInput(attrs={"class": "form-control"}),
     )

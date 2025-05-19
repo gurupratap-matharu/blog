@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "trips.apps.TripsConfig",
     "orders.apps.OrdersConfig",
+    "payments.apps.PaymentsConfig",
     # Wagtail contrib
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",

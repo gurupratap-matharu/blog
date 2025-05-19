@@ -7,6 +7,8 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
+from trips.providers.prosys import Prosys
+
 from .forms import OrderForm, PassengerForm
 
 logger = logging.getLogger(__name__)
@@ -47,20 +49,50 @@ class OrderCreateView(FormView):
         context["formset"] = self._get_formset()
         return context
 
-    def form_valid(self, form):
-        logger.info("order create form is valid...")
-        logger.info("cleaned data:%s" % form.cleaned_data)
-        return super().form_valid(form)
-
     def _get_formset(self):
         """
         Build the passenger formset
         """
 
+        data = self.request.POST or None
         q = self.request.session.get("q")
         extra = int(q.get("num_of_passengers", 0))
 
         PassengerFormset = formset_factory(PassengerForm, extra=extra)
-        formset = PassengerFormset()
+        formset = PassengerFormset(data=data)
 
         return formset
+
+    def form_valid(self, form):
+        """
+        Here form obj is our order form which is already validated at this point.
+        Now we need to validate the passenger formset and route to payment or route back with errors.
+        """
+
+        logger.info("order form is valid...")
+        logger.info("cleaned data:%s" % form.cleaned_data)
+
+        formset = self._get_formset()
+
+        if not formset.is_valid():
+            return super().form_invalid(form)
+
+        logger.info("passenger formset is valid...")
+        logger.info("formset cleaned data:%s" % formset.cleaned_data)
+
+        price = self.get_price(passengers=formset)
+
+        return super().form_valid(form)
+
+    def get_price(self, passengers):
+        session = self.request.session
+        seats = session.get("seats")
+        service_id = session.get("service_id")
+        connection_id = session.get("connection_id")
+
+        obj = Prosys(connection_id=connection_id)
+        price = obj.get_price(service_id, passengers, seats)
+
+        logger.info("price:%s" % price)
+
+        return price

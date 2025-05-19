@@ -10,14 +10,14 @@
   <div class="container">
     <div class="row">
       <div class="col-12 col-lg-8">
-        <div class="card card-plain mb-3">
-          <div class="card-header pb-0">
-            <h5 class="card-title">{% translate "Pasajeros" %}</h5>
-          </div>
-          <div class="card-body">
-            <div class="accordion accordion-flush" id="accordionExample">
-              <form method="post">
-                {% csrf_token %}
+        <form method="post">
+          {% csrf_token %}
+          <div class="card card-plain mb-3">
+            <div class="card-header pb-0">
+              <h5 class="card-title">{% translate "Pasajeros" %}</h5>
+            </div>
+            <div class="card-body">
+              <div class="accordion" id="accordionExample">
                 {{ formset.management_form }}
                 {{ formset.non_form_errors }}
                 {% for form in formset %}
@@ -38,8 +38,8 @@
                         <div class="row">
                           <div class="col-md-4">
                             <div class="mb-3">
-                              <span class="text-danger">{{ form.document_type.errors }}</span>
                               <label class="form-label" for="{{ form.document_type.auto_id }}">{{ form.document_type.label }}</label>
+                              <p class="text-sm text-danger mb-1">{{ form.document_type.errors.as_text }}</p>
                               {{ form.document_type }}
                               <div class="form-text ms-2" id="{{ form.document_type.auto_id }}_helptext">
                                 <small>{{ form.document_type.help_text|safe }}</small>
@@ -48,8 +48,8 @@
                           </div>
                           <div class="col-md-4">
                             <div class="mb-3">
-                              <span class="text-danger">{{ form.document_number.errors }}</span>
                               <label class="form-label" for="{{ form.document_number.auto_id }}">{{ form.document_number.label }}</label>
+                              <p class="text-sm text-danger mb-1">{{ form.document_number.errors.as_text }}</p>
                               <div class="input-group">
                                 <span class="input-group-text z-index-0">🔍</span>
                                 {{ form.document_number }}
@@ -61,8 +61,8 @@
                           </div>
                           <div class="col-md-4">
                             <div class="mb-3">
-                              <span class="text-danger">{{ form.nationality.errors }}</span>
                               <label class="form-label" for="{{ form.nationality.auto_id }}">{{ form.nationality.label }}</label>
+                              <p class="text-sm text-danger mb-1">{{ form.nationality.errors.as_text }}</p>
                               {{ form.nationality }}
                               <div class="form-text ms-2" id="{{ form.nationality.auto_id }}_helptext">
                                 <small>{{ form.nationality.help_text|safe }}</small>
@@ -73,8 +73,8 @@
                         <div class="row">
                           <div class="col-md-4">
                             <div class="mb-3">
-                              <span class="text-danger">{{ form.first_name.errors }}</span>
                               <label class="form-label" for="{{ form.first_name.auto_id }}">{{ form.first_name.label }}</label>
+                              <p class="text-sm text-danger mb-1">{{ form.first_name.errors.as_text }}</p>
                               {{ form.first_name }}
                               <div class="form-text ms-2" id="{{ form.first_name.auto_id }}_helptext">
                                 <small>{{ form.first_name.help_text|safe }}</small>
@@ -83,8 +83,8 @@
                           </div>
                           <div class="col-md-4">
                             <div class="mb-3">
-                              <span class="text-danger">{{ form.last_name.errors }}</span>
                               <label class="form-label" for="{{ form.last_name.auto_id }}">{{ form.last_name.label }}</label>
+                              <p class="text-sm text-danger mb-1">{{ form.last_name.errors.as_text }}</p>
                               {{ form.last_name }}
                               <div class="form-text ms-2" id="{{ form.last_name.auto_id }}_helptext">
                                 <small>{{ form.last_name.help_text|safe }}</small>
@@ -93,8 +93,8 @@
                           </div>
                           <div class="col-md-4">
                             <div class="mb-3">
-                              <span class="text-danger">{{ form.gender.errors }}</span>
                               <label class="form-label" for="{{ form.gender.auto_id }}">{{ form.gender.label }}</label>
+                              <p class="text-sm text-danger mb-1">{{ form.gender.errors.as_text }}</p>
                               {{ form.gender }}
                               <div class="form-text ms-2" id="{{ form.gender.auto_id }}_helptext">
                                 <small>{{ form.gender.help_text|safe }}</small>
@@ -105,8 +105,8 @@
                         <div class="row">
                           <div class="col-md-4">
                             <div class="mb-3">
-                              <span class="text-danger">{{ form.birth_date.errors }}</span>
                               <label class="form-label" for="{{ form.birth_date.auto_id }}">{{ form.birth_date.label }}</label>
+                              <p class="text-sm text-danger mb-1">{{ form.birth_date.errors.as_text }}</p>
                               {{ form.birth_date }}
                               <div class="form-text ms-2" id="{{ form.birth_date.auto_id }}_helptext">
                                 <small>{{ form.birth_date.help_text|safe }}</small>
@@ -114,8 +114,8 @@
                             </div>
                           </div>
                           <div class="col-md-4">
-                            <span class="text-danger">{{ form.phone_number.errors }}</span>
                             <label class="form-label" for="{{ form.phone_number.auto_id }}">{{ form.phone_number.label }}</label>
+                            <p class="text-sm text-danger mb-1">{{ form.phone_number.errors.as_text }}</p>
                             <div class="input-group">
                               <span class="input-group-text z-index-0">📞</span>
                               {{ form.phone_number }}
@@ -129,17 +129,14 @@
                     </div>
                   </div>
                 {% endfor %}
-              </form>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="card card-plain mt-3">
-          <div class="card-header pb-0">
-            <h5 class="card-title">{% translate "Sus Datos" %}</h5>
-          </div>
-          <div class="card-body">
-            <form method="post">
-              {% csrf_token %}
+          <div class="card card-plain mt-3">
+            <div class="card-header pb-0">
+              <h5 class="card-title">{% translate "Sus Datos" %}</h5>
+            </div>
+            <div class="card-body">
               {{ form.non_field_errors }}
               {% for field in form.visible_fields %}
                 <div class="mb-3">
@@ -167,9 +164,9 @@
                   </svg>
                 </button>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
       <div class="col-12 col-lg-4">
         {# Trip Summary Card #}
