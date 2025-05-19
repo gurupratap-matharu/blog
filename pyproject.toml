@@ -15,6 +15,7 @@ psycopg2-binary = "^2.9.10"
 zeep = "^4.3.1"
 wagtail = "^7.0"
 django-countries = "^7.6.1"
+mercadopago = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
 djlint = "^1.31.1"
