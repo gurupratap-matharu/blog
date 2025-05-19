@@ -276,6 +276,71 @@ class Prosys:
 
         return data
 
+    def get_price(self, service_id, passengers: list[dict]):
+        """
+        Calculates the final price to be charged based on seats and payment types.
+        """
+
+        for p in passengers:
+            p["nationality_id"] = self._get_nationality_id(p.get("nationality"))
+            p["document_type_id"] = self._get_document_type_id(p.get("document_type"))
+            p["residential_id"] = 1
+
+        context = dict()
+        context["service_id"] = service_id
+        context["passengers"] = [
+            {
+                "label": 19,
+                "amount": 0,
+                "first_name": "Inderpal",
+                "last_name": "Singh",
+                "document_type_id": 1,
+                "document_number": random.randint(1000000, 9999999),
+                "nationality_id": 10,
+                "residential_id": 1,
+            },
+            {
+                "label": 20,
+                "amount": 0,
+                "first_name": "Harjinder",
+                "last_name": "Kaur",
+                "document_type_id": 1,
+                "document_number": random.randint(1000000, 9999999),
+                "nationality_id": 6,
+                "residential_id": 1,
+            },
+        ]
+
+        passengers_xml = render_to_string("trips/get_computed_rates.xml", context)
+
+        logger.info("passengers_xml:%s" % passengers_xml)
+
+        response = self.client.service.GetComputedRates(
+            self.web_id,
+            self.user,
+            self.password,
+            service_id,
+            passengers_xml,
+            self.connection_id,
+            self.key,
+        )
+
+        logger.info(etree.tostring(response, pretty_print=True).decode())
+
+        element_tags = response.findall("Elements")
+        payment_tags = response.findall("Payments")
+
+        elements = [self._parse_price_element(key) for key in element_tags]
+        payments = [self._parse_payment(key) for key in payment_tags]
+        result = self._parse_result(response.find("Result"))
+
+        data = dict()
+        data["elements"] = elements
+        data["payments"] = payments
+        data["result"] = result
+
+        return data
+
     def complete_sale(self, service_id, order, guid):
         """
         Confirms a sale and returns tickets.
@@ -574,6 +639,52 @@ class Prosys:
 
         return data
 
+    def _parse_price_element(self, key):
+        data = dict()
+
+        data["id"] = key.find("ID").text
+        data["service"] = key.find("Service").text
+        data["seat"] = key.find("Element").text
+        data["quality"] = key.find("Quality").text
+        data["interest"] = key.find("Interest").text
+        data["interest_amount"] = key.find("InterestAmount").text
+        data["amount"] = key.find("Amount").text
+        data["discount_code"] = key.find("DiscountCode").text
+        data["discount_amount"] = key.find("DiscountAmount").text
+        data["discount_amount_special"] = key.find("SpecialDiscountAmount").text
+        data["payment_info"] = key.find("PaymentInfo").text
+        data["residential_id"] = key.find("ResidentialId").text
+        data["nationality_id"] = key.find("NationalityId").text
+        data["rg3450_amount"] = key.find("RG3450Amount").text
+        data["rate_type"] = key.find("RateType").text
+
+        return data
+
+    def _parse_payment(self, key):
+        data = dict()
+
+        data["id"] = key.find("ID").text
+        data["type"] = key.find("Type").text
+        data["amount"] = key.find("Amount").text
+        data["entity"] = key.find("Entity").text
+        data["number"] = key.find("Number").text
+        data["months"] = key.find("Months").text
+        data["currency"] = key.find("Currency").text
+        data["interest"] = key.find("Interest").text
+        data["first_name"] = key.find("FirstName").text
+        data["last_name"] = key.find("LastName").text
+        data["document"] = key.find("Document").text
+        data["phone"] = key.find("Phone").text
+        data["commerce"] = key.find("Commerce").text
+        data["terminal"] = key.find("Terminal").text
+        data["Lot"] = key.find("Lot").text
+        data["Coupon"] = key.find("Coupon").text
+        data["Authorization"] = key.find("Authorization").text
+        data["rg3450_amount"] = key.find("AmountRG3450").text
+        data["currency_iso"] = key.find("CurrencyISO").text
+
+        return data
+
     def _parse_country(self, key):
         data = dict()
 
@@ -730,6 +841,48 @@ class Prosys:
 
         dt = datetime.strptime(value, "%d/%m/%Y %H:%M")
         return timezone.make_aware(dt)
+
+    def _get_nationality_id(self, country_code: str):
+        """
+        Find the nationality id based on Prosys codes. If nationality not in list
+        then return Argentina.
+        """
+
+        code_map = {
+            "AR": "2",
+            "BO": 10,
+            "BR": "5",
+            "CL": "6",
+            "CO": "18",
+            "EC": "16",
+            "PY": "9",
+            "PE": "13",
+            "UY": "14",
+            "VE": "15",
+        }
+
+        return code_map.get(country_code, "2")
+
+    def _get_document_type_id(self, code: str):
+        """
+        Returns the document type id as per prosys mapping. This method needs improvement
+        as it doesn't cover all cases perfectly.
+
+        For doc types not in the map below we return DNI.
+        """
+
+        doc_map = {
+            "DNI": "1",
+            "CEDULA": "2",
+            "PASSPORT": "3",
+            "LE": "5",
+            "LC": "7",
+            "CUIT": "4",
+            "RUT": "4",
+            "NIE": "4",
+        }
+
+        return doc_map.get(code, "1")
 
     def __repr__(self):
         return "Prosys Client 👋"
