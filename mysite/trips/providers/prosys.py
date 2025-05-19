@@ -233,7 +233,7 @@ class Prosys:
         context = dict()
         context["service_id"] = service_id
         context["seats"] = seats
-        seats_xml = render_to_string("trips/seats.xml", context)
+        seats_xml = render_to_string("trips/prepare_sale.xml", context)
 
         logger.info("seats_xml:%s" % seats_xml)
 
@@ -372,7 +372,7 @@ class Prosys:
             },
         ]
 
-        order_xml = render_to_string("trips/order.xml", context)
+        order_xml = render_to_string("trips/complete_sale.xml", context)
 
         logger.info("order_xml: %s" % order_xml)
 

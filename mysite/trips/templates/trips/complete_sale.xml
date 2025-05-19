@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<NewDataSet>
+  <Service>
+    {% for seat in seats %}
+    <Seats>
+      <ID>{{ seat.service_id }}</ID>
+      <Text>{{ seat.label }}</Text>
+      <Amount>{{ seat.amount }}</Amount>
+      <FirstName>{{ seat.first_name }}</FirstName>
+      <LastName>{{ seat.last_name }}</LastName>
+      <DateOfBirth>{{ seat.date_of_birth }}</DateOfBirth>
+      <Gender>{{ seat.gender }}</Gender>
+      <DocumentTypeId>{{ seat.document_type_id }}</DocumentTypeId>
+      <DocumentNumber>{{ seat.document_number }}</DocumentNumber>
+      <NationalityId>{{ seat.nationality_id }}</NationalityId>
+      <ResidentialId>{{ seat.residential_id }}</ResidentialId>
+      <IdTributariaId>{{ seat.tax_id }}</IdTributariaId>
+      <IdNumero>{{ seat.tax_id_number }}</IdNumero>
+      <CondImpositivaId>{{ seat.tax_category }}</CondImpositivaId>
+      <RazonSocial/>
+      <RUC>1</RUC>
+      <PhoneNumber>{{ seat.phone_number }}</PhoneNumber>
+      <EmailDirection>{{ seat.email }}</EmailDirection>
+      <MaritalStatusID>1</MaritalStatusID>
+      <PaymentInfo>1</PaymentInfo>
+    </Seats>
+    {% endfor %}
+    <Payments>
+      <ID>1</ID>
+      <Type>EFEC</Type>
+      <Amount>0</Amount>
+      <AmountRG3450>0</AmountRG3450>
+      <Entity/>
+      <Number>0</Number>
+      <Months>0</Months>
+      <Currency>$</Currency>
+      <Interest>0</Interest>
+      <LastName/>
+      <FirstName/>
+      <Document/>
+      <Phone/>
+      <Commerce/>
+      <Terminal/>
+      <Lot/>
+      <Coupon/>
+      <Authorization/>
+    </Payments>
+  </Service>
+</NewDataSet>
