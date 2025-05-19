@@ -324,6 +324,13 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")
 PAYWAY_PUBLIC_KEY = os.getenv("PAYWAY_PUBLIC_KEY", "")
 PAYWAY_PRIVATE_KEY = os.getenv("PAYWAY_PRIVATE_KEY", "")
 
+# Mercado pago
+MP_PUBLIC_KEY = os.getenv("MP_PUBLIC_KEY")
+MP_ACCESS_TOKEN = os.getenv("MP_ACCESS_TOKEN")
+MP_CLIENT_ID = os.getenv("MP_CLIENT_ID")
+MP_CLIENT_SECRET = os.getenv("MP_CLIENT_SECRET")
+MP_WEBHOOK_TOKEN = os.getenv("MP_WEBHOOK_TOKEN")
+
 # CATA PROSYS
 CATA_WSDL = os.getenv("CATA_WSDL", "")
 CATA_USER = os.getenv("CATA_USER", "")
