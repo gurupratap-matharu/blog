@@ -177,11 +177,3 @@ class SeatsView(FormView):
         disabled = unavailable + passage
 
         return disabled
-
-
-class PaymentView(TemplateView):
-    template_name = "trips/payment.html"
-
-
-class PaymentSuccessView(TemplateView):
-    template_name = "trips/payment_success.html"
