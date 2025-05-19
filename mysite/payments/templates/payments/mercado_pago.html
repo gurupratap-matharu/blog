@@ -1,0 +1,22 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block title %}
+  Mercado Pago
+{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <p>Mercado Pago</p>
+    <p>Botón de Pago</p>
+    <div id="wallet_container"></div>
+  </div>
+{% endblock content %}
+
+{% block extra_js %}
+  {{ preference.id|json_script:"preference_id" }}
+  {{ mp_public_key|json_script:"mp_public_key" }}
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <script src="{% static 'assets/js/mercadopago.js' %}"></script>
+{% endblock extra_js %}

@@ -1,1 +1,15 @@
-<h1>Payment</h1>
+{% extends "layouts/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+  {% translate "Pago" %}
+{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <div class="d-flex justify-content-center">
+      <a href="{% url 'payments:mercado-pago' %}">Mercado Pago</a>
+    </div>
+  </div>
+{% endblock content %}
