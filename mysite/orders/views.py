@@ -80,7 +80,7 @@ class OrderCreateView(FormView):
         logger.info("passenger formset is valid...")
         logger.info("formset cleaned data:%s" % formset.cleaned_data)
 
-        price = self.get_price(passengers=formset)
+        _ = self.get_price(passengers=formset)
 
         return super().form_valid(form)
 
