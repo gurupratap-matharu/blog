@@ -119,6 +119,11 @@ def mercadopago_success(request):
     site_id=MLA&
     processing_mode=aggregator&
     merchant_account_id=null
+
+    # Note:
+        Veer for the moment we accept post on this view
+        We do not check for session variables at this moment
+
     """
 
     params = request.GET
