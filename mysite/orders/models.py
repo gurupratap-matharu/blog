@@ -63,13 +63,18 @@ class Order(models.Model):
         return self
 
     def send_mail(self):
-        send_mail(
+
+        return send_mail(
             _("Pasajes Confirmados"),
-            "Gracias por tu compra",
+            _("Gracias por tu compra"),
             settings.DEFAULT_FROM_EMAIL,
             [self.email, settings.DEFAULT_TO_EMAIL],
             fail_silently=False,
         )
+
+    def send_confirmation(self, payment_id):
+        self.confirm(payment_id)
+        self.send_mail()
 
 
 class Passenger(models.Model):

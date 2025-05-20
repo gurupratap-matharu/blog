@@ -150,7 +150,7 @@ def mercadopago_success(request):
         logger.info("mercadopago payment successful...")
 
         order = get_object_or_404(Order, id=order_id)
-        order.confirm(payment_id=payment_id)
+        order.send_confirmation(payment_id=payment_id)
 
         return redirect(reverse_lazy("payments:success"))
 
