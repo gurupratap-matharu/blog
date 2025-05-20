@@ -5,7 +5,6 @@ from datetime import timedelta
 from http import HTTPStatus
 
 from django.conf import settings
-from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.templatetags.static import static
@@ -37,18 +36,6 @@ class PaymentPendingView(TemplateView):
 
 class PaymentFailView(TemplateView):
     template_name = "payments/payment_fail.html"
-    session_keys = ("q", "connection_id", "guid")
-
-    def dispatch(self, request, *args, **kwargs):
-        """
-        Verify that session is valid with all keys else redirect to home.
-        """
-
-        if not all(k in request.session for k in self.session_keys):
-            messages.info(request, settings.SESSION_EXPIRED_MESSAGE)
-            return redirect("/")
-
-        return super().dispatch(request, *args, **kwargs)
 
 
 class MercadoPagoView(TemplateView):

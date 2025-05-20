@@ -1,70 +1,104 @@
-from datetime import timedelta
 from http import HTTPStatus
+from unittest import skip
 
-from django.conf import settings
-from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import resolve, reverse_lazy
-from django.utils import timezone
 
-from payments.views import PaymentFailView
+from payments.views import PaymentFailView, PaymentPendingView, PaymentSuccessView
+
+
+class PaymentSuccessTests(TestCase):
+    url = reverse_lazy("payments:success")
+    home_url = "/"
+    template_name = PaymentSuccessView.template_name
+
+    def test_payment_success_url_resolves_correct_view(self):
+        resolver_match = resolve(self.url)
+        self.assertEqual(resolver_match.func.view_class, PaymentSuccessView)
+
+    def test_payment_success_view_works_correctly(self):
+        response = self.client.get(self.url, headers={"accept-language": "es"})
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(response, self.template_name)
+        self.assertContains(response, "Pago Éxitoso")
+        self.assertContains(response, "¡Pasajes Confirmados!")
+        self.assertContains(response, "Reservar otro pasaje")
+        self.assertNotContains(response, "Hi there! I should not be on this page.")
+
+    def test_payment_success_view_only_accepts_get_request(self):
+        response = self.client.post(self.url)  # try POST
+
+        self.assertEqual(response.status_code, HTTPStatus.METHOD_NOT_ALLOWED)
+        self.assertTemplateNotUsed(response, self.template_name)
+
+    @skip
+    def test_payment_success_view_ticket_pdf_download_link_works(self):
+        self.fail()
+
+    @skip
+    def test_payment_success_view_add_to_calendar_link_works(self):
+        self.fail()
+
+    @skip
+    def test_payment_success_view_sends_ticket_via_email_to_user(self):
+        self.fail()
+
+    @skip
+    def test_payment_success_view_sends_notification_to_operator_via_email(self):
+        self.fail()
+
+    @skip
+    def test_payment_success_clears_session(self):
+        self.fail()
+
+
+class PaymentPendingTests(TestCase):
+    url = reverse_lazy("payments:pending")
+    home_url = "/"
+    template_name = PaymentPendingView.template_name
+
+    def test_payment_pending_url_resolves_correct_view(self):
+        resolver_match = resolve(self.url)
+        self.assertEqual(resolver_match.func.view_class, PaymentPendingView)
+
+    def test_payment_pending_view_works_correctly(self):
+        response = self.client.get(self.url, headers={"accept-language": "es"})
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(response, self.template_name)
+        self.assertContains(response, "Pago Pendiente")
+        self.assertContains(response, "Ir al Home")
+        self.assertNotContains(response, "Hi there! I should not be on this page.")
+
+    def test_payment_pending_view_only_accepts_get_request(self):
+        response = self.client.post(self.url)  # try POST
+
+        self.assertEqual(response.status_code, HTTPStatus.METHOD_NOT_ALLOWED)
+        self.assertTemplateNotUsed(response, self.template_name)
 
 
 class PaymentFailTests(TestCase):
     url = reverse_lazy("payments:fail")
     home_url = "/"
-    template_name = "payments/payment_fail.html"
-
-    def setUp(self) -> None:
-        """
-        Build the session for each test.
-        """
-        tomorrow = timezone.now() + timedelta(days=1)
-        departure = tomorrow.strftime("%d-%m-%Y")
-
-        self.q = {
-            "trip_type": "one_way",
-            "num_of_passengers": "2",
-            "origin": "BUE",
-            "destination": "MZA",
-            "departure": departure,
-            "return": "",
-        }
-        session = self.client.session
-        session["q"] = self.q
-        session["connection_id"] = "54321"
-        session.save()
+    template_name = PaymentFailView.template_name
 
     def test_payment_fail_url_resolves_correct_view(self):
         resolver_match = resolve(self.url)
         self.assertEqual(resolver_match.func.view_class, PaymentFailView)
 
-    def test_payment_fail_redirects_to_home_for_invalid_session(self):
-        # Arrange: we clear the session that's built in the setup() method
-        # and verify it.
+    def test_payment_fail_view_works_correctly(self):
+        response = self.client.get(self.url, headers={"accept-language": "es"})
 
-        self.client.session.pop("q")
-        self.client.session.pop("connection_id")
-        self.client.session.save()
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(response, self.template_name)
+        self.assertContains(response, "Pago sin éxito")
+        self.assertContains(response, "Ir al home")
+        self.assertContains(response, "Probar de nuevo")
+        self.assertNotContains(response, "Hi there! I should not be on this page.")
 
-        self.assertNotIn("q", self.client.session)
-        self.assertNotIn("connection_id", self.client.session)
-        self.assertNotIn("guid", self.client.session)
+    def test_payment_fail_view_only_accepts_get_request(self):
+        response = self.client.post(self.url)  # try POST
 
-        # Act: hit the view via get
-        response = self.client.get(self.url)
-
-        # Assert: that we are redirected to home with a nice message
-        self.assertRedirects(response, self.home_url, HTTPStatus.FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.METHOD_NOT_ALLOWED)
         self.assertTemplateNotUsed(response, self.template_name)
-
-        messages = list(get_messages(response.wsgi_request))
-
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(settings.SESSION_EXPIRED_MESSAGE, str(messages[0]))
-
-    def test_payment_fail_html_content(self):
-        self.fail()
-
-    def test_payment_fail_works(self):
-        self.fail()
