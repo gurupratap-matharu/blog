@@ -413,8 +413,8 @@ if not DEBUG:
     # EMAIL_HOST = "smtp.mailgun.org"
     # EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
     # EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
+    # EMAIL_PORT = 587
+    # EMAIL_USE_TLS = True
 
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
