@@ -2,22 +2,23 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.forms import formset_factory
+from django.forms import modelformset_factory
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import CreateView
 
 from trips.providers.prosys import Prosys
 
 from .forms import OrderForm, PassengerForm
+from .models import Passenger
 
 logger = logging.getLogger(__name__)
 
 
-class OrderCreateView(FormView):
+class OrderCreateView(CreateView):
     template_name = "orders/order_form.html"
     form_class = OrderForm
-    success_url = reverse_lazy("trips:payment")  # change this
+    success_url = reverse_lazy("payments:home")
     session_keys = ("q", "connection_id", "seats", "guid", "service_id")
 
     def dispatch(self, request, *args, **kwargs):
@@ -32,19 +33,20 @@ class OrderCreateView(FormView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
-        """Prepopulate the order form with logged user data if available"""
+        """Prepopulate the order form with loggedin user data"""
 
-        initial = dict()
-        user = self.request.user
-
-        if user:
-            initial["name"] = user.first_name
-            initial["email"] = user.email
-            initial["confirm_email"] = user.email
-
-        return initial
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            return {
+                "name": user.first_name,
+                "email": user.email,
+                "confirm_email": user.email,
+            }
+        return {}
 
     def get_context_data(self, **kwargs):
+        """Add passenger formset to context"""
+
         context = super().get_context_data(**kwargs)
         context["formset"] = self._get_formset()
         return context
@@ -54,19 +56,27 @@ class OrderCreateView(FormView):
         Build the passenger formset
         """
 
-        data = self.request.POST or None
         q = self.request.session.get("q")
         extra = int(q.get("num_of_passengers", 0))
+        data = self.request.POST or None
+        queryset = Passenger.objects.none()
 
-        PassengerFormset = formset_factory(PassengerForm, extra=extra)
-        formset = PassengerFormset(data=data)
+        PassengerFormset = modelformset_factory(
+            model=Passenger, form=PassengerForm, extra=extra
+        )
+        formset = PassengerFormset(data=data, queryset=queryset)
 
         return formset
 
     def form_valid(self, form):
         """
-        Here form obj is our order form which is already validated at this point.
-        Now we need to validate the passenger formset and route to payment or route back with errors.
+        Here form represent Order model which is validated at this point.
+        formset represents Passenger Model.
+
+        We need to
+            - validate passenger formset, save it if valid else redirect
+            - build order-passenger m2m relationship
+            - store order data in session
         """
 
         logger.info("order form is valid...")
@@ -80,19 +90,34 @@ class OrderCreateView(FormView):
         logger.info("passenger formset is valid...")
         logger.info("formset cleaned data:%s" % formset.cleaned_data)
 
-        _ = self.get_price(passengers=formset)
+        # Create passenger objects
+        order = form.save()
+        passengers = formset.save()
+
+        # Create and save order -> passenger m2m
+        order.passengers.add(*passengers)
+        order.save()
+
+        price = self.get_price()
+
+        logger.info("passengers:%s" % passengers)
+        logger.info("price:%s" % price)
+
+        # Save order.id, price in session so payments can access it
+        self.request.session["order_id"] = str(order.id)
+        self.request.session["price"] = price
 
         return super().form_valid(form)
 
-    def get_price(self, passengers):
+    def get_price(self):
         session = self.request.session
+
         seats = session.get("seats")
         service_id = session.get("service_id")
         connection_id = session.get("connection_id")
 
         obj = Prosys(connection_id=connection_id)
-        price = obj.get_price(service_id, passengers, seats)
-
-        logger.info("price:%s" % price)
+        data = obj.get_price(service_id, seats)
+        price = data.get("payments")[0]["amount"]
 
         return price

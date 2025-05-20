@@ -1,11 +1,17 @@
+import logging
 import uuid
 
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from django_countries.fields import CountryField
 
 from .validators import phone_regex, validate_birth_date
+
+logger = logging.getLogger(__name__)
 
 
 class Order(models.Model):
@@ -18,7 +24,10 @@ class Order(models.Model):
         _("Email"), help_text=_("Enviaremos los pasajes a este email")
     )
     phone_number = models.CharField(
-        _("Telefono"), validators=[phone_regex], max_length=17
+        _("Telefono"),
+        help_text="Ex: +5491150254321",
+        validators=[phone_regex],
+        max_length=17,
     )
     paid = models.BooleanField(default=False)
     payment_id = models.CharField(max_length=250, blank=True)
@@ -37,11 +46,36 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    def confirm(self, payment_id):
+        logger.info("confirming order...")
+
+        if not payment_id:
+            raise ValidationError(
+                "Order: %(order)s cannot be confirmed without a payment_id!",
+                params={"order": self},
+                code="invalid",
+            )
+
+        self.paid = True
+        self.payment_id = payment_id
+        self.save(update_fields=["paid", "payment_id"])
+
+        return self
+
+    def send_mail(self):
+        send_mail(
+            _("Pasajes Confirmados"),
+            "Gracias por tu compra",
+            settings.DEFAULT_FROM_EMAIL,
+            [self.email, settings.DEFAULT_TO_EMAIL],
+            fail_silently=False,
+        )
+
 
 class Passenger(models.Model):
     DOCUMENT_TYPE_CHOICES = [
         ("DNI", "DNI"),
-        ("PASSPORT", "PASSPORT"),
+        ("PP", "PASSPORTE"),
         ("CE", "CEDULA"),
         ("LE", "LE"),
         ("LC", "LC"),
@@ -55,13 +89,18 @@ class Passenger(models.Model):
         ("CNPJ", "CNPJ"),
     ]
 
+    FEMALE = "F"
+    MALE = "M"
     GENDER_CHOICES = [
-        ("F", _("Female")),
-        ("M", _("Male")),
+        (FEMALE, _("Female")),
+        (MALE, _("Male")),
     ]
 
     document_type = models.CharField(
-        _("Tipo de documento"), choices=DOCUMENT_TYPE_CHOICES, max_length=10
+        _("Tipo de documento"),
+        choices=DOCUMENT_TYPE_CHOICES,
+        max_length=10,
+        default="DNI",
     )
     document_number = models.CharField(
         _("Nro de documento"), max_length=50, unique=True
@@ -69,7 +108,9 @@ class Passenger(models.Model):
     nationality = CountryField(_("Nacionalidad"), blank_label=_("(Nationality)"))
     first_name = models.CharField(_("Nombre"), max_length=50)
     last_name = models.CharField(_("Apellido"), max_length=50)
-    gender = models.CharField(_("Género"), choices=GENDER_CHOICES, max_length=1)
+    gender = models.CharField(
+        _("Género"), choices=GENDER_CHOICES, max_length=1, default=FEMALE
+    )
     birth_date = models.DateField(
         _("Fecha de nacimiento"), validators=[validate_birth_date]
     )

@@ -276,18 +276,11 @@ class Prosys:
 
         return data
 
-    def get_price(self, service_id, passengers: list[dict]):
+    def get_price(self, service_id, seats):
         """
         Calculates the final price to be charged based on seats and payment types.
-        """
 
-        for p in passengers:
-            p["nationality_id"] = self._get_nationality_id(p.get("nationality"))
-            p["document_type_id"] = self._get_document_type_id(p.get("document_type"))
-            p["residential_id"] = 1
-
-        context = dict()
-        context["service_id"] = service_id
+        Eg: of passengers argument
         context["passengers"] = [
             {
                 "label": 19,
@@ -310,6 +303,25 @@ class Prosys:
                 "residential_id": 1,
             },
         ]
+        """
+
+        passengers = [
+            {
+                "label": label,
+                "amount": 0,
+                "first_name": "Inderpal",
+                "last_name": "Singh",
+                "document_type_id": 1,
+                "document_number": random.randint(1000000, 9999999),
+                "nationality_id": 10,
+                "residential_id": 1,
+            }
+            for label in seats
+        ]
+
+        context = dict()
+        context["service_id"] = service_id
+        context["passengers"] = passengers
 
         passengers_xml = render_to_string("trips/get_computed_rates.xml", context)
 

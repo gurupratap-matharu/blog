@@ -1,12 +1,10 @@
 import logging
-import random
-import uuid
 from datetime import timedelta
 from http import HTTPStatus
 
 from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -15,6 +13,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
 import mercadopago
+from orders.models import Order
 
 from .models import WebhookMessage
 
@@ -49,8 +48,10 @@ class MercadoPagoView(TemplateView):
         return context
 
     def get_preference(self):
-        order_id = str(uuid.uuid4())
-        unit_price = round(random.random() * 100, 2)
+        session = self.request.session
+        order_id = session.get("order_id")
+        unit_price = float(session.get("price")) / 1000  # <-- Minimizing this for MP
+
         uri = self.request.build_absolute_uri
         BASE_URI = "https://ventanita.com.ar"
 
@@ -59,7 +60,7 @@ class MercadoPagoView(TemplateView):
         success = BASE_URI + reverse_lazy("payments:mercado-pago-success")
         failure = BASE_URI + reverse_lazy("payments:fail")
         pending = BASE_URI + reverse_lazy("payments:pending")
-        notification_url = BASE_URI + reverse_lazy("payments:mercado-pago-webhook")
+        # notification_url = BASE_URI + reverse_lazy("payments:mercado-pago-webhook")
 
         preference_data = {
             "items": [
@@ -67,10 +68,10 @@ class MercadoPagoView(TemplateView):
                     "id": order_id,
                     "title": "Pasajes de Micro",
                     "description": "Pasajes de Micro",  # <-- could be customized
-                    "currency_id": "ARS",
                     "picture_url": picture_url,
                     "category_id": "tickets",
                     "quantity": 1,
+                    "currency_id": "ARS",
                     "unit_price": unit_price,
                 }
             ],
@@ -80,8 +81,8 @@ class MercadoPagoView(TemplateView):
                 "pending": pending,
             },
             "auto_return": "approved",
-            "notification_url": notification_url,
-            "statement_descriptor": "Ventanita",
+            # "notification_url": notification_url,
+            "statement_descriptor": "Pasajes de Micro",
             "external_reference": order_id,
             "binary_mode": True,
         }
@@ -147,7 +148,10 @@ def mercadopago_success(request):
 
     if (status == "approved") and order_id and payment_id:
         logger.info("mercadopago payment successful...")
-        # TODO:Confirm order here...
+
+        order = get_object_or_404(Order, id=order_id)
+        order.confirm(payment_id=payment_id)
+
         return redirect(reverse_lazy("payments:success"))
 
     return redirect(reverse_lazy("payments:fail"))
