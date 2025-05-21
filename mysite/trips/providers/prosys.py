@@ -347,13 +347,13 @@ class Prosys:
         result = self._parse_result(response.find("Result"))
 
         data = dict()
-        data["elements"] = elements
+        data["seats"] = elements
         data["payments"] = payments
         data["result"] = result
 
         return data
 
-    def complete_sale(self, service_id, order, guid):
+    def complete_sale(self, service_id, guid, passengers):
         """
         Confirms a sale and returns tickets.
         Call this when you get payment confirmation from your payment processor via webhook.
@@ -361,28 +361,21 @@ class Prosys:
 
         Incomplete - Remove hardcoded dict
         """
+
+        for p in passengers:
+            p["amount"] = float(p.get("amount"))
+            p["document_type_id"] = self._get_document_type_id(p.get("document_type"))
+            p["nationality_id"] = self._get_nationality_id(p.get("nationality"))
+            p["residential_id"] = 1
+            p["tax_id"] = 2
+            p["tax_id_number"] = 9876543
+            p["tax_category"] = 1
+
         context = dict()
         context["service_id"] = service_id
-        context["seats"] = [
-            {
-                "service_id": 1,
-                "label": 20,
-                "amount": 550044.0,
-                "first_name": "Inderpal",
-                "last_name": "Singh",
-                "date_of_birth": "1955-02-02",
-                "gender": "M",
-                "document_type_id": 1,
-                "document_number": random.randint(1000000, 9999999),
-                "nationality_id": 2,
-                "residential_id": 1,
-                "tax_id": 2,
-                "tax_id_number": 20956028230,
-                "tax_category": 1,
-                "phone_number": 224327,
-                "email": "inderpal@email.com",
-            },
-        ]
+        context["seats"] = passengers
+
+        logger.info("context:%s" % context)
 
         order_xml = render_to_string("trips/complete_sale.xml", context)
 
