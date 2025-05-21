@@ -7,8 +7,6 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from trips.providers.prosys import Prosys
-
 from .forms import OrderForm, PassengerForm
 from .models import Passenger
 
@@ -82,13 +80,11 @@ class OrderCreateView(CreateView):
         logger.info("order form is valid...")
         logger.info("cleaned data:%s" % form.cleaned_data)
 
+        session = self.request.session
         formset = self._get_formset()
 
         if not formset.is_valid():
             return super().form_invalid(form)
-
-        logger.info("passenger formset is valid...")
-        logger.info("formset cleaned data:%s" % formset.cleaned_data)
 
         # Create passenger objects
         order = form.save()
@@ -98,26 +94,31 @@ class OrderCreateView(CreateView):
         order.passengers.add(*passengers)
         order.save()
 
-        price = self.get_price()
-
+        logger.info("passenger formset is valid...")
+        logger.info("formset cleaned data:%s" % formset.cleaned_data)
         logger.info("passengers:%s" % passengers)
-        logger.info("price:%s" % price)
 
         # Save order.id, price in session so payments can access it
-        self.request.session["order_id"] = str(order.id)
-        self.request.session["price"] = price
+        session["order_id"] = str(order.id)
+        session["passengers"] = self.prepare_passengers(passengers)
 
         return super().form_valid(form)
 
-    def get_price(self):
+    def prepare_passengers(self, passengers):
+        """
+        Prepare a compiled list of passengers with seats to store
+        in session. This is needed by the webhook to confirm the sale.
+        """
+
         session = self.request.session
+        price = session.get("price")
+        seats = price.get("seats")
 
-        seats = session.get("seats")
-        service_id = session.get("service_id")
-        connection_id = session.get("connection_id")
+        passengers = [p.to_dict() for p in passengers]
 
-        obj = Prosys(connection_id=connection_id)
-        data = obj.get_price(service_id, seats)
-        price = data.get("payments")[0]["amount"]
+        for passenger, seat in zip(passengers, seats):
+            passenger["label"] = seat["seat"]
+            passenger["service_id"] = seat["service"]
+            passenger["amount"] = seat["amount"]
 
-        return price
+        return passengers
