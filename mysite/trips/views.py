@@ -111,17 +111,27 @@ class SeatsView(FormView):
         return context
 
     def form_valid(self, form):
-        seats = form.cleaned_data.get("seats")
-        session = self.request.session
+        """
+        Since we have confirmed seats we prepare the sale and get price per seat
+        via api.
+        """
 
+        seats = form.cleaned_data.get("seats")
+
+        session = self.request.session
         connection_id = session.get("connection_id")
         service_id = session.get("service_id")
 
         obj = Prosys(connection_id=connection_id)
         prepare_sale = obj.prepare_sale(service_id=service_id, seats=seats)
+        price = obj.get_price(service_id=service_id, seats=seats)
 
         session["seats"] = seats
+        session["prepare_sale"] = prepare_sale
         session["guid"] = prepare_sale.get("guid")
+
+        session["price"] = price
+        session["amount"] = price.get("payments")[0]["amount"]
 
         return super().form_valid(form)
 
