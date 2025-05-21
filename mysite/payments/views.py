@@ -14,6 +14,7 @@ from django.views.generic import TemplateView
 
 import mercadopago
 from orders.models import Order
+from trips.providers.prosys import Prosys
 
 from .models import WebhookMessage
 
@@ -50,7 +51,7 @@ class MercadoPagoView(TemplateView):
     def get_preference(self):
         session = self.request.session
         order_id = session.get("order_id")
-        unit_price = float(session.get("price")) / 1000  # <-- Minimizing this for MP
+        unit_price = float(session.get("amount")) / 1000  # <-- Minimizing this for MP
 
         uri = self.request.build_absolute_uri
         BASE_URI = "https://ventanita.com.ar"
@@ -128,6 +129,12 @@ def mercadopago_success(request):
     """
 
     params = request.GET
+    session = request.session
+
+    connection_id = session.get("connection_id")
+    service_id = session.get("service_id")
+    guid = session.get("guid")
+    passengers = session.get("passengers")
 
     order_id = params.get("external_reference")
     status = params.get("status")
@@ -150,6 +157,16 @@ def mercadopago_success(request):
         logger.info("mercadopago payment successful...")
 
         order = get_object_or_404(Order, id=order_id)
+
+        # Complete sale with operator
+        obj = Prosys(connection_id=connection_id)
+        sale = obj.complete_sale(
+            service_id=service_id, guid=guid, passengers=passengers
+        )
+
+        logger.info("sale:%s" % sale)
+
+        # Confirm sale with user
         order.send_confirmation(payment_id=payment_id)
 
         return redirect(reverse_lazy("payments:success"))
