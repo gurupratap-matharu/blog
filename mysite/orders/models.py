@@ -140,3 +140,15 @@ class Passenger(models.Model):
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
+
+    def to_dict(self):
+        return {
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "date_of_birth": self.birth_date.strftime("%Y-%m-%d"),
+            "gender": self.gender,
+            "document_type": self.document_type,
+            "document_number": self.document_number,
+            "nationality": self.nationality.code,
+            "phone_number": self.phone_number,
+        }
