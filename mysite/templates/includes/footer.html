@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-md-2 mb-4 ms-auto">
         <p class="font-weight-bolder">
-          <a href="{% url 'wagtail_serve' '' %}" class="text-primary text-gradient">Ventanita</a>
+          <a href="/" class="text-primary text-gradient">Ventanita</a>
         </p>
         <ul class="d-flex flex-row ms-n3 nav">
           <li class="nav-item">
@@ -56,13 +56,10 @@
         <h6 class="text-gradient text-primary text-sm">{% translate "Empresa" %}</h6>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'about' %}">{% translate "Sobre nosotros" %}</a>
+            <a class="nav-link" href="/about/">{% translate "Sobre nosotros" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://forms.gle/mMAoc95hbJoF76hUA" target="_blank">{% translate "Trabaja con nosotros" %}</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'blog' %}">{% translate "Blog" %}</a>
+            <a class="nav-link" href="/blog/">{% translate "Blog" %}</a>
           </li>
         </ul>
       </div>
@@ -70,10 +67,10 @@
         <h6 class="text-gradient text-primary text-sm">{% translate "Info Útil" %}</h6>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'pasajes-de-micro' %}">{% translate "Terminales de Bus" %}</a>
+            <a class="nav-link" href="/pasajes-de-micro/">{% translate "Terminales de Bus" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'empresas-de-bus' %}">{% translate "Empresas de Bus" %}</a>
+            <a class="nav-link" href="/empresas-de-bus/">{% translate "Empresas de Bus" %}</a>
           </li>
         </ul>
       </div>
@@ -81,13 +78,13 @@
         <h6 class="text-gradient text-primary text-sm">{% translate "Soporte" %}</h6>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'contact' %}">{% translate "Contacto" %}</a>
+            <a class="nav-link" href="/contact/">{% translate "Contacto" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'ayuda' %}">{% translate "Ayuda" %}</a>
+            <a class="nav-link" href="/ayuda/">{% translate "Ayuda" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'feedback' %}">{% translate "Comentarios" %}</a>
+            <a class="nav-link" href="/feedback/">{% translate "Comentarios" %}</a>
           </li>
         </ul>
       </div>
@@ -95,13 +92,13 @@
         <h6 class="text-gradient text-primary text-sm">{% translate "Enlaces Útiles" %}</h6>
         <ul class="flex-column ms-n3 nav">
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'condiciones-generales' %}">{% translate "Condiciones Generales" %}</a>
+            <a class="nav-link" href="/condiciones-generales/">{% translate "Condiciones Generales" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'politicas-de-privacidad' %}">{% translate "Politicas de Privacidad" %}</a>
+            <a class="nav-link" href="/politicas-de-privacidad/">{% translate "Politicas de Privacidad" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% slugurl 'sitemap' %}">{% translate "Mapa del sitio" %}</a>
+            <a class="nav-link" href="/sitemap/">{% translate "Mapa del sitio" %}</a>
           </li>
         </ul>
       </div>
@@ -114,7 +111,6 @@
             </script>
             {% translate " Made with ❤️ in Argentina 🇦🇷" %}
           </p>
-          {% get_footer_text %}
         </div>
       </div>
     </div>
