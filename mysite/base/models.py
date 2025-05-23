@@ -530,6 +530,9 @@ class FormPage(AbstractEmailForm):
         messages.success(request, "Message sent successfully! 🙌")
         return redirect(url, permanent=False)
 
+    def canonical_url(self):
+        return self.full_url
+
 
 @register_setting
 class GenericSettings(ClusterableModel, BaseGenericSetting):
