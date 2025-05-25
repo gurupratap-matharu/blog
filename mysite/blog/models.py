@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django import forms
@@ -7,7 +8,7 @@ from django.db import models
 from django.db.models import Count
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
-from django.utils.html import strip_tags
+from django.utils.html import mark_safe, strip_tags
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
@@ -300,6 +301,36 @@ class BlogPage(BasePage):
         text = strip_tags(self.body.raw_data)
         words = len(text.split(" "))
         return round(words / 200)
+
+    def ld_entity(self):
+        image = self.feed_image or self.listing_image or self.social_image
+        image_url = image.file.url if image else ""
+
+        schema = {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "url": self.full_url,
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": self.full_url,
+            },
+            "headline": self.title,
+            "description": self.search_description,
+            "image": f"https://ventanita.com.ar{image_url}",
+            "author": {"@type": "Person", "name": self.authors()[0].full_name()},
+            "publisher": {
+                "@type": "Organization",
+                "name": "Ventanita",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://ventanita.com.ar/static/assets/img/logos/ventanita.avif",
+                },
+            },
+            "datePublished": self.first_published_at.isoformat(),
+            "dateModified": self.last_published_at.isoformat(),
+        }
+
+        return mark_safe(json.dumps(schema, ensure_ascii=False))
 
 
 class BlogPageGalleryImage(Orderable):
