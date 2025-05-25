@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models import Count
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
+from django.utils.html import strip_tags
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
@@ -290,6 +291,15 @@ class BlogPage(BasePage):
     def canonical_url(self):
         # Veer customise this incase of multiple routes
         return self.get_full_url()
+
+    @cached_property
+    def reading_time(self):
+        """
+        Divide the word count by avg reading speed of 200 words per minute.
+        """
+        text = strip_tags(self.body.raw_data)
+        words = len(text.split(" "))
+        return round(words / 200)
 
 
 class BlogPageGalleryImage(Orderable):
