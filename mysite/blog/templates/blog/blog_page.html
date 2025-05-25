@@ -86,49 +86,4 @@
       </div>
     </div>
   </section>
-  {# Related Articles #}
-  <section class="pt-5 pb-0">
-    <div class="container">
-      <div class="d-flex justify-content-center my-5">
-        <h1 class="display-6">Related Articles</h1>
-      </div>
-      <div class="row">
-        {% for post in page.get_similar_posts %}
-          <div class="col-md-4 mt-4">
-            <div class="card h-100">
-              {% image post.feed_image width-400 class="card-img-top" %}
-              <div class="card-body">
-                <h5 class="card-title">
-                  <a href="{% pageurl post %}">{{ post.title }}</a>
-                </h5>
-                <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
-                <a href="{% pageurl post %}" class="card-link icon-link icon-link-hover">Read Now
-                  <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        {% empty %}
-          <p class="text-center">There are no related posts yet.</p>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-  {% comment "Posts with Similar Tags" %}{% endcomment %}
-  <section class="pt-md-5">
-    <div class="container">
-      {% if page.get_tags %}
-        <div class="d-flex justify-content-center my-5">
-          <h1 class="display-6">Find more blog posts with similar tags</h1>
-        </div>
-        <div class="text-center">
-          {% for tag in page.get_tags %}
-            <a href="{{ tag.url }}" class="btn rounded-pill btn-outline-dark me-2">{{ tag }}</a>
-          {% endfor %}
-        </div>
-      {% endif %}
-    </div>
-  </section>
 {% endblock content %}
