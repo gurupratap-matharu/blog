@@ -398,7 +398,7 @@ LOGGING = {
             "propagate": False,
         },
         "zeep.transports": {
-            "level": "DEBUG",
+            "level": os.getenv("ZEEP_LOG_LEVEL", default="INFO"),
             "propagate": False,
             "handlers": ["console"],
         },
