@@ -56,6 +56,11 @@ class RobotsView(TemplateView):
         return context
 
 
+class IndexNow(TemplateView):
+    template_name = "3520839d70e34eb79e009ddb5fedef3b.txt"
+    content_type = "text/plain"
+
+
 class CustomSubmissionsListView(SubmissionsListView):
     """
     Custom List view to show the preview of an image in the admin.

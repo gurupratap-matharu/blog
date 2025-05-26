@@ -9,7 +9,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
-from base.views import RobotsView, favicon
+from base.views import IndexNow, RobotsView, favicon
 from debug_toolbar.toolbar import debug_toolbar_urls
 from search import views as search_views
 
@@ -25,6 +25,7 @@ urlpatterns = [
     path("sitemap.xml", sitemap),
     path("favicon.ico", favicon),
     path("robots.txt", RobotsView.as_view()),
+    path("3520839d70e34eb79e009ddb5fedef3b.txt", IndexNow.as_view(), name="indexnow"),
     path("styleguide/", TemplateView.as_view(template_name="styleguide.html")),
 ]
 
