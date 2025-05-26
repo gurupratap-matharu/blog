@@ -3,7 +3,6 @@
 {% load static i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
-  {# Header 1 with text and image on right #}
   <header>
     <div class="page-header min-vh-75">
       {% image page.feed_image original as tmp_photo %}
@@ -15,7 +14,7 @@
         <div class="row">
           <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
             {% comment %} {% breadcrumbs %} {% endcomment %}
-            <h1 class="display-3">{{ page.title }}</h1>
+            <h1 class="display-5 mb-5">{{ page.title }}</h1>
             {% for author in page.authors %}
               <div class="author align-items-center">
                 {% image author.image width-200 class="avatar avatar-xl rounded-circle" %}
@@ -41,7 +40,6 @@
       </div>
     </div>
   </header>
-  {# Main content #}
   <section class="my-md-5 py-md-5">
     <div class="container">
       <div class="row">
@@ -79,8 +77,8 @@
                 </div>
         {% endcomment %}
         <div class="col-lg-8 mx-auto">
-          <p class="lead">{{ page.subtitle }}</p>
-          <p class="lead">{{ page.intro }}</p>
+          {% if page.subtitle %}<p class="lead mb-3">{{ page.subtitle }}</p>{% endif %}
+          {% if page.intro %}<p class="lead mb-3">{{ page.intro }}</p>{% endif %}
           {{ page.body }}
         </div>
       </div>
