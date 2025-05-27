@@ -306,7 +306,18 @@ class BlogPage(BasePage):
         image = self.feed_image or self.listing_image or self.social_image
         image_url = image.file.url if image else ""
 
-        schema = {
+        image_schema = {
+            "@context": "https://schema.org",
+            "@type": "ImageObject",
+            "contentUrl": f"https://ventanita.com.ar{image_url}",
+            "license": "https://ventanita.com.ar/condiciones-generales/",
+            "acquireLicensePage": "https://ventanita.com.ar/contact/",
+            "creditText": image.description or self.listing_title or self.social_text,
+            "creator": {"@type": "Organisation", "name": "Ventanita"},
+            "copyrightNotice": "Ventanita",
+        }
+
+        article_schema = {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             "url": self.full_url,
@@ -330,7 +341,14 @@ class BlogPage(BasePage):
             "dateModified": self.last_published_at.isoformat(),
         }
 
-        return mark_safe(json.dumps(schema, ensure_ascii=False))
+        page_schema = json.dumps(
+            {
+                "@context": "http://schema.org",
+                "@graph": [image_schema, article_schema],
+            },
+            ensure_ascii=False,
+        )
+        return mark_safe(page_schema)
 
 
 class BlogPageGalleryImage(Orderable):
