@@ -94,6 +94,14 @@ css:
 superuser:
 	python mysite/manage.py createsuperuser
 
+dump-data:
+	python mysite/manage.py dumpdata --natural-foreign --indent 2 \
+		-e auth.permission -e contenttypes -e wagtailcore.GroupCollectionPermission \
+		-e wagtailimages.rendition -e images.rendition -e sessions \
+		-e wagtailsearch.indexentry -e wagtailsearch.sqliteftsindexentry \
+		-e wagtailcore.referenceindex -e wagtailcore.pagesubscription \
+		> data.json
+
 status:
 	@echo "Nginx"
 	@sudo systemctl status nginx
