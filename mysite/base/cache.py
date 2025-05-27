@@ -28,7 +28,9 @@ def get_default_cache_control_decorator():
     """
     Get cache control decorator that can be applied to views as a sane
     default for normal content pages.
-    """
 
-    cache_control_kwargs = get_cache_control_kwargs()
-    return cache_control(**cache_control_kwargs)
+    """
+    # cache_control_kwargs = get_cache_control_kwargs()
+    # return cache_control(**cache_control_kwargs)
+
+    return cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # one day
