@@ -96,10 +96,10 @@
 
     <main class="mt-6 min-vh-50" id="main-content">{% block content %}{% endblock content %}</main>
 
+    {% block footer %}{% include "includes/footer.html" %}{% endblock footer %}
     {% block modal %}{% endblock modal %}
 
     {% if request.user.is_superuser %}{% include "includes/sessions.html" %}{% endif %}
-    {% block footer %}{% include "includes/footer.html" %}{% endblock footer %}
 
     {{ request.session.q|json_script:"q" }}
     <script defer src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
