@@ -1,8 +1,10 @@
+import json
 import logging
 
 from django import forms
 from django.core.paginator import Paginator
 from django.db import models
+from django.utils.html import mark_safe, strip_tags
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
@@ -170,6 +172,80 @@ class PartnerPage(BasePage):
             tag.url = f"{base_url}tags/{tag.slug}/"
 
         return tags
+
+    def ld_entity(self):
+        image = self.hero_image or self.listing_image or self.social_image
+        image_url = image.file.url if image else ""
+        image_schema = {
+            "@context": "https://schema.org",
+            "@type": "ImageObject",
+            "contentUrl": f"https://ventanita.com.ar{image_url}",
+            "license": "https://ventanita.com.ar/condiciones-generales/",
+            "acquireLicensePage": "https://ventanita.com.ar/contact/",
+            "creditText": self.listing_title or self.social_text,
+            "creator": {"@type": "Person", "name": "Ventanita"},
+            "copyrightNotice": "Ventanita",
+        }
+
+        breadcrumb_schema = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Pasajes de Micro",
+                    "item": "https://ventanita.com.ar/",
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Empresas",
+                    "item": self.get_parent().full_url,
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": self.title,
+                    "item": self.full_url,
+                },
+            ],
+        }
+
+        faq_schema = {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": self.get_faq_entities(),
+        }
+
+        page_schema = json.dumps(
+            {
+                "@context": "http://schema.org",
+                "@graph": [breadcrumb_schema, image_schema, faq_schema],
+            },
+            ensure_ascii=False,
+        )
+        return mark_safe(page_schema)
+
+    def get_faq_entities(self):
+
+        entities = []
+
+        for block in self.faq:
+            for item in block.value["item"]:
+                question = item.get("question")
+                answer_html = item.get("answer")
+                answer_text = strip_tags(answer_html.source)
+
+                entity = {
+                    "@type": "Question",
+                    "name": question.strip(),
+                    "acceptedAnswer": {"@type": "Answer", "text": answer_text.strip()},
+                }
+
+                entities.append(entity)
+
+        return entities
 
 
 class Amenity(models.Model):

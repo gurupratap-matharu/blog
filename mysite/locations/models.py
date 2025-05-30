@@ -178,7 +178,7 @@ class CityPage(BasePage):
             "license": "https://ventanita.com.ar/condiciones-generales/",
             "acquireLicensePage": "https://ventanita.com.ar/contact/",
             "creditText": self.listing_title or self.social_text,
-            "creator": {"@type": "Organisation", "name": "Ventanita"},
+            "creator": {"@type": "Person", "name": "Ventanita"},
             "copyrightNotice": "Ventanita",
         }
 

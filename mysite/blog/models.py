@@ -312,8 +312,8 @@ class BlogPage(BasePage):
             "contentUrl": f"https://ventanita.com.ar{image_url}",
             "license": "https://ventanita.com.ar/condiciones-generales/",
             "acquireLicensePage": "https://ventanita.com.ar/contact/",
-            "creditText": image.description or self.listing_title or self.social_text,
-            "creator": {"@type": "Organisation", "name": "Ventanita"},
+            "creditText": self.listing_title or self.social_text,
+            "creator": {"@type": "Person", "name": "Ventanita"},
             "copyrightNotice": "Ventanita",
         }
 
