@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% load static i18n wagtailcore_tags wagtailimages_tags schema_tags %}
+{% load static i18n wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
   <article class="container col-12 col-xl-9 min-vh-75">
@@ -61,6 +61,6 @@
   <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
   <script defer src="{% static 'assets/js/search.js' %}"></script>
   {# djlint:off #}
-    <script type="application/ld+json">{% global_schema_markup wagtail_site %}</script>
+    <script type="application/ld+json">{{ page.ld_entity }}</script>
   {# djlint:on #}
 {% endblock extra_js %}

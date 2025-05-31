@@ -18,6 +18,7 @@ from wagtail.search import index
 
 from base.blocks import BaseStreamBlock
 from base.models import BasePage
+from base.schemas import organisation_schema
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import Tag, TaggedItemBase
@@ -341,10 +342,40 @@ class BlogPage(BasePage):
             "dateModified": self.last_published_at.isoformat(),
         }
 
+        breadcrumb_schema = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Pasajes de Micro",
+                    "item": "https://ventanita.com.ar/",
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://ventanita.com.ar/blog/",
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": self.title,
+                    "item": self.full_url,
+                },
+            ],
+        }
+
         page_schema = json.dumps(
             {
                 "@context": "http://schema.org",
-                "@graph": [image_schema, article_schema],
+                "@graph": [
+                    image_schema,
+                    article_schema,
+                    breadcrumb_schema,
+                    organisation_schema,
+                ],
             },
             ensure_ascii=False,
         )

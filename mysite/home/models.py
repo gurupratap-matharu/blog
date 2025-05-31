@@ -1,4 +1,7 @@
+import json
+
 from django.db import models
+from django.utils.html import mark_safe, strip_tags
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
@@ -11,6 +14,7 @@ from base.blocks import (
     PromotionsBlock,
 )
 from base.models import BasePage
+from base.schemas import organisation_schema
 
 
 class HomePage(BasePage):
@@ -183,3 +187,70 @@ class HomePage(BasePage):
 
     def __str__(self):
         return self.title
+
+    def ld_entity(self):
+        image = self.listing_image or self.social_image
+        image_url = image.file.url if image else ""
+        image_schema = {
+            "@context": "https://schema.org",
+            "@type": "ImageObject",
+            "contentUrl": f"https://ventanita.com.ar{image_url}",
+            "license": "https://ventanita.com.ar/condiciones-generales/",
+            "acquireLicensePage": "https://ventanita.com.ar/contact/",
+            "creditText": self.listing_title or self.social_text,
+            "creator": {"@type": "Person", "name": "Ventanita"},
+            "copyrightNotice": "Ventanita",
+        }
+
+        breadcrumb_schema = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Pasajes de Micro",
+                    "item": "https://ventanita.com.ar/",
+                }
+            ],
+        }
+
+        faq_schema = {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": self.get_faq_entities(),
+        }
+
+        page_schema = json.dumps(
+            {
+                "@context": "http://schema.org",
+                "@graph": [
+                    breadcrumb_schema,
+                    image_schema,
+                    faq_schema,
+                    organisation_schema,
+                ],
+            },
+            ensure_ascii=False,
+        )
+        return mark_safe(page_schema)
+
+    def get_faq_entities(self):
+
+        entities = []
+
+        for block in self.faq:
+            for item in block.value["item"]:
+                question = item.get("question")
+                answer_html = item.get("answer")
+                answer_text = strip_tags(answer_html.source)
+
+                entity = {
+                    "@type": "Question",
+                    "name": question.strip(),
+                    "acceptedAnswer": {"@type": "Answer", "text": answer_text.strip()},
+                }
+
+                entities.append(entity)
+
+        return entities

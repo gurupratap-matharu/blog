@@ -12,6 +12,7 @@ from wagtail.search import index
 
 from base.blocks import BaseStreamBlock, ContactBlock, FAQBlock, LinkBlock
 from base.models import BasePage
+from base.schemas import organisation_schema
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
@@ -221,7 +222,12 @@ class PartnerPage(BasePage):
         page_schema = json.dumps(
             {
                 "@context": "http://schema.org",
-                "@graph": [breadcrumb_schema, image_schema, faq_schema],
+                "@graph": [
+                    breadcrumb_schema,
+                    image_schema,
+                    faq_schema,
+                    organisation_schema,
+                ],
             },
             ensure_ascii=False,
         )

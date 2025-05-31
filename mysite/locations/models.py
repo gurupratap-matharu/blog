@@ -12,6 +12,7 @@ from wagtail.search import index
 
 from base.blocks import BaseStreamBlock, FAQBlock, LinkBlock, NavTabLinksBlock
 from base.models import BasePage
+from base.schemas import organisation_schema
 
 logger = logging.getLogger(__name__)
 
@@ -216,7 +217,12 @@ class CityPage(BasePage):
         page_schema = json.dumps(
             {
                 "@context": "http://schema.org",
-                "@graph": [breadcrumb_schema, image_schema, faq_schema],
+                "@graph": [
+                    breadcrumb_schema,
+                    image_schema,
+                    faq_schema,
+                    organisation_schema,
+                ],
             },
             ensure_ascii=False,
         )
