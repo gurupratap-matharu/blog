@@ -149,6 +149,52 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
         posts = posts.filter(tags=tag) if tag else posts
         return posts
 
+    def ld_entity(self):
+        image = self.image or self.listing_image or self.social_image
+        image_url = image.file.url if image else ""
+        image_schema = {
+            "@context": "https://schema.org",
+            "@type": "ImageObject",
+            "contentUrl": f"https://ventanita.com.ar{image_url}",
+            "license": "https://ventanita.com.ar/condiciones-generales/",
+            "acquireLicensePage": "https://ventanita.com.ar/contact/",
+            "creditText": self.listing_title or self.social_text,
+            "creator": {"@type": "Person", "name": "Ventanita"},
+            "copyrightNotice": "Ventanita",
+        }
+
+        breadcrumb_schema = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Ventanita",
+                    "item": "https://ventanita.com.ar/",
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://ventanita.com.ar/blog/",
+                },
+            ],
+        }
+
+        page_schema = json.dumps(
+            {
+                "@context": "http://schema.org",
+                "@graph": [
+                    breadcrumb_schema,
+                    image_schema,
+                    organisation_schema,
+                ],
+            },
+            ensure_ascii=False,
+        )
+        return mark_safe(page_schema)
+
 
 class BlogPageTag(TaggedItemBase):
     """

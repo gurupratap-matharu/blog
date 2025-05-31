@@ -32,3 +32,9 @@
     </div>
   </div>
 {% endblock content %}
+
+{% block extra_js %}
+  {# djlint:off #}
+    <script type="application/ld+json">{{ page.ld_entity }}</script>
+  {# djlint:on #}
+{% endblock extra_js %}
