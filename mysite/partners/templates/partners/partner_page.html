@@ -4,19 +4,17 @@
 
 {% block content %}
   <article id="content" class="container col-12 col-xl-9 mt-3">
-    <h1 class="fs-2">
-      <span class="text-primary text-gradient">Pasajes de micro con</span>
-      <br />
-      {{ page.title }}
-    </h1>
+    <h1 class="fs-2">{{ page.title }}</h1>
     <div class="row">
-      <div class="col-6 col-md-4 mx-auto">{% image page.logo original class="img-fluid" loading="lazy" %}</div>
+      <div class="col-4 col-md-2 mx-auto">{% image page.logo original class="img-fluid" loading="lazy" %}</div>
     </div>
+    {% comment %}
     <section class="py-3 py-md-5">
 
       {% include 'includes/search_form.html' %}
 
     </section>
+    {% endcomment %}
     <section class="py-3">
       {% breadcrumbs %}
     </section>
@@ -34,6 +32,11 @@
     {% if page.body %}
       <section class="pb-3 pb-md-5">
         {{ page.body }}
+      </section>
+    {% endif %}
+    {% if page.destinations %}
+      <section class="py-3 py-md-5">
+        {{ page.destinations }}
       </section>
     {% endif %}
     {% if page.faq %}
@@ -56,6 +59,11 @@
     <section class="py-3 py-md-5">
 
       {% include "includes/featured-companies.html" %}
+
+    </section>
+    <section class="py-3 py-md-5">
+
+      {% include "includes/cta.html" %}
 
     </section>
     <section class="py-3 py-md-5">

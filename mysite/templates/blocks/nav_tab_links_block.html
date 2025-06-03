@@ -1,5 +1,5 @@
 <h2 class="fs-5 pb-3">{{ self.title }}</h2>
-<ul class="nav nav-underline mb-3" id="myTab-{% lorem 1 w random %}" role="tablist">
+<ul class="nav nav-underline text-sm mb-3" id="myTab-{% lorem 1 w random %}" role="tablist">
   {% for element in self.item %}
     <li class="nav-item" role="presentation">
       <button class="nav-link
@@ -18,7 +18,7 @@
     </li>
   {% endfor %}
 </ul>
-<div class="tab-content" id="myTabContent-{% lorem 1 w random %}"">
+<div class="tab-content text-sm" id="myTabContent-{% lorem 1 w random %}"">
   {% for element in self.item %}
     <div class="tab-pane fade
                 {% if forloop.first %}show active{% endif %}"
@@ -26,7 +26,7 @@
          role="tabpanel"
          aria-labelledby="tab-{{ forloop.counter }}{{ seed }}"
          tabindex="0">
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
         {% for link in element.item %}
           <div class="col mb-1">
             <a href={{ link.get_url }}>{{ link.get_title }}</a>
