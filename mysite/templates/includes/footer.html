@@ -1,8 +1,150 @@
 {% load i18n static %}
 {% load wagtailcore_tags navigation_tags %}
 
-<footer class="footer mt-5">
+<footer class="footer">
   <div class="container">
+    <div class="row py-5">
+      <div class="col-12 col-md-10 mx-auto">
+        <h2 class="fs-5 pb-3">Explorá Micros</h2>
+        <div class="accordion accordion-flush" id="accordionLinks">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold ps-0"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#flush-collapseTerminals"
+                      aria-expanded="false"
+                      aria-controls="flush-collapseTerminals">Terminales de Ómnibus</button>
+            </h3>
+            <div id="flush-collapseTerminals" class="accordion-collapse collapse" data-bs-parent="#accordionLinks">
+              <div class="accordion-body ps-0">
+                <div class="row row-cols-1 row-cols-md-4 g-2 text-sm">
+                  <div class="col">
+                    <a href="/pasajes-de-micro/terminal-de-retiro/">Terminal de Retiro</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/terminal-de-cordoba/">Terminal de Córdoba</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/terminal-de-rosario/">Terminal de Rosario</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/terminal-de-mar-del-plata/">Terminal de Mar Del Plata</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/terminal-de-mendoza/">Terminal de Mendoza</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/terminal-de-salta/">Terminal de Salta</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/terminal-de-tucuman/">Terminal de Tucuman</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/terminal-de-san-luis/">Terminal de San Luis</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-terminal-de-neuquen/">Terminal de Neuquén</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-terminal-de-san-juan/">Terminal de San Juan</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-terminal-de-jujuy/">Terminal de Jujuy</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/terminal-de-santa-fe/">Terminal de Santa Fe</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold ps-0"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#flush-collapseRoutes"
+                      aria-expanded="false"
+                      aria-controls="flush-collapseRoutes">Rutas Populares en Argentina</button>
+            </h3>
+            <div id="flush-collapseRoutes" class="accordion-collapse collapse" data-bs-parent="#accordionLinks">
+              <div class="accordion-body ps-0">
+                <div class="row row-cols-1 row-cols-md-4 g-2 text-sm">
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-de-buenos-aires-a-mar-del-plata/">Micro de Buenos Aires a Mar
+                    Del Plata</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-de-buenos-aires-a-mendoza/">Micro de Buenos Aires a Mendoza</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-de-buenos-aires-a-asuncion-del-paraguay/">Micro de Buenos Aires a
+                    Asunción</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-de-buenos-aires-a-puerto-iguazu/">Micro de Buenos Aires a
+                    Puerto Iguazú</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold ps-0"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#flush-collapseDestinations"
+                      aria-expanded="false"
+                      aria-controls="flush-collapseDestinations">Destinos Populares en Argentina</button>
+            </h3>
+            <div id="flush-collapseDestinations" class="accordion-collapse collapse" data-bs-parent="#accordionLinks">
+              <div class="accordion-body ps-0">
+                <div class="row row-cols-1 row-cols-md-4 g-2 text-sm">
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-mar-del-plata/">Pasajes a Mar Del Plata</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-buenos-aires/">Pasajes a Buenos Aires</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-cordoba/">Pasajes a Córdoba</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-mendoza/">Pasajes a Mendoza</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-san-carlos-de-bariloche/">Pasajes a Bariloche</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-bahia-blanca/">Pasajes a Bahía Blanca</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-santa-fe/">Pasajes a Santa Fe</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-tucuman/">Pasajes a Tucumán</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-posadas/">Pasajes a Posadas</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-resistencia/">Pasajes a Resistencia</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-corrientes/">Pasajes a Corrientes</a>
+                  </div>
+                  <div class="col">
+                    <a href="/pasajes-de-micro/pasajes-a-asuncion-del-paraguay/">Pasajes a Asunción</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-2 mb-4 ms-auto">
         <p class="font-weight-bolder">
@@ -51,6 +193,10 @@
             </div>
           </form>
         </div>
+        <p class="text-sm">
+          <a href="https://ventanita.com.ar" class="me-2">Argentina</a>
+          <a href="https://ventanita.com.py">Paraguay</a>
+        </p>
       </div>
       <div class="col-md-2 col-sm-6 col-6 mb-4">
         <p class="fw-bold">{% translate "Empresa" %}</p>
@@ -102,17 +248,19 @@
           </li>
         </ul>
       </div>
-      <div class="col-12">
-        <div class="text-center">
-          <p class="mt-4 nav-link">
-            {% translate "Copyright" %} ©
-            <script>
-                 document.write(new Date().getFullYear());
-            </script>
-            {% translate " Made with ❤️ in Argentina 🇦🇷" %}
-          </p>
-        </div>
-      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-6 col-md-3 col-lg-2"></div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <p class="mt-4 nav-link">
+        {% translate "Copyright" %} ©
+        <script>
+             document.write(new Date().getFullYear());
+        </script>
+        {% translate " Made with ❤️ in Argentina 🇦🇷" %}
+      </p>
     </div>
   </div>
+</div>
 </footer>
