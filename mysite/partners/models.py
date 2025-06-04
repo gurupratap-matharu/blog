@@ -16,6 +16,7 @@ from base.blocks import (
     FAQBlock,
     ImageLinkBlock,
     LinkBlock,
+    NavTabBlock,
     NavTabLinksBlock,
 )
 from base.models import BasePage
@@ -177,6 +178,14 @@ class PartnerPage(BasePage):
         use_json_field=True,
     )
 
+    info = StreamField(
+        [("Info", NavTabBlock())],
+        verbose_name="Info Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
     routes = StreamField(
         [("Routes", NavTabLinksBlock())],
         verbose_name="Routes Section",
@@ -209,6 +218,7 @@ class PartnerPage(BasePage):
         FieldPanel("logo"),
         FieldPanel("intro"),
         FieldPanel("hero_image"),
+        FieldPanel("info"),
         FieldPanel("contact"),
         FieldPanel("body"),
         FieldPanel("destinations"),

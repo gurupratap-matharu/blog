@@ -24,14 +24,14 @@
         <figcaption class="figure-caption text-center text-xs">{{ page.image.caption }}</figcaption>
       </figure>
     {% endif %}
+    {% if page.info %}
+      <section class="py-3 py-md-5">
+        {{ page.info }}
+      </section>
+    {% endif %}
     {% if page.intro %}
       <section class="py-3 py-md-5">
         <h2 class="lead">{{ page.intro }}</h2>
-      </section>
-    {% endif %}
-    {% if page.body %}
-      <section class="pb-3 pb-md-5">
-        {{ page.body }}
       </section>
     {% endif %}
     {% if page.destinations %}
@@ -39,9 +39,19 @@
         {{ page.destinations }}
       </section>
     {% endif %}
+    {% if page.routes %}
+      <section class="py-3 py-md-5">
+        {{ page.routes }}
+      </section>
+    {% endif %}
     {% if page.faq %}
       <section class="py-3 py-md-5">
         {{ page.faq }}
+      </section>
+    {% endif %}
+    {% if page.body %}
+      <section class="pb-3 pb-md-5">
+        {{ page.body }}
       </section>
     {% endif %}
     <section class="py-3 py-md-5">
@@ -74,17 +84,15 @@
   </article>
 {% endblock content %}
 
+{% comment %}
 {% block modal %}
 
   {% include 'includes/offcanvas.html' %}
 
 {% endblock modal %}
+{% endcomment %}
 
 {% block extra_js %}
-  <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
-  <script defer src="{% static 'assets/js/search.js' %}"></script>
   {# djlint:off #}
   <script type="application/ld+json">{{ page.ld_entity }}</script>
   {# djlint:on #}
