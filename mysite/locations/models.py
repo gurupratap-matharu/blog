@@ -260,6 +260,27 @@ class CityPage(BasePage):
             "mainEntity": self.get_faq_entities(),
         }
 
+        article_schema = {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": self.title,
+            "image": [f"https://ventanita.com.ar{image_url}"],
+            "datePublished": self.first_published_at.isoformat(),
+            "dateModified": self.last_published_at.isoformat(),
+            "author": [
+                {
+                    "@type": "Organization",
+                    "name": "Ventanita",
+                    "url": "https://ventanita.com.ar",
+                }
+            ],
+            "publisher": {
+                "@type": "Organization",
+                "name": "Ventanita",
+                "url": "https://ventanita.com.ar",
+            },
+        }
+
         page_schema = json.dumps(
             {
                 "@context": "http://schema.org",
@@ -268,6 +289,7 @@ class CityPage(BasePage):
                     image_schema,
                     faq_schema,
                     organisation_schema,
+                    article_schema,
                 ],
             },
             ensure_ascii=False,

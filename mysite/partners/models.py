@@ -10,7 +10,14 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
 from wagtail.search import index
 
-from base.blocks import BaseStreamBlock, ContactBlock, FAQBlock, LinkBlock
+from base.blocks import (
+    BaseStreamBlock,
+    ContactBlock,
+    FAQBlock,
+    ImageLinkBlock,
+    LinkBlock,
+    NavTabLinksBlock,
+)
 from base.models import BasePage
 from base.schemas import organisation_schema
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -161,6 +168,23 @@ class PartnerPage(BasePage):
     tags = ClusterTaggableManager(through="partners.PartnerPageTag", blank=True)
 
     amenities = ParentalManyToManyField("partners.Amenity", blank=True)
+
+    destinations = StreamField(
+        [("destinations", ImageLinkBlock())],
+        verbose_name="Destinations where this operator has presence",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
+    routes = StreamField(
+        [("Routes", NavTabLinksBlock())],
+        verbose_name="Routes Section",
+        blank=True,
+        max_num=1,
+        use_json_field=True,
+    )
+
     faq = StreamField(
         [("faq", FAQBlock())],
         verbose_name="FAQ Section",
@@ -187,6 +211,8 @@ class PartnerPage(BasePage):
         FieldPanel("hero_image"),
         FieldPanel("contact"),
         FieldPanel("body"),
+        FieldPanel("destinations"),
+        FieldPanel("routes"),
         FieldPanel("faq"),
         FieldPanel("links"),
         MultiFieldPanel(
@@ -263,6 +289,27 @@ class PartnerPage(BasePage):
             "mainEntity": self.get_faq_entities(),
         }
 
+        article_schema = {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": self.title,
+            "image": [f"https://ventanita.com.ar{image_url}"],
+            "datePublished": self.first_published_at.isoformat(),
+            "dateModified": self.last_published_at.isoformat(),
+            "author": [
+                {
+                    "@type": "Organization",
+                    "name": "Ventanita",
+                    "url": "https://ventanita.com.ar",
+                }
+            ],
+            "publisher": {
+                "@type": "Organization",
+                "name": "Ventanita",
+                "url": "https://ventanita.com.ar",
+            },
+        }
+
         page_schema = json.dumps(
             {
                 "@context": "http://schema.org",
@@ -271,6 +318,7 @@ class PartnerPage(BasePage):
                     image_schema,
                     faq_schema,
                     organisation_schema,
+                    article_schema,
                 ],
             },
             ensure_ascii=False,
