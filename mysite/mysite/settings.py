@@ -183,16 +183,9 @@ EMAIL_PORT = 1025
 # Email
 DEFAULT_FROM_EMAIL = "'Ventanita' <noreply@ventanita.com.ar>"
 DEFAULT_TO_EMAIL = "gurupratap.matharu@gmail.com"
-SERVER_EMAIL = "wagtail@ventanita.com.ar"
-RECIPIENT_LIST = [
-    "gurupratap.matharu@gmail.com",
-    "veerplaying@gmail.com",
-]
-
-ADMINS = [
-    ("Veer", "veerplaying@gmail.com"),
-    # ("Gurupratap", "gurupratap.matharu@gmail.com"),
-]
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+RECIPIENT_LIST = ["gurupratap.matharu@gmail.com"]
+ADMINS = [("Gurupratap", "gurupratap.matharu@gmail.com")]
 
 
 TEMPLATES = [
@@ -409,12 +402,12 @@ SHELL_PLUS_PRINT_SQL = True
 SHELL_PLUS_PRINT_SQL_TRUNCATE = None
 
 if not DEBUG:
-    # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    # EMAIL_HOST = "smtp.mailgun.org"
-    # EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-    # EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-    # EMAIL_PORT = 587
-    # EMAIL_USE_TLS = True
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "smtp.mailgun.org"
+    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
 
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
@@ -436,7 +429,7 @@ if not DEBUG:
     sentry_sdk.init(
         dsn=os.getenv("SENTRY_DSN"),
         integrations=[DjangoIntegration()],
-        environment="wagtail",
+        environment="Ventanita-AR",
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
         # We recommend adjusting this value in production.
