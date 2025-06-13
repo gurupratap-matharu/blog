@@ -5,11 +5,11 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-  <div class="container">
+  <div class="container mb-5">
     <div class="row">
       {% for post in posts %}
         {% with post=post.specific %}
-          <div class="col-md-4 mt-4">
+          <div class="col-md-4 mt-3">
             <div class="card h-100">
               {% image post.feed_image fill-400x300 class="card-img-top" %}
               <div class="card-body">

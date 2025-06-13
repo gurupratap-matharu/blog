@@ -3,7 +3,6 @@ import logging
 
 from django import forms
 from django.contrib import messages
-from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import Count
 from django.shortcuts import redirect, render
@@ -80,14 +79,8 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
-        qs = self.get_children().live().order_by("-first_published_at")
-
-        paginator = Paginator(qs, 9)
-        page_number = request.GET.get("page")
-        page_obj = paginator.get_page(page_number)
-
-        context["posts"] = context["page_obj"] = page_obj
-        context["featured"] = qs.first()  # <- TODO: Improve this
+        posts = self.get_children().live().order_by("-first_published_at")
+        context["posts"] = posts
 
         return context
 
