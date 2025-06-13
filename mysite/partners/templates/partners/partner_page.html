@@ -3,29 +3,27 @@
 {% load i18n static wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
-  <article id="content" class="container col-12 col-xl-9 mt-3">
-    <h1 class="fs-2">{{ page.title }}</h1>
-    <div class="row">
-      <div class="col-4 col-md-2 mx-auto">{% image page.logo original class="img-fluid" loading="lazy" %}</div>
-    </div>
-    {% comment %}
-    <section class="py-3 py-md-5">
-
-      {% include 'includes/search_form.html' %}
-
-    </section>
-    {% endcomment %}
-    <section class="py-3">
-      {% breadcrumbs %}
-    </section>
+  <section class="container-lg px-0 mt-n3">
     {% if page.hero_image %}
-      <figure class="figure d-block py-3">
-        {% image page.hero_image original format-avif loading="lazy" class="figure-img img-fluid rounded-3 d-block shadow-xl" %}
+      <figure class="figure">
+        {% image page.hero_image original format-avif loading="lazy" class="figure-img img-fluid d-block rounded-3 shadow-xl" %}
         <figcaption class="figure-caption text-center text-xs">{{ page.image.caption }}</figcaption>
       </figure>
     {% endif %}
+  </section>
+  <article id="content" class="container col-12 col-xl-9">
+    <div class="author align-items-center">
+      <div class="d-flex align-items-center rounded-circle border border-3 border-dark overflow-hidden"
+           style="width: 150px;
+                  height: 150px">{% image page.logo original class="img-fluid" %}</div>
+      <div class="name ps-3">
+        <h1 class="mb-0">{{ page.title }}</h1>
+        <div class="ms-2">{% breadcrumbs %}</div>
+      </div>
+    </div>
+    <hr />
     {% if page.info %}
-      <section class="py-3 py-md-5">
+      <section class="">
         {{ page.info }}
       </section>
     {% endif %}
@@ -73,15 +71,13 @@
     </section>
     <section class="py-3 py-md-5">
 
-      {% include "includes/cta.html" %}
-
-    </section>
-    <section class="py-3 py-md-5">
-
       {% include "includes/mission.html" %}
 
     </section>
   </article>
+
+  {% include "includes/seo_links.html" %}
+
 {% endblock content %}
 
 {% comment %}
@@ -90,6 +86,8 @@
   {% include 'includes/offcanvas.html' %}
 
 {% endblock modal %}
+
+
 {% endcomment %}
 
 {% block extra_js %}
