@@ -214,11 +214,11 @@ class NavTabLinksBlock(StructBlock):
 
 
 class ContactBlock(StructBlock):
-    phone = CharBlock()
-    whatsapp = CharBlock()
-    email = EmailBlock()
-    address = TextBlock()
-    website = URLBlock()
+    phone = CharBlock(required=False)
+    whatsapp = CharBlock(required=False)
+    email = EmailBlock(required=False)
+    address = TextBlock(required=False)
+    website = URLBlock(required=False)
 
     class Meta:
         template = "blocks/contact_block.html"
