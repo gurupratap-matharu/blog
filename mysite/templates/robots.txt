@@ -9,6 +9,8 @@ Disallow: /orders/
 Disallow: /payments/
 Disallow: /private/
 Disallow: /trips/
+Disallow: /cdn-cgi/
+
 
 User-agent: GPTBot
 Disallow: /
