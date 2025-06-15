@@ -102,17 +102,17 @@
 
 {% endblock content %}
 
-{% comment %}
 {% block modal %}
 
   {% include 'includes/offcanvas.html' %}
 
 {% endblock modal %}
 
-
-{% endcomment %}
-
 {% block extra_js %}
+  <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
+  <script defer src="{% static 'assets/js/search.js' %}"></script>
   {# djlint:off #}
   <script type="application/ld+json">{{ page.ld_entity }}</script>
   {# djlint:on #}
