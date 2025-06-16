@@ -1,9 +1,11 @@
+from django.utils import timezone
+
 from wagtail.models import Page, Site
 from wagtail.test.utils import WagtailPageTestCase
 from wagtail.test.utils.form_data import nested_form_data, streamfield
 
 from home.models import HomePage
-from partners.models import PartnerIndexPage, PartnerPage  # Create your tests here.
+from partners.models import PartnerIndexPage, PartnerPage
 
 
 class PartnerIndexPageTests(WagtailPageTestCase):
@@ -121,6 +123,8 @@ class PartnerPageTests(WagtailPageTestCase):
 
         # Add PartnerPage as child of PartnerIndexPage
         cls.partner_index_page.add_child(instance=cls.partner_page)
+        cls.partner_page.first_published_at = timezone.now()
+        cls.partner_page.last_published_at = timezone.now()
         cls.partner_page.save_revision().publish()
         cls.partner_page.save()
 
@@ -129,6 +133,9 @@ class PartnerPageTests(WagtailPageTestCase):
             {
                 "title": "Cata International",
                 "body": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "destinations": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "info": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "routes": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "faq": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "links": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "contact": streamfield([("text", "Lorem ipsum dolor sit amet")]),
