@@ -7,7 +7,7 @@
     <div class="col col-sm-8 col-md-6 mx-auto">
       <div class="card card-plain">
         <div class="card-header py-0">
-          <h3>{{ page.title }}</h3>
+          <h1 class="fs-3">{{ page.title }}</h1>
           <p class="mb-0">{{ page.body }}</p>
         </div>
         <form action="{% pageurl page %}"
@@ -20,11 +20,13 @@
             {{ form.non_field_errors }}
             <div class="row">
               {% for field in form.visible_fields %}
-                <div class="col-12 mb-1">
+                <div class="col-12">
                   {{ field.label_tag }}
-                  <div class="text-danger">{{ field.errors }}</div>
+                  <p class="text-danger text-sm mb-1">{{ field.errors.as_text }}</p>
                   {{ field }}
-                  <div class="form-text ms-2">{{ field.help_text|safe }}</div>
+                  <p>
+                    <small class="form-text text-xs">{{ field.help_text|safe }}</small>
+                  </p>
                 </div>
               {% endfor %}
             </div>
