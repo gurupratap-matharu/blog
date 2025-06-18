@@ -45,6 +45,8 @@ class PartnerIndexPageTests(WagtailPageTestCase):
         cls.site.save()
 
         cls.home_page.add_child(instance=cls.partner_index_page)
+        cls.partner_index_page.first_published_at = timezone.now()
+        cls.partner_index_page.last_published_at = timezone.now()
         cls.partner_index_page.save_revision().publish()
         cls.partner_index_page.save()
 
@@ -139,6 +141,7 @@ class PartnerPageTests(WagtailPageTestCase):
                 "faq": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "links": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "contact": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "ratings": streamfield([("text", "Lorem ipsum dolor sit amet")]),
             }
         )
 

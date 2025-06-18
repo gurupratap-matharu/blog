@@ -2,9 +2,8 @@ import json
 import logging
 
 from django import forms
-from django.core.paginator import Paginator
 from django.db import models
-from django.utils.html import mark_safe, strip_tags
+from django.utils.html import mark_safe
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
@@ -18,9 +17,9 @@ from base.blocks import (
     LinkBlock,
     NavTabBlock,
     NavTabLinksBlock,
+    RatingsBlock,
 )
 from base.models import BasePage
-from base.schemas import organisation_schema
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
@@ -70,29 +69,29 @@ class PartnerIndexPage(BasePage):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
-        qs = self.get_children().live().order_by("-first_published_at")
-
-        paginator = Paginator(qs, 12)
-        page_number = request.GET.get("page")
-        page_obj = paginator.get_page(page_number)
-
-        context["partners"] = context["page_obj"] = page_obj
+        partners = self.get_children().live().order_by("-first_published_at")
+        context["partners"] = partners
 
         return context
 
     def ld_entity(self):
-        image = self.image or self.listing_image or self.social_image
-        image_url = image.file.url if image else ""
-        image_schema = {
-            "@context": "https://schema.org",
-            "@type": "ImageObject",
-            "contentUrl": f"https://ventanita.com.ar{image_url}",
-            "license": "https://ventanita.com.ar/condiciones-generales/",
-            "acquireLicensePage": "https://ventanita.com.ar/contact/",
-            "creditText": self.listing_title or self.social_text,
-            "creator": {"@type": "Person", "name": "Ventanita"},
-            "copyrightNotice": "Ventanita",
-        }
+
+        page_schema = json.dumps(
+            {
+                "@context": "http://schema.org",
+                "@graph": [
+                    self._get_breadcrumb_schema(),
+                    self._get_image_schema(),
+                    self._get_article_schema(),
+                    self._get_organisation_schema(),
+                    self._get_faq_schema(),
+                ],
+            },
+            ensure_ascii=False,
+        )
+        return mark_safe(page_schema)
+
+    def _get_breadcrumb_schema(self):
 
         breadcrumb_schema = {
             "@context": "https://schema.org",
@@ -112,19 +111,7 @@ class PartnerIndexPage(BasePage):
                 },
             ],
         }
-
-        page_schema = json.dumps(
-            {
-                "@context": "http://schema.org",
-                "@graph": [
-                    breadcrumb_schema,
-                    image_schema,
-                    organisation_schema,
-                ],
-            },
-            ensure_ascii=False,
-        )
-        return mark_safe(page_schema)
+        return breadcrumb_schema
 
 
 class PartnerPage(BasePage):
@@ -210,6 +197,14 @@ class PartnerPage(BasePage):
         use_json_field=True,
     )
 
+    ratings = StreamField(
+        [("Ratings", RatingsBlock())],
+        verbose_name="Ratings",
+        blank=True,
+        max_num=1,
+        collapsed=True,
+    )
+
     search_fields = BasePage.search_fields + [
         index.SearchField("body"),
     ]
@@ -225,6 +220,7 @@ class PartnerPage(BasePage):
         FieldPanel("routes"),
         FieldPanel("faq"),
         FieldPanel("links"),
+        FieldPanel("ratings"),
         MultiFieldPanel(
             [
                 FieldPanel("tags"),
@@ -255,18 +251,74 @@ class PartnerPage(BasePage):
         return tags
 
     def ld_entity(self):
-        image = self.hero_image or self.listing_image or self.social_image
+
+        page_schema = json.dumps(
+            {
+                "@context": "http://schema.org",
+                "@graph": [
+                    self._get_breadcrumb_schema(),
+                    self._get_image_schema(),
+                    self._get_article_schema(),
+                    self._get_organisation_schema(),
+                    self._get_faq_schema(),
+                ],
+            },
+            ensure_ascii=False,
+        )
+        return mark_safe(page_schema)
+
+    def _get_organisation_schema(self):
+        """
+        This method is overwritten since operator landing pages should have details about the
+        bus operator in the organisation schema markup with aggregated Ratings.
+        """
+
+        image = self.logo or self.listing_image or self.social_image
         image_url = image.file.url if image else ""
-        image_schema = {
+
+        if self.ratings:
+            obj = self.ratings[0].value
+            rating_value = str(obj.get_score())
+            rating_count = str(obj.get_total_ratings())
+        else:
+            rating_value = rating_count = 0
+
+        org_schema = {
             "@context": "https://schema.org",
-            "@type": "ImageObject",
-            "contentUrl": f"https://ventanita.com.ar{image_url}",
-            "license": "https://ventanita.com.ar/condiciones-generales/",
-            "acquireLicensePage": "https://ventanita.com.ar/contact/",
-            "creditText": self.listing_title or self.social_text,
-            "creator": {"@type": "Person", "name": "Ventanita"},
-            "copyrightNotice": "Ventanita",
+            "@type": "Organization",
+            "name": self.title,
+            "url": self.full_url,
+            "logo": f"https://ventanita.com.ar{image_url}",
+            "image": f"https://ventanita.com.ar{image_url}",
+            "description": self.search_description,
+            "email": "support@ventanita.com.ar",
+            "telephone": "+54-11-5025-4191",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Uspallata 471",
+                "addressLocality": "Buenos Aires",
+                "addressCountry": "AR",
+                "addressRegion": "CABA",
+                "postalCode": "1143",
+            },
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+54-911-5025-4191",
+                "email": "support@ventanita.com.ar",
+            },
+            "sameAs": [],
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": rating_value,
+                "ratingCount": rating_count,
+                "bestRating": "5",
+                "worstRating": "1",
+            },
         }
+
+        return org_schema
+
+    def _get_breadcrumb_schema(self):
 
         breadcrumb_schema = {
             "@context": "https://schema.org",
@@ -275,13 +327,13 @@ class PartnerPage(BasePage):
                 {
                     "@type": "ListItem",
                     "position": 1,
-                    "name": "Pasajes de Micro",
+                    "name": "Argentina",
                     "item": "https://ventanita.com.ar/",
                 },
                 {
                     "@type": "ListItem",
                     "position": 2,
-                    "name": "Empresas",
+                    "name": "Empresas de Bus",
                     "item": self.get_parent().full_url,
                 },
                 {
@@ -292,68 +344,7 @@ class PartnerPage(BasePage):
                 },
             ],
         }
-
-        faq_schema = {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": self.get_faq_entities(),
-        }
-
-        article_schema = {
-            "@context": "https://schema.org",
-            "@type": "Article",
-            "headline": self.title,
-            "image": [f"https://ventanita.com.ar{image_url}"],
-            "datePublished": self.first_published_at.isoformat(),
-            "dateModified": self.last_published_at.isoformat(),
-            "author": [
-                {
-                    "@type": "Organization",
-                    "name": "Ventanita",
-                    "url": "https://ventanita.com.ar",
-                }
-            ],
-            "publisher": {
-                "@type": "Organization",
-                "name": "Ventanita",
-                "url": "https://ventanita.com.ar",
-            },
-        }
-
-        page_schema = json.dumps(
-            {
-                "@context": "http://schema.org",
-                "@graph": [
-                    breadcrumb_schema,
-                    image_schema,
-                    faq_schema,
-                    organisation_schema,
-                    article_schema,
-                ],
-            },
-            ensure_ascii=False,
-        )
-        return mark_safe(page_schema)
-
-    def get_faq_entities(self):
-
-        entities = []
-
-        for block in self.faq:
-            for item in block.value["item"]:
-                question = item.get("question")
-                answer_html = item.get("answer")
-                answer_text = strip_tags(answer_html.source)
-
-                entity = {
-                    "@type": "Question",
-                    "name": question.strip(),
-                    "acceptedAnswer": {"@type": "Answer", "text": answer_text.strip()},
-                }
-
-                entities.append(entity)
-
-        return entities
+        return breadcrumb_schema
 
 
 class Amenity(models.Model):
