@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.db import models
 from django.db.models import Count
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import mark_safe, strip_tags
 
@@ -17,7 +18,6 @@ from wagtail.search import index
 
 from base.blocks import BaseStreamBlock
 from base.models import BasePage
-from base.schemas import organisation_schema
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import Tag, TaggedItemBase
@@ -143,18 +143,21 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
         return posts
 
     def ld_entity(self):
-        image = self.image or self.listing_image or self.social_image
-        image_url = image.file.url if image else ""
-        image_schema = {
-            "@context": "https://schema.org",
-            "@type": "ImageObject",
-            "contentUrl": f"https://ventanita.com.ar{image_url}",
-            "license": "https://ventanita.com.ar/condiciones-generales/",
-            "acquireLicensePage": "https://ventanita.com.ar/contact/",
-            "creditText": self.listing_title or self.social_text,
-            "creator": {"@type": "Person", "name": "Ventanita"},
-            "copyrightNotice": "Ventanita",
-        }
+        page_schema = json.dumps(
+            {
+                "@context": "http://schema.org",
+                "@graph": [
+                    self._get_breadcrumb_schema(),
+                    self._get_image_schema(),
+                    self._get_article_schema(),
+                    self._get_organisation_schema(),
+                ],
+            },
+            ensure_ascii=False,
+        )
+        return mark_safe(page_schema)
+
+    def _get_breadcrumb_schema(self):
 
         breadcrumb_schema = {
             "@context": "https://schema.org",
@@ -175,18 +178,7 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
             ],
         }
 
-        page_schema = json.dumps(
-            {
-                "@context": "http://schema.org",
-                "@graph": [
-                    breadcrumb_schema,
-                    image_schema,
-                    organisation_schema,
-                ],
-            },
-            ensure_ascii=False,
-        )
-        return mark_safe(page_schema)
+        return breadcrumb_schema
 
 
 class BlogPageTag(TaggedItemBase):
@@ -343,19 +335,32 @@ class BlogPage(BasePage):
         return round(words / 200)
 
     def ld_entity(self):
+
+        page_schema = json.dumps(
+            {
+                "@context": "http://schema.org",
+                "@graph": [
+                    self._get_breadcrumb_schema(),
+                    self._get_image_schema(),
+                    self._get_article_schema(),
+                    self._get_faq_schema(),
+                    self._get_organisation_schema(),
+                ],
+            },
+            ensure_ascii=False,
+        )
+        return mark_safe(page_schema)
+
+    def _get_article_schema(self):
+        """
+        Overwriting this method since for blog posts we use the BlogPosting Schema
+        """
+
         image = self.feed_image or self.listing_image or self.social_image
         image_url = image.file.url if image else ""
 
-        image_schema = {
-            "@context": "https://schema.org",
-            "@type": "ImageObject",
-            "contentUrl": f"https://ventanita.com.ar{image_url}",
-            "license": "https://ventanita.com.ar/condiciones-generales/",
-            "acquireLicensePage": "https://ventanita.com.ar/contact/",
-            "creditText": self.listing_title or self.social_text,
-            "creator": {"@type": "Person", "name": "Ventanita"},
-            "copyrightNotice": "Ventanita",
-        }
+        date_published = self.first_published_at or timezone.now()
+        date_modified = self.last_published_at or timezone.now()
 
         article_schema = {
             "@context": "https://schema.org",
@@ -377,9 +382,13 @@ class BlogPage(BasePage):
                     "url": "https://ventanita.com.ar/static/assets/img/logos/ventanita.avif",
                 },
             },
-            "datePublished": self.first_published_at.isoformat(),
-            "dateModified": self.last_published_at.isoformat(),
+            "datePublished": date_published.isoformat(),
+            "dateModified": date_modified.isoformat(),
         }
+
+        return article_schema
+
+    def _get_breadcrumb_schema(self):
 
         breadcrumb_schema = {
             "@context": "https://schema.org",
@@ -388,7 +397,7 @@ class BlogPage(BasePage):
                 {
                     "@type": "ListItem",
                     "position": 1,
-                    "name": "Pasajes de Micro",
+                    "name": "Ventanita",
                     "item": "https://ventanita.com.ar/",
                 },
                 {
@@ -406,19 +415,7 @@ class BlogPage(BasePage):
             ],
         }
 
-        page_schema = json.dumps(
-            {
-                "@context": "http://schema.org",
-                "@graph": [
-                    image_schema,
-                    article_schema,
-                    breadcrumb_schema,
-                    organisation_schema,
-                ],
-            },
-            ensure_ascii=False,
-        )
-        return mark_safe(page_schema)
+        return breadcrumb_schema
 
 
 class BlogPageGalleryImage(Orderable):
