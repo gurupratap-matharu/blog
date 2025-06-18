@@ -5,7 +5,9 @@ from django.contrib import messages
 from django.db import models
 from django.forms import widgets
 from django.shortcuts import redirect
+from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.panels import (
@@ -45,6 +47,7 @@ from wagtail.search import index
 
 from base.blocks import BaseStreamBlock
 from base.cache import get_default_cache_control_decorator
+from base.schemas import organisation_schema
 from base.views import CustomSubmissionsListView
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -268,7 +271,6 @@ class ListingFields(models.Model):
     ]
 
 
-# Apply default cache headers on this page model's serve method.
 @method_decorator(get_default_cache_control_decorator(), name="serve")
 class BasePage(SocialFields, ListingFields, Page):
     """
@@ -303,6 +305,83 @@ class BasePage(SocialFields, ListingFields, Page):
         page = self.get_translation_or_none(locale=es)
         if page and page.live:
             return page.full_url
+
+    def _get_organisation_schema(self):
+        return organisation_schema
+
+    def _get_image_schema(self):
+        image = self.listing_image or self.social_image
+        image_url = image.file.url if image else ""
+
+        image_schema = {
+            "@context": "https://schema.org",
+            "@type": "ImageObject",
+            "contentUrl": f"https://ventanita.com.ar{image_url}",
+            "license": "https://ventanita.com.ar/condiciones-generales/",
+            "acquireLicensePage": "https://ventanita.com.ar/contact/",
+            "creditText": self.listing_title or self.social_text,
+            "creator": {"@type": "Person", "name": "Ventanita"},
+            "copyrightNotice": "Ventanita",
+        }
+
+        return image_schema
+
+    def _get_article_schema(self):
+        image = self.listing_image or self.social_image
+        image_url = image.file.url if image else ""
+
+        date_published = self.first_published_at or timezone.now()
+        date_modified = self.last_published_at or timezone.now()
+
+        org = {
+            "@type": "Organization",
+            "name": "Ventanita",
+            "url": "https://ventanita.com.ar",
+        }
+
+        article_schema = {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": self.title,
+            "image": [f"https://ventanita.com.ar{image_url}"],
+            "datePublished": date_published.isoformat(),
+            "dateModified": date_modified.isoformat(),
+            "author": [org],
+            "publisher": org,
+        }
+
+        return article_schema
+
+    def _get_faq_schema(self):
+        if not hasattr(self, "faq"):
+            return
+
+        faq_schema = {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": self._get_faq_entities(),
+        }
+
+        return faq_schema
+
+    def _get_faq_entities(self):
+
+        entities = []
+        for block in self.faq:
+            for item in block.value["item"]:
+                question = item.get("question")
+                answer_html = item.get("answer")
+                answer_text = strip_tags(answer_html.source)
+
+                entity = {
+                    "@type": "Question",
+                    "name": question.strip(),
+                    "acceptedAnswer": {"@type": "Answer", "text": answer_text.strip()},
+                }
+
+                entities.append(entity)
+
+        return entities
 
 
 BasePage._meta.get_field("seo_title").verbose_name = "Title tag"

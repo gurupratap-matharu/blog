@@ -2,6 +2,7 @@ from wagtail.blocks import (
     CharBlock,
     ChoiceBlock,
     EmailBlock,
+    IntegerBlock,
     ListBlock,
     PageChooserBlock,
     RichTextBlock,
@@ -14,7 +15,7 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 
-from .struct_values import LinkStructValue
+from .struct_values import LinkStructValue, RatingsStructValue
 
 
 class HeadingBlock(StructBlock):
@@ -222,6 +223,25 @@ class ContactBlock(StructBlock):
 
     class Meta:
         template = "blocks/contact_block.html"
+
+
+class RatingsBlock(StructBlock):
+    """
+    Stores responses for ratings from 1 to 5 stars.
+    """
+
+    five = IntegerBlock(default=0, help_text="How many 5 stars?")
+    four = IntegerBlock(default=0, help_text="How many 4 stars?")
+    three = IntegerBlock(default=0, help_text="How many 3 stars?")
+    two = IntegerBlock(default=0, help_text="How many 2 stars?")
+    one = IntegerBlock(default=0, help_text="How many 1 star?")
+
+    class Meta:
+        icon = "pick"
+        template = "blocks/ratings.html"
+        label_format = "Five:{five} Four:{four} Three:{three} Two:{two} One:{one}"
+        search_index = False
+        value_class = RatingsStructValue
 
 
 class BaseStreamBlock(StreamBlock):

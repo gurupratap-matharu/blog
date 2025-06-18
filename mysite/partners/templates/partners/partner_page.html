@@ -74,6 +74,12 @@
         {{ page.faq }}
       </section>
     {% endif %}
+    {% if page.ratings %}
+      <section class="py-3 py-md-5">
+        <h2 class="fs-5 pb-3">Opiniones sobre {{ page.title }}</h2>
+        {{ page.ratings }}
+      </section>
+    {% endif %}
     <section class="py-3 py-md-5">
       <h2 class="fs-5 pb-3">¡Comprá tu pasaje con {{ page.title }}!</h2>
       <p>
