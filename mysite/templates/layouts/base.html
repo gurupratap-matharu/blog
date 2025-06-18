@@ -9,7 +9,11 @@
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    {% if page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{% endif %}
+    {% if page.canonical_url %}
+      <link rel="canonical" href="{{ page.canonical_url }}" />
+    {% else %}
+      <link rel="canonical" href="{{ request.build_absolute_uri }}" />
+    {% endif %}
     {# djlint:off #}
     <title>{% block title %}{% firstof page.seo_title page.title %}{% endblock title %}{% block title_suffix %} | {{ settings.base.SiteSettings.title_suffix }}{% endblock title_suffix %}</title>
     <meta name="description" content="{% block meta_description %}{% firstof page.search_description "Reserva tus pasajes de micro al mejor precio con Ventanita. Compara, elige y viaja con tranquiliadad por toda Argentina 🇦🇷. ¡Tu próxima aventura empieza aquí!" %}{% endblock meta_description %}" />
