@@ -19,7 +19,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
     path("documents/", include(wagtaildocs_urls)),
-    path("trips/", include("trips.urls")),
+    path("pasajes-en-micro/", include("trips.urls")),
     path("orders/", include("orders.urls")),
     path("payments/", include("payments.urls")),
     path("sitemap.xml", sitemap),

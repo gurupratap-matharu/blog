@@ -145,9 +145,9 @@ class SeatsView(FormView):
 
         obj = Prosys(connection_id=session.get("connection_id"))
 
-        trip = obj.get_service(service_id)
-        trip["reserved"] = self.get_reserved(trip=trip)
-        trip["disabled"] = self.get_disabled(trip=trip)
+        trip = obj.get_service_with_seat_map(service_id)
+        # trip["reserved"] = self.get_reserved(trip=trip)
+        # trip["disabled"] = self.get_disabled(trip=trip)
 
         return trip
 
@@ -187,3 +187,7 @@ class SeatsView(FormView):
         disabled = unavailable + passage
 
         return disabled
+
+
+class SearchView(TemplateView):
+    template_name = "trips/search.html"
