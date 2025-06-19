@@ -5,9 +5,9 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 
-from trips.forms import SeatForm, TripSearchForm
+from trips.forms import TripSearchForm
 from trips.providers.prosys import Prosys
 
 logger = logging.getLogger(__name__)
@@ -85,10 +85,8 @@ class TripDetailView(TemplateView):
         return route
 
 
-class SeatsView(FormView):
+class SeatsView(TemplateView):
     template_name = "trips/seats.html"
-    form_class = SeatForm
-    success_url = reverse_lazy("orders:order-create")
     session_keys = ("q", "connection_id")
 
     def dispatch(self, request, *args, **kwargs):
@@ -104,38 +102,27 @@ class SeatsView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         service_id = self.kwargs.get("service_id")
-        context["trip"] = self.get_trip(service_id=service_id)
-
+        context["trip"] = self.get_seat_map(service_id=service_id)
         return context
 
-    def form_valid(self, form):
+    def post(self, request, *args, **kwargs):
         """
-        Since we have confirmed seats we prepare the sale and get price per seat
-        via api.
+        Store seat numbers in session and redirect to order create.
         """
+        session = request.session
+        passengers = session["q"]["num_of_passengers"]
+        seats = request.POST.getlist("seats")
 
-        seats = form.cleaned_data.get("seats")
-
-        session = self.request.session
-        connection_id = session.get("connection_id")
-        service_id = session.get("service_id")
-
-        obj = Prosys(connection_id=connection_id)
-        prepare_sale = obj.prepare_sale(service_id=service_id, seats=seats)
-        price = obj.get_price(service_id=service_id, seats=seats)
+        if len(seats) != int(passengers):
+            messages.info(request, f"Elegí {passengers} asientos")
+            return redirect(request.path_info)
 
         session["seats"] = seats
-        session["prepare_sale"] = prepare_sale
-        session["guid"] = prepare_sale.get("guid")
 
-        session["price"] = price
-        session["amount"] = price.get("payments")[0]["amount"]
+        return redirect(reverse_lazy("orders:order-create"))
 
-        return super().form_valid(form)
-
-    def get_trip(self, service_id):
+    def get_seat_map(self, service_id):
         """
         Get the current seats availability for a trip from the API.
         """
@@ -146,47 +133,7 @@ class SeatsView(FormView):
         obj = Prosys(connection_id=session.get("connection_id"))
 
         trip = obj.get_service_with_seat_map(service_id)
-        # trip["reserved"] = self.get_reserved(trip=trip)
-        # trip["disabled"] = self.get_disabled(trip=trip)
-
         return trip
-
-    def get_reserved(self, trip):
-        """
-        Build a map of reserved (or seats that are not allowed to be selected)
-        """
-
-        # build full seat map
-        all = [{"row": x, "col": y} for x in range(12) for y in range(5)]
-
-        # seats given by the api, subtract one since seats.js is zero indexed
-        active = [
-            {"row": int(x.get("row")) - 1, "col": int(x.get("col")) - 1}
-            for x in trip.get("seats")
-        ]
-
-        # mark rest as reserved
-        reserved = [x for x in all if x not in active]
-
-        return reserved
-
-    def get_disabled(self, trip):
-        """
-        Mark the central passage of the vehicle (col:2) as reserved.
-        """
-
-        # seats from api which are not free
-        unavailable = [
-            {"row": int(x.get("row")) - 1, "col": int(x.get("col")) - 1}
-            for x in trip.get("seats")
-            if x.get("status") != "Free"
-        ]
-
-        # central passage of the vehicle
-        passage = [{"row": x, "col": 2} for x in range(12)]
-        disabled = unavailable + passage
-
-        return disabled
 
 
 class SearchView(TemplateView):

@@ -1,18 +1,19 @@
 {% load static %}
 
 {% if messages %}
-  <div class="mt-7"></div>
-  {% for message in messages %}
-    {% with klass=message.tags %}
-      <div class="alert alert-{{ klass }} alert-dismissible fade show mx-4" role="alert">
-        <svg class="bi me-2" width="16" height="16" fill="currentColor" aria-hidden="true">
-          <use xlink:href="{% static 'assets/icons/icons.svg' %}#bell" />
-        </svg>
-        <span class="alert-text"><strong>
-          {% if message.tags %}{{ message.tags|title }}:{% endif %}
-        </strong>{{ message }}</span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endwith %}
-  {% endfor %}
+  <div class="mt-7">
+    {% for message in messages %}
+      {% with klass=message.tags %}
+        <div class="alert alert-{{ klass }} alert-dismissible fade show mx-4" role="alert">
+          <svg class="bi me-2" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <use xlink:href="{% static 'assets/icons/icons.svg' %}#bell" />
+          </svg>
+          <span class="alert-text"><strong>
+            {% if message.tags %}{{ message.tags|title }}:{% endif %}
+          </strong>{{ message }}</span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endwith %}
+    {% endfor %}
+  </div>
 {% endif %}

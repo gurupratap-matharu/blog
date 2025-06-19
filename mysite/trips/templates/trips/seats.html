@@ -7,40 +7,104 @@
 {% endblock title %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'assets/css/seatchart.css' %}" />
+  <link href="{% static 'assets/css/seats.css' %}" rel="stylesheet" type="text/css" />
 {% endblock extra_css %}
 
 {% block content %}
-  <div class="row">
+  <div class="row mb-5">
     <div class="col col-md-9 mx-auto">
-      <h5 class="text-center">{% translate "Elegir Asiento" %}</h5>
-      <div class="card card-plain">
-        <div class="card-body seat-container"></div>
-        <div class="card-footer d-flex justify-content-between">
-          <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-round">{% translate "Atras" %}</a>
-          <form method="post">
-            {% csrf_token %}
-            {{ form }}
-            <button type="submit" class="btn btn-round bg-gradient-primary icon-link icon-link-hover" id="confirm" disabled>
-              {% translate "Confirmar" %}
+      <ul class="nav nav-underline justify-content-center" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active"
+                  id="lower-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#lower-tab-pane"
+                  type="button"
+                  role="tab"
+                  aria-controls="lower-tab-pane"
+                  aria-selected="true">{% translate "Planta Baja" %}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link"
+                  id="upper-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#upper-tab-pane"
+                  type="button"
+                  role="tab"
+                  aria-controls="upper-tab-pane"
+                  aria-selected="false">{% translate "Planta Alta" %}</button>
+        </li>
+      </ul>
+      <form method="post">
+        {% csrf_token %}
+        <div class="tab-content mt-3" id="myTabContent">
+          <div class="tab-pane fade show active" id="lower-tab-pane" role="tabpanel" aria-labelledby="lower-tab" tabindex="0">
+            <div class="bus mx-auto py-2 border rounded-3">
+              {% for row in trip.seat_map.B %}
+                <div class="row gx-0 my-1 gap-1 justify-content-center">
+                  {% for col in row %}
+                    <div class="col-1 box">
+                      {% if col.category == 'Seat' %}
+                        <input class="seat-checkbox"
+                               type="checkbox"
+                               id="check-{{ col.row }}{{ col.col }}"
+                               name="seats"
+                               value="{{ col.label }}"
+                               data-label="{{ col.label }}"
+                               {% if col.is_selectable == 'false' %}disabled{% endif %} />
+                        <label class="form-check-label visually-hidden" for="check-{{ col.row }}{{ col.col }}">{{ col.label }}</label>
+                      {% elif col.category != 'Undefined' %}
+                        <span class="info">{{ col.label }}</span>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="tab-pane fade" id="upper-tab-pane" role="tabpanel" aria-labelledby="upper-tab" tabindex="0">
+            <div class="bus mx-auto py-2 border rounded-3">
+              {% for row in trip.seat_map.A %}
+                <div class="row gx-0 my-1 gap-1 justify-content-center">
+                  {% for col in row %}
+                    <div class="col-1 box">
+                      {% if col.category == 'Seat' %}
+                        <input class="seat-checkbox"
+                               type="checkbox"
+                               id="checkDefault-{{ col.row }}{{ col.col }}"
+                               name="seats"
+                               value="{{ col.label }}"
+                               data-label="{{ col.label }}"
+                               {% if col.is_selectable == 'false' %}disabled{% endif %} />
+                        <label class="form-check-label visually-hidden" for="checkDefault-{{ col.row }}{{ col.col }}">{{ col.label }}</label>
+                      {% elif col.category != 'Undefined' %}
+                        <span class="info">{{ col.label }}</span>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="bus mx-auto d-flex justify-content-between align-items-center mt-3">
+            <a href="{{ request.META.HTTP_REFERER }}" class="icon-link icon-link-hover me-3">
+              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-left" />
+              </svg>
+            {% translate "Atrás" %}</a>
+            <button type="submit" class="btn btn-round bg-gradient-primary mb-0 icon-link icon-link-hover">
+              {% translate "Elegir" %}
               <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
                 <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
               </svg>
             </button>
-          </form>
+          </div>
         </div>
-      </div>
+      </form>
+      {% if request.user.is_superuser %}
+        <hr />
+        {{ trip }}
+      {% endif %}
     </div>
   </div>
-  <p>
-    <code>
-      {% if request.user.is_superuser %}{{ trip }}{% endif %}
-    </code>
-  </p>
 {% endblock content %}
-
-{% block extra_js %}
-  <script defer src="{% static 'assets/js/seatchart.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/seats.js' %}"></script>
-  {{ trip|json_script:"trip" }}
-{% endblock extra_js %}

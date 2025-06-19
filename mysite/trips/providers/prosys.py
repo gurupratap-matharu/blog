@@ -170,6 +170,10 @@ class Prosys:
         return response
 
     def get_service(self, service_id):
+        """
+        Loads the seat map for a service.
+        """
+
         data = dict()
 
         response = self.client.service.GetServiceData(
@@ -227,6 +231,41 @@ class Prosys:
         data["seats"] = seats
 
         return data
+
+    def get_service_with_seat_map(self, service_id):
+        """
+        Custom method to build a processed seat map to render in django template.
+        """
+
+        seat_map = dict()
+
+        # Get service details from api
+        service = self.get_service(service_id)
+        seats = service.get("seats")
+
+        # Find floors in result
+        floors = sorted(set([x["floor"] for x in seats]))
+
+        # For each floor build empty rows of 15 no. each
+        for floor in floors:
+            seat_map[floor] = [[] for _ in range(15)]
+
+        # Populate each empty row with relevant seats
+        for seat in service.get("seats"):
+            index = int(seat.get("row"))
+            floor = seat.get("floor")
+
+            seat_map[floor][index].append(seat)
+
+        # Remove all empty rows that don't have any seats
+        for floor in floors:
+            rows = seat_map[floor]
+            rows = [row for row in rows if row]
+            seat_map[floor] = rows
+
+        service["seat_map"] = seat_map
+
+        return service
 
     def prepare_sale(self, service_id, seats):
 
@@ -582,15 +621,18 @@ class Prosys:
         data["service_id"] = key.xpath("//Servicio/@idServicio")[0]
         data["departure"] = self._parse_datetime(value=key.find("HoraSalida").text)
         data["arrival"] = self._parse_datetime(value=key.find("HoraLlegada").text)
-        data["seats_available"] = key.find("ButacasLibres").text.split()[1]
+        # data["seats_available"] = key.find("ButacasLibres").text.split()[1]
+        data["seats_available"] = key.find("ButacasLibres").text
         data["can_select_seats"] = key.xpath("//VeTaquilla")[0].text
         data["category"] = key.xpath("//Clase")[0].text
         data["company"] = key.xpath("//Empresa")[0].text
         data["company_id"] = key.find("EmpresaId").text
-        data["price"] = round(float(key.find("Precio").text.split()[1]))
-        data["price_promotional"] = round(
-            float(key.find("TarifaPromo").text.split()[1])
-        )
+        # data["price"] = round(float(key.find("Precio").text.split()[1]))
+        # data["price_promotional"] = round(
+        #     float(key.find("TarifaPromo").text.split()[1])
+        # )
+        data["price"] = key.find("Precio").text
+        data["price_promotional"] = key.find("TarifaPromo").text
         data["has_discount"] = key.xpath("//TieneDescuento")[0].text
         data["currency_code"] = key.xpath("//MonedaISO")[0].text
         data["is_international"] = key.xpath("//EsInternacional")[0].text

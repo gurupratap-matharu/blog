@@ -2,7 +2,6 @@ import json
 import logging
 from datetime import datetime
 
-from django import forms
 from django.core.exceptions import ValidationError
 from django.http.request import QueryDict
 from django.utils.translation import gettext_lazy as _
@@ -166,15 +165,3 @@ class TripSearchForm:
 
     def __repr__(self):
         return json.dumps(self.data)
-
-
-class SeatForm(forms.Form):
-    seats = forms.CharField(max_length=20, widget=forms.HiddenInput)
-
-    def clean_seats(self):
-        seats = self.cleaned_data["seats"]
-        seats = [x.strip() for x in seats.split(",")]
-
-        logger.info("cleaning seat numbers to:%s" % seats)
-
-        return seats
