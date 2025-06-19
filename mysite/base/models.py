@@ -510,6 +510,11 @@ class FormPage(AbstractEmailForm):
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
 
+        for field in form.errors:
+            attrs = form[field].field.widget.attrs
+            attrs.setdefault("class", "")
+            attrs["class"] += " is-invalid"
+
         for name, field in form.fields.items():
             if isinstance(field.widget, widgets.Textarea):
                 field.widget.attrs.update({"rows": "5"})
