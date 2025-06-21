@@ -1,39 +1,9 @@
 <?xml version="1.0"?>
 <NewDataSet>seats
-  <Service>
-    <ID>{{ service_id }}</ID>
+  <Service><ID>{{ service_id }}</ID>
     {% for passenger in passengers %}
-    <Seats>
-      <Text>{{ passenger.label }}</Text>
-      <Amount>0</Amount>
-      <FirstName>{{ passenger.first_name }}</FirstName>
-      <LastName>{{ passenger.last_name }}</LastName>
-      <DocumentTypeId>{{ passenger.document_type_id }}</DocumentTypeId>
-      <DocumentNumber>{{ passenger.document_number }}</DocumentNumber>
-      <NationalityId>{{ passenger.nationality_id }}</NationalityId>
-      <ResidentialId>{{ passenger.residential_id }}</ResidentialId>
-      <PaymentInfo>1</PaymentInfo>
-      <DiscountCode></DiscountCode>
-    </Seats>
+    <Seats><Text>{{ passenger.label }}</Text><Amount>0</Amount><FirstName>{{ passenger.first_name }}</FirstName><LastName>{{ passenger.last_name }}</LastName><DocumentTypeId>{{ passenger.document_type_id }}</DocumentTypeId><DocumentNumber>{{ passenger.document_number }}</DocumentNumber><NationalityId>{{ passenger.nationality_id }}</NationalityId><ResidentialId>{{ passenger.residential_id }}</ResidentialId><PaymentInfo>1</PaymentInfo><DiscountCode/></Seats>
     {% endfor %}
   </Service>
-  <Payments>
-    <ID>1</ID>
-    <Type>EFEC</Type>
-    <Amount>0</Amount>
-    <Entity/>
-    <Number>0</Number>
-    <Months>0</Months>
-    <Currency>$</Currency>
-    <Interest>0</Interest>
-    <LastName/>
-    <FirstName/>
-    <Document/>
-    <Phone/>
-    <Commerce/>
-    <Terminal/>
-    <Lot/>
-    <Coupon/>
-    <Authorization/>
-  </Payments>
+  <Payments><ID>1</ID><Type>EFEC</Type><Amount>0</Amount><Entity/><Number>0</Number><Months>0</Months><Currency>$</Currency><Interest>0</Interest><LastName/><FirstName/><Document/><Phone/><Commerce/><Terminal/><Lot/><Coupon/><Authorization/></Payments>
 </NewDataSet>

@@ -5,9 +5,11 @@ from django.contrib import messages
 from django.forms import modelformset_factory
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, FormView
 
-from .forms import OrderForm, PassengerForm
+from trips.providers.prosys import Prosys
+
+from .forms import OrderCancelForm, OrderForm, PassengerForm
 from .models import Passenger
 
 logger = logging.getLogger(__name__)
@@ -17,7 +19,7 @@ class OrderCreateView(CreateView):
     template_name = "orders/order_form.html"
     form_class = OrderForm
     success_url = reverse_lazy("payments:home")
-    session_keys = ("q", "connection_id", "seats", "guid", "service_id")
+    session_keys = ("q", "connection_id", "seats", "service_id")
 
     def dispatch(self, request, *args, **kwargs):
         """
@@ -64,6 +66,8 @@ class OrderCreateView(CreateView):
         )
         formset = PassengerFormset(data=data, queryset=queryset)
 
+        logger.info("data:%s" % data)
+
         return formset
 
     def form_valid(self, form):
@@ -75,12 +79,17 @@ class OrderCreateView(CreateView):
             - validate passenger formset, save it if valid else redirect
             - build order-passenger m2m relationship
             - store order data in session
+            - call prepare_sale() to get guid
+            - call get_price() to get price per seat
         """
 
         logger.info("order form is valid...")
         logger.info("cleaned data:%s" % form.cleaned_data)
 
         session = self.request.session
+        service_id = session.get("service_id")
+        seats = session.get("seats")
+
         formset = self._get_formset()
 
         if not formset.is_valid():
@@ -98,22 +107,27 @@ class OrderCreateView(CreateView):
         logger.info("formset cleaned data:%s" % formset.cleaned_data)
         logger.info("passengers:%s" % passengers)
 
-        # Save order.id, price in session so payments can access it
+        obj = Prosys(connection_id=session.get("connection_id"))
+        prepare_sale = obj.prepare_sale(service_id, seats)
+        price = obj.get_price(service_id, seats)
+
+        session["guid"] = prepare_sale["guid"]
+        session["amount"] = price["payments"][0]["amount"]
+        session["prepare_sale"] = prepare_sale
+        session["price"] = price
+
         session["order_id"] = str(order.id)
-        session["passengers"] = self.prepare_passengers(passengers)
+        session["passengers"] = self.prepare_passengers(passengers, price)
 
         return super().form_valid(form)
 
-    def prepare_passengers(self, passengers):
+    def prepare_passengers(self, passengers, price):
         """
         Prepare a compiled list of passengers with seats to store
         in session. This is needed by the webhook to confirm the sale.
         """
 
-        session = self.request.session
-        price = session.get("price")
         seats = price.get("seats")
-
         passengers = [p.to_dict() for p in passengers]
 
         for passenger, seat in zip(passengers, seats):
@@ -122,3 +136,8 @@ class OrderCreateView(CreateView):
             passenger["amount"] = seat["amount"]
 
         return passengers
+
+
+class OrderCancelView(FormView):
+    template_name = "orders/order_cancel.html"
+    form_class = OrderCancelForm

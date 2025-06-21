@@ -1,0 +1,52 @@
+{% extends "layouts/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+  {% translate "Devolución de pasajes" %}
+{% endblock title %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-12 col-md-9 col-lg-6 mx-auto">
+      <div class="card">
+        <div class="card-header pb-0">
+          <h1 class="fs-4">{% translate "Devolución de pasajes" %}</h1>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            {% for field in form.visible_fields %}
+              <div class="mb-3">
+                <label class="form-label text-sm" for="{{ field.auto_id }}{% if field.label == 'Captcha' %}_1{% endif %}">
+                  {{ field.label }}
+                </label>
+                <p class="text-sm text-danger mb-1">{{ field.errors.as_text }}</p>
+                {{ field }}
+                <div class="form-text ms-2" id="{{ field.auto_id }}_helptext">
+                  <small>{{ field.help_text|safe }}</small>
+                </div>
+              </div>
+            {% endfor %}
+            <div class="form-check form-check-info text-left ms-2">
+              <input class="form-check-input" type="checkbox" value="" id="termsCheckbox" required checked />
+              <label class="form-check-label text-muted" for="termsCheckbox">
+                {% translate "Estoy de acuerdo con los" %} <a href="/condiciones-generales/" target="_blank">{% translate "Condiciones Generales" %}</a>
+              </label>
+            </div>
+            <div class="d-flex justify-content-between mt-5">
+              <a href="/" class="btn btn-round btn-outline-light text-dark">{% translate "Cancel" %}</a>
+              <button class="btn btn-round bg-gradient-primary" type="submit">{% translate "Buscar" %}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block extra_js %}
+  <script src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
+  <script src="{% static 'assets/js/dates/es.js' %}"></script>
+  <script src="{% static 'assets/js/order_search.js' %}"></script>
+{% endblock extra_js %}

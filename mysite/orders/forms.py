@@ -74,3 +74,50 @@ class PassengerForm(forms.ModelForm):
             "nationality": forms.Select(attrs=select),
             "gender": forms.Select(attrs=select),
         }
+
+
+class OrderCancelForm(forms.Form):
+    DOCUMENT_TYPE_CHOICES = [
+        ("DNI", "DNI"),
+        ("Passport", "Pasaporte"),
+        ("Other", "Otros"),
+    ]
+
+    document_type = forms.ChoiceField(
+        label=_("Tipo de documento"),
+        required=True,
+        choices=DOCUMENT_TYPE_CHOICES,
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
+    document_number = forms.CharField(
+        label=_("Número de documento"),
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+
+    travel_date = forms.DateField(
+        label=_("Fecha de viaje"),
+        required=True,
+        widget=forms.DateInput(attrs={"class": "form-control travel-date"}),
+    )
+
+    invoice_number = forms.CharField(
+        label=_("Número del comprobante"),
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+
+    email = forms.EmailField(
+        required=True, widget=forms.EmailInput(attrs={"class": "form-control"})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.errors:
+            attrs = self[field].field.widget.attrs
+            attrs.setdefault("class", "")
+            attrs["class"] += " is-invalid"
