@@ -1,8 +1,11 @@
+import json
 import logging
+import traceback
 from datetime import timedelta
 from http import HTTPStatus
 
 from django.conf import settings
+from django.core.mail import mail_admins
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.templatetags.static import static
@@ -51,13 +54,11 @@ class MercadoPagoView(TemplateView):
     def get_preference(self):
         session = self.request.session
         order_id = session.get("order_id")
-        unit_price = float(session.get("amount")) / 1000  # <-- Minimizing this for MP
+        unit_price = float(session.get("amount")) / 100  # <-- Minimizing this for MP
 
-        uri = self.request.build_absolute_uri
-        BASE_URI = "https://ventanita.com.ar"
+        BASE_URI = settings.BASE_URI
 
-        picture_url = uri(static("assets/img/logos/ventanita.avif"))
-
+        picture_url = BASE_URI + static("assets/img/logos/ventanita.avif")
         success = BASE_URI + reverse_lazy("payments:mercado-pago-success")
         failure = BASE_URI + reverse_lazy("payments:fail")
         pending = BASE_URI + reverse_lazy("payments:pending")
@@ -68,7 +69,7 @@ class MercadoPagoView(TemplateView):
                 {
                     "id": order_id,
                     "title": "Pasajes de Micro",
-                    "description": "Pasajes de Micro",  # <-- could be customized
+                    "description": "Pasajes de Micro",
                     "picture_url": picture_url,
                     "category_id": "tickets",
                     "quantity": 1,
@@ -89,9 +90,7 @@ class MercadoPagoView(TemplateView):
         }
 
         preference = mercado_pago.preference().create(preference_data)
-
         logger.info("preference:%s" % preference)
-
         return preference["response"]
 
 
@@ -159,16 +158,29 @@ def mercadopago_success(request):
         order = get_object_or_404(Order, id=order_id)
 
         # Complete sale with operator
-        obj = Prosys(connection_id=connection_id)
-        sale = obj.complete_sale(
-            service_id=service_id, guid=guid, passengers=passengers
-        )
+        try:
+            obj = Prosys(connection_id=connection_id)
+            sale = obj.complete_sale(
+                service_id=service_id, guid=guid, passengers=passengers
+            )
+            logger.info("CompletedSale:%s" % sale)
 
-        logger.info("sale:%s" % sale)
+        except Exception as e:
+            # We have received the payment and could not confirm with API
+            # this needs to be handled with care
 
-        # Confirm sale with user
+            session_json = json.dumps(dict(session), indent=4)
+            params_json = json.dumps(params, indent=4)
+
+            subject = f"CompleteSale Error Order:{order_id}"
+            message = f"Exception:{traceback.format_exc()}\n\nParams:{params_json}\n\nSession:{session_json}"
+
+            logger.warn(subject, e)
+            mail_admins(subject, message)
+            return redirect(reverse_lazy("payments:fail"))
+
+        # Confirm order
         order.send_confirmation(payment_id=payment_id)
-
         return redirect(reverse_lazy("payments:success"))
 
     return redirect(reverse_lazy("payments:fail"))

@@ -13,6 +13,7 @@ load_dotenv()
 
 PROJECT_DIR = Path(__file__).resolve().parent  # Django project dir
 BASE_DIR = PROJECT_DIR.parent  # Git root
+BASE_URI = "https://ventanita.com.ar"
 
 
 SECRET_KEY = os.getenv("SECRET_KEY")
