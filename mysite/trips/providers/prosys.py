@@ -83,9 +83,12 @@ class Prosys:
         response = self.client.service.StartSession(
             self.web_id, self.user, self.password, self.key
         )
-        connection_id = response.xpath("//ConnectionId")[0].text
-        is_ok = response.xpath("//IsOk")[0].text
-        has_warnings = response.xpath("//HasWarnings")[0].text
+        session = response.find("SessionInformation")
+        result = response.find("Result")
+
+        connection_id = session.find("ConnectionId").text
+        is_ok = result.find("IsOk").text
+        has_warnings = result.find("HasWarnings").text
 
         logger.info("connecton_id:%s" % connection_id)
         logger.info("is_ok?:%s" % is_ok)
@@ -118,7 +121,9 @@ class Prosys:
 
         logger.info(etree.tostring(response, pretty_print=True).decode())
         keys = response.findall("Servicio")
+        logger.info("keys:%s" % keys)
         trips = [self._parse_service(key) for key in keys]
+
         data = dict()
         data["origin"] = origin.get("Descripcion", "").title()
         data["destination"] = destination.get("Descripcion", "").title()
@@ -396,9 +401,6 @@ class Prosys:
         """
         Confirms a sale and returns tickets.
         Call this when you get payment confirmation from your payment processor via webhook.
-
-
-        Incomplete - Remove hardcoded dict
         """
 
         for p in passengers:
@@ -577,8 +579,8 @@ class Prosys:
         response = self.client.service.EndSession(
             self.web_id, self.user, self.password, self.connection_id, self.key
         )
-        is_ok = response.xpath("//IsOk")[0].text
-        has_warnings = response.xpath("//HasWarnings")[0].text
+        is_ok = response.find("IsOk").text
+        has_warnings = response.find("HasWarnings").text
 
         self.connection_id = None
 
@@ -618,24 +620,28 @@ class Prosys:
     def _parse_service(self, key):
         data = dict()
 
-        data["service_id"] = key.xpath("//Servicio/@idServicio")[0]
+        data["service_id"] = key.get("idServicio")
+        data["service_code"] = key.find("CodigoServicio").text
         data["departure"] = self._parse_datetime(value=key.find("HoraSalida").text)
         data["arrival"] = self._parse_datetime(value=key.find("HoraLlegada").text)
         # data["seats_available"] = key.find("ButacasLibres").text.split()[1]
         data["seats_available"] = key.find("ButacasLibres").text
-        data["can_select_seats"] = key.xpath("//VeTaquilla")[0].text
-        data["category"] = key.xpath("//Clase")[0].text
-        data["company"] = key.xpath("//Empresa")[0].text
+        data["can_select_seats"] = key.find("VeTaquilla").text
+        data["category"] = key.find("Clase").text
+        data["company"] = key.find("Empresa").text
         data["company_id"] = key.find("EmpresaId").text
+        data["transporter"] = key.find("EmpresaTransportista").text
+        data["transporter_id"] = key.find("EmpresaTransportistaId").text
         # data["price"] = round(float(key.find("Precio").text.split()[1]))
         # data["price_promotional"] = round(
         #     float(key.find("TarifaPromo").text.split()[1])
         # )
         data["price"] = key.find("Precio").text
         data["price_promotional"] = key.find("TarifaPromo").text
-        data["has_discount"] = key.xpath("//TieneDescuento")[0].text
-        data["currency_code"] = key.xpath("//MonedaISO")[0].text
-        data["is_international"] = key.xpath("//EsInternacional")[0].text
+        data["has_discount"] = key.find("TieneDescuento").text
+        data["currency_code"] = key.find("Moneda").text
+        data["currency_code_iso"] = key.find("MonedaISO").text
+        data["is_international"] = key.find("EsInternacional").text
 
         return data
 
