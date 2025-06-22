@@ -1,1 +1,59 @@
-# Create your models here.
+from django.db import models
+from django.urls import reverse_lazy
+from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
+
+from django_countries.fields import CountryField
+
+
+class Location(models.Model):
+    """
+    Represents any location where a trip can start or stop. This include
+    origin, destination and all intermediate stops.
+
+    In domain sense this can be a bus terminal for intercity buses.
+    """
+
+    name = models.CharField(_("name"), max_length=200)
+    slug = models.SlugField(_("slug"), max_length=200, unique=True)
+    abbr = models.CharField(
+        verbose_name=_("abbreviation"),
+        max_length=7,
+        blank=True,
+        unique=True,
+        help_text=_("Used internally as a reference"),
+    )
+    address_line1 = models.CharField(_("Address line 1"), max_length=128, blank=True)
+    address_line2 = models.CharField(_("Address line 2"), max_length=128, blank=True)
+    city = models.CharField(_("City"), max_length=64, blank=True)
+    state = models.CharField(_("State/Province"), max_length=200, blank=True)
+    postal_code = models.CharField(_("Postal Code"), max_length=10, blank=True)
+    country = CountryField(blank_label=_("(select country)"))
+    latitude = models.DecimalField(
+        _("Latitude"), max_digits=9, decimal_places=6, null=True
+    )
+    longitude = models.DecimalField(
+        _("Longitude"), max_digits=9, decimal_places=6, null=True
+    )
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("location")
+        verbose_name_plural = _("locations")
+
+    def __str__(self):
+        return self.name
+
+    def natural_key(self):
+        return (self.abbr,)
+
+    def save(self, *args, **kwargs) -> None:
+        if not self.slug:
+            self.slug = slugify(self.name)
+
+        return super().save(*args, **kwargs)
+
+    def get_absolute_url(self) -> str:
+        return reverse_lazy("locations:location-detail", kwargs={"slug": self.slug})
