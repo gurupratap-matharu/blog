@@ -18,9 +18,17 @@ from wagtail.admin.panels import (
     PublishingPanel,
 )
 from wagtail.contrib.forms.forms import FormBuilder
-from wagtail.contrib.forms.models import FORM_FIELD_CHOICES, AbstractEmailForm, AbstractFormField
+from wagtail.contrib.forms.models import (
+    FORM_FIELD_CHOICES,
+    AbstractEmailForm,
+    AbstractFormField,
+)
 from wagtail.contrib.forms.panels import FormSubmissionsPanel
-from wagtail.contrib.settings.models import BaseGenericSetting, BaseSiteSetting, register_setting
+from wagtail.contrib.settings.models import (
+    BaseGenericSetting,
+    BaseSiteSetting,
+    register_setting,
+)
 from wagtail.fields import RichTextField, StreamField
 from wagtail.images import get_image_model
 from wagtail.images.fields import WagtailImageField

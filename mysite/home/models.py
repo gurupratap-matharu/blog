@@ -6,7 +6,13 @@ from django.utils.html import mark_safe
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
 
-from base.blocks import BaseStreamBlock, FAQBlock, ImageLinkBlock, LinkBlock, PromotionsBlock
+from base.blocks import (
+    BaseStreamBlock,
+    FAQBlock,
+    ImageLinkBlock,
+    LinkBlock,
+    PromotionsBlock,
+)
 from base.models import BasePage
 
 
