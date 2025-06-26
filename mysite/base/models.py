@@ -18,17 +18,9 @@ from wagtail.admin.panels import (
     PublishingPanel,
 )
 from wagtail.contrib.forms.forms import FormBuilder
-from wagtail.contrib.forms.models import (
-    FORM_FIELD_CHOICES,
-    AbstractEmailForm,
-    AbstractFormField,
-)
+from wagtail.contrib.forms.models import FORM_FIELD_CHOICES, AbstractEmailForm, AbstractFormField
 from wagtail.contrib.forms.panels import FormSubmissionsPanel
-from wagtail.contrib.settings.models import (
-    BaseGenericSetting,
-    BaseSiteSetting,
-    register_setting,
-)
+from wagtail.contrib.settings.models import BaseGenericSetting, BaseSiteSetting, register_setting
 from wagtail.fields import RichTextField, StreamField
 from wagtail.images import get_image_model
 from wagtail.images.fields import WagtailImageField
@@ -410,7 +402,7 @@ class StandardPage(BasePage):
     )
 
     body = StreamField(
-        BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
+        BaseStreamBlock(), verbose_name="Page body", blank=True, collapsed=True
     )
 
     content_panels = BasePage.content_panels + [
@@ -459,7 +451,7 @@ class FormPage(AbstractEmailForm):
         on_delete=models.SET_NULL,
         related_name="+",
     )
-    body = StreamField(BaseStreamBlock(), use_json_field=True, blank=True)
+    body = StreamField(BaseStreamBlock(), collapsed=True, blank=True)
     thank_you_text = RichTextField(blank=True)
 
     uploaded_image_collection = models.ForeignKey(

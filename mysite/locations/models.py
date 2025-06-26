@@ -135,7 +135,7 @@ class CityPage(BasePage):
     )
 
     body = StreamField(
-        BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
+        BaseStreamBlock(), verbose_name="Page body", blank=True, collapsed=True
     )
 
     faq = StreamField(
@@ -143,7 +143,7 @@ class CityPage(BasePage):
         verbose_name="FAQ Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     links = StreamField(
@@ -151,7 +151,7 @@ class CityPage(BasePage):
         verbose_name="Links Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     companies = StreamField(
@@ -159,7 +159,7 @@ class CityPage(BasePage):
         verbose_name="Companies Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     country = models.ForeignKey(
@@ -272,7 +272,7 @@ class StationPage(RoutablePageMixin, BasePage):
     )
 
     body = StreamField(
-        BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
+        BaseStreamBlock(), verbose_name="Page body", blank=True, collapsed=True
     )
     address = models.TextField()
     lat_long = models.CharField(
@@ -293,7 +293,7 @@ class StationPage(RoutablePageMixin, BasePage):
         verbose_name="FAQ Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     links = StreamField(
@@ -301,7 +301,7 @@ class StationPage(RoutablePageMixin, BasePage):
         verbose_name="Links Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     companies = StreamField(
@@ -309,7 +309,7 @@ class StationPage(RoutablePageMixin, BasePage):
         verbose_name="Companies Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     search_fields = BasePage.search_fields + [

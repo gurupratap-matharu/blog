@@ -404,13 +404,14 @@ class Prosys:
         """
 
         for p in passengers:
-            p["amount"] = float(p.get("amount"))
+            # p["amount"] = float(p.get("amount"))
             p["document_type_id"] = self._get_document_type_id(p.get("document_type"))
             p["nationality_id"] = self._get_nationality_id(p.get("nationality"))
             p["residential_id"] = 1
             p["tax_id"] = 2
             p["tax_id_number"] = 9876543
             p["tax_category"] = 1
+            p["email"] = "passenger@email.com"
 
         context = dict()
         context["service_id"] = service_id

@@ -51,7 +51,7 @@ class HomePage(BasePage):
     body = StreamField(
         BaseStreamBlock(),
         blank=True,
-        use_json_field=True,
+        collapsed=True,
     )
 
     promotions = StreamField(
@@ -59,7 +59,7 @@ class HomePage(BasePage):
         verbose_name="Promotions Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     # Featured sections on the HomePage
@@ -111,7 +111,7 @@ class HomePage(BasePage):
         verbose_name="Popular Destinations Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     faq = StreamField(
@@ -119,7 +119,7 @@ class HomePage(BasePage):
         verbose_name="FAQ Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     links = StreamField(
@@ -127,7 +127,7 @@ class HomePage(BasePage):
         verbose_name="Links Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     content_panels = BasePage.content_panels + [

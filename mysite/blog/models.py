@@ -217,7 +217,7 @@ class BlogPage(BasePage):
         help_text="Landscape mode only; horizontal width between 1000px to 3000px",
     )
     body = StreamField(
-        BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
+        BaseStreamBlock(), verbose_name="Page body", blank=True, collapsed=True
     )
 
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)

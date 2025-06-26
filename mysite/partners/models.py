@@ -146,11 +146,11 @@ class PartnerPage(BasePage):
         verbose_name="Contact Information",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     body = StreamField(
-        BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
+        BaseStreamBlock(), verbose_name="Page body", blank=True, collapsed=True
     )
 
     tags = ClusterTaggableManager(through="partners.PartnerPageTag", blank=True)
@@ -162,7 +162,7 @@ class PartnerPage(BasePage):
         verbose_name="Destinations where this operator has presence",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     info = StreamField(
@@ -170,7 +170,7 @@ class PartnerPage(BasePage):
         verbose_name="Info Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     routes = StreamField(
@@ -178,7 +178,7 @@ class PartnerPage(BasePage):
         verbose_name="Routes Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     faq = StreamField(
@@ -186,7 +186,7 @@ class PartnerPage(BasePage):
         verbose_name="FAQ Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     links = StreamField(
@@ -194,7 +194,7 @@ class PartnerPage(BasePage):
         verbose_name="Links Section",
         blank=True,
         max_num=1,
-        use_json_field=True,
+        collapsed=True,
     )
 
     ratings = StreamField(
