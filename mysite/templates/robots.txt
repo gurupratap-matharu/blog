@@ -1,5 +1,7 @@
 User-Agent: *
 User-agent: AdsBot-Google
+Disallow: /account/
+Disallow: /accounts/
 Disallow: /admin/
 Disallow: /captcha/
 Disallow: /cart/
