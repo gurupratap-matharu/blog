@@ -1,0 +1,45 @@
+{% extends "layouts/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+  {{ origin }} - {{ destination }}
+{% endblock title %}
+
+{% block content %}
+  <div class="container-fluid col-12 col-xl-9 min-vh-75">
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-1 border">
+            <img src="{% static 'assets/img/company-logos/logo-cata-internacional.jpg' %}"
+                 width="70"
+                 height="35"
+                 class="img-fluid"
+                 alt="Logo of Company {{ trip.company }}" />
+          </div>
+          <div class="col-4 border">
+            <p class="text-sm fw-bold mb-0">6:05 AM - 7:50 PM</p>
+            <p class="text-xs text-secondary mb-0">Cata</p>
+          </div>
+          <div class="col-2 border">
+            <p class="text-sm fw-bold mb-0">17 hr 45 min</p>
+            <p class="text-xs text-secondary mb-0">BUE - MZA</p>
+          </div>
+          <div class="col-2 border">
+            <p class="text-sm fw-bold mb-0">Cama</p>
+            <p class="text-xs text-secondary mb-0">17 Available</p>
+          </div>
+          <div class="col-3 border">
+            <p class="text-sm fw-bold mb-0">ARS 52500</p>
+            <p class="text-xs text-secondary mb-0">Per person</p>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item">A second item</li>
+      <li class="list-group-item">A third item</li>
+      <li class="list-group-item">A fourth item</li>
+      <li class="list-group-item">And a fifth one</li>
+    </ul>
+  </div>
+{% endblock content %}

@@ -94,6 +94,7 @@
   </head>
   {# djlint:off #}
   <body class="{% block body_class %}template-{{ self.get_verbose_name|slugify }}{% endblock body_class %}">
+    {% block body %}
 
     {% block header %}{% include "includes/navigation.html" %}{% endblock header %}
     {% block messages %}{% include "includes/messages.html" %}{% endblock messages %}
@@ -105,6 +106,7 @@
 
     {% if request.user.is_superuser %}{% include "includes/sessions.html" %}{% endif %}
 
+    {% endblock body %}
     {{ request.session.q|json_script:"q" }}
     <script defer src="{% static "assets/js/core/bootstrap.bundle.min.js" %}"></script>
     <script defer src="{% static "assets/js/main.js" %}"></script>

@@ -790,14 +790,14 @@ class Prosys:
         data["departure"] = key.find("dMCFechaHoraSalida").text
         data["arrival"] = key.find("MCFechahorallegada").text
         data["created"] = key.find("dMCFechaEmision").text
-        data["category"] = key.find("CalidadLegalDes").text.strip()
-        data["company"] = key.find("EmpTransportista").text.strip()
-        data["company_description"] = key.find("EmpTransportistaDes").text.strip()
-        data["company_address"] = key.find("EmpresaDomicilio").text.strip()
-        data["company_tax_category"] = key.find("EmpresaIVA").text.strip()
-        data["company_tax_id"] = key.find("EmpresaCUIT").text.strip()
-        data["company_tax_iibb"] = key.find("EmpresaIIBB").text.strip()
-        data["company_email"] = key.find("EmpresaMail").text.strip()
+        data["category"] = key.find("CalidadLegalDes").text
+        data["company"] = key.find("EmpTransportista").text
+        data["company_description"] = key.find("EmpTransportistaDes").text
+        data["company_address"] = key.find("EmpresaDomicilio").text
+        data["company_tax_category"] = key.find("EmpresaIVA").text
+        data["company_tax_id"] = key.find("EmpresaCUIT").text
+        data["company_tax_iibb"] = key.find("EmpresaIIBB").text
+        data["company_email"] = key.find("EmpresaMail").text
 
         return data
 

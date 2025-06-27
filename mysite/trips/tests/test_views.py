@@ -10,7 +10,6 @@ from django.test import TestCase
 from django.urls import reverse_lazy
 from django.utils import timezone
 
-from trips.forms import SeatForm
 from trips.views import SeatsView, TripDetailView, TripSearchView
 
 from .utils import SEARCH_RESULTS, SERVICE, STOPS
@@ -178,6 +177,7 @@ class SeatViewTests(TestCase):
         tomorrow = timezone.now() + timedelta(days=1)
         departure = tomorrow.strftime("%d-%m-%Y")
 
+        # user searched for this
         self.q = {
             "trip_type": "one_way",
             "num_of_passengers": "2",
@@ -186,17 +186,33 @@ class SeatViewTests(TestCase):
             "departure": departure,
             "return": "",
         }
+        self.connection_id = "54321"
+
+        # user selected this trip
+        self.service_id = "2"
+
         session = self.client.session
         session["q"] = self.q
-        session["connection_id"] = "54321"
+        session["connection_id"] = self.connection_id
+        session["service_id"] = self.service_id
         session.save()
 
+    @skip("Veer please figure out how to write this one!")
     @patch("trips.views.Prosys")
-    def test_seatview_url_resolves_correct_view(self, MockProsys):
-        # Arrange: mock the get_service() method get a dummy service
+    def test_get_seat_map_method(self, MockProsys):
+        # Arrange: mock the api call
+        obj = MockProsys()
+        obj.get_service_with_seat_map = MagicMock(return_value=self.service)
+
+        # Act
+        # TODO: Veer i don't know how to call the view method with a request
+
+    @patch("trips.views.Prosys")
+    def test_seat_view_works_via_get(self, MockProsys):
+        # Arrange: mock the get_service_with_seat_map() method get a dummy seatmap
 
         obj = MockProsys()
-        obj.get_service = MagicMock(return_value=self.service)
+        obj.get_service_with_seat_map = MagicMock(return_value=self.service)
 
         # Act
         response = self.client.get(self.url)
@@ -206,35 +222,30 @@ class SeatViewTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTemplateUsed(response, self.template_name)
         self.assertContains(response, "Elegir Asiento")
+        self.assertIn("trip", response.context)
         self.assertNotContains(response, "Hi I should not be on this page")
-        self.assertIs(SeatsView.form_class, SeatForm)
-        self.assertEqual(SeatsView.success_url, self.order_url)
 
-    @patch("trips.views.Prosys")
-    def test_seat_view_works_via_get(self, MockProsys):
-        # Arrange: mock the get_service() method to get a dummy service
+        obj.get_service_with_seat_map.assert_called_with(service_id=self.service_id)
 
-        obj = MockProsys()
-        obj.get_service = MagicMock(return_value=self.service)
+    def test_redirects_home_incase_of_invalid_selection(self):
+        """
+        Test that a valid message is show incase user selects seats not equal
+        to the number of passengers in initial query.
+        """
 
-        # Act: hit the view via get
-        response = self.client.get(self.url)
+        # Arrange: in setup we have passengers here we select three seats which are invalid
+        passengers = self.q.get("num_of_passengers")
+        data = {"seats": ["1", "2", "3"]}
+        # Act
+        response = self.client.post(self.url, data=data)
 
         # Assert
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertTemplateUsed(response, self.template_name)
-        self.assertContains(response, "Elegir Asiento")
-        self.assertNotContains(response, "Hi I should not be on this page")
+        self.assertRedirects(response, self.url, HTTPStatus.FOUND)
 
-        self.assertIsInstance(response.context["form"], SeatForm)
+        messages = list(get_messages(response.wsgi_request))
 
-        self.assertIn("trip", response.context)
-        self.assertIn("disabled", response.context["trip"])
-        self.assertIn("reserved", response.context["trip"])
-
-    @skip("Veer please implement me")
-    def test_seat_view_disabled_seats(self):
-        self.fail()
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(f"Elegí {passengers} asientos", str(messages[0]))
 
     @skip("Veer please implement me")
     def test_seat_view_reserved_seats(self):
@@ -262,12 +273,12 @@ class SeatViewTests(TestCase):
         self.assertEqual(settings.SESSION_EXPIRED_MESSAGE, str(messages[0]))
 
     @patch("trips.views.Prosys")
-    def test_seat_view_sets_service_id_in_session(self, MockProsys):
-        # Arrange: mock the get_service() to get a dummy service
+    def test_seat_view_sets_service_id_in_session_on_valid_post(self, MockProsys):
+        # Arrange: mock the get_service_with_seat_map() to get a dummy seatmap
         # also verify that session does not contain `service_id`
 
         obj = MockProsys()
-        obj.get_service = MagicMock(return_value=self.service)
+        obj.get_service_with_seat_map = MagicMock(return_value=self.service)
 
         self.assertNotIn("service_id", self.client.session)
 

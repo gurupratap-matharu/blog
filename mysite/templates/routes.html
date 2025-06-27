@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+  Routes 🗺️
+{% endblock title %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'assets/css/leaflet.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/leaflet.fullscreen.css' %}" />
+{% endblock extra_css %}
+
+{% block body %}
+  <main id="map" class="vh-100">
+  </main>
+{% endblock body %}
+
+{% block extra_js %}
+  <script defer src="{% static 'assets/js/maps/leaflet.js' %}"></script>
+  <script defer src="{% static 'assets/js/maps/Leaflet.fullscreen.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/routes.js' %}"></script>
+{% endblock extra_js %}
