@@ -37,6 +37,8 @@ class HeadingBlock(StructBlock):
 
     class Meta:
         icon = "title"
+        label = "Headings"
+        search_index = False
         template = "blocks/heading_block.html"
 
 
@@ -51,6 +53,8 @@ class ImageBlock(StructBlock):
 
     class Meta:
         icon = "image"
+        label = "Image"
+        search_index = False
         template = "blocks/image_block.html"
 
 
@@ -63,6 +67,8 @@ class InternalLinkBlock(StructBlock):
 
     class Meta:
         icon = "link"
+        label = "Internal Link"
+        search_index = False
         value_class = LinkStructValue
 
 
@@ -72,6 +78,8 @@ class ExternalLinkBlock(StructBlock):
 
     class Meta:
         icon = "link"
+        label = "External Link"
+        search_index = False
         value_class = LinkStructValue
 
 
@@ -84,11 +92,12 @@ class LinkStreamBlock(StreamBlock):
     external_link = ExternalLinkBlock()
 
     class Meta:
-        template = "blocks/link_stream_block.html"
-        label = "Link"
         icon = "link"
+        label = "Links"
         min_num = 1
         max_num = 1
+        search_index = False
+        template = "blocks/link_stream_block.html"
 
 
 class FurtherReadingBlock(StreamBlock):
@@ -103,6 +112,7 @@ class FurtherReadingBlock(StreamBlock):
         template = "blocks/further_reading_block.html"
         label = "Further Reading"
         icon = "tasks"
+        search_index = False
         min_num = 1
         max_num = 5
 
@@ -113,7 +123,8 @@ class ImageLinkItemBlock(StructBlock):
     page = PageChooserBlock()
 
     class Meta:
-        icon = "image"
+        icon = "link"
+        search_index = False
 
 
 class ImageLinkBlock(StructBlock):
@@ -121,7 +132,9 @@ class ImageLinkBlock(StructBlock):
     item = ListBlock(ImageLinkItemBlock())
 
     class Meta:
-        icon = "list-ol"
+        icon = "image"
+        label = "Image links"
+        search_index = False
         template = "blocks/image_link_block.html"
 
 
@@ -131,6 +144,9 @@ class PromotionsBlock(ImageLinkBlock):
     """
 
     class Meta:
+        icon = "cut"
+        label = "Promos"
+        search_index = False
         template = "blocks/promotions_block.html"
 
 
@@ -144,6 +160,8 @@ class BlockQuote(StructBlock):
 
     class Meta:
         icon = "openquote"
+        label = "{text}"
+        search_index = False
         template = "blocks/blockquote.html"
 
 
@@ -152,8 +170,8 @@ class FAQItemBlock(StructBlock):
     answer = RichTextBlock(required=True)
 
     class Meta:
-        label = "Section"
-        icon = "title"
+        icon = "comment"
+        search_index = False
 
 
 class FAQBlock(StructBlock):
@@ -161,7 +179,9 @@ class FAQBlock(StructBlock):
     item = ListBlock(FAQItemBlock())
 
     class Meta:
-        icon = "list-ol"
+        icon = "help"
+        label = "FAQ"
+        search_index = False
         template = "blocks/faq_block.html"
 
 
@@ -170,7 +190,10 @@ class LinkBlock(StructBlock):
     item = ListBlock(InternalLinkBlock())
 
     class Meta:
-        icon = "list-ol"
+        help_text = "Collection of internal links"
+        icon = "link"
+        label = "Links"
+        search_index = False
         template = "blocks/link_block.html"
 
 
@@ -181,8 +204,10 @@ class NavTabItemBlock(StructBlock):
     )
 
     class Meta:
-        label = "Section"
-        icon = "title"
+        help_text = "Content with rich text in a simple tab"
+        icon = "media"
+        label_format = "{title}"
+        search_index = False
 
 
 class NavTabBlock(StructBlock):
@@ -190,7 +215,10 @@ class NavTabBlock(StructBlock):
     item = ListBlock(NavTabItemBlock())
 
     class Meta:
+        help_text = "Nav Tabs"
         icon = "list-ol"
+        label_format = "{title}"
+        search_index = False
         template = "blocks/nav_tab_block.html"
 
 
@@ -199,8 +227,10 @@ class NavTabLinksItemBlock(StructBlock):
     item = ListBlock(InternalLinkBlock())
 
     class Meta:
-        label = "Tab"
-        icon = "title"
+        help_text = "Collection of internal links in a nav tab"
+        icon = "tasks"
+        label_format = "{title}"
+        search_index = False
 
 
 class NavTabLinksBlock(StructBlock):
@@ -210,7 +240,10 @@ class NavTabLinksBlock(StructBlock):
     item = ListBlock(NavTabLinksItemBlock())
 
     class Meta:
+        help_text = "Show SEO links in a tabbed interface to hide clutter"
         icon = "list-ol"
+        label_format = "{title}"
+        search_index = False
         template = "blocks/nav_tab_links_block.html"
 
 
@@ -222,6 +255,10 @@ class ContactBlock(StructBlock):
     website = URLBlock(required=False)
 
     class Meta:
+        help_text = "Contact information"
+        icon = "mail"
+        label_format = "{whatsapp} {email}"
+        search_index = False
         template = "blocks/contact_block.html"
 
 
