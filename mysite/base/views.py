@@ -57,8 +57,9 @@ class RobotsView(TemplateView):
 
 
 class IndexNow(TemplateView):
-    template_name = "3520839d70e34eb79e009ddb5fedef3b.txt"
+    template_name = "indexnow_key.txt"
     content_type = "text/plain"
+    extra_context = {"key": settings.INDEXNOW_KEY}
 
 
 class CustomSubmissionsListView(SubmissionsListView):
