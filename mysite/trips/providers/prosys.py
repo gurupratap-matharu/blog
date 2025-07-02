@@ -1,3 +1,4 @@
+import json
 import logging
 import random
 from datetime import datetime
@@ -121,7 +122,7 @@ class Prosys:
 
         logger.info(etree.tostring(response, pretty_print=True).decode())
         keys = response.findall("Servicio")
-        logger.info("keys:%s" % keys)
+
         trips = [self._parse_service(key) for key in keys]
 
         data = dict()
@@ -309,6 +310,21 @@ class Prosys:
         result = self._parse_result(response.find("Result"))
 
         data = dict()
+        data["result"] = result
+
+        if result["is_ok"] == "false":
+            data["errors"] = self._parse_errors(response.find("Errors"))
+
+            data_json = json.dumps(data, indent=4)
+            context_json = json.dumps(context, indent=4)
+
+            subject = "PrepareSale Error"
+            message = f"Context:{context_json}\nData:{data_json}"
+
+            mail_admins(subject=subject, message=message)
+
+            return data
+
         data["guid"] = response.find("Operation").find("GUID").text.strip()
         data["seats"] = elements
         data["countries"] = countries
@@ -316,7 +332,6 @@ class Prosys:
         data["tax_id"] = tax_id
         data["tax_category"] = tax_category
         data["civil_states"] = civil_states
-        data["result"] = result
 
         return data
 
@@ -401,6 +416,12 @@ class Prosys:
         """
         Confirms a sale and returns tickets.
         Call this when you get payment confirmation from your payment processor via webhook.
+
+        Note: This method is called by the webhook when we have received confirmed payment
+        from the user and we are supposed to complete the sale and confirm the order.
+
+        So failure of execution of this method is very critical to business
+        and it should be reported immmediately typically via email.
         """
 
         for p in passengers:
@@ -437,15 +458,33 @@ class Prosys:
         logger.info(etree.tostring(response, pretty_print=True).decode())
 
         result = self._parse_result(response.find("Result"))
+
+        data = dict()
+        data["result"] = result
+
+        if result["is_ok"] == "false":
+            data["errors"] = self._parse_errors(response.find("Errors"))
+            passengers_json = json.dumps(passengers, indent=4)
+            data_json = json.dumps(data, indent=4)
+
+            subject = f"CompleteSale Error Guid:{guid}"
+            message = f"Guid:{guid}\nServiceId:{service_id}\nPassengers:{passengers_json}\nData:{data_json}"
+
+            logger.warn(subject)
+            logger.warn(message)
+
+            mail_admins(subject=subject, message=message)
+
+            return data
+
         details = self._parse_sale_details(response.find("SaleDataDetails"))
         items = [
             self._parse_sale_item(item) for item in response.findall("SaleDataItems")
         ]
 
-        data = dict()
-        data["result"] = result
         data["details"] = details
         data["items"] = items
+
         return data
 
     def get_categories(self, company_id, origin, destination):
@@ -663,7 +702,7 @@ class Prosys:
     def _parse_stop(self, key):
         data = dict()
 
-        data["id"] = key.get("id").strip().title()
+        data["id"] = key.get("id").strip()
         data["name"] = key.get("localidad").strip().title()
         data["state"] = key.get("provincia").strip().title()
         data["country"] = key.get("pais").strip().title()
@@ -678,6 +717,31 @@ class Prosys:
         result["has_warnings"] = el.find("HasWarnings").text
 
         return result
+
+    def _parse_errors(self, key):
+        """
+        If result is not ok from api then Errors are returned in response.
+        Eg xml is like this...
+
+        <Errors>
+            <Code>225</Code>
+            <Description>Las butacas preparadas no corresponden a las butacas enviadas.</Description>
+            <Tag/>
+            <Severity>1</Severity>
+        </Errors>
+        """
+
+        if not key:
+            return
+
+        data = dict()
+
+        data["code"] = key.find("Code").text
+        data["description"] = key.find("Description").text
+        data["tag"] = key.find("Tag").text
+        data["severity"] = key.find("Severity").text
+
+        return data
 
     def _parse_element(self, key):
         data = dict()
@@ -786,18 +850,26 @@ class Prosys:
         data = dict()
 
         data["origin"] = key.find("sMCNombreParadaOrigen").text
+        data["origin_code"] = key.find("nMCIdParadaOrigen").text
         data["destination"] = key.find("sMCNombreParadaDestino").text
+        data["destination_code"] = key.find("nMCIdParadaDestino").text
+        data["service"] = key.find("sMCCodigoServicio").text
+        data["category"] = key.find("sMCCalidadServicio").text
+        data["insurance"] = key.find("sMCPolizaSeguro").text
+        data["message"] = key.find("sMCMensajePasajero").text
         data["departure"] = key.find("dMCFechaHoraSalida").text
         data["arrival"] = key.find("MCFechahorallegada").text
         data["created"] = key.find("dMCFechaEmision").text
-        data["category"] = key.find("CalidadLegalDes").text
-        data["company"] = key.find("EmpTransportista").text
-        data["company_description"] = key.find("EmpTransportistaDes").text
+        data["category_description"] = key.find("CalidadLegalDes").text
+        data["company_code"] = key.find("EmpTransportista").text
+        data["company"] = key.find("EmpTransportistaDes").text
         data["company_address"] = key.find("EmpresaDomicilio").text
         data["company_tax_category"] = key.find("EmpresaIVA").text
         data["company_tax_id"] = key.find("EmpresaCUIT").text
         data["company_tax_iibb"] = key.find("EmpresaIIBB").text
         data["company_email"] = key.find("EmpresaMail").text
+
+        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
 
         return data
 
@@ -823,25 +895,31 @@ class Prosys:
         data["bar_code"] = key.find("TextoEspecial").text
         data["qr_code"] = key.find("TextoQR").text
 
+        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
+
         return data
 
     def _parse_operation(self, key):
         data = dict()
 
-        data["guid"] = key.find("GUID").text.strip()
-        data["order_id"] = key.find("OperacionId").text.strip()
-        data["created"] = key.find("Fecha").text.strip()
-        data["error"] = key.find("Error").text.strip()
-        data["message"] = key.find("Mensaje").text.strip()
+        data["guid"] = key.find("GUID").text
+        data["order_id"] = key.find("OperacionId").text
+        data["created"] = key.find("Fecha").text
+        data["error"] = key.find("Error").text
+        data["message"] = key.find("Mensaje").text
+
+        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
 
         return data
 
     def _parse_ticket(self, key):
         data = dict()
 
-        data["seat"] = key.find("Butaca").text.strip()
-        data["ticket_number"] = key.find("Boleto").text.strip()
-        data["ticket_id"] = key.find("IdVentaDetalle").text.strip()
+        data["seat"] = key.find("Butaca").text
+        data["ticket_number"] = key.find("Boleto").text
+        data["ticket_id"] = key.find("IdVentaDetalle").text
+
+        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
 
         return data
 
@@ -850,10 +928,10 @@ class Prosys:
         data = dict()
 
         data["company"] = key.find("Empresa").text
-        data["trip"] = key.find("Servicio").text.strip()
+        data["trip"] = key.find("Servicio").text
         data["ticket_number"] = key.find("BoletoMGO").text
-        data["origin"] = key.find("OrigenDes").text.strip()
-        data["destination"] = key.find("DestinoDes").text.strip()
+        data["origin"] = key.find("OrigenDes").text
+        data["destination"] = key.find("DestinoDes").text
         data["departure"] = key.find("Embarque").text
         data["seat"] = key.find("Butaca").text
         data["amount"] = key.find("Importe").text
@@ -866,13 +944,17 @@ class Prosys:
         data["refunded_amount"] = key.find("DevImporte").text
         data["refunded_amount_total"] = key.find("DevImporteTotal").text
 
+        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
+
         return data
 
     def _parse_ticket_status(self, key):
         data = dict()
 
-        data["code"] = key.find("Codigo").text.strip()
-        data["description"] = key.find("Descripcion").text.strip()
+        data["code"] = key.find("Codigo").text
+        data["description"] = key.find("Descripcion").text
+
+        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
 
         return data
 
