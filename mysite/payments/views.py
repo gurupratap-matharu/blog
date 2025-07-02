@@ -1,6 +1,5 @@
 import json
 import logging
-import traceback
 from datetime import timedelta
 from http import HTTPStatus
 
@@ -158,14 +157,14 @@ def mercadopago_success(request):
         order = get_object_or_404(Order, id=order_id)
 
         # Complete sale with operator
-        try:
-            obj = Prosys(connection_id=connection_id)
-            sale = obj.complete_sale(
-                service_id=service_id, guid=guid, passengers=passengers
-            )
-            logger.info("CompletedSale:%s" % sale)
+        obj = Prosys(connection_id=connection_id)
+        sale = obj.complete_sale(
+            service_id=service_id, guid=guid, passengers=passengers
+        )
 
-        except Exception as e:
+        logger.info("CompletedSale:%s" % sale)
+
+        if sale["result"]["is_ok"] == "false":
             # We have received the payment and could not confirm with API
             # this needs to be handled with care
 
@@ -173,14 +172,13 @@ def mercadopago_success(request):
             params_json = json.dumps(params, indent=4)
 
             subject = f"CompleteSale Error Order:{order_id}"
-            message = f"Exception:{traceback.format_exc()}\n\nParams:{params_json}\n\nSession:{session_json}"
+            message = f"Sale:{sale}\n\nParams:{params_json}\n\nSession:{session_json}"
 
-            logger.warn(subject, e)
             mail_admins(subject, message)
             return redirect(reverse_lazy("payments:fail"))
 
         # Confirm order
-        order.send_confirmation(payment_id=payment_id)
+        order.send_confirmation(payment_id=payment_id, sale=sale)
         return redirect(reverse_lazy("payments:success"))
 
     return redirect(reverse_lazy("payments:fail"))
