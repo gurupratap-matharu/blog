@@ -1,0 +1,19 @@
+Hola {{ order.name }},
+
+Empresa: {{ details.company }}
+
+Origen: {{ details.origin }}
+Salida: {{ details.departure }}
+
+Destino: {{ details.destination }}
+Llegada: {{ details.arrival }}
+
+{% for passenger in items %}
+Pasajero {{ forloop.counter }}
+Nombre: {{ passenger.first_name }} {{ passenger.last_name }}
+{{ passenger.document_type }} {{ passenger.document_number }}
+Butaca: {{ passenger.seat }}
+Nacionalidad: {{ passenger.nationality }}
+Nro. Boleto: {{ passenger.ticket_number }}
+
+{% endfor %}
