@@ -1,10 +1,12 @@
 import logging
 import uuid
+from timeit import default_timer as timer
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
 from django_countries.fields import CountryField
@@ -62,19 +64,36 @@ class Order(models.Model):
 
         return self
 
-    def send_mail(self):
+    def send_confirmation(self, payment_id, sale):
+        """
+        Update the order with payment_id and send an email to the user.
+        """
+        start = timer()
+        logger.info("sale:%s" % sale)
 
-        return send_mail(
-            _("Pasajes Confirmados"),
-            _("Gracias por tu compra"),
+        sale["order"] = self
+
+        self.confirm(payment_id=payment_id)
+
+        subject_path = "orders/emails/booking_confirmed_subject.txt"
+        message_path = "orders/emails/booking_confirmed_message.txt"
+
+        subject = render_to_string(subject_path, context=sale).strip()
+        message = render_to_string(message_path, context=sale).strip()
+
+        mails_sent = send_mail(
+            subject,
+            message,
             settings.DEFAULT_FROM_EMAIL,
             [self.email, settings.DEFAULT_TO_EMAIL],
             fail_silently=False,
         )
 
-    def send_confirmation(self, payment_id):
-        self.confirm(payment_id)
-        self.send_mail()
+        end = timer()
+
+        logger.info("confirmation took:%0.2f secs" % (end - start))
+
+        return mails_sent
 
 
 class Passenger(models.Model):
