@@ -5,13 +5,14 @@ Disallow: /accounts/
 Disallow: /admin/
 Disallow: /captcha/
 Disallow: /cart/
+Disallow: /cdn-cgi/
 Disallow: /coupons/
 Disallow: /django-admin/
+Disallow: /media/
 Disallow: /orders/
 Disallow: /payments/
 Disallow: /private/
 Disallow: /trips/
-Disallow: /cdn-cgi/
 
 
 User-agent: GPTBot
