@@ -215,6 +215,11 @@ def mailgun_webhook(request):
     logger.info("Mailgun POST:%s" % request.POST)
     logger.info("Mailgun body:%s" % request.body)
 
+    subject = "Mailgun Webhook"
+    message = request.body.decode()
+
+    mail_admins(subject, message)
+
     return HttpResponse(
         "Message received okay.", content_type="text/plain", status=HTTPStatus.OK
     )
