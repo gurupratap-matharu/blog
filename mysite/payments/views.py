@@ -212,7 +212,8 @@ def mailgun_webhook(request):
     """
 
     logger.info("Mailgun params:%s" % request.GET)
-    logger.info("Mailgun body:%s" % request.POST)
+    logger.info("Mailgun POST:%s" % request.POST)
+    logger.info("Mailgun body:%s" % request.body)
 
     return HttpResponse(
         "Message received okay.", content_type="text/plain", status=HTTPStatus.OK

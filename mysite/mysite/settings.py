@@ -317,6 +317,7 @@ DEFAULT_PER_PAGE = 8
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")
 
 INDEXNOW_KEY = os.getenv("INDEXNOW_KEY")
+MAILGUN_WEBHOOK_KEY = os.getenv("MAILGUN_WEBHOOK_KEY")
 
 PAYWAY_PUBLIC_KEY = os.getenv("PAYWAY_PUBLIC_KEY", "")
 PAYWAY_PRIVATE_KEY = os.getenv("PAYWAY_PRIVATE_KEY", "")
@@ -405,6 +406,7 @@ LOGGING = {
 
 SHELL_PLUS_PRINT_SQL = True
 SHELL_PLUS_PRINT_SQL_TRUNCATE = None
+
 
 if not DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
