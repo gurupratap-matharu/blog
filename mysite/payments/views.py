@@ -198,5 +198,22 @@ def mercadopago_webhook(request):
     logger.info("mp webhook request body:%s", request.body)
 
     return HttpResponse(
-        "Messge received okay.", content_type="text/plain", status=HTTPStatus.OK
+        "Message received okay.", content_type="text/plain", status=HTTPStatus.OK
+    )
+
+
+@csrf_exempt
+@require_POST
+def mailgun_webhook(request):
+    """
+    Webhook to receive email failure notifications from Mailgun.
+    Currently WIP for testing and finding out a way to retry sending
+    or notify user immediately.
+    """
+
+    logger.info("Mailgun params:%s" % request.GET)
+    logger.info("Mailgun body:%s" % request.POST)
+
+    return HttpResponse(
+        "Message received okay.", content_type="text/plain", status=HTTPStatus.OK
     )

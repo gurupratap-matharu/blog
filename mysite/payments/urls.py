@@ -6,6 +6,7 @@ from .views import (
     PaymentPendingView,
     PaymentSuccessView,
     PaymentView,
+    mailgun_webhook,
     mercadopago_success,
     mercadopago_webhook,
 )
@@ -23,5 +24,10 @@ urlpatterns = [
         "webhooks/mercado-pago/drSndwy4YXkO15Zx1gABbbspSpxOasfx/",
         mercadopago_webhook,
         name="mercado-pago-webhook",
+    ),
+    path(
+        "webhooks/mailgun/EAm4CP6Y3PgO0WfsMJvdFPmWMRWAWbm3/",
+        mailgun_webhook,
+        name="mailgun-webhook",
     ),
 ]
