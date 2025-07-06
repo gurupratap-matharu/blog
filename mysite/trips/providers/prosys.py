@@ -15,6 +15,8 @@ from zeep.cache import SqliteCache
 from zeep.plugins import HistoryPlugin
 from zeep.transports import Transport
 
+from .exceptions import InvalidCompleteSale, InvalidPrepareSale
+
 logger = logging.getLogger(__name__)
 
 transport = Transport(cache=SqliteCache(), timeout=10)
@@ -294,6 +296,26 @@ class Prosys:
 
         logger.info(etree.tostring(response, pretty_print=True).decode())
 
+        result = self._parse_result(response.find("Result"))
+
+        data = dict()
+        data["result"] = result
+
+        if result["is_ok"] == "false":
+            data["errors"] = self._parse_errors(response.find("Errors"))
+
+            data_json = json.dumps(data, indent=4, ensure_ascii=False)
+            context_json = json.dumps(context, indent=4, ensure_ascii=False)
+
+            subject = "PrepareSale Error"
+            message = f"Context:{context_json}\nData:{data_json}"
+
+            mail_admins(subject=subject, message=message)
+
+            err = data.get("errors").get("description")
+
+            raise InvalidPrepareSale(err)
+
         elements = [self._parse_element(key) for key in response.findall("Elements")]
         countries = [self._parse_country(key) for key in response.findall("Countries")]
         document_types = [
@@ -306,24 +328,6 @@ class Prosys:
         civil_states = [
             self._parse_civil_states(key) for key in response.findall("CivilStates")
         ]
-
-        result = self._parse_result(response.find("Result"))
-
-        data = dict()
-        data["result"] = result
-
-        if result["is_ok"] == "false":
-            data["errors"] = self._parse_errors(response.find("Errors"))
-
-            data_json = json.dumps(data, indent=4)
-            context_json = json.dumps(context, indent=4)
-
-            subject = "PrepareSale Error"
-            message = f"Context:{context_json}\nData:{data_json}"
-
-            mail_admins(subject=subject, message=message)
-
-            return data
 
         data["guid"] = response.find("Operation").find("GUID").text.strip()
         data["seats"] = elements
@@ -463,9 +467,11 @@ class Prosys:
         data["result"] = result
 
         if result["is_ok"] == "false":
-            data["errors"] = self._parse_errors(response.find("Errors"))
-            passengers_json = json.dumps(passengers, indent=4)
-            data_json = json.dumps(data, indent=4)
+
+            errors = self._parse_errors(response.find("Errors"))
+            data["errors"] = errors
+            passengers_json = json.dumps(passengers, indent=4, ensure_ascii=False)
+            data_json = json.dumps(data, indent=4, ensure_ascii=False)
 
             subject = f"CompleteSale Error Guid:{guid}"
             message = f"Guid:{guid}\nServiceId:{service_id}\nPassengers:{passengers_json}\nData:{data_json}"
@@ -475,7 +481,7 @@ class Prosys:
 
             mail_admins(subject=subject, message=message)
 
-            return data
+            raise InvalidCompleteSale(errors.get("description"))
 
         details = self._parse_sale_details(response.find("SaleDataDetails"))
         items = [
