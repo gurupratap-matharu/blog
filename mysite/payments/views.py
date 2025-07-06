@@ -156,17 +156,19 @@ def mercadopago_success(request):
 
         order = get_object_or_404(Order, id=order_id)
 
-        # Complete sale with operator
-        obj = Prosys(connection_id=connection_id)
-        sale = obj.complete_sale(
-            service_id=service_id, guid=guid, passengers=passengers
-        )
+        try:
+            # Complete sale with operator
+            obj = Prosys(connection_id=connection_id)
+            sale = obj.complete_sale(
+                service_id=service_id, guid=guid, passengers=passengers
+            )
+            logger.info("CompletedSale:%s" % sale)
 
-        logger.info("CompletedSale:%s" % sale)
+        except Exception as e:
+            # We couldn't complete the sale and this is critical
+            # record it and redirect user to payment pending
 
-        if sale["result"]["is_ok"] == "false":
-            # We have received the payment and could not confirm with API
-            # this needs to be handled with care
+            logger.warn(e)
 
             session_json = json.dumps(dict(session), indent=4)
             params_json = json.dumps(params, indent=4)
