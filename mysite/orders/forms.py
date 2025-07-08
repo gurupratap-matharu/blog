@@ -1,7 +1,9 @@
 import logging
+from datetime import datetime
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.mail import mail_admins
 from django.utils.translation import gettext_lazy as _
 
 from .models import Order, Passenger
@@ -99,6 +101,7 @@ class OrderCancelForm(forms.Form):
 
     travel_date = forms.DateField(
         label=_("Fecha de viaje"),
+        input_formats=["%d-%m-%Y"],
         required=True,
         widget=forms.DateInput(attrs={"class": "form-control travel-date"}),
     )
@@ -121,3 +124,37 @@ class OrderCancelForm(forms.Form):
             attrs = self[field].field.widget.attrs
             attrs.setdefault("class", "")
             attrs["class"] += " is-invalid"
+
+    def clean_travel_date(self):
+        """
+        Allow travel date in the future only since past tickets cannot be cancelled.
+        """
+
+        data = self.cleaned_data["travel_date"]
+
+        logger.info("checking travel date is in future...")
+        logger.info("travel_date:%s" % data)
+
+        if data < datetime.today().date():
+            raise ValidationError(
+                _("Fecha de ida:%(value)s no puede ser en el pasado"),
+                code="invalid",
+                params={"value": data},
+            )
+
+        return data
+
+    def send_mail(self):
+        logger.info("sending order cancel email...")
+        cd = self.cleaned_data
+
+        subject = f"Devolución: {cd['invoice_number']}"
+        message = (
+            f"Doc type:{cd['document_type']}\n"
+            f"Doc no  :{cd['document_number']}\n"
+            f"Travel  :{cd['travel_date'].strftime('%d-%m-%Y')}\n"
+            f"Invoice :{cd['invoice_number']}\n"
+            f"Email   :{cd['email']}\n"
+        )
+
+        mail_admins(subject, message)

@@ -15,7 +15,12 @@ from zeep.cache import SqliteCache
 from zeep.plugins import HistoryPlugin
 from zeep.transports import Transport
 
-from .exceptions import InvalidCompleteSale, InvalidPrepareSale
+from .exceptions import (
+    InvalidCompleteSale,
+    InvalidPrepareSale,
+    InvalidRefund,
+    InvalidTransaction,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -429,7 +434,7 @@ class Prosys:
         """
 
         for p in passengers:
-            # p["amount"] = float(p.get("amount"))
+            p["amount"] = float(p.get("amount"))
             p["document_type_id"] = self._get_document_type_id(p.get("document_type"))
             p["nationality_id"] = self._get_nationality_id(p.get("nationality"))
             p["residential_id"] = 1
@@ -542,7 +547,13 @@ class Prosys:
         logger.info(etree.tostring(response, pretty_print=True).decode())
 
         result = self._parse_result(response.find("Result"))
-        operation = self._parse_operation(response.find("Operation"))
+
+        operation_el = response.find("Operation")
+
+        if not operation_el:
+            raise InvalidTransaction("Could not find the transaction. Invalid guid")
+
+        operation = self._parse_operation(operation_el)
         tickets = [self._parse_ticket(key) for key in response.findall("Tickets")]
 
         data = dict()
@@ -584,7 +595,7 @@ class Prosys:
 
         return data
 
-    def refund(self, ticket_id, retention_pct):
+    def refund(self, ticket_id, retention_pct=0):
         """
         Do a refund.
 
@@ -615,8 +626,14 @@ class Prosys:
         logger.info(etree.tostring(response, pretty_print=True).decode())
 
         data = dict()
+        status = self._parse_refund_status(response.find("Estado"))
 
-        data["status"] = self._parse_refund_status(response.find("Estado"))
+        data["status"] = status
+
+        if status["code"] != "0":
+            # For invalid refund status code is non-zero
+            raise InvalidRefund(status["description"])
+
         data["details"] = self._parse_refund_details(response.find("Datos"))
 
         return data
@@ -736,9 +753,6 @@ class Prosys:
             <Severity>1</Severity>
         </Errors>
         """
-
-        if not key:
-            return
 
         data = dict()
 
@@ -968,6 +982,7 @@ class Prosys:
         return self._parse_ticket_status(key)
 
     def _parse_refund_details(self, key):
+
         data = dict()
 
         data["refund_amount"] = key.find("MontoDevuelto").text

@@ -4,3 +4,12 @@ class InvalidPrepareSale(Exception):
 
 class InvalidCompleteSale(Exception):
     pass
+
+
+class InvalidTransaction(Exception):
+    pass
+
+
+class InvalidRefund(Exception):
+
+    pass
