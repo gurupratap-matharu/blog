@@ -17,6 +17,7 @@ wagtail = "^7.0"
 django-countries = "^7.6.1"
 mercadopago = "^2.3.0"
 pymemcache = "^4.0.0"
+reportlab = "^4.4.2"
 
 [tool.poetry.group.dev.dependencies]
 djlint = "^1.31.1"
