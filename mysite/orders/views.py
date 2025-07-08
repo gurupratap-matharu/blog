@@ -3,14 +3,17 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.forms import modelformset_factory
+from django.http import FileResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, FormView
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import CreateView, FormView, View
 
 from trips.providers.prosys import Prosys
 
 from .forms import OrderCancelForm, OrderForm, PassengerForm
 from .models import Passenger
+from .renderers import Render
 
 logger = logging.getLogger(__name__)
 
@@ -139,5 +142,22 @@ class OrderCreateView(CreateView):
 
 
 class OrderCancelView(FormView):
-    template_name = "orders/order_cancel.html"
     form_class = OrderCancelForm
+    success_url = "/"
+    success_message = _("Hemos recibido tu solicitud de devolución exitosamente!")
+    template_name = "orders/order_cancel.html"
+
+    def form_valid(self, form):
+        logger.info("order cancel form is valid...")
+
+        messages.info(self.request, self.success_message)
+        form.send_mail()
+
+        return super().form_valid(form)
+
+
+class TicketsView(View):
+    def get(self, request, *args, **kwargs):
+        pdf = Render().get_ticket_pdf()
+
+        return FileResponse(pdf, as_attachment=False, filename="tickets.pdf")
