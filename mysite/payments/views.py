@@ -180,7 +180,7 @@ def mercadopago_success(request):
             return redirect(reverse_lazy("payments:fail"))
 
         # Confirm order
-        order.send_confirmation(payment_id=payment_id, sale=sale)
+        order.send_confirmation(payment_id=payment_id, sale=sale, guid=guid)
         return redirect(reverse_lazy("payments:success"))
 
     return redirect(reverse_lazy("payments:fail"))
