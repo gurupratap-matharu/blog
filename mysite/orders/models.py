@@ -1,4 +1,5 @@
 import logging
+import string
 import uuid
 from timeit import default_timer as timer
 
@@ -7,6 +8,8 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models
 from django.template.loader import render_to_string
+from django.urls import reverse_lazy
+from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
 from django_countries.fields import CountryField
@@ -32,7 +35,10 @@ class Order(models.Model):
         max_length=17,
     )
     paid = models.BooleanField(default=False)
+
     payment_id = models.CharField(max_length=250, blank=True)
+    transaction_id = models.CharField(max_length=50, blank=True)
+    reservation_code = models.CharField(max_length=50, blank=True)
 
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -48,7 +54,13 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.name}"
 
-    def confirm(self, payment_id):
+    def get_absolute_url(self):
+        raise ValueError("Please implement this")
+
+    def get_cancel_url(self):
+        return reverse_lazy("orders:order-cancel", kwargs={"id": self.id})
+
+    def confirm(self, payment_id, guid):
         logger.info("confirming order...")
 
         if not payment_id:
@@ -60,11 +72,17 @@ class Order(models.Model):
 
         self.paid = True
         self.payment_id = payment_id
-        self.save(update_fields=["paid", "payment_id"])
+        self.transaction_id = guid
+        self.reservation_code = get_random_string(
+            length=6, allowed_chars=string.ascii_uppercase
+        )
+        self.save(
+            update_fields=["paid", "payment_id", "transaction_id", "reservation_code"]
+        )
 
         return self
 
-    def send_confirmation(self, payment_id, sale):
+    def send_confirmation(self, payment_id, sale, guid):
         """
         Update the order with payment_id and send an email to the user.
         """
@@ -73,7 +91,7 @@ class Order(models.Model):
 
         sale["order"] = self
 
-        self.confirm(payment_id=payment_id)
+        self.confirm(payment_id=payment_id, guid=guid)
 
         subject_path = "orders/emails/booking_confirmed_subject.txt"
         message_path = "orders/emails/booking_confirmed_message.txt"

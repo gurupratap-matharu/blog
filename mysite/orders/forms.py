@@ -3,7 +3,6 @@ from datetime import datetime
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.core.mail import mail_admins
 from django.utils.translation import gettext_lazy as _
 
 from .models import Order, Passenger
@@ -78,23 +77,12 @@ class PassengerForm(forms.ModelForm):
         }
 
 
-class OrderCancelForm(forms.Form):
-    DOCUMENT_TYPE_CHOICES = [
-        ("DNI", "DNI"),
-        ("Passport", "Pasaporte"),
-        ("Other", "Otros"),
-    ]
+class OrderSearchForm(forms.Form):
 
-    document_type = forms.ChoiceField(
-        label=_("Tipo de documento"),
-        required=True,
-        choices=DOCUMENT_TYPE_CHOICES,
-        widget=forms.Select(attrs={"class": "form-select"}),
-    )
-
-    document_number = forms.CharField(
-        label=_("Número de documento"),
-        max_length=100,
+    reservation_code = forms.CharField(
+        label=_("Código de Reserva"),
+        help_text=_("Podes encontrar en los pasajes que te enviamos"),
+        max_length=10,
         required=True,
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
@@ -106,15 +94,10 @@ class OrderCancelForm(forms.Form):
         widget=forms.DateInput(attrs={"class": "form-control travel-date"}),
     )
 
-    invoice_number = forms.CharField(
-        label=_("Número del comprobante"),
-        max_length=100,
-        required=True,
-        widget=forms.TextInput(attrs={"class": "form-control"}),
-    )
-
     email = forms.EmailField(
-        required=True, widget=forms.EmailInput(attrs={"class": "form-control"})
+        help_text=_("Email que usaste para comprar los pasajes"),
+        required=True,
+        widget=forms.EmailInput(attrs={"class": "form-control"}),
     )
 
     def __init__(self, *args, **kwargs):
@@ -130,10 +113,9 @@ class OrderCancelForm(forms.Form):
         Allow travel date in the future only since past tickets cannot be cancelled.
         """
 
-        data = self.cleaned_data["travel_date"]
-
         logger.info("checking travel date is in future...")
-        logger.info("travel_date:%s" % data)
+
+        data = self.cleaned_data["travel_date"]
 
         if data < datetime.today().date():
             raise ValidationError(
@@ -143,18 +125,3 @@ class OrderCancelForm(forms.Form):
             )
 
         return data
-
-    def send_mail(self):
-        logger.info("sending order cancel email...")
-        cd = self.cleaned_data
-
-        subject = f"Devolución: {cd['invoice_number']}"
-        message = (
-            f"Doc type:{cd['document_type']}\n"
-            f"Doc no  :{cd['document_number']}\n"
-            f"Travel  :{cd['travel_date'].strftime('%d-%m-%Y')}\n"
-            f"Invoice :{cd['invoice_number']}\n"
-            f"Email   :{cd['email']}\n"
-        )
-
-        mail_admins(subject, message)
