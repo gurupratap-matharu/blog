@@ -550,7 +550,7 @@ class Prosys:
 
         operation_el = response.find("Operation")
 
-        if not operation_el:
+        if operation_el is None:
             raise InvalidTransaction("Could not find the transaction. Invalid guid")
 
         operation = self._parse_operation(operation_el)
@@ -563,7 +563,7 @@ class Prosys:
 
         return data
 
-    def check_tickets(self, ticket_id):
+    def check_ticket(self, ticket_id):
         """
         Gives details about a ticket whether confirmed or refunded.
 
@@ -594,6 +594,22 @@ class Prosys:
         data["details"] = self._parse_ticket_details(response.find("Datos"))
 
         return data
+
+    def get_tickets(self, guid):
+        """
+        Wrapper method that checks the status of an order and pulls the ticket ids.
+        For each ticket id we then pull the current ticket status.
+        """
+        tickets = []
+
+        status = self.check_status(guid=guid)
+
+        for ticket in status["tickets"]:
+            details = self.check_ticket(ticket["ticket_id"]).get("details")
+            data = ticket | details
+            tickets.append(data)
+
+        return tickets
 
     def refund(self, ticket_id, retention_pct=0):
         """
@@ -889,8 +905,6 @@ class Prosys:
         data["company_tax_iibb"] = key.find("EmpresaIIBB").text
         data["company_email"] = key.find("EmpresaMail").text
 
-        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
-
         return data
 
     def _parse_sale_item(self, key):
@@ -915,8 +929,6 @@ class Prosys:
         data["bar_code"] = key.find("TextoEspecial").text
         data["qr_code"] = key.find("TextoQR").text
 
-        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
-
         return data
 
     def _parse_operation(self, key):
@@ -928,8 +940,6 @@ class Prosys:
         data["error"] = key.find("Error").text
         data["message"] = key.find("Mensaje").text
 
-        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
-
         return data
 
     def _parse_ticket(self, key):
@@ -938,8 +948,6 @@ class Prosys:
         data["seat"] = key.find("Butaca").text
         data["ticket_number"] = key.find("Boleto").text
         data["ticket_id"] = key.find("IdVentaDetalle").text
-
-        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
 
         return data
 
@@ -964,17 +972,66 @@ class Prosys:
         data["refunded_amount"] = key.find("DevImporte").text
         data["refunded_amount_total"] = key.find("DevImporteTotal").text
 
-        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
+        # Generate this key based on derived logic of other data for a ticket
+        # Very handy later
+        data["is_refundable"], data["retention_pct"] = self._get_refund_status(key)
 
         return data
+
+    def _get_refund_status(self, key):
+        """
+        Calculate the refund status and retention percentage based on a departure.
+
+        TODO: Implement for servicios provinciales
+
+        departure datetime string from api is of kind "07/10/2025 - 11:20"
+        delta = (departure - now)
+
+        Refund Rules for Servicios Nacionales:
+            48hs < delta => 10%
+            24hs < delta < 48hs => 20%
+            1h < delta < 24hs => 30%
+            delta < 1h => 0%
+        """
+
+        departure = key.find("Embarque").text
+        already_refunded = key.find("Devuelto").text
+
+        print(f"already_refunded:{already_refunded}")
+
+        dt = datetime.strptime(departure, "%m/%d/%Y - %H:%M")
+        departure = timezone.make_aware(dt)
+        now = timezone.localtime()
+
+        td = departure - now
+        hours = td.total_seconds() / 3600
+
+        logger.info("departure:%s" % departure)
+        logger.info("now:%s" % now)
+        logger.info("hours before departure:%s" % hours)
+
+        # Calculate retention_pct based on departure and now
+        if hours > 48:
+            retention_pct = 10
+
+        elif 24 < hours <= 48:
+            retention_pct = 20
+
+        elif 1 < hours <= 24:
+            retention_pct = 30
+
+        else:
+            retention_pct = 0
+
+        is_refundable = (already_refunded is None) and (retention_pct > 0)
+
+        return is_refundable, retention_pct
 
     def _parse_ticket_status(self, key):
         data = dict()
 
         data["code"] = key.find("Codigo").text
         data["description"] = key.find("Descripcion").text
-
-        data = {k: v.strip() for k, v in data.items() if isinstance(v, str)}
 
         return data
 
