@@ -1,18 +1,20 @@
+import json
 import logging
 
 from django.conf import settings
 from django.contrib import messages
+from django.core.mail import mail_admins
 from django.forms import modelformset_factory
 from django.http import FileResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, FormView, View
+from django.views.generic import CreateView, DetailView, FormView, View
 
 from trips.providers.prosys import Prosys
 
-from .forms import OrderCancelForm, OrderForm, PassengerForm
-from .models import Passenger
+from .forms import OrderForm, OrderSearchForm, PassengerForm
+from .models import Order, Passenger
 from .renderers import Render
 
 logger = logging.getLogger(__name__)
@@ -141,19 +143,95 @@ class OrderCreateView(CreateView):
         return passengers
 
 
-class OrderCancelView(FormView):
-    form_class = OrderCancelForm
-    success_url = "/"
-    success_message = _("Hemos recibido tu solicitud de devolución exitosamente!")
-    template_name = "orders/order_cancel.html"
+class OrderSearchView(FormView):
+    form_class = OrderSearchForm
+    failure_message = _("No pudimos encontrar sus pasajes.")
+    template_name = "orders/order_search.html"
+    order = None
 
     def form_valid(self, form):
-        logger.info("order cancel form is valid...")
+        cd = form.cleaned_data
 
-        messages.info(self.request, self.success_message)
-        form.send_mail()
+        try:
+            self.order = Order.objects.get(
+                email__iexact=cd["email"],
+                reservation_code__iexact=cd["reservation_code"],
+            )
+
+        except Order.DoesNotExist as e:
+            logger.warn(e)
+            messages.warning(self.request, self.failure_message)
+
+            return super().form_invalid(form)
+
+        logger.info("order:%s" % self.order)
 
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.order.get_cancel_url()
+
+
+class OrderCancelView(DetailView):
+    model = Order
+    pk_url_kwarg = "id"
+    template_name = "orders/order_cancel.html"
+    success_msg = _("Hemos recibimos su solicitud exitosamente.")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tickets"] = self.get_tickets()
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        ticket_ids = request.POST.getlist("ticket_id")
+        connection_id = request.session.get("connection_id")
+        order = self.get_object()
+
+        logger.info("ticket_ids:%s" % ticket_ids)
+
+        obj = Prosys(connection_id=connection_id)
+
+        response = []
+
+        for ticket_id in ticket_ids:
+
+            ticket = obj.check_ticket(ticket_id)
+            retention_pct = ticket.get("details")["retention_pct"]
+
+            refund = obj.refund(ticket_id=ticket_id, retention_pct=retention_pct)
+            response.append(refund)
+
+        json_response = json.dumps(response, ensure_ascii=False, indent=4)
+
+        logger.info("sending order cancel email...")
+
+        subject = f"Devolución: {ticket_ids}"
+        message = (
+            f"Name             :{order.name}\n"
+            f"Phone            :{order.phone_number}\n"
+            f"Reservation Code :{order.reservation_code}\n"
+            f"Transaction Id   :{order.transaction_id}\n"
+            f"Email            :{order.email}\n"
+            f"Ticket Ids       :{ticket_ids}\n"
+            f"API Response     :{json_response}\n"
+        )
+
+        mail_admins(subject, message)
+
+        messages.success(request, self.success_msg)
+
+        return redirect("/")
+
+    def get_tickets(self):
+        session = self.request.session
+        order = self.object
+
+        obj = Prosys(connection_id=session.get("connection_id"))
+        tickets = obj.get_tickets(guid=order.transaction_id)
+
+        return tickets
 
 
 class TicketsView(View):

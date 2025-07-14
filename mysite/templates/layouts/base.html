@@ -97,9 +97,11 @@
     {% block body %}
 
     {% block header %}{% include "includes/navigation.html" %}{% endblock header %}
-    {% block messages %}{% include "includes/messages.html" %}{% endblock messages %}
 
-    <main class="mt-6 min-vh-50" id="main-content">{% block content %}{% endblock content %}</main>
+    <main class="mt-6 min-vh-50" id="main-content">
+      {% block messages %}{% include "includes/messages.html" %}{% endblock messages %}
+      {% block content %}{% endblock content %}
+    </main>
 
     {% block footer %}{% include "includes/footer.html" %}{% endblock footer %}
     {% block modal %}{% endblock modal %}
