@@ -174,10 +174,10 @@ def mercadopago_success(request):
             params_json = json.dumps(params, indent=4)
 
             subject = f"CompleteSale Error Order:{order_id}"
-            message = f"Sale:{sale}\n\nParams:{params_json}\n\nSession:{session_json}"
+            message = f"Params:{params_json}\n\nSession:{session_json}"
 
             mail_admins(subject, message)
-            return redirect(reverse_lazy("payments:fail"))
+            return redirect(reverse_lazy("payments:pending"))
 
         # Confirm order
         order.send_confirmation(payment_id=payment_id, sale=sale, guid=guid)
