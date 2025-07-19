@@ -70,6 +70,7 @@ class Command(BaseCommand):
     def extract_url(self, url):
         filename = self.url_to_filename(url)
         filepath = OUTPUT_DIR / filename
+        data = dict()
 
         try:
             response = requests.get(url, headers=HEADERS, timeout=15)
@@ -87,22 +88,22 @@ class Command(BaseCommand):
 
             return
 
-        bs = BeautifulSoup(response.text, "html.parser")
+        else:
 
-        data = dict()
+            bs = BeautifulSoup(response.text, "html.parser")
 
-        parts = url.split("/")
-        data["origin_code"], data["destination_code"] = parts[-2], parts[-1]
+            parts = url.split("/")
+            data["origin_code"], data["destination_code"] = parts[-2], parts[-1]
 
-        for el in bs.find("footer").find_all("input"):
-            name = el.attrs.get("name")
-            value = el.attrs.get("value")
+            for el in bs.find("footer").find_all("input"):
+                name = el.attrs.get("name")
+                value = el.attrs.get("value")
 
-            if name not in ("hidListaBusTrip", "hidUrlVuelta"):
-                key = name.lstrip("hid")
-                data[key] = value
+                if name not in ("hidListaBusTrip", "hidUrlVuelta"):
+                    key = name.lstrip("hid")
+                    data[key] = value
 
-        return data
+            return data
 
     def url_to_filename(self, url):
         """Create a unique, readable filename from the URL."""
