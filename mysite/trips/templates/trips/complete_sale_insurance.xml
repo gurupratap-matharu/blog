@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<NewDataSet>
+  <Service>
+    <ID>{{ service_id }}</ID>
+    <Seats>
+      <Amount>{{ insurance_amount }}</Amount>
+      <Voucher/>
+      <Boleto/>
+      <DocumentTypeId>1</DocumentTypeId>
+      <DocumentNumber>40123123</DocumentNumber>
+      <FirstName>Juan</FirstName>
+      <LastName>Gomez</LastName>
+      <NationalityId>2</NationalityId>
+      <DateOfBirth>07/02/1990</DateOfBirth>
+      <Gender>M</Gender>
+      <ResidentialId>1</ResidentialId>
+      <IdTributariaId>1</IdTributariaId>
+      <IdNumero>1112112111</IdNumero>
+      <RUC>1</RUC>
+      <CondImpositivaId>2</CondImpositivaId>
+      <RazonSocial>RSocial</RazonSocial>
+      <PaymentInfo>1</PaymentInfo>
+    </Seats>
+  </Service>
+  <Payments>
+    <ID>1</ID>
+    <Type>EFEC</Type>
+    <Amount>0</Amount>
+    <AmountRG3450>0</AmountRG3450>
+    <Entity/>
+    <Number>0</Number>
+    <Months>0</Months>
+    <Currency>$</Currency>
+    <Interest>0</Interest>
+    <LastName/>
+    <FirstName/>
+    <Document/>
+    <Phone/>
+    <Commerce/>
+    <Terminal/>
+    <Lot/>
+    <Coupon/>
+    <Authorization/>
+  </Payments>
+</NewDataSet>

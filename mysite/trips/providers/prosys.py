@@ -17,7 +17,11 @@ from zeep.transports import Transport
 
 from .exceptions import (
     InvalidCompleteSale,
+    InvalidCompleteSaleInsurance,
+    InvalidEndSession,
+    InvalidPaymentsType,
     InvalidPrepareSale,
+    InvalidPrepareSaleInsurance,
     InvalidRefund,
     InvalidTransaction,
 )
@@ -280,6 +284,46 @@ class Prosys:
 
         return service
 
+    def get_payments_type_by_service(self, service_id):
+        """
+        Gets all the payment types that a service accepts for booking.
+        """
+        data = dict()
+
+        response = self.client.service.GetPaymentsTypeByService(
+            self.web_id,
+            self.user,
+            self.password,
+            service_id,
+            self.connection_id,
+            self.key,
+        )
+
+        logger.debug(etree.tostring(response, pretty_print=True).decode())
+        result = self._parse_result(response.find("Result"))
+
+        if result["is_ok"] == "false":
+            data["errors"] = self._parse_errors(response.find("Errors"))
+
+            data_json = json.dumps(data, indent=4, ensure_ascii=False)
+
+            subject = "Payments Types Error"
+            message = f"Data:{data_json}"
+
+            mail_admins(subject=subject, message=message)
+
+            err = data.get("errors").get("description")
+
+            raise InvalidPaymentsType(err)
+
+        payments_type = [
+            self._parse_payments_type(key) for key in response.findall("PaymentsTypes")
+        ]
+        data["result"] = result
+        data["payments_type"] = payments_type
+
+        return data
+
     def prepare_sale(self, service_id, seats):
 
         context = dict()
@@ -336,6 +380,62 @@ class Prosys:
 
         data["guid"] = response.find("Operation").find("GUID").text.strip()
         data["seats"] = elements
+        data["countries"] = countries
+        data["document_types"] = document_types
+        data["tax_id"] = tax_id
+        data["tax_category"] = tax_category
+        data["civil_states"] = civil_states
+
+        return data
+
+    def prepare_sale_insurance(self, service_id):
+        response = self.client.service.PrepareSale_Insurance(
+            self.web_id,
+            self.user,
+            self.password,
+            service_id,
+            self.connection_id,
+            self.key,
+        )
+
+        logger.info(etree.tostring(response, pretty_print=True).decode())
+
+        result = self._parse_result(response.find("Result"))
+
+        data = dict()
+        data["result"] = result
+
+        if result["is_ok"] == "false":
+
+            errors = self._parse_errors(response.find("Errors"))
+            data["errors"] = errors
+            data_json = json.dumps(data, indent=4, ensure_ascii=False)
+
+            subject = "PrepareSaleInsurance Error"
+            message = f"ServiceId:{service_id}\nData:{data_json}"
+
+            logger.warn(subject)
+            logger.warn(message)
+
+            mail_admins(subject=subject, message=message)
+
+            raise InvalidPrepareSaleInsurance(errors.get("description"))
+
+        insurance_info = self._parse_insurance_info(response.find("Seguros_Info"))
+
+        countries = [self._parse_country(key) for key in response.findall("Countries")]
+        document_types = [
+            self._parse_document_types(key) for key in response.findall("DocumentTypes")
+        ]
+        tax_id = [self._parse_tax_id(key) for key in response.findall("IdTributaria")]
+        tax_category = [
+            self._parse_tax_category(key) for key in response.findall("CondImpositiva")
+        ]
+        civil_states = [
+            self._parse_civil_states(key) for key in response.findall("CivilStates")
+        ]
+
+        data["insurance_info"] = insurance_info
         data["countries"] = countries
         data["document_types"] = document_types
         data["tax_id"] = tax_id
@@ -487,6 +587,76 @@ class Prosys:
             mail_admins(subject=subject, message=message)
 
             raise InvalidCompleteSale(errors.get("description"))
+
+        details = self._parse_sale_details(response.find("SaleDataDetails"))
+        items = [
+            self._parse_sale_item(item) for item in response.findall("SaleDataItems")
+        ]
+
+        data["details"] = details
+        data["items"] = items
+
+        return data
+
+    def complete_sale_insurance(self, service_id, insurance_amount):
+        """
+        Incomplete method and WIP
+
+        Completes the sale of an insurance typically for a "child" and associate
+        it with a ticket.
+        Veer this method is very similar to a the complete sale method.
+
+        Initially our search() and prepare_sale_insurance() methods need to be called
+        from the UI
+        prepare_sale_insurance gives the insurance amount which we need to pass here
+        The response is very similar to complete_sale() method just that the insurance
+        amounts are very small!
+
+        This is an experimental method and we need to decide later if we wish to habilitate
+        this on the frontend.
+
+        # Todo: Add passenger details to context and template
+        """
+
+        context = dict()
+        context["service_id"] = service_id
+        context["insurance_amount"] = insurance_amount
+        insurance_xml = render_to_string("trips/complete_sale_insurance.xml", context)
+
+        logger.info("insurance_xml: %s" % insurance_xml)
+
+        response = self.client.service.CompleteSale_Insurance(
+            self.web_id,
+            self.user,
+            self.password,
+            service_id,
+            insurance_xml,
+            self.connection_id,
+            self.key,
+        )
+
+        logger.info(etree.tostring(response, pretty_print=True).decode())
+
+        result = self._parse_result(response.find("Result"))
+
+        data = dict()
+        data["result"] = result
+
+        if result["is_ok"] == "false":
+            errors = self._parse_errors(response.find("Errors"))
+
+            data["errors"] = errors
+            data_json = json.dumps(data, indent=4, ensure_ascii=False)
+
+            subject = "CompleteSaleInsurance Error"
+            message = f"ServiceId:{service_id}\nData:{data_json}"
+
+            logger.warn(subject)
+            logger.warn(message)
+
+            mail_admins(subject=subject, message=message)
+
+            raise InvalidCompleteSaleInsurance(errors.get("description"))
 
         details = self._parse_sale_details(response.find("SaleDataDetails"))
         items = [
@@ -655,18 +825,37 @@ class Prosys:
         return data
 
     def end_session(self):
+        """
+        Ends a session with the API.
+        """
+
         response = self.client.service.EndSession(
             self.web_id, self.user, self.password, self.connection_id, self.key
         )
-        is_ok = response.find("IsOk").text
-        has_warnings = response.find("HasWarnings").text
+
+        logger.debug(etree.tostring(response, pretty_print=True).decode())
+
+        result = self._parse_result(response.find("Result"))
+
+        data = dict()
+        data["result"] = result
+
+        if result["is_ok"] == "false":
+
+            errors = self._parse_errors(response.find("Errors"))
+            data["errors"] = errors
+            data_json = json.dumps(data, indent=4, ensure_ascii=False)
+
+            subject = "Invalid EndSession"
+            message = f"Data:{data_json}"
+
+            mail_admins(subject=subject, message=message)
+
+            raise InvalidEndSession(errors.get("description"))
 
         self.connection_id = None
 
-        logger.info("is_ok?:%s" % is_ok)
-        logger.info("has_warnings?:%s" % has_warnings)
-
-        return is_ok
+        return data
 
     def get_stops(self, stop_id=0, web_agency_id=0):
         """
@@ -779,6 +968,14 @@ class Prosys:
 
         return data
 
+    def _parse_payments_type(self, key):
+        data = dict()
+
+        data["code"] = key.find("Codigo").text
+        data["description"] = key.find("Descripcion").text.strip()
+
+        return data
+
     def _parse_element(self, key):
         data = dict()
 
@@ -879,6 +1076,21 @@ class Prosys:
         data["id"] = key.find("Id").text
         data["description"] = key.find("Descripcion").text
         data["code"] = key.find("EstadoCivilIdMGO").text
+
+        return data
+
+    def _parse_insurance_info(self, key):
+        data = dict()
+
+        data["insurance_amount"] = key.find("ImporteSeguro").text
+        data["max_age"] = key.find("EdadMaximaVenta").text
+        data["associate"] = key.find("Asociar").text
+        data["quantity"] = key.find("CantidadAsociar").text
+        data["rg3450_amount"] = key.find("RG3450Amount").text
+        data["rg3450_not_charge_foreigners"] = key.find(
+            "RG3450NoCobraAExtranjeros"
+        ).text
+        data["currency_code"] = key.find("MonedaISO").text
 
         return data
 
