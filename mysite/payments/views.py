@@ -162,7 +162,11 @@ def mercadopago_success(request):
             sale = obj.complete_sale(
                 service_id=service_id, guid=guid, passengers=passengers
             )
+
             logger.info("CompletedSale:%s" % sale)
+
+            # Close session with API
+            obj.end_session()
 
         except Exception as e:
             # We couldn't complete the sale and this is critical
