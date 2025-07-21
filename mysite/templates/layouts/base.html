@@ -16,7 +16,7 @@
     {% endif %}
     {# djlint:off #}
     <title>{% block title %}{% firstof page.seo_title page.title %}{% endblock title %}{% block title_suffix %} | {{ settings.base.SiteSettings.title_suffix }}{% endblock title_suffix %}</title>
-    <meta name="description" content="{% block meta_description %}{% firstof page.search_description "Reserva tus pasajes de micro al mejor precio con Ventanita. Compara, elige y viaja con tranquiliadad por toda Argentina 🇦🇷. ¡Tu próxima aventura empieza aquí!" %}{% endblock meta_description %}" />
+    <meta name="description" content="{% block description %}{% firstof page.search_description "Reserva tus pasajes de micro al mejor precio con Ventanita. Compara, elige y viaja con tranquiliadad por toda Argentina 🇦🇷. ¡Tu próxima aventura empieza aquí!" %}{% endblock description %}" />
     {# djlint:on #}
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="MSSmartTagsPreventParsing" content="true" />

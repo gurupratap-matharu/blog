@@ -1,12 +1,9 @@
-import string
-from datetime import timedelta
 from http import HTTPStatus
+from unittest.mock import MagicMock, patch
 
 from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import resolve, reverse
-from django.utils import timezone
-from django.utils.crypto import get_random_string
 
 from orders.factories import OrderFactory
 from orders.forms import OrderSearchForm
@@ -26,7 +23,6 @@ class OrderSearchTests(TestCase):
         self.assertEqual(resolver_match.func.view_class, OrderSearchView)
 
     def test_order_search_works_via_get(self):
-        # Arrange
         # Act
         response = self.client.get(self.url)
 
@@ -38,17 +34,9 @@ class OrderSearchTests(TestCase):
         self.assertIsInstance(response.context["form"], OrderSearchForm)
 
     def test_invalid_order_post_shows_message(self):
-
-        # Arrange
-        reservation_code = get_random_string(
-            length=6, allowed_chars=string.ascii_uppercase
-        )
-        three_days_from_now = timezone.now() + timedelta(days=3)
-        travel_date = three_days_from_now.date().strftime("%d-%m-%Y")
-
+        # Arrange: Create an order which does not exists
         data = {
-            "reservation_code": reservation_code,
-            "travel_date": travel_date,
+            "reservation_code": "ABC123",  # some random code
             "email": "passenger@email.com",
         }
 
@@ -66,23 +54,57 @@ class OrderSearchTests(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(OrderSearchView.failure_message, str(messages[0]))
 
-    def test_valid_past_order_is_not_found(self):
-        self.fail("Currently we do not have a way to find if an order is past locally")
+    @patch("orders.views.Prosys")
+    def test_order_search_is_case_insensitive(self, MockProsys):
+        """
+        Here a user searches for his/her valid order but enters the fields
+        in different case.
 
-    def test_valid_future_order_is_found(self):
-        # Arrange
+        - Reservation_codes are all auto generated in Uppercase so let the user enter
+          them in lowercase
+        - Whereas email is generally lower case so let the user enter it in uppercase.
 
-        # 1. Create a valid paid order in DB
-        order = OrderFactory().valid_order()
+        """
 
-        # 2. Create data for post
-        three_days_from_now = timezone.now() + timedelta(days=3)
-        travel_date = three_days_from_now.date().strftime("%d-%m-%Y")
+        # Arrange: Patch prosys method & create a paid order
+        MockProsys.get_tickets = MagicMock(return_value=dict())
+
+        order = OrderFactory(paid=True)
         data = {
-            "reservation_code": order.reservation_code,
-            "travel_date": travel_date,
-            "email": order.email,
+            "reservation_code": order.reservation_code.lower(),
+            "email": order.email.upper(),
         }
+
+        # Act
+        response = self.client.post(self.url, data=data, follow=True)
+
+        # Assert
+        # Make sure order is found and user is redirected to order cancel page
+        messages = list(get_messages(response.wsgi_request))
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertRedirects(response, order.get_cancel_url(), HTTPStatus.FOUND)
+        self.assertTemplateNotUsed(response, self.template_name)
+        self.assertTemplateUsed(response, "orders/order_cancel.html")
+        self.assertEqual(len(messages), 0)
+
+    @patch("orders.views.Prosys")
+    def test_valid_future_order_is_found(self, MockProsys):
+        """
+        Incase of valid order search user is directed to OrderCancelView
+        which calls the api to get the tickets.
+
+        We patch that method and return an empty dict to just test that
+        the user is redirected.
+        """
+
+        # Arrange
+        # Patch prosys method
+        MockProsys.get_tickets = MagicMock(return_value=dict())
+
+        # Create a valid paid order in DB
+        order = OrderFactory(paid=True)
+        data = dict(reservation_code=order.reservation_code, email=order.email)
 
         # Act
         response = self.client.post(self.url, data=data, follow=True)
@@ -96,6 +118,3 @@ class OrderSearchTests(TestCase):
         self.assertTemplateNotUsed(response, self.template_name)
         self.assertTemplateUsed(response, "orders/order_cancel.html")
         self.assertEqual(len(messages), 0)
-
-    def test_user_with_multiple_future_orders_on_same_day(self):
-        self.fail()

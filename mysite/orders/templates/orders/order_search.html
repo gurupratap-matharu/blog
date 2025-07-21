@@ -2,9 +2,11 @@
 
 {% load static i18n %}
 
-{% block title %}
-  {% translate "Devolución de pasajes" %}
-{% endblock title %}
+{# djlint:off #}
+{% block title %}{% translate "Devolución de pasajes" %}{% endblock title %}
+{% block description %}{% translate "¿Cambio de planes? Acá podes devolver tus pasajes de micro. Con Ventanita es muy fácil solo necesitas tu e-mail y código de reserva." %}{% endblock description %}
+
+{# djlint:on #}
 
 {% block content %}
   <div class="row">
