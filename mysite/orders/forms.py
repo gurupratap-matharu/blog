@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -11,6 +10,8 @@ logger = logging.getLogger(__name__)
 
 
 class OrderForm(forms.ModelForm):
+    INVALID_EMAIL_MSG = _("Las direcciones de correo electrónico no coinciden")
+
     confirm_email = forms.EmailField(
         label=_("Confirmar Correo Electrónico"),
         widget=forms.TextInput(attrs={"class": "form-control"}),
@@ -39,9 +40,8 @@ class OrderForm(forms.ModelForm):
         email = cd.get("email")
         confirm_email = cd.get("confirm_email")
 
-        if email != confirm_email:
-            msg = _("Las direcciones de correo electrónico no coinciden")
-            err = ValidationError(msg, code="invalid")
+        if email and confirm_email and (email.lower() != confirm_email.lower()):
+            err = ValidationError(self.INVALID_EMAIL_MSG, code="invalid")
             self.add_error("confirm_email", err)
 
 
@@ -78,6 +78,9 @@ class PassengerForm(forms.ModelForm):
 
 
 class OrderSearchForm(forms.Form):
+    """
+    Form to search an order before cancellation.
+    """
 
     reservation_code = forms.CharField(
         label=_("Código de Reserva"),
@@ -85,13 +88,6 @@ class OrderSearchForm(forms.Form):
         max_length=10,
         required=True,
         widget=forms.TextInput(attrs={"class": "form-control"}),
-    )
-
-    travel_date = forms.DateField(
-        label=_("Fecha de viaje"),
-        input_formats=["%d-%m-%Y"],
-        required=True,
-        widget=forms.DateInput(attrs={"class": "form-control travel-date"}),
     )
 
     email = forms.EmailField(
@@ -107,21 +103,3 @@ class OrderSearchForm(forms.Form):
             attrs = self[field].field.widget.attrs
             attrs.setdefault("class", "")
             attrs["class"] += " is-invalid"
-
-    def clean_travel_date(self):
-        """
-        Allow travel date in the future only since past tickets cannot be cancelled.
-        """
-
-        logger.info("checking travel date is in future...")
-
-        data = self.cleaned_data["travel_date"]
-
-        if data < datetime.today().date():
-            raise ValidationError(
-                _("Fecha de ida:%(value)s no puede ser en el pasado"),
-                code="invalid",
-                params={"value": data},
-            )
-
-        return data
