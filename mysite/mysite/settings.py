@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "trips.apps.TripsConfig",
     "orders.apps.OrdersConfig",
     "payments.apps.PaymentsConfig",
+    "tools.apps.ToolsConfig",
     # Wagtail contrib
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -184,6 +185,7 @@ EMAIL_PORT = 1025
 
 # Email
 DEFAULT_FROM_EMAIL = "'Ventanita' <noreply@ventanita.com.ar>"
+NOTIFICATION_EMAIL = "'Ventanita | Notificaciones' <notificaciones@ventanita.com.ar>"
 DEFAULT_TO_EMAIL = "gurupratap.matharu@gmail.com"
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 RECIPIENT_LIST = ["gurupratap.matharu@gmail.com"]
@@ -406,6 +408,11 @@ LOGGING = {
 
 SHELL_PLUS_PRINT_SQL = True
 SHELL_PLUS_PRINT_SQL_TRUNCATE = None
+SHELL_PLUS_IMPORTS = [
+    "import json, random",
+    "from datetime import datetime, timedelta",
+    "from orders.factories import OrderFactory",
+]
 
 
 if not DEBUG:
