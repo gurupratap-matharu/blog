@@ -155,3 +155,42 @@ SEARCH_RESULTS = {
         }
     ],
 }
+
+COMPLETE_SALE = {
+    "result": {"is_ok": "true", "has_warnings": "false"},
+    "details": {
+        "origin": "2 - Retiro - RRO(Avenida Antartida Argentina y Calle 10)",
+        "destination": "Gualeguaychú",
+        "departure": "2025-05-22 05:00",
+        "arrival": "2025-05-22 08:20",
+        "created": "2025-05-21 10:25",
+        "category": "Cama",
+        "company": "GOQ",
+        "company_description": "GOQ - QC",
+        "company_address": "Avenida Brasil 549849 - CABA - BUENOS AIRES - ARGENTINA",
+        "company_tax_category": "Responsable Inscript",
+        "company_tax_id": "CUIT: 210276180011",
+        "company_tax_iibb": "258965478",
+        "company_email": "lapruebadelmailmaslargoeshipernecesaria1234567890123456789012345@prueba.com",
+    },
+    "items": [
+        {
+            "ticket_number": "6150021",
+            "seat": "1",
+            "price_gross": "550044.0000",
+            "price_net": "550044.0000",
+            "currency": "Peso argentino",
+            "first_name": "Harjinder",
+            "last_name": "Kaur",
+            "document_type": "D.N.I.",
+            "document_number": "19833212",
+            "Nationality": "Argentina",
+            "date_of_birth": "1955-05-21",
+            "phone_number": "+91233422533",
+            "email": None,
+            "gender": "F",
+            "bar_code": "0000061500210005010276180011081550044,02205202505001104    00000011000KAUR HARJINDER                          119833212       1000095",
+            "qr_code": "6150021",
+        }
+    ],
+}
