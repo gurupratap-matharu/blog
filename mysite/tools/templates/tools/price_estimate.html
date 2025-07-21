@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %}
+
+{% load static i18n wagtailcore_tags %}
+
+{% block title %}
+  {% translate "Precio de Pasajes en Micro" %}
+{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col col-xl-10 mx-auto">
+        <h1>Precio de Pasajes en Micro</h1>
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-md-6">
+              <label for="origin" class="form-label">Origen</label>
+              <input type="text" class="form-control" id="origin" name="origin" />
+            </div>
+            <div class="col-12 col-md-6">
+              <label for="destination" class="form-label">Destino</label>
+              <input type="text" class="form-control" id="destination" name="destination" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-lg bg-gradient-primary">Buscar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
