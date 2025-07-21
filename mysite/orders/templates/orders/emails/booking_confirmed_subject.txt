@@ -1,1 +1,1 @@
-{% load i18n %}{% translate "¡Genial! Tu viaje está confirmado" %}
+Ventanita - Reserva {{ order.reservation_code }} / {{ details.departure }}

@@ -1133,7 +1133,7 @@ class Prosys:
         data["last_name"] = key.find("MCPasajeroApellido").text
         data["document_type"] = key.find("MCPasajeroTipoDocumento").text
         data["document_number"] = key.find("MCPasajeroNumeroDocumento").text
-        data["Nationality"] = key.find("MCPasajeroNacionalidad").text
+        data["nationality"] = key.find("MCPasajeroNacionalidad").text
         data["date_of_birth"] = key.find("MCPasajeroFechaNacimiento").text
         data["phone_number"] = key.find("MCPasajeroNumeroTelefono").text
         data["email"] = key.find("MCPasajeroMail").text

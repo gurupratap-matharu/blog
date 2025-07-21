@@ -1,5 +1,8 @@
 Hola {{ order.name }},
 
+Gracias por elegir Ventanita.
+
+Código de Reserva: {{ order.reservation_code }}
 Empresa: {{ details.company }}
 
 Origen: {{ details.origin }}
@@ -8,6 +11,7 @@ Salida: {{ details.departure }}
 Destino: {{ details.destination }}
 Llegada: {{ details.arrival }}
 
+Categoría: {{ details.category }}
 {% for passenger in items %}
 Pasajero {{ forloop.counter }}
 Nombre: {{ passenger.first_name }} {{ passenger.last_name }}
