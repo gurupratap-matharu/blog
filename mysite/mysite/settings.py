@@ -411,7 +411,6 @@ SHELL_PLUS_PRINT_SQL_TRUNCATE = None
 SHELL_PLUS_IMPORTS = [
     "import json, random",
     "from datetime import datetime, timedelta",
-    "from orders.factories import OrderFactory",
 ]
 
 
