@@ -5,7 +5,7 @@ from timeit import default_timer as timer
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -63,10 +63,10 @@ class Order(models.Model):
     def confirm(self, payment_id, guid):
         logger.info("confirming order...")
 
-        if not payment_id:
+        if not payment_id or not guid:
             raise ValidationError(
-                "Order: %(order)s cannot be confirmed without a payment_id!",
-                params={"order": self},
+                "Order: %(order)s cannot be confirmed without both a payment_id: %(payment_id)s and guid:%(guid)s!",
+                params={"order": self, "payment_id": payment_id, "guid": guid},
                 code="invalid",
             )
 
@@ -82,36 +82,49 @@ class Order(models.Model):
 
         return self
 
-    def send_confirmation(self, payment_id, sale, guid):
+    def send_user_email(self, sale):
         """
-        Update the order with payment_id and send an email to the user.
+        Send the buyer an email with tickets.
         """
+
+        logger.info("sending confirmation email...")
+        context = sale
+
+        context["order"] = self
+
         start = timer()
-        logger.info("sale:%s" % sale)
-
-        sale["order"] = self
-
-        self.confirm(payment_id=payment_id, guid=guid)
 
         subject_path = "orders/emails/booking_confirmed_subject.txt"
         message_path = "orders/emails/booking_confirmed_message.txt"
 
-        subject = render_to_string(subject_path, context=sale).strip()
-        message = render_to_string(message_path, context=sale).strip()
+        subject = render_to_string(subject_path, context).strip()
+        message = render_to_string(message_path, context).strip()
 
-        mails_sent = send_mail(
+        msg = EmailMultiAlternatives(
             subject,
             message,
-            settings.DEFAULT_FROM_EMAIL,
-            [self.email, settings.DEFAULT_TO_EMAIL],
-            fail_silently=False,
+            settings.NOTIFICATION_EMAIL,
+            [self.email],
+            cc=[settings.NOTIFICATION_EMAIL],
+            reply_to=[settings.NOTIFICATION_EMAIL],
         )
 
+        mails_sent = msg.send()
         end = timer()
 
-        logger.info("confirmation took:%0.2f secs" % (end - start))
+        logger.info("took:%0.2f secs" % (end - start))
 
         return mails_sent
+
+    def send_confirmation(self, payment_id, sale, guid):
+        """
+        Update the order with payment_id and send an email to the user.
+        """
+
+        self.confirm(payment_id=payment_id, guid=guid)
+        self.send_user_email(sale=sale)
+
+        return self
 
 
 class Passenger(models.Model):
