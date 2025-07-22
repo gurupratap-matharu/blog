@@ -186,6 +186,7 @@ EMAIL_PORT = 1025
 # Email
 DEFAULT_FROM_EMAIL = "'Ventanita' <noreply@ventanita.com.ar>"
 NOTIFICATION_EMAIL = "'Ventanita | Notificaciones' <notificaciones@ventanita.com.ar>"
+CANCELLATION_EMAIL = "'Ventanita | Devoluciones' <devoluciones@ventanita.com.ar>"
 DEFAULT_TO_EMAIL = "gurupratap.matharu@gmail.com"
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 RECIPIENT_LIST = ["gurupratap.matharu@gmail.com"]

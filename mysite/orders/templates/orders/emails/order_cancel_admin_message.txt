@@ -1,0 +1,11 @@
+Hi,
+
+Order Cancellation request received
+
+Name: {{ order.name }}
+Phone: {{ order.phone_number }}
+Reservation Code: {{ order.reservation_code }}
+Transaction id: {{ order.transaction_id }}
+Email: {{ order.email }}
+Ticket Ids: {{ ticket_ids }}
+API Response: {{ data }}

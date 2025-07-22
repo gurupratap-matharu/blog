@@ -3,10 +3,11 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.mail import mail_admins
+from django.core.mail import EmailMultiAlternatives
 from django.forms import modelformset_factory
 from django.http import FileResponse
 from django.shortcuts import redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, FormView, View
@@ -184,16 +185,24 @@ class OrderCancelView(DetailView):
 
         return context
 
+    def get_tickets(self):
+        session = self.request.session
+        order = self.object
+
+        obj = Prosys(connection_id=session.get("connection_id"))
+        tickets = obj.get_tickets(guid=order.transaction_id)
+
+        return tickets
+
     def post(self, request, *args, **kwargs):
         ticket_ids = request.POST.getlist("ticket_id")
         connection_id = request.session.get("connection_id")
-        order = self.get_object()
 
         logger.info("ticket_ids:%s" % ticket_ids)
 
         obj = Prosys(connection_id=connection_id)
 
-        response = []
+        data = []
 
         for ticket_id in ticket_ids:
 
@@ -201,14 +210,45 @@ class OrderCancelView(DetailView):
             retention_pct = ticket.get("details")["retention_pct"]
 
             refund = obj.refund(ticket_id=ticket_id, retention_pct=retention_pct)
-            response.append(refund)
+            data.append(refund)
 
-        json_response = json.dumps(response, ensure_ascii=False, indent=4)
+        self.send_cancellation_mail(ticket_ids, data)
+        messages.success(request, self.success_msg)
+
+        return redirect("/")
+
+    def send_cancellation_mail(self, ticket_ids, data):
+        """
+        Send order cancellation confirmation to the user and
+        a copy to us.
+        """
 
         logger.info("sending order cancel email...")
 
-        subject = f"Devolución: {ticket_ids}"
-        message = (
+        order = self.get_object()
+        json_response = json.dumps(data, ensure_ascii=False, indent=4)
+
+        context = dict()
+        context["order"] = order
+        context["data"] = data
+        context["ticket_ids"] = ticket_ids
+
+        subject_path = "orders/emails/order_cancel_subject.txt"
+        message_path = "orders/emails/order_cancel_message.txt"
+
+        subject = render_to_string(subject_path, context).strip()
+        message = render_to_string(message_path, context).strip()
+
+        user_email = EmailMultiAlternatives(
+            subject,
+            message,
+            settings.NOTIFICATION_EMAIL,
+            [order.email],
+            cc=[settings.CANCELLATION_EMAIL],
+            reply_to=[settings.CANCELLATION_EMAIL],
+        )
+
+        admin_message = (
             f"Name             :{order.name}\n"
             f"Phone            :{order.phone_number}\n"
             f"Reservation Code :{order.reservation_code}\n"
@@ -218,20 +258,17 @@ class OrderCancelView(DetailView):
             f"API Response     :{json_response}\n"
         )
 
-        mail_admins(subject, message)
+        admin_email = EmailMultiAlternatives(
+            subject,
+            admin_message,
+            settings.NOTIFICATION_EMAIL,
+            [settings.CANCELLATION_EMAIL],
+        )
 
-        messages.success(request, self.success_msg)
+        mails_sent = user_email.send()
+        admin_email.send()
 
-        return redirect("/")
-
-    def get_tickets(self):
-        session = self.request.session
-        order = self.object
-
-        obj = Prosys(connection_id=session.get("connection_id"))
-        tickets = obj.get_tickets(guid=order.transaction_id)
-
-        return tickets
+        return mails_sent
 
 
 class TicketsView(View):

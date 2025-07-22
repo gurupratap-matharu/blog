@@ -6,6 +6,7 @@
 {% block title %}{% translate "Devolución de pasajes" %}{% endblock title %}
 {% block description %}{% translate "¿Cambio de planes? Acá podes devolver tus pasajes de micro. Con Ventanita es muy fácil solo necesitas tu e-mail y código de reserva." %}{% endblock description %}
 
+
 {# djlint:on #}
 
 {% block content %}
@@ -14,6 +15,7 @@
       <div class="card card-plain">
         <div class="card-header pb-0">
           <h1 class="fs-4">{% translate "Devolución de pasajes" %}</h1>
+          <p>{% translate "Ingresá tu código de reserva y email y te buscamos tus pasajes." %}</p>
         </div>
         <div class="card-body">
           <form method="post">
@@ -37,8 +39,7 @@
               </label>
             </div>
             <div class="d-flex justify-content-between mt-5">
-              <a href="/" class="btn btn-round btn-outline-light text-dark">{% translate "Cancel" %}</a>
-              <button class="btn btn-round bg-gradient-primary" type="submit">{% translate "Buscar" %}</button>
+              <button class="btn btn-lg bg-gradient-primary w-100" type="submit">{% translate "Buscar" %}</button>
             </div>
           </form>
         </div>
