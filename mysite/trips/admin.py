@@ -5,4 +5,16 @@ from trips.models import Location
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        "name",
+        "abbr",
+        "city",
+        "state",
+        "postal_code",
+        "country",
+        "latitude",
+        "longitude",
+    )
+    prepopulated_fields = {"slug": ("name",)}
+    search_fields = ("name",)
+    list_per_page = 30
