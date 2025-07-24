@@ -1,1 +1,1 @@
-Devolución | Ventanita {{ order.reservation_code }} / {{ ticket_ids }}
+Devolución | Ventanita {{ order.reservation_code }}

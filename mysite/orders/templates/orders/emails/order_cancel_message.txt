@@ -5,7 +5,6 @@ Gracias por elegir Ventanita.
 Hemos recibido tu solicitud de devolución de pasajes y eso ya está en proceso.
 
 Código de reserva: {{ order.reservation_code }}
-Los boletos son: {{ ticket_ids }}
 
 El reembolso se acreditará a la tarjeta utilizada al momento del pago.
 
