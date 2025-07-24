@@ -12,7 +12,7 @@ class LocationModelTests(TestCase):
 
     def test_str_representation(self):
         location = LocationFactory()
-        self.assertEqual(str(location), f"{self.name}")
+        self.assertEqual(str(location), f"{location.name}")
 
     def test_verbose_names(self):
         location = LocationFactory()
