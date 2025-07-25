@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse_lazy
 from django.utils.text import slugify
@@ -57,3 +59,76 @@ class Location(models.Model):
 
     def get_absolute_url(self) -> str:
         return reverse_lazy("locations:location-detail", kwargs={"slug": self.slug})
+
+
+class Stats(models.Model):
+    """
+    Holds statistics between a pair of locations. This could be information
+    like duration, price, first & last departures between (origin, destination) pair.
+    """
+
+    origin = models.ForeignKey(
+        "trips.Location", on_delete=models.SET_NULL, related_name="+", null=True
+    )
+    destination = models.ForeignKey(
+        "trips.Location", on_delete=models.SET_NULL, related_name="+", null=True
+    )
+
+    first_departure = models.TimeField(_("First departure"), null=True)
+    last_departure = models.TimeField(_("Last departure"), null=True)
+    duration = models.DurationField(_("Duration"), null=True)
+
+    price_economy = models.DecimalField(
+        _("Price Economy"),
+        max_digits=9,
+        decimal_places=2,
+        null=True,
+        validators=[MinValueValidator(1)],
+    )
+    price_avg = models.DecimalField(
+        _("Price Average"),
+        max_digits=9,
+        decimal_places=2,
+        null=True,
+        validators=[MinValueValidator(1)],
+    )
+
+    num_departures = models.PositiveIntegerField(
+        _("Number of departures per day"), null=True
+    )
+
+    companies = models.CharField(_("companies"), max_length=200, blank=True)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("stats")
+        verbose_name_plural = _("stats")
+        indexes = [
+            models.Index(fields=["-created_on"]),
+        ]
+
+    def clean(self):
+        """
+        Don't allow duplicate (origin, destination) stats
+        Don't allow stats between same origin, destination
+        """
+
+        if self.origin == self.destination:
+            raise ValidationError(
+                _("Stats cannot be created between same origin:destination pair!"),
+                code="invalid",
+                params={"origin": self.origin, "destination": self.destination},
+            )
+
+        qs = Stats.objects.filter(origin=self.origin, destination=self.destination)
+        if qs.exists():
+            raise ValidationError(
+                _("Stats for pair (%(origin)s:%(destination)s) already exists!"),
+                code="invalid",
+                params={"origin": self.origin, "destination": self.destination},
+            )
+
+    def __str__(self):
+        return f"{self.origin}:{self.destination}"

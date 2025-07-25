@@ -1,8 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.text import slugify
 
-from trips.factories import LocationFactory
-from trips.models import Location
+from trips.factories import LocationFactory, StatsFactory
+from trips.models import Location, Stats
 
 
 class LocationModelTests(TestCase):
@@ -39,3 +40,47 @@ class LocationModelTests(TestCase):
 
         self.assertIsNotNone(location.slug)
         self.assertEqual(location.slug, slugify(location.name))
+
+
+class StatsModelTests(TestCase):
+    """
+    Test suite for the stats model.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        # Set up data for the whole TestCase
+        cls.origin = LocationFactory()
+        cls.destination = LocationFactory()
+
+    def test_str_representation(self):
+        stats = StatsFactory(origin=self.origin, destination=self.destination)
+
+        self.assertEqual(str(stats), f"{stats.origin}:{stats.destination}")
+
+    def test_verbose_names(self):
+        stats = StatsFactory(origin=self.origin, destination=self.destination)
+
+        self.assertEqual(str(stats._meta.verbose_name), "stats")
+        self.assertEqual(str(stats._meta.verbose_name_plural), "stats")
+
+    def test_stats_model_creation_is_accurate(self):
+
+        stats = StatsFactory(origin=self.origin, destination=self.destination)
+        s_db = Stats.objects.first()
+
+        self.assertEqual(Stats.objects.count(), 1)
+
+        self.assertEqual(s_db.first_departure, stats.first_departure)
+        self.assertEqual(s_db.last_departure, stats.last_departure)
+        self.assertEqual(s_db.duration, stats.duration)
+        self.assertEqual(s_db.price_economy, stats.price_economy)
+        self.assertEqual(s_db.price_avg, stats.price_avg)
+        self.assertEqual(s_db.num_departures, stats.num_departures)
+        self.assertEqual(s_db.companies, stats.companies)
+
+    def test_stats_cannot_have_same_origin_destination(self):
+        loc = LocationFactory(name="Ushuaia")
+
+        with self.assertRaises(ValidationError):
+            StatsFactory(origin=loc, destination=loc).full_clean()
