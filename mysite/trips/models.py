@@ -132,3 +132,13 @@ class Stats(models.Model):
 
     def __str__(self):
         return f"{self.origin}:{self.destination}"
+
+    def get_companies_list(self):
+        companies = self.companies.replace("/", ",").replace("|", ",")
+        return [x.strip() for x in companies.split(",")]
+
+    def get_duration_display(self):
+        hours, remaining_seconds = divmod(self.duration.seconds, 3600)
+        mins = remaining_seconds // 60
+
+        return f"{hours} hr {mins} min"
