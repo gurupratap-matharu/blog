@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import PriceEstimateView
+from .views import PriceEstimateView, ToolsIndexView
 
 app_name = "tools"
 
@@ -10,4 +10,5 @@ urlpatterns = [
         PriceEstimateView.as_view(),
         name="price-estimate",
     ),
+    path("", ToolsIndexView.as_view(), name="tools-index"),
 ]

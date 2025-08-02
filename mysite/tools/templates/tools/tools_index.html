@@ -1,0 +1,26 @@
+{% extends "layouts/base.html" %}
+
+{% load static i18n wagtailcore_tags %}
+
+{# djlint:off #}
+{% block title %}Herramientas para planear tu viaje en Micro - Ventanita{% endblock title %}
+{% block description %}Usá estas herramientas para mejor planear tu viajes. Danos feedback de que te gustaria ver?.
+Todas son gratuitas, rápidas y útiles para todos los viajeros!{% endblock description%}
+
+
+{# djlint:on #}
+
+{% block content %}
+  <div class="container mb-5">
+    <div class="row">
+      <div class="col col-xl-10 mx-auto">
+        <h1 class="fs-2">Herramientas Grátis</h1>
+        <ul>
+          <li>
+            <a href="/herramientas/precio-de-pasajes-en-micro/">Estimador de precios de pasajes</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
