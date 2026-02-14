@@ -7,6 +7,7 @@ requires-python = ">=3.14"
 dependencies = [
     "django-allauth[socialaccount]>=65.14.3",
     "django-countries>=8.2.0",
+    "gunicorn>=25.1.0",
     "mercadopago>=2.3.0",
     "psycopg2-binary>=2.9.11",
     "python-dotenv>=1.2.1",
