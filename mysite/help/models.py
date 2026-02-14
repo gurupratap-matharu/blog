@@ -9,6 +9,7 @@ from wagtail.search import index
 from base.blocks import BaseStreamBlock
 from base.models import BasePage, GenericImportantPages
 
+
 logger = logging.getLogger(__name__)
 
 

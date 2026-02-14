@@ -6,10 +6,11 @@ from django.core import mail
 from django.test import TestCase
 from django.urls import resolve, reverse
 
+from trips.providers.factories import ProsysFactory
+
 from orders.factories import OrderFactory
 from orders.forms import OrderSearchForm
 from orders.views import OrderCancelView, OrderSearchView
-from trips.providers.factories import ProsysFactory
 
 
 class OrderSearchTests(TestCase):
@@ -85,7 +86,9 @@ class OrderSearchTests(TestCase):
         messages = list(get_messages(response.wsgi_request))
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertRedirects(response, order.get_cancel_url(), HTTPStatus.FOUND)
+        self.assertRedirects(
+            response, order.get_cancel_url(), HTTPStatus.FOUND
+        )
         self.assertTemplateNotUsed(response, self.template_name)
         self.assertTemplateUsed(response, "orders/order_cancel.html")
         self.assertEqual(len(messages), 0)
@@ -116,7 +119,9 @@ class OrderSearchTests(TestCase):
         messages = list(get_messages(response.wsgi_request))
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertRedirects(response, order.get_cancel_url(), HTTPStatus.FOUND)
+        self.assertRedirects(
+            response, order.get_cancel_url(), HTTPStatus.FOUND
+        )
         self.assertTemplateNotUsed(response, self.template_name)
         self.assertTemplateUsed(response, "orders/order_cancel.html")
         self.assertEqual(len(messages), 0)
@@ -182,7 +187,9 @@ class OrderCancelTests(TestCase):
         obj.refund = MagicMock(return_value={"status": "ok"})
 
         # Act
-        response = self.client.post(order.get_cancel_url(), data=data, follow=True)
+        response = self.client.post(
+            order.get_cancel_url(), data=data, follow=True
+        )
 
         # Assert
         # Make sure user is redirected to Home with a valid confirmation message

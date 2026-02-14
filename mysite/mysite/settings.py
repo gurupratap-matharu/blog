@@ -5,9 +5,8 @@ from pathlib import Path
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 
-import sentry_sdk
 from dotenv import load_dotenv
-from sentry_sdk.integrations.django import DjangoIntegration
+
 
 load_dotenv()
 
@@ -36,8 +35,8 @@ INSTALLED_APPS = [
     "help.apps.HelpConfig",
     "users.apps.UsersConfig",
     "trips.apps.TripsConfig",
-    "orders.apps.OrdersConfig",
-    "payments.apps.PaymentsConfig",
+    # "orders.apps.OrdersConfig",
+    # "payments.apps.PaymentsConfig",
     "tools.apps.ToolsConfig",
     # Wagtail contrib
     "wagtail.contrib.forms",
@@ -64,6 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.postgres",
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.sitemaps",
@@ -108,7 +108,10 @@ INTERNAL_IPS = ["127.0.0.1"]
 TESTING = "test" in sys.argv
 if not TESTING:
     INSTALLED_APPS = [*INSTALLED_APPS, "debug_toolbar"]
-    MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware", *MIDDLEWARE]
+    MIDDLEWARE = [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        *MIDDLEWARE,
+    ]
 
 # Django allauth
 ACCOUNT_LOGIN_METHODS = {"email"}
@@ -185,8 +188,12 @@ EMAIL_PORT = 1025
 
 # Email
 DEFAULT_FROM_EMAIL = "'Ventanita' <noreply@ventanita.com.ar>"
-NOTIFICATION_EMAIL = "'Ventanita | Notificaciones' <notificaciones@ventanita.com.ar>"
-CANCELLATION_EMAIL = "'Ventanita | Devoluciones' <devoluciones@ventanita.com.ar>"
+NOTIFICATION_EMAIL = (
+    "'Ventanita | Notificaciones' <notificaciones@ventanita.com.ar>"
+)
+CANCELLATION_EMAIL = (
+    "'Ventanita | Devoluciones' <devoluciones@ventanita.com.ar>"
+)
 DEFAULT_TO_EMAIL = "gurupratap.matharu@gmail.com"
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 RECIPIENT_LIST = ["gurupratap.matharu@gmail.com"]
@@ -231,12 +238,6 @@ DATABASES = {
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": "127.0.0.1:11211",
-    }
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -437,18 +438,3 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
 
     X_FRAME_OPTIONS = "DENY"
-
-    # Sentry
-
-    sentry_sdk.init(
-        dsn=os.getenv("SENTRY_DSN"),
-        integrations=[DjangoIntegration()],
-        environment="Ventanita-AR",
-        # Set traces_sample_rate to 1.0 to capture 100%
-        # of transactions for performance monitoring.
-        # We recommend adjusting this value in production.
-        traces_sample_rate=0.1,
-        # If you wish to associate users to errors (assuming you are using
-        # django.contrib.auth) you may enable sending PII data.
-        send_default_pii=True,
-    )

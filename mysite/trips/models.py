@@ -25,8 +25,12 @@ class Location(models.Model):
         unique=True,
         help_text=_("Used internally as a reference"),
     )
-    address_line1 = models.CharField(_("Address line 1"), max_length=128, blank=True)
-    address_line2 = models.CharField(_("Address line 2"), max_length=128, blank=True)
+    address_line1 = models.CharField(
+        _("Address line 1"), max_length=128, blank=True
+    )
+    address_line2 = models.CharField(
+        _("Address line 2"), max_length=128, blank=True
+    )
     city = models.CharField(_("City"), max_length=64, blank=True)
     state = models.CharField(_("State/Province"), max_length=200, blank=True)
     postal_code = models.CharField(_("Postal Code"), max_length=10, blank=True)
@@ -58,7 +62,9 @@ class Location(models.Model):
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self) -> str:
-        return reverse_lazy("locations:location-detail", kwargs={"slug": self.slug})
+        return reverse_lazy(
+            "locations:location-detail", kwargs={"slug": self.slug}
+        )
 
 
 class Stats(models.Model):
@@ -68,10 +74,16 @@ class Stats(models.Model):
     """
 
     origin = models.ForeignKey(
-        "trips.Location", on_delete=models.SET_NULL, related_name="+", null=True
+        "trips.Location",
+        on_delete=models.SET_NULL,
+        related_name="+",
+        null=True,
     )
     destination = models.ForeignKey(
-        "trips.Location", on_delete=models.SET_NULL, related_name="+", null=True
+        "trips.Location",
+        on_delete=models.SET_NULL,
+        related_name="+",
+        null=True,
     )
 
     first_departure = models.TimeField(_("First departure"), null=True)
@@ -117,17 +129,29 @@ class Stats(models.Model):
 
         if self.origin == self.destination:
             raise ValidationError(
-                _("Stats cannot be created between same origin:destination pair!"),
+                _(
+                    "Stats cannot be created between same origin:destination pair!"
+                ),
                 code="invalid",
-                params={"origin": self.origin, "destination": self.destination},
+                params={
+                    "origin": self.origin,
+                    "destination": self.destination,
+                },
             )
 
-        qs = Stats.objects.filter(origin=self.origin, destination=self.destination)
+        qs = Stats.objects.filter(
+            origin=self.origin, destination=self.destination
+        )
         if qs.exists():
             raise ValidationError(
-                _("Stats for pair (%(origin)s:%(destination)s) already exists!"),
+                _(
+                    "Stats for pair (%(origin)s:%(destination)s) already exists!"
+                ),
                 code="invalid",
-                params={"origin": self.origin, "destination": self.destination},
+                params={
+                    "origin": self.origin,
+                    "destination": self.destination,
+                },
             )
 
     def __str__(self):

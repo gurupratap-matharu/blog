@@ -9,9 +9,8 @@ from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
 
 from base.models import Country, FooterText, Person
-from partners.models import Amenity
-
 from blog.models import BlogCategory
+from partners.models import Amenity
 
 
 class AmenityViewSet(SnippetViewSet):

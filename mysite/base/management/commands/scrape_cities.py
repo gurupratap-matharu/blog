@@ -6,8 +6,10 @@ import time
 from django.core.management.base import BaseCommand
 
 import requests
-from base.scrapers.base import HEADERS
 from bs4 import BeautifulSoup
+
+from base.scrapers.base import HEADERS
+
 
 headers = {
     "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_2 like Mac OS X)"
@@ -39,7 +41,9 @@ class Command(BaseCommand):
 
         city = bs.find("h1").get_text().lstrip("Stations in ")
         links = bs.find_all("li", {"class": "suggestion"})
-        stations = [(city, link.a.get_text(), link.a.attrs["href"]) for link in links]
+        stations = [
+            (city, link.a.get_text(), link.a.attrs["href"]) for link in links
+        ]
 
         logger.info("city:%s" % city)
 

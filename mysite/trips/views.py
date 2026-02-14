@@ -10,6 +10,7 @@ from django.views.generic import TemplateView
 from trips.forms import TripSearchForm
 from trips.providers.prosys import Prosys
 
+
 logger = logging.getLogger(__name__)
 
 

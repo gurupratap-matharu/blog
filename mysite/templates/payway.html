@@ -1,0 +1,88 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block title %}
+  Payway
+{% endblock title %}
+
+{% block content %}
+  <section class="container">
+    <h3 class="text-center">Payway Integration</h3>
+    <div class="row">
+      <div class="col col-md-6 col-lg-4 mx-auto">
+        <div class="card">
+          <div class="card-header">
+            <h5>Con datos de tarjeta</h5>
+          </div>
+          <div class="card-body">
+            <form method="post" id="payment-form" name="payment-form">
+              <label for="card_number" class="form-label">Numero de tarjeta:</label>
+              <input type="text" class="form-control" data-decidir="card_number" placeholder="XXXXXXXXXXXXXXXX" value="4507990000004905" />
+              <label for="security_code" class="form-label">Codigo de seguridad:</label>
+              <input type="text" class="form-control" data-decidir="security_code" placeholder="XXX" value="123" />
+              <label for="card_expiration_month" class="form-label">Mes de vencimiento:</label>
+              <input type="text" class="form-control" data-decidir="card_expiration_month" placeholder="MM" value="12" />
+              <label for="card_expiration_year" class="form-label">Año de vencimiento:</label>
+              <input type="text" class="form-control" data-decidir="card_expiration_year" placeholder="AA" value="30" />
+              <label for="card_holder_name" class="form-label">Nombre del titular:</label>
+              <input type="text" class="form-control" data-decidir= "card_holder_name" placeholder="TITULAR" value="TITULAR" />
+              <label for="card_holder_doc_type" class="form-label">Tipo de documento:</label>
+              <select class="form-select" data-decidir="card_holder_doc_type">
+                <option value="dni">DNI</option>
+              </select>
+              <label for="card_holder_doc_type">Numero de documento:</label>
+              <input type="text" class="form-control" data-decidir= "card_holder_doc_number" placeholder="XXXXXXXXXX" value="27859328" />
+              <label for="card_holder_birthday">Card holder birthday:</label>
+              <input type="text"
+                     class="form-control"
+                     id="card_holder_birthday"
+                     data-decidir="card_holder_birthday"
+                     placeholder="ddMMYYYY"
+                     value="04091994" />
+              <label for="card_holder_door_number">Card holder door number:</label>
+              <input type="text"
+                     class="form-control"
+                     id="card_holder_door_number"
+                     data-decidir="card_holder_door_number"
+                     placeholder="NUM"
+                     value="1" />
+              <div class="d-flex justify-content-end mt-3">
+                <button class="btn bg-gradient-primary" type="submit">Submit</button>
+              </div>
+            </form>
+            <form method="post" id="token-form">
+              {% csrf_token %}
+              {{ form }}
+            </form>
+          </div>
+        </div>
+        <div class="card mt-3">
+          <div class="card-header">
+            <h5>Pago Offline</h5>
+          </div>
+          <div class="card-body">
+            <form method="post" id="offline-form" name="offline-form">
+              <label for="customer_name">Nombre del cliente:</label>
+              <input type="text" class="form-control" data-decidir="customer_name" placeholder="TITULAR" value="TITULAR" />
+              <label for="customer_doc_type">Tipo de documento:</label>
+              <select class="form-select" data-decidir="customer_doc_type">
+                <option value="dni">DNI</option>
+              </select>
+              <label for="customer_doc_number">Numero de documento:</label>
+              <input type="text" class="form-control" data-decidir= "customer_doc_number" placeholder="XXXXXXXXXX" value="27859328" />
+              <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn bg-gradient-primary">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}
+
+{% block extra_js %}
+  <script src="https://live.decidir.com/static/v2.6.4/decidir.js"></script>
+  <script src="{% static 'assets/js/payway.js' %}"></script>
+{% endblock extra_js %}

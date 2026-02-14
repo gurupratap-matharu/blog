@@ -2,11 +2,11 @@ from wagtail.models import Page, Site
 from wagtail.test.utils import WagtailPageTestCase
 from wagtail.test.utils.form_data import nested_form_data, streamfield
 
-from base.models import StandardPage
 from locations.models import CityIndexPage
-from partners.models import PartnerIndexPage
 
+from base.models import StandardPage
 from blog.models import BlogIndexPage
+from partners.models import PartnerIndexPage
 
 from .models import HomePage
 
@@ -21,7 +21,9 @@ class HomePageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         try:
-            default_home = Page.objects.get(title="Welcome to your new Wagtail site!")
+            default_home = Page.objects.get(
+                title="Welcome to your new Wagtail site!"
+            )
             default_home.slug = "home-old"
             default_home.save_revision().publish()
             default_home.save()
@@ -31,7 +33,10 @@ class HomePageTests(WagtailPageTestCase):
 
         cls.root = Page.objects.get(id=1).specific
         cls.home_page = HomePage(
-            title="Home", slug="home", hero_text="You can do it", hero_cta="Learn More"
+            title="Home",
+            slug="home",
+            hero_text="You can do it",
+            hero_cta="Learn More",
         )
         # Set Home Page as child of root
         cls.root.add_child(instance=cls.home_page)
@@ -77,11 +82,23 @@ class HomePageTests(WagtailPageTestCase):
 
     def test_can_create_index_pages_under_home_page(self):
         self.assertCanCreateAt(parent_model=HomePage, child_model=StandardPage)
-        self.assertCanCreateAt(parent_model=HomePage, child_model=BlogIndexPage)
-        self.assertCanCreateAt(parent_model=HomePage, child_model=CityIndexPage)
-        self.assertCanCreateAt(parent_model=HomePage, child_model=PartnerIndexPage)
+        self.assertCanCreateAt(
+            parent_model=HomePage, child_model=BlogIndexPage
+        )
+        self.assertCanCreateAt(
+            parent_model=HomePage, child_model=CityIndexPage
+        )
+        self.assertCanCreateAt(
+            parent_model=HomePage, child_model=PartnerIndexPage
+        )
 
     def test_cannot_create_wrong_children_or_parents_for_home_page(self):
-        self.assertCanNotCreateAt(parent_model=BlogIndexPage, child_model=HomePage)
-        self.assertCanNotCreateAt(parent_model=CityIndexPage, child_model=HomePage)
-        self.assertCanNotCreateAt(parent_model=PartnerIndexPage, child_model=HomePage)
+        self.assertCanNotCreateAt(
+            parent_model=BlogIndexPage, child_model=HomePage
+        )
+        self.assertCanNotCreateAt(
+            parent_model=CityIndexPage, child_model=HomePage
+        )
+        self.assertCanNotCreateAt(
+            parent_model=PartnerIndexPage, child_model=HomePage
+        )

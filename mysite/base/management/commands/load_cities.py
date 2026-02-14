@@ -5,8 +5,10 @@ from django.core.management.base import BaseCommand
 
 from wagtail.models import Locale
 
-from base.models import Country
 from locations.models import CityIndexPage, CityPage
+
+from base.models import Country
+
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +32,9 @@ class Command(BaseCommand):
                 logger.info("already exists city:%s" % city)
 
             except CityPage.DoesNotExist:
-                city_page = CityPage(title=city, country=argentina, seo_title=seo_title)
+                city_page = CityPage(
+                    title=city, country=argentina, seo_title=seo_title
+                )
                 city_index.add_child(instance=city_page)
                 city_page.save_revision().publish()
 

@@ -10,6 +10,7 @@ from django.core.management.base import BaseCommand
 import requests
 from bs4 import BeautifulSoup
 
+
 BASE_DIR = Path.home() / "Downloads" / "cdp"
 FAILED_LOG = BASE_DIR / "failed_urls.txt"
 
@@ -44,7 +45,6 @@ class Command(BaseCommand):
         data = self.read_json()
 
         for i, url in enumerate(urls, 1):
-
             self.stdout.write(f"\n[{i}/{len(urls)}] Processing: {url}")
 
             key = self.url_to_dict_key(url)
@@ -82,18 +82,22 @@ class Command(BaseCommand):
             print(f"[OK] Saved: {filename}")
 
         except Exception as e:
-            self.stdout.write(self.style.ERROR(f"[ERROR] Failed to fetch {url}: {e}"))
+            self.stdout.write(
+                self.style.ERROR(f"[ERROR] Failed to fetch {url}: {e}")
+            )
             with open(FAILED_LOG, "a") as f:
                 f.write(url + "\n")
 
             return
 
         else:
-
             bs = BeautifulSoup(response.text, "html.parser")
 
             parts = url.split("/")
-            data["origin_code"], data["destination_code"] = parts[-2], parts[-1]
+            data["origin_code"], data["destination_code"] = (
+                parts[-2],
+                parts[-1],
+            )
 
             for el in bs.find("footer").find_all("input"):
                 name = el.attrs.get("name")
@@ -133,7 +137,9 @@ class Command(BaseCommand):
                 data = json.load(f)
 
         except FileNotFoundError:
-            self.stdout.write("Could not find json so starting with empty dict")
+            self.stdout.write(
+                "Could not find json so starting with empty dict"
+            )
             data = dict()
 
         return data

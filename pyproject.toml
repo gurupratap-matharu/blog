@@ -1,114 +1,87 @@
-[tool.poetry]
+[project]
 name = "blog"
 version = "0.1.0"
-description = "This is Ventanita's marketing site"
-authors = ["Gurupratap Matharu <gurupratap.matharu@gmail.com>"]
+description = "Ventanita Argentina 🇦🇷"
 readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "django-allauth[socialaccount]>=65.14.3",
+    "django-countries>=8.2.0",
+    "mercadopago>=2.3.0",
+    "psycopg2-binary>=2.9.11",
+    "python-dotenv>=1.2.1",
+    "reportlab>=4.4.10",
+    "wagtail>=7.3",
+    "wagtail-localize>=1.13",
+    "zeep>=4.3.2",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-python-dotenv = "^0.21.0"
-wagtail-localize = "^1.9"
-gunicorn = "^23.0.0"
-django-allauth = {extras = ["socialaccount"], version = "^65.5.0"}
-psycopg2-binary = "^2.9.10"
-zeep = "^4.3.1"
-wagtail = "^7.0"
-django-countries = "^7.6.1"
-mercadopago = "^2.3.0"
-pymemcache = "^4.0.0"
-reportlab = "^4.4.2"
-
-[tool.poetry.group.dev.dependencies]
-djlint = "^1.31.1"
-ipython = "^8.14.0"
-django-extensions = "^3.2.3"
-django-debug-toolbar = "^4.1.0"
-coverage = "^7.5.1"
-black = "^24.4.2"
-ruff = "^0.6.9"
-sentry-sdk = "^2.16.0"
-isort = "^5.13.2"
-factory-boy = "^3.3.3"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "django-debug-toolbar>=6.2.0",
+    "django-extensions>=4.1",
+]
 
 [tool.ruff]
-line-length = 120
-exclude = [
-    "*migrations*",
-    ]
+line-length=79
+exclude=["*migrations*", "static"]
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-skip = ["docs", "migrations", "media", "static", ".git", ".github", ".ruff_cache", "htmlcov"]
-skip_glob = ["docs/*", "migrations/*", "static/*", "staticfiles/*", "media/*", "htmlcov/*", "*/locale/*", "*.html"]
-known_django = "django"
-known_wagtail = "wagtail"
-sections = "FUTURE,STDLIB,DJANGO,WAGTAIL,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+[tool.ruff.lint.isort]
+combine-as-imports=true
+force-single-line=false
+known-first-party=["blog", "base", "home", "search", "users", "partners", "orders", "payments"]
+known-third-party=["wagtail", "rest_framework"]
+lines-after-imports=2
+section-order=["future", "standard-library", "django", "wagtail", "third-party", "first-party", "local-folder"]
 
-[tool.bandit]
-exclude_dirs = ["docs", "path/to/file"]
-skips = ["B310", "B311"]
-
-[tool.black]
-exclude = '''
-/(
-  | migrations | docs
-)/
-'''
+[tool.ruff.lint.isort.sections]
+"django"=["django"]
+"wagtail"=["wagtail"]
 
 [tool.djlint]
-blank_line_before_tag = "load,extends,block,include"
-blank_line_after_tag = "load,extends,endblock,include"
-close_void_tags = true
-custom_blocks = "toc,example"
-custom_html = "mjml"
-exclude = ".venv,venv,.tox,.eggs,.git"
-extend_exclude = ".custom"
-format_attribute_template_tags = true
-format_css = true
-format_js = true
-# ignore = "H006"
+blank_line_before_tag="load,extends"
+blank_line_after_tag="load,extends,endblock"
+close_void_tags=true
+custom_blocks="toc,example"
+custom_html="mjml"
+exclude=".venv,venv,.tox,.eggs,.git"
+extend_exclude=".custom"
+format_attribute_template_tags=true
+format_css=true
+format_js=true
 ignore_blocks="raw,example"
 indent=2
-max_attribute_length = 120
-max_line_length = 120
-profile = "django"
-use_gitignore = true
+max_attribute_length=120
+max_line_length=120
+profile="django"
+# preserve_blank_lines=true
+use_gitignore=true
 
 [tool.djlint.css]
-indent_size = 5
+indent_size=5
 
 [tool.djlint.js]
-indent_size = 5
+indent_size=5
 
 [tool.coverage.run]
 branch = true
 omit = [
     # omit anything in a migrations directory anywhere
-    "*/migrations/*",
+    # "*/migrations/*",
     # omit the tests themselfves
-    "*/tests/*",
-    # omit everything in /usr
-    "/usr/*",
+    # "*/tests/*",
     # omit these single files
-    "mysite/mysite/asgi.py",
-    "mysite/mysite/wsgi.py",
-    "mysite/mysite/settings.py",
-    "mysite/manage.py",
-    "*/urls.py",
-    "*/__init__.py",
+    # "main/asgi.py",
+    # "main/wsgi.py",
+    # "main/settings.py",
+    # "manage.py",
+    # "*/urls.py",
+    # "*/__init__.py",
 ]
 
 [tool.coverage.report]
 show_missing = true
 skip_covered = false
-skip_empty = true
 
 [tool.coverage.html]
 show_contexts = true
-title = "Coverage Report | Ventanita"

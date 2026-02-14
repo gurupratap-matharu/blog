@@ -6,8 +6,10 @@ import time
 from django.core.management.base import BaseCommand
 
 import requests
-from base.scrapers.base import HEADERS
 from bs4 import BeautifulSoup
+
+from base.scrapers.base import HEADERS
+
 
 INPUT_CSV = "city_stations.csv"
 OUTPUT_CSV = "stations.csv"
@@ -24,7 +26,8 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         logger.warn(
-            "It is recommended you empty %s file to avoid duplicates\n" % INPUT_CSV
+            "It is recommended you empty %s file to avoid duplicates\n"
+            % INPUT_CSV
         )
         logger.info("running stations scraper...")
 
@@ -65,7 +68,9 @@ class Command(BaseCommand):
         """
 
         with open(filename, newline="") as csv_file:
-            city_stations_reader = csv.reader(csv_file, delimiter=" ", quotechar="|")
+            city_stations_reader = csv.reader(
+                csv_file, delimiter=" ", quotechar="|"
+            )
             city_stations = [tuple(row) for row in city_stations_reader]
 
         return city_stations
@@ -76,7 +81,6 @@ class Command(BaseCommand):
         Scrapes the data for a single bus station
         """
         try:
-
             response = requests.get(station_url, headers=HEADERS, timeout=10)
             bs = BeautifulSoup(response.text, "html.parser")
 

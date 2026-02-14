@@ -12,6 +12,7 @@ from wagtail.contrib.forms.views import SubmissionsListView
 from wagtail.images import get_image_model
 from wagtail.models.sites import Site
 
+
 logger = logging.getLogger(__name__)
 
 ImageModel = get_image_model()
@@ -84,10 +85,14 @@ class CustomSubmissionsListView(SubmissionsListView):
         for data_row in data_rows:
             fields = data_row["fields"]
 
-            for idx, (value, field_type) in enumerate(zip(fields, field_types)):
+            for idx, (value, field_type) in enumerate(
+                zip(fields, field_types)
+            ):
                 if field_type == "image" and value:
                     image = ImageModel.objects.get(pk=value)
-                    rendition = image.get_rendition("fill-100x75|jpegquality-40")
+                    rendition = image.get_rendition(
+                        "fill-100x75|jpegquality-40"
+                    )
                     preview_url = rendition.url
                     url = reverse("wagtailimages:edit", args=(image.id,))
                     # build up a link to the image, using the image title & id

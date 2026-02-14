@@ -7,6 +7,7 @@ from wagtail.test.utils.form_data import nested_form_data, streamfield
 from home.models import HomePage
 from locations.models import CityIndexPage, CityPage, StationPage
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -20,7 +21,9 @@ class CityIndexPageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         try:
-            default_home = Page.objects.get(title="Welcome to your new Wagtail site!")
+            default_home = Page.objects.get(
+                title="Welcome to your new Wagtail site!"
+            )
             default_home.slug = "home-old"
             default_home.save_revision().publish()
             default_home.save()
@@ -30,7 +33,10 @@ class CityIndexPageTests(WagtailPageTestCase):
 
         cls.root = Page.objects.get(id=1).specific
         cls.home_page = HomePage(
-            title="Home", slug="home", hero_text="You can do it", hero_cta="Learn More"
+            title="Home",
+            slug="home",
+            hero_text="You can do it",
+            hero_cta="Learn More",
         )
         cls.city_index_page = CityIndexPage(title="cities", slug="cities")
 
@@ -93,7 +99,9 @@ class CityPageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         try:
-            default_home = Page.objects.get(title="Welcome to your new Wagtail site!")
+            default_home = Page.objects.get(
+                title="Welcome to your new Wagtail site!"
+            )
             default_home.slug = "home-old"
             default_home.save_revision().publish()
             default_home.save()
@@ -103,7 +111,10 @@ class CityPageTests(WagtailPageTestCase):
 
         cls.root = Page.objects.get(id=1).specific
         cls.home_page = HomePage(
-            title="Home", slug="home", hero_text="You can do it", hero_cta="Learn More"
+            title="Home",
+            slug="home",
+            hero_text="You can do it",
+            hero_cta="Learn More",
         )
         cls.city_index_page = CityIndexPage(title="cities", slug="cities")
         cls.city_page = CityPage(title="Buenos Aires", slug="buenos-aires")
@@ -137,7 +148,9 @@ class CityPageTests(WagtailPageTestCase):
                 "body": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "faq": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "links": streamfield([("text", "Lorem ipsum dolor sit amet")]),
-                "companies": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "companies": streamfield(
+                    [("text", "Lorem ipsum dolor sit amet")]
+                ),
             }
         )
 
@@ -185,7 +198,9 @@ class StationPageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         try:
-            default_home = Page.objects.get(title="Welcome to your new Wagtail site!")
+            default_home = Page.objects.get(
+                title="Welcome to your new Wagtail site!"
+            )
             default_home.slug = "home-old"
             default_home.save_revision().publish()
 
@@ -194,7 +209,10 @@ class StationPageTests(WagtailPageTestCase):
 
         cls.root = Page.objects.get(id=1).specific
         cls.home_page = HomePage(
-            title="Home", slug="home", hero_text="You can do it", hero_cta="Learn More"
+            title="Home",
+            slug="home",
+            hero_text="You can do it",
+            hero_cta="Learn More",
         )
         cls.city_index_page = CityIndexPage(title="cities", slug="cities")
         cls.city_page = CityPage(title="Buenos Aires", slug="buenos-aires")
@@ -235,7 +253,9 @@ class StationPageTests(WagtailPageTestCase):
                 "body": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "faq": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "links": streamfield([("text", "Lorem ipsum dolor sit amet")]),
-                "companies": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "companies": streamfield(
+                    [("text", "Lorem ipsum dolor sit amet")]
+                ),
             }
         )
 

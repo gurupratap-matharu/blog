@@ -2,8 +2,10 @@ import logging
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
-from base.decorators import timeit
 from bs4 import BeautifulSoup
+
+from base.decorators import timeit
+
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +62,11 @@ class BaseScraper:
         """
         Build a full url for any internal path of a site.
         """
-        url = f"{self.base_url}/{path}" if leading_slash else f"{self.base_url}{path}"
+        url = (
+            f"{self.base_url}/{path}"
+            if leading_slash
+            else f"{self.base_url}{path}"
+        )
         return url
 
     def get_items(self, bs=None):

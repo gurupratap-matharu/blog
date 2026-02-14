@@ -7,9 +7,20 @@ from django.db.models import Value
 
 from trips.models import Location
 
+
 logger = logging.getLogger(__name__)
 
-IMP_LOCATIONS = ["BUE", "DELE", "ROS", "MDP", "CBA", "MZA", "IGU", "SFE", "POS"]
+IMP_LOCATIONS = [
+    "BUE",
+    "DELE",
+    "ROS",
+    "MDP",
+    "CBA",
+    "MZA",
+    "IGU",
+    "SFE",
+    "POS",
+]
 
 
 class Command(BaseCommand):

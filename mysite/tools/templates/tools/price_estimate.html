@@ -8,152 +8,258 @@
 
 
 {# djlint:on #}
-
 {% block content %}
-  <div class="container mb-5">
-    <div class="row">
-      <div class="col col-xl-10 mx-auto">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb bg-white ps-0 mb-g">
-            <li class="breadcrumb-item" aria-current="page">
-              <a href="/herramientas/">Herramientas</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-              <a href="#"></a>
-            </li>
-          </ol>
-        </nav>
-        <h1 class="fs-2">Calculadora de Precio de Pasajes en Micro</h1>
-        <p>
-          ¿Querés saber cuánto cuesta viajar en micro desde una ciudad a otra en Argentina? Con esta
-          herramienta podés estimar el precio promedio y el más económico para cualquier ruta entre cientos de
-          ciudades. Ideal para planificar tu viaje con anticipación, comparar costos y encontrar la mejor opción.
-        </p>
-        <form method="post">
-          {% csrf_token %}
-          <div class="row g-3 mb-3">
-            <div class="col-12 col-md-3">
-              <label for="origin" class="form-label">Origen</label>
-              <select class="form-select" id="origin" name="origin" aria-label="Origin" required>
-                <option value="">--Seleccioná Origen--</option>
-                <option value="retiro-buenos-aires">Buenos Aires</option>
-                <option value="rosario">Rosario</option>
-                <option value="mendoza">Mendoza</option>
-              </select>
-            </div>
-            <div class="col-12 col-md-3">
-              <label for="destination" class="form-label">Destino</label>
-              <select class="form-select" id="destination" name="destination" aria-label="Destination" required>
-                <option value="">--Seleccioná Destino--</option>
-                <option value="retiro-buenos-aires">Buenos Aires</option>
-                <option value="rosario">Rosario</option>
-                <option value="mendoza">Mendoza</option>
-              </select>
+  <article class="container col-12 col-xl-9">
+    <section>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-white ps-0">
+          <li class="breadcrumb-item">
+            <a href="/">
+              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#house" />
+              </svg>
+              <span class="visually-hidden">Home</span></a>
+          </li>
+          <li class="breadcrumb-item" aria-current="page">
+            <a href="/herramientas/">Herramientas</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            <a href="#"></a>
+          </li>
+        </ol>
+      </nav>
+    </section>
+    <section>
+      <h1 class="fs-2">Calculadora de Precio de Pasajes en Micro</h1>
+      <p>
+        ¿Querés saber cuánto cuesta viajar en micro desde una ciudad a otra en Argentina? Con esta
+        herramienta podés estimar el precio promedio y el más económico para cualquier ruta entre cientos de
+        ciudades. Ideal para planificar tu viaje con anticipación, comparar costos y encontrar la mejor opción.
+      </p>
+    </section>
+    <section class="py-3 py-md-5">
+      <form method="post">
+        {% csrf_token %}
+        <div class="row g-3 align-items-end mb-3">
+          <div class="col-12 col-md-3">
+            <label for="origin" class="form-label">Origen</label>
+            <select class="form-select" id="origin" name="origin" aria-label="Origin" required>
+              <option value="">--Seleccioná Origen--</option>
+              <option value="retiro-buenos-aires">Buenos Aires</option>
+              <option value="rosario">Rosario</option>
+              <option value="mendoza">Mendoza</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-3">
+            <label for="destination" class="form-label">Destino</label>
+            <select class="form-select" id="destination" name="destination" aria-label="Destination" required>
+              <option value="">--Seleccioná Destino--</option>
+              <option value="retiro-buenos-aires">Buenos Aires</option>
+              <option value="rosario">Rosario</option>
+              <option value="mendoza">Mendoza</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-3">
+            <button type="submit" class="btn bg-gradient-primary w-100 mb-0 mt-3 md-md-0">Calcular Precio</button>
+          </div>
+        </div>
+      </form>
+    </section>
+    {% if stats %}
+      <section class="py-3 py-md-5">
+        <h2 class="fs-5">Perspectiva General</h2>
+        <div class="row g-3">
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h6 clas="card-subtitle mb-2 text-body-secondary">Precio más economico</h6>
+                <h5 class="card-title fs-3">ARS {{ stats.price_economy|floatformat }}</h5>
+                <p class="card-text text-sm">
+                  El pasaje de micro más barato de {{ stats.origin }} a {{ stats.destination }}
+                  actualmente sale ARS {{ stats.price_economy|floatformat }}
+                </p>
+              </div>
             </div>
           </div>
-          <button type="submit" class="btn bg-gradient-primary btn-round">Calcular Precio</button>
-        </form>
-        {% if stats %}
-          <div class="row g-3 py-3 py-md-5">
-            <h2 class="fs-5">Perspectiva General</h2>
-            <div class="col-12 col-sm-6 col-lg-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 clas="card-subtitle mb-2 text-body-secondary">Precio más economico</h6>
-                  <h5 class="card-title fs-3">ARS {{ stats.price_economy|floatformat }}</h5>
-                  <p class="card-text text-sm">
-                    El pasaje de micro más barato de {{ stats.origin }} a {{ stats.destination }}
-                    actualmente sale ARS {{ stats.price_economy|floatformat }}
-                  </p>
-                </div>
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-body-secondary">Precio promedio</h6>
+                <h5 class="card-title fs-3">ARS {{ stats.price_avg|floatformat }}</h5>
+                <p class="card-text text-sm">
+                  El pasaje de micro promedio de {{ stats.origin }} a {{ stats.destination }}
+                  actualmente rodeá a ARS {{ stats.price_avg|floatformat }}
+                </p>
               </div>
             </div>
-            <div class="col-12 col-sm-6 col-lg-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 class="card-subtitle mb-2 text-body-secondary">Precio promedio</h6>
-                  <h5 class="card-title fs-3">ARS {{ stats.price_avg|floatformat }}</h5>
-                  <p class="card-text text-sm">
-                    El pasaje de micro promedio de {{ stats.origin }} a {{ stats.destination }}
-                    actualmente rodeá a ARS {{ stats.price_avg|floatformat }}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-lg-6">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 class="card-subtitle">Duración</h6>
-                  <div class="row">
-                    <div class="col-md-6 d-flex align-items-center">
-                      <h5 class="card-title fs-3">{{ stats.get_duration_display }}</h5>
-                    </div>
-                    <div class="col-md-6">
-                      <p class="card-text text-sm">
-                        El viaje promedio entre {{ stats.origin }} a {{ stats.destination }} tarda
-                        {{ stats.get_duration_display }}.
-                      </p>
-                    </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h6 class="card-subtitle">Duración</h6>
+                <div class="row">
+                  <div class="col-md-6 d-flex align-items-center">
+                    <h5 class="card-title fs-3">{{ stats.get_duration_display }}</h5>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-lg-6">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 class="card-subtitle">Salidas Diarias</h6>
-                  <div class="row">
-                    <div class="col-md-4 d-flex align-items-center">
-                      <h5 class="card-title fs-3">{{ stats.num_departures }}</h5>
-                    </div>
-                    <div class="col-md-8">
-                      <p class="card-text text-sm">
-                        Entre {{ stats.origin }} a {{ stats.destination }} en promedio hay
-                        {{ stats.num_departures }} salidas diarias.
-                      </p>
-                    </div>
+                  <div class="col-md-6">
+                    <p class="card-text text-sm">
+                      El viaje promedio entre {{ stats.origin }} a {{ stats.destination }} tarda
+                      {{ stats.get_duration_display }}.
+                    </p>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 clas="card-subtitle mb-2 text-body-secondary">Primera Salida</h6>
-                  <h5 class="card-title fs-3">{{ stats.first_departure }} hs</h5>
-                  <p class="card-text text-sm">
-                    La primera salida de {{ stats.origin }} a {{ stats.destination }} es a las {{ stats.first_departure }} hs
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 clas="card-subtitle mb-2 text-body-secondary">Última Salida</h6>
-                  <h5 class="card-title fs-3">{{ stats.last_departure }} hs</h5>
-                  <p class="card-text text-sm">
-                    La última salida de {{ stats.origin }} a {{ stats.destination }} es a las {{ stats.last_departure }} hs
-                  </p>
                 </div>
               </div>
             </div>
           </div>
-          <section class="py-3 py-md-5">
-            <h2 class="fs-5 pb-3">Empresas que viajan a {{ stats.destination }}</h2>
-            <div class="row">
-              {% for company in stats.get_companies_list %}
-                <div class="col-12 col-lg-6 p-1">
-                  <div class="card rounded-3">
-                    <div class="card-body">
-                      <p class="card-text">{{ company }}</p>
-                    </div>
+          <div class="col-12 col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h6 class="card-subtitle">Salidas Diarias</h6>
+                <div class="row">
+                  <div class="col-md-4 d-flex align-items-center">
+                    <h5 class="card-title fs-3">{{ stats.num_departures }}</h5>
+                  </div>
+                  <div class="col-md-8">
+                    <p class="card-text text-sm">
+                      Entre {{ stats.origin }} a {{ stats.destination }} en promedio hay
+                      {{ stats.num_departures }} salidas diarias.
+                    </p>
                   </div>
                 </div>
-              {% endfor %}
+              </div>
             </div>
-          </section>
-        {% endif %}
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card h-100">
+              <div class="card-body">
+                <h6 clas="card-subtitle mb-2 text-body-secondary">Primera Salida</h6>
+                <h5 class="card-title fs-3">{{ stats.first_departure }} hs</h5>
+                <p class="card-text text-sm">
+                  La primera salida de {{ stats.origin }} a {{ stats.destination }} es a las {{ stats.first_departure }} hs
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card h-100">
+              <div class="card-body">
+                <h6 clas="card-subtitle mb-2 text-body-secondary">Última Salida</h6>
+                <h5 class="card-title fs-3">{{ stats.last_departure }} hs</h5>
+                <p class="card-text text-sm">
+                  La última salida de {{ stats.origin }} a {{ stats.destination }} es a las {{ stats.last_departure }} hs
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-3 py-md-5">
+        <h2 class="fs-5 pb-3">Empresas que viajan a {{ stats.destination }}</h2>
+        <div class="row">
+          {% for company in stats.get_companies_list %}
+            <div class="col-12 col-lg-6 p-1">
+              <div class="card rounded-3">
+                <div class="card-body">
+                  <p class="card-text">{{ company }}</p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+    <section class="py-3 py-md-5">
+      <h2 class="fs-5 pb-3">¿Como usar la calculadora de precios?</h2>
+      <div class="row g-4 py-3 row-cols-1 row-cols-lg-3">
+        <div class="col d-flex align-items-start">
+          <h5 class="card-title display-5 me-3">1</h5>
+          <div>
+            <h3 class="fs-6">Origen y Destino</h3>
+            <p>Ingresá tu origen y destino de tu micro en el formulario</p>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <h5 class="card-title display-5 me-3">2</h5>
+          <div>
+            <h3 class="fs-6">Busca precios</h3>
+            <p>Clickea "Buscar Precios" para encontrar la tendencia de precios y info útil para tu ruta</p>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <h5 class="card-title display-5 me-3">3</h5>
+          <div>
+            <h3 class="fs-6">Planeá mejor</h3>
+            <p>Usá el info para mejor planear tu proximo viaje 🙌</p>
+          </div>
+        </div>
       </div>
-    </div>
-  {% endblock content %}
+    </section>
+    <section class="py-3">
+      <h2 class="fs-5 pb-3">Preguntas frecuentes sobre esta herramientita</h2>
+      <div class="accordion accordion-flush" id="accordionFAQ">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button ps-0 collapsed font-weight-bold"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapse1"
+                    aria-expanded="true"
+                    aria-controls="collapse1">¿Los precios son exactos?</button>
+          </h3>
+          <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+            <div class="accordion-body ps-0">Answer1</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button ps-0 collapsed font-weight-bold"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapse2"
+                    aria-expanded="false"
+                    aria-controls="collapse2">¿Incluye promociones o descuentos?</button>
+          </h3>
+          <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+            <div class="accordion-body ps-0">Answer2</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button ps-0 collapsed font-weight-bold"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapse3"
+                    aria-expanded="false"
+                    aria-controls="collapse3">¿Puedo reservar desde aqui?</button>
+          </h3>
+          <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+            <div class="accordion-body ps-0">Answer3</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button ps-0 collapsed font-weight-bold"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapse4"
+                    aria-expanded="false"
+                    aria-controls="collapse4">¿Porqué no encuentro precios para mi ruta?</button>
+          </h3>
+          <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+            <div class="accordion-body ps-0">Answer4</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-3">
+      {% include "includes/advice.html" %}
+    </section>
+    <section class="py-3 py-md-5">
+      {% include "includes/featured-companies.html" %}
+    </section>
+    <section class="py-3 py-md-5">
+      {% include "includes/mission.html" %}
+    </section>
+  </article>
+  {% include "includes/seo_links.html" %}
+{% endblock content %}

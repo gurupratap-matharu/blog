@@ -16,6 +16,7 @@ from django_countries.fields import CountryField
 
 from .validators import phone_regex, validate_birth_date
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -77,7 +78,12 @@ class Order(models.Model):
             length=6, allowed_chars=string.ascii_uppercase
         )
         self.save(
-            update_fields=["paid", "payment_id", "transaction_id", "reservation_code"]
+            update_fields=[
+                "paid",
+                "payment_id",
+                "transaction_id",
+                "reservation_code",
+            ]
         )
 
         return self
@@ -160,7 +166,9 @@ class Passenger(models.Model):
     document_number = models.CharField(
         _("Nro de documento"), max_length=50, unique=True
     )
-    nationality = CountryField(_("Nacionalidad"), blank_label=_("(Nationality)"))
+    nationality = CountryField(
+        _("Nacionalidad"), blank_label=_("(Nationality)")
+    )
     first_name = models.CharField(_("Nombre"), max_length=50)
     last_name = models.CharField(_("Apellido"), max_length=50)
     gender = models.CharField(

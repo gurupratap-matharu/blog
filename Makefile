@@ -3,10 +3,7 @@
 help:
 	@echo "Available commands"
 	@echo "ci - lints, migrations, tests, coverage"
-	@echo "install - installs production requirements"
-	@echo "isort - sorts all imports of the project"
 	@echo "runserver - runs the development server"
-	@echo "setup-test-data - erases the db and loads mock data"
 	@echo "shellplus - runs the development shell"
 	@echo "lint - check style with black, flake8, sort python with isort, and indent html"
 	@echo "format - enforce a consistent code style across the codebase and sort python files with isort"
@@ -17,8 +14,6 @@ tags:
 collectstatic:
 	python mysite/manage.py collectstatic --noinput
 
-clean:
-	rm -rf __pycache__ .pytest_cache
 
 check:
 	python mysite/manage.py check
@@ -35,13 +30,7 @@ compilemessages:
 translations: makemessages compilemessages
 
 install:
-	poetry install
-
-update:
-	poetry update
-
-setup_test_data:
-	python mysite/manage.py setup_test_data
+	uv sync
 
 shellplus:
 	python mysite/manage.py shell_plus --print-sql
@@ -67,26 +56,24 @@ runserver:
 build: install makemigrations migrate runserver
 
 format:
-	poetry run black .
-	poetry run isort . --profile black
-	poetry run ruff check --fix .
+	ruff check --select I --fix
+	ruff format .
 	djlint --reformat .
 
 lint:
-	poetry run black --check --diff .
-	poetry run isort --check-only --diff --profile black .
-	poetry run ruff check .
+	ruff check .
+	djlint --lint .
 	djlint --check .
 
 test: check migrations-check
-	cd mysite && coverage run --source='.' manage.py test --noinput --shuffle -v 2
-	coverage html && open htmlcov/index.html
+	coverage run --source='.' manage.py test --no-input
+	coverage html
 
 security:
 	poetry run bandit -rc pyproject.toml .
 	poetry run safety check
 
-ci: format lint security test
+ci: format lint test
 
 css:
 	sass mysite/static/assets/scss/soft-design-system.scss -s compressed mysite/static/assets/css/styles.min.css

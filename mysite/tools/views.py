@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 
 from trips.models import Stats
 
+
 logger = logging.getLogger(__name__)
 
 

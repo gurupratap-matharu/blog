@@ -3,6 +3,7 @@ import logging
 
 from reportlab.pdfgen import canvas
 
+
 logger = logging.getLogger(__name__)
 
 

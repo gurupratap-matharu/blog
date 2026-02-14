@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
+
 logger = logging.getLogger(__name__)
 
 phone_regex = RegexValidator(
@@ -19,7 +20,11 @@ def validate_birth_date(born):
     """Check if a person is between 1 - 99 years old"""
 
     today = date.today()
-    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    age = (
+        today.year
+        - born.year
+        - ((today.month, today.day) < (born.month, born.day))
+    )
 
     logger.info("validating birth date:%s", born)
     logger.info("age:%s", age)

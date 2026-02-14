@@ -18,7 +18,9 @@ class PartnerIndexPageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         try:
-            default_home = Page.objects.get(title="Welcome to your new Wagtail site!")
+            default_home = Page.objects.get(
+                title="Welcome to your new Wagtail site!"
+            )
             default_home.slug = "home-old"
             default_home.save_revision().publish()
             default_home.save()
@@ -28,7 +30,10 @@ class PartnerIndexPageTests(WagtailPageTestCase):
 
         cls.root = Page.get_first_root_node()
         cls.home_page = HomePage(
-            title="Home", slug="home", hero_text="You can do it", hero_cta="Learn More"
+            title="Home",
+            slug="home",
+            hero_text="You can do it",
+            hero_cta="Learn More",
         )
         cls.partner_index_page = PartnerIndexPage(
             title="Empresas de bus", slug="empresas-de-bus"
@@ -74,7 +79,9 @@ class PartnerIndexPageTests(WagtailPageTestCase):
     def test_can_create_partner_page_under_partnerindexpage(self):
         self.assertCanCreateAt(PartnerIndexPage, PartnerPage)
 
-    def test_cannot_create_wrong_children_or_parents_for_partner_index_page(self):
+    def test_cannot_create_wrong_children_or_parents_for_partner_index_page(
+        self,
+    ):
         self.assertCanNotCreateAt(PartnerIndexPage, HomePage)
         self.assertCanNotCreateAt(PartnerPage, PartnerIndexPage)
 
@@ -92,7 +99,9 @@ class PartnerPageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         try:
-            default_home = Page.objects.get(title="Welcome to your new Wagtail site!")
+            default_home = Page.objects.get(
+                title="Welcome to your new Wagtail site!"
+            )
             default_home.slug = "home-old"
             default_home.save_revision().publish()
             default_home.save()
@@ -102,7 +111,10 @@ class PartnerPageTests(WagtailPageTestCase):
 
         cls.root = Page.get_first_root_node()
         cls.home_page = HomePage(
-            title="Home", slug="home", hero_text="You can do it", hero_cta="Learn More"
+            title="Home",
+            slug="home",
+            hero_text="You can do it",
+            hero_cta="Learn More",
         )
         cls.partner_index_page = PartnerIndexPage(
             title="Empresas de bus", slug="empresas-de-bus"
@@ -135,13 +147,21 @@ class PartnerPageTests(WagtailPageTestCase):
             {
                 "title": "Cata International",
                 "body": streamfield([("text", "Lorem ipsum dolor sit amet")]),
-                "destinations": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "destinations": streamfield(
+                    [("text", "Lorem ipsum dolor sit amet")]
+                ),
                 "info": streamfield([("text", "Lorem ipsum dolor sit amet")]),
-                "routes": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "routes": streamfield(
+                    [("text", "Lorem ipsum dolor sit amet")]
+                ),
                 "faq": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "links": streamfield([("text", "Lorem ipsum dolor sit amet")]),
-                "contact": streamfield([("text", "Lorem ipsum dolor sit amet")]),
-                "ratings": streamfield([("text", "Lorem ipsum dolor sit amet")]),
+                "contact": streamfield(
+                    [("text", "Lorem ipsum dolor sit amet")]
+                ),
+                "ratings": streamfield(
+                    [("text", "Lorem ipsum dolor sit amet")]
+                ),
             }
         )
 
@@ -172,7 +192,11 @@ class PartnerPageTests(WagtailPageTestCase):
         self.assertCanNotCreateAt(
             parent_model=PartnerPage, child_model=PartnerIndexPage
         )
-        self.assertCanNotCreateAt(parent_model=PartnerPage, child_model=HomePage)
+        self.assertCanNotCreateAt(
+            parent_model=PartnerPage, child_model=HomePage
+        )
 
     def test_partner_page_subpages(self):
-        self.assertAllowedSubpageTypes(parent_model=PartnerPage, child_models={})
+        self.assertAllowedSubpageTypes(
+            parent_model=PartnerPage, child_models={}
+        )

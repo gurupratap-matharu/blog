@@ -30,12 +30,16 @@ class WebhookMessageTests(TestCase):
 
     def test_str_representation(self):
         obj = WebhookMessage.objects.first()
-        self.assertEqual(str(obj), f"{obj.get_provider_display()}:{obj.received_at}")
+        self.assertEqual(
+            str(obj), f"{obj.get_provider_display()}:{obj.received_at}"
+        )
 
     def test_verbose_names(self):
         obj = WebhookMessage.objects.first()
         self.assertEqual(str(obj._meta.verbose_name), "webhook message")
-        self.assertEqual(str(obj._meta.verbose_name_plural), "webhook messages")
+        self.assertEqual(
+            str(obj._meta.verbose_name_plural), "webhook messages"
+        )
 
     def test_obj_creation_is_correct(self):
         obj = WebhookMessage.objects.first()

@@ -7,6 +7,7 @@ from wagtail.models import Locale
 
 from locations.models import CityPage, StationPage
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -19,12 +20,13 @@ class Command(BaseCommand):
         stations = self.read_stations()
 
         for city, station, address, lat_long, url in stations:
-
             seo_title = f"{station} | Bus station in Argentina"
             lat_long = ",".join(x[:12] for x in lat_long.split(","))
 
             try:
-                station_page = StationPage.objects.get(title=station, locale=en)
+                station_page = StationPage.objects.get(
+                    title=station, locale=en
+                )
                 logger.info("already exists station:%s" % station)
 
             except StationPage.DoesNotExist:

@@ -45,12 +45,14 @@ from wagtail.models import (
 from wagtail.models.i18n import Locale
 from wagtail.search import index
 
+from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
+
 from base.blocks import BaseStreamBlock
 from base.cache import get_default_cache_control_decorator
 from base.schemas import organisation_schema
 from base.views import CustomSubmissionsListView
-from modelcluster.fields import ParentalKey
-from modelcluster.models import ClusterableModel
+
 
 logger = logging.getLogger(__name__)
 
@@ -152,11 +154,17 @@ class Person(
                 src="/media/images/kal-visuals-square.2e16d0ba.fill-50x50.jpg">'
         """
 
-        return self.image.get_rendition("fill-50x50").img_tag() if self.image else ""
+        return (
+            self.image.get_rendition("fill-50x50").img_tag()
+            if self.image
+            else ""
+        )
 
     @property
     def preview_modes(self):
-        return PreviewableMixin.DEFAULT_PREVIEW_MODES + [("blog_post", _("Blog post"))]
+        return PreviewableMixin.DEFAULT_PREVIEW_MODES + [
+            ("blog_post", _("Blog post"))
+        ]
 
     def get_preview_template(self, request, mode_name):
         """Html template to render the person model in UI"""
@@ -176,7 +184,11 @@ class Person(
 
 
 class FooterText(
-    DraftStateMixin, RevisionMixin, PreviewableMixin, TranslatableMixin, models.Model
+    DraftStateMixin,
+    RevisionMixin,
+    PreviewableMixin,
+    TranslatableMixin,
+    models.Model,
 ):
     """
     Site footer text which is registered using the `register_snippet` in `wagtail_hooks.py`.
@@ -376,7 +388,10 @@ class BasePage(SocialFields, ListingFields, Page):
                 entity = {
                     "@type": "Question",
                     "name": question.strip(),
-                    "acceptedAnswer": {"@type": "Answer", "text": answer_text.strip()},
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": answer_text.strip(),
+                    },
                 }
 
                 entities.append(entity)
@@ -385,7 +400,9 @@ class BasePage(SocialFields, ListingFields, Page):
 
 
 BasePage._meta.get_field("seo_title").verbose_name = "Title tag"
-BasePage._meta.get_field("search_description").verbose_name = "Meta description"
+BasePage._meta.get_field(
+    "search_description"
+).verbose_name = "Meta description"
 
 
 class StandardPage(BasePage):
@@ -398,7 +415,9 @@ class StandardPage(BasePage):
 
     page_description = "Use this to build a simple or generic page"
 
-    introduction = models.TextField(help_text="Text to describe the page", blank=True)
+    introduction = models.TextField(
+        help_text="Text to describe the page", blank=True
+    )
 
     image = models.ForeignKey(
         "wagtailimages.Image",
@@ -439,7 +458,9 @@ class FormField(AbstractFormField):
         choices=list(FORM_FIELD_CHOICES) + [("image", "Upload Image")],
     )
 
-    page = ParentalKey("FormPage", related_name="form_fields", on_delete=models.CASCADE)
+    page = ParentalKey(
+        "FormPage", related_name="form_fields", on_delete=models.CASCADE
+    )
 
 
 class CustomFormBuilder(FormBuilder):
@@ -606,7 +627,9 @@ class FormPage(AbstractEmailForm):
 
         return submission
 
-    def render_landing_page(self, request, form_submission=None, *args, **kwargs):
+    def render_landing_page(
+        self, request, form_submission=None, *args, **kwargs
+    ):
         """
         Redirect user to home page after successful submission.
         """
@@ -630,7 +653,9 @@ class GenericSettings(ClusterableModel, BaseGenericSetting):
     facebook_url = models.URLField(verbose_name="Facebook URL", blank=True)
     instagram_url = models.URLField(verbose_name="Instagram URL", blank=True)
     youtube_url = models.URLField(verbose_name="Youtube URL", blank=True)
-    organisation_url = models.URLField(verbose_name="Organisation URL", blank=True)
+    organisation_url = models.URLField(
+        verbose_name="Organisation URL", blank=True
+    )
 
     panels = [
         MultiFieldPanel(
@@ -661,20 +686,28 @@ class SiteSettings(BaseSiteSetting):
 
 @register_setting(icon="placeholder")
 class GenericImportantPages(BaseGenericSetting):
-
     # Fetch these pages when looking up GenericImportantPages for or a site
     select_related = ["contact_page", "feedback_page", "article_feedback_page"]
 
     contact_page = models.ForeignKey(
-        "wagtailcore.Page", null=True, on_delete=models.SET_NULL, related_name="+"
+        "wagtailcore.Page",
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
     )
 
     feedback_page = models.ForeignKey(
-        "wagtailcore.Page", null=True, on_delete=models.SET_NULL, related_name="+"
+        "wagtailcore.Page",
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
     )
 
     article_feedback_page = models.ForeignKey(
-        "wagtailcore.Page", null=True, on_delete=models.SET_NULL, related_name="+"
+        "wagtailcore.Page",
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
     )
 
     panels = [

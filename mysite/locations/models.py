@@ -13,6 +13,7 @@ from wagtail.search import index
 from base.blocks import BaseStreamBlock, FAQBlock, LinkBlock, NavTabLinksBlock
 from base.models import BasePage
 
+
 logger = logging.getLogger(__name__)
 
 

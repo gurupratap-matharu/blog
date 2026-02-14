@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import PriceEstimateView, ToolsIndexView
 
+
 app_name = "tools"
 
 urlpatterns = [

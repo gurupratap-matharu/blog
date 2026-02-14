@@ -4,6 +4,7 @@ from django import template
 
 from base.models import FooterText
 
+
 register = template.Library()
 
 logger = logging.getLogger(__name__)

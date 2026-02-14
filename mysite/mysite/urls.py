@@ -9,19 +9,21 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
-from base.views import IndexNow, RobotsView, favicon
 from debug_toolbar.toolbar import debug_toolbar_urls
+
+from base.views import IndexNow, RobotsView, favicon
 from search import views as search_views
+
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("private/", include(wagtailadmin_urls)),
+    path("documents/", include(wagtaildocs_urls)),
     path("accounts/", include("allauth.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
-    path("documents/", include(wagtaildocs_urls)),
-    path("pasajes-en-micro/", include("trips.urls")),
-    path("orders/", include("orders.urls")),
-    path("payments/", include("payments.urls")),
+    # path("pasajes-en-micro/", include("trips.urls")),
+    # path("orders/", include("orders.urls")),
+    # path("payments/", include("payments.urls")),
     path("herramientas/", include("tools.urls")),
     path("sitemap.xml", sitemap),
     path("favicon.ico", favicon),
@@ -42,7 +44,9 @@ if settings.DEBUG:
 
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )
 
     # Add routes to test error templates
     urlpatterns += [

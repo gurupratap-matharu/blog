@@ -156,7 +156,9 @@ class BlockQuote(StructBlock):
     """
 
     text = TextBlock()
-    attribute_name = CharBlock(blank=True, required=False, label="e.g. Mary Berry")
+    attribute_name = CharBlock(
+        blank=True, required=False, label="e.g. Mary Berry"
+    )
 
     class Meta:
         icon = "openquote"
@@ -276,7 +278,9 @@ class RatingsBlock(StructBlock):
     class Meta:
         icon = "pick"
         template = "blocks/ratings.html"
-        label_format = "Five:{five} Four:{four} Three:{three} Two:{two} One:{one}"
+        label_format = (
+            "Five:{five} Four:{four} Three:{three} Two:{two} One:{one}"
+        )
         search_index = False
         value_class = RatingsStructValue
 

@@ -16,11 +16,13 @@ from wagtail.fields import StreamField
 from wagtail.models import Orderable
 from wagtail.search import index
 
-from base.blocks import BaseStreamBlock
-from base.models import BasePage
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import Tag, TaggedItemBase
+
+from base.blocks import BaseStreamBlock
+from base.models import BasePage
+
 
 logger = logging.getLogger(__name__)
 
@@ -35,11 +37,15 @@ class BlogPersonRelationship(Orderable, models.Model):
     """
 
     page = ParentalKey(
-        "BlogPage", related_name="blog_person_relationship", on_delete=models.CASCADE
+        "BlogPage",
+        related_name="blog_person_relationship",
+        on_delete=models.CASCADE,
     )
 
     person = models.ForeignKey(
-        "base.Person", related_name="person_blog_relationship", on_delete=models.CASCADE
+        "base.Person",
+        related_name="person_blog_relationship",
+        on_delete=models.CASCADE,
     )
 
     panels = [FieldPanel("person")]
@@ -251,7 +257,9 @@ class BlogPage(BasePage):
             heading="Blog information",
         ),
         InlinePanel("gallery_images", label="Gallery images"),
-        InlinePanel("related_links", heading="Related links", label="Related links"),
+        InlinePanel(
+            "related_links", heading="Related links", label="Related links"
+        ),
     ]
 
     promote_panels = [
@@ -296,12 +304,12 @@ class BlogPage(BasePage):
         """
 
         post_tags_ids = self.tags.values_list("id", flat=True)
-        similar_posts = BlogPage.objects.filter(tags__in=post_tags_ids).exclude(
-            id=self.id
-        )
-        similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
-            "-same_tags"
-        )[:3]
+        similar_posts = BlogPage.objects.filter(
+            tags__in=post_tags_ids
+        ).exclude(id=self.id)
+        similar_posts = similar_posts.annotate(
+            same_tags=Count("tags")
+        ).order_by("-same_tags")[:3]
         return similar_posts
 
     def authors(self):
@@ -373,7 +381,10 @@ class BlogPage(BasePage):
             "headline": self.title,
             "description": self.search_description,
             "image": f"https://ventanita.com.ar{image_url}",
-            "author": {"@type": "Person", "name": self.authors()[0].full_name()},
+            "author": {
+                "@type": "Person",
+                "name": self.authors()[0].full_name(),
+            },
             "publisher": {
                 "@type": "Organization",
                 "name": "Ventanita",
@@ -437,7 +448,9 @@ class BlogPageGalleryImage(Orderable):
 
 
 class BlogPageRelatedLink(Orderable):
-    page = ParentalKey(BlogPage, on_delete=models.CASCADE, related_name="related_links")
+    page = ParentalKey(
+        BlogPage, on_delete=models.CASCADE, related_name="related_links"
+    )
     name = models.CharField(max_length=255)
     url = models.URLField()
 

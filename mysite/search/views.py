@@ -5,6 +5,7 @@ from django.shortcuts import render
 
 from wagtail.models import Locale, Page
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -15,7 +16,9 @@ def search(request):
     # Search
     if search_query:
         search_results = (
-            Page.objects.live().filter(locale=Locale.get_active()).search(search_query)
+            Page.objects.live()
+            .filter(locale=Locale.get_active())
+            .search(search_query)
         )
     else:
         search_results = Page.objects.none()

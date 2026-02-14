@@ -9,7 +9,6 @@ from django.utils import timezone
 
 
 class ProsysFactory:
-
     LOCATIONS = (
         "Retiro",
         "Liniers",
@@ -39,10 +38,14 @@ class ProsysFactory:
         return random.choice(self.LOCATIONS)
 
     def _departure(self):
-        return (timezone.now() + timedelta(days=3)).strftime("%m/%d/%Y - %H:%m")
+        return (timezone.now() + timedelta(days=3)).strftime(
+            "%m/%d/%Y - %H:%m"
+        )
 
     def _created(self):
-        return (timezone.now() - timedelta(days=3)).strftime("%m/%d/%Y - %H:%m")
+        return (timezone.now() - timedelta(days=3)).strftime(
+            "%m/%d/%Y - %H:%m"
+        )
 
     def _amount(self):
         return f"{random.randrange(300, 1200):.4f}"

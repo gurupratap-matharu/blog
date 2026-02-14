@@ -9,6 +9,10 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
 from wagtail.search import index
 
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.models import ParentalKey, ParentalManyToManyField
+from taggit.models import TaggedItemBase
+
 from base.blocks import (
     BaseStreamBlock,
     ContactBlock,
@@ -20,9 +24,7 @@ from base.blocks import (
     RatingsBlock,
 )
 from base.models import BasePage
-from modelcluster.contrib.taggit import ClusterTaggableManager
-from modelcluster.models import ParentalKey, ParentalManyToManyField
-from taggit.models import TaggedItemBase
+
 
 logger = logging.getLogger(__name__)
 
@@ -153,7 +155,9 @@ class PartnerPage(BasePage):
         BaseStreamBlock(), verbose_name="Page body", blank=True, collapsed=True
     )
 
-    tags = ClusterTaggableManager(through="partners.PartnerPageTag", blank=True)
+    tags = ClusterTaggableManager(
+        through="partners.PartnerPageTag", blank=True
+    )
 
     amenities = ParentalManyToManyField("partners.Amenity", blank=True)
 
@@ -363,7 +367,10 @@ class Amenity(models.Model):
     )
 
     icon_name = models.CharField(
-        max_length=20, help_text="Name of the bootstrap icon", blank=True, null=True
+        max_length=20,
+        help_text="Name of the bootstrap icon",
+        blank=True,
+        null=True,
     )
 
     panels = [

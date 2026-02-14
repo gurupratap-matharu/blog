@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand
 import requests
 from bs4 import BeautifulSoup
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -54,7 +55,10 @@ class Command(BaseCommand):
 
         try:
             response = requests.post(
-                url=self.INDEXNOW_URL, headers=headers, json=payload, timeout=10
+                url=self.INDEXNOW_URL,
+                headers=headers,
+                json=payload,
+                timeout=10,
             )
             response.raise_for_status()
 
@@ -65,5 +69,9 @@ class Command(BaseCommand):
             self.stderr.write(msg)
 
         else:
-            self.stdout.write(f"Successfully submitted {len(urls)} URLs to IndexNow.")
-            self.stdout.write(f"Response: {response.status_code} - {response.text}")
+            self.stdout.write(
+                f"Successfully submitted {len(urls)} URLs to IndexNow."
+            )
+            self.stdout.write(
+                f"Response: {response.status_code} - {response.text}"
+            )

@@ -5,11 +5,11 @@ from django.utils.functional import cached_property
 
 from wagtail.blocks import StructValue
 
+
 logger = logging.getLogger(__name__)
 
 
 class RatingsStructValue(StructValue):
-
     def _round_to_nearest_5(self, x):
         return 5 * round(x / 5)
 

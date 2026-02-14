@@ -9,9 +9,11 @@ from django.test import TestCase
 from django.urls import reverse_lazy
 
 from faker import Faker
+from trips.tests.utils import COMPLETE_SALE
+
 from orders.factories import OrderFactory, PassengerFactory
 from orders.models import Order, Passenger
-from trips.tests.utils import COMPLETE_SALE
+
 
 fake = Faker()
 
@@ -29,7 +31,9 @@ class PassengerModelTests(TestCase):
         passenger = PassengerFactory()
 
         self.assertEqual(str(passenger._meta.verbose_name), "passenger")
-        self.assertEqual(str(passenger._meta.verbose_name_plural), "passengers")
+        self.assertEqual(
+            str(passenger._meta.verbose_name_plural), "passengers"
+        )
 
     def test_passenger_model_creation_is_accurate(self):
         # Arrange
@@ -40,14 +44,20 @@ class PassengerModelTests(TestCase):
 
         # Assert
         self.assertEqual(Passenger.objects.count(), 1)
-        self.assertEqual(passenger_from_db.document_type, passenger.document_type)
-        self.assertEqual(passenger_from_db.document_number, passenger.document_number)
+        self.assertEqual(
+            passenger_from_db.document_type, passenger.document_type
+        )
+        self.assertEqual(
+            passenger_from_db.document_number, passenger.document_number
+        )
         self.assertEqual(passenger_from_db.first_name, passenger.first_name)
         self.assertEqual(passenger_from_db.last_name, passenger.last_name)
         self.assertEqual(passenger_from_db.nationality, passenger.nationality)
         self.assertEqual(passenger_from_db.gender, passenger.gender)
         self.assertEqual(passenger_from_db.birth_date, passenger.birth_date)
-        self.assertEqual(passenger_from_db.phone_number, passenger.phone_number)
+        self.assertEqual(
+            passenger_from_db.phone_number, passenger.phone_number
+        )
 
     def test_all_attributes_max_length(self):
 
@@ -162,7 +172,9 @@ class OrderModelTests(TestCase):
         self.assertEqual(order_from_db.paid, order.paid)
         self.assertEqual(order_from_db.payment_id, order.payment_id)
         self.assertEqual(order_from_db.transaction_id, order.transaction_id)
-        self.assertEqual(order_from_db.reservation_code, order.reservation_code)
+        self.assertEqual(
+            order_from_db.reservation_code, order.reservation_code
+        )
 
     def test_all_attributes_max_length(self):
         # Arrange
@@ -174,7 +186,9 @@ class OrderModelTests(TestCase):
         name_max_length = order._meta.get_field("name").max_length
         phone_max_length = order._meta.get_field("phone_number").max_length
         payment_id_max_length = order._meta.get_field("payment_id").max_length
-        transaction_id_max_length = order._meta.get_field("transaction_id").max_length
+        transaction_id_max_length = order._meta.get_field(
+            "transaction_id"
+        ).max_length
         reservation_code_max_length = order._meta.get_field(
             "reservation_code"
         ).max_length
@@ -188,7 +202,9 @@ class OrderModelTests(TestCase):
 
     def test_new_order_is_always_unpaid(self):
         order = Order.objects.create(
-            name="princy", email="princy@email.com", phone_number="+919999448805"
+            name="princy",
+            email="princy@email.com",
+            phone_number="+919999448805",
         )
 
         self.assertFalse(order.paid)
@@ -310,7 +326,9 @@ class OrderModelTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, subject)
         self.assertEqual(mail.outbox[0].body, message)
-        self.assertEqual(mail.outbox[0].from_email, settings.NOTIFICATION_EMAIL)
+        self.assertEqual(
+            mail.outbox[0].from_email, settings.NOTIFICATION_EMAIL
+        )
         self.assertEqual(mail.outbox[0].to, [order.email])
         self.assertEqual(mail.outbox[0].cc, [settings.NOTIFICATION_EMAIL])
 

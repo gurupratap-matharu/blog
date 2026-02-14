@@ -1,6 +1,7 @@
 import datetime
 import zoneinfo
 
+
 START_SESSION_XML = """<?xml version="1.0" encoding="utf-8"?><soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><StartSessionResponse
@@ -137,10 +138,20 @@ SEARCH_RESULTS = {
         {
             "service_id": "1",
             "departure": datetime.datetime(
-                2025, 5, 18, 6, 0, tzinfo=zoneinfo.ZoneInfo(key="America/Buenos_Aires")
+                2025,
+                5,
+                18,
+                6,
+                0,
+                tzinfo=zoneinfo.ZoneInfo(key="America/Buenos_Aires"),
             ),
             "arrival": datetime.datetime(
-                2025, 5, 18, 9, 20, tzinfo=zoneinfo.ZoneInfo(key="America/Buenos_Aires")
+                2025,
+                5,
+                18,
+                9,
+                20,
+                tzinfo=zoneinfo.ZoneInfo(key="America/Buenos_Aires"),
             ),
             "seats_available": "20",
             "can_select_seats": "1",

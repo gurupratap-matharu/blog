@@ -15,7 +15,6 @@ class InvalidTransaction(Exception):
 
 
 class InvalidRefund(Exception):
-
     pass
 
 

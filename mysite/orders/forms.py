@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import Order, Passenger
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -40,13 +41,16 @@ class OrderForm(forms.ModelForm):
         email = cd.get("email")
         confirm_email = cd.get("confirm_email")
 
-        if email and confirm_email and (email.lower() != confirm_email.lower()):
+        if (
+            email
+            and confirm_email
+            and (email.lower() != confirm_email.lower())
+        ):
             err = ValidationError(self.INVALID_EMAIL_MSG, code="invalid")
             self.add_error("confirm_email", err)
 
 
 class PassengerForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

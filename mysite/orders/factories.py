@@ -5,7 +5,9 @@ from django.utils.crypto import get_random_string
 import factory
 from factory import fuzzy
 from faker import Faker
+
 from orders.models import Order, Passenger
+
 
 fake = Faker()
 
@@ -26,8 +28,12 @@ class OrderFactory(factory.django.DjangoModelFactory):
         lambda _: (fake.country_calling_code() + fake.phone_number())[:14]
     )
     paid = factory.Faker("boolean")
-    payment_id = factory.LazyAttribute(lambda obj: fake.bban() if obj.paid else "")
-    transaction_id = factory.LazyAttribute(lambda obj: fake.uuid4() if obj.paid else "")
+    payment_id = factory.LazyAttribute(
+        lambda obj: fake.bban() if obj.paid else ""
+    )
+    transaction_id = factory.LazyAttribute(
+        lambda obj: fake.uuid4() if obj.paid else ""
+    )
     reservation_code = factory.LazyAttribute(
         lambda obj: (
             get_random_string(length=6, allowed_chars=string.ascii_uppercase)

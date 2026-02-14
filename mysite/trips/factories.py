@@ -5,11 +5,20 @@ from datetime import timedelta
 import factory
 from factory import fuzzy
 from faker import Faker
+
 from trips.models import Location, Stats
+
 
 fake = Faker()
 
-companies = ["Andesmar", "Balut", "Chevallier", "20 De Junio", "Cata", "Dumascat"]
+companies = [
+    "Andesmar",
+    "Balut",
+    "Chevallier",
+    "20 De Junio",
+    "Cata",
+    "Dumascat",
+]
 
 
 class LocationFactory(factory.django.DjangoModelFactory):

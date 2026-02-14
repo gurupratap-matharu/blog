@@ -15,10 +15,12 @@ from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
 import mercadopago
-from orders.models import Order
 from trips.providers.prosys import Prosys
 
+from orders.models import Order
+
 from .models import WebhookMessage
+
 
 logger = logging.getLogger(__name__)
 mercado_pago = mercadopago.SDK(settings.MP_ACCESS_TOKEN)
@@ -53,7 +55,9 @@ class MercadoPagoView(TemplateView):
     def get_preference(self):
         session = self.request.session
         order_id = session.get("order_id")
-        unit_price = float(session.get("amount")) / 100  # <-- Minimizing this for MP
+        unit_price = (
+            float(session.get("amount")) / 100
+        )  # <-- Minimizing this for MP
 
         BASE_URI = settings.BASE_URI
 
@@ -204,7 +208,9 @@ def mercadopago_webhook(request):
     logger.info("mp webhook request body:%s", request.body)
 
     return HttpResponse(
-        "Message received okay.", content_type="text/plain", status=HTTPStatus.OK
+        "Message received okay.",
+        content_type="text/plain",
+        status=HTTPStatus.OK,
     )
 
 
@@ -227,5 +233,7 @@ def mailgun_webhook(request):
     mail_admins(subject, message)
 
     return HttpResponse(
-        "Message received okay.", content_type="text/plain", status=HTTPStatus.OK
+        "Message received okay.",
+        content_type="text/plain",
+        status=HTTPStatus.OK,
     )

@@ -18,6 +18,7 @@ from .forms import OrderForm, OrderSearchForm, PassengerForm
 from .models import Order, Passenger
 from .renderers import Render
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -205,11 +206,12 @@ class OrderCancelView(DetailView):
         data = []
 
         for ticket_id in ticket_ids:
-
             ticket = obj.check_ticket(ticket_id)
             retention_pct = ticket.get("details")["retention_pct"]
 
-            refund = obj.refund(ticket_id=ticket_id, retention_pct=retention_pct)
+            refund = obj.refund(
+                ticket_id=ticket_id, retention_pct=retention_pct
+            )
             data.append(refund)
 
         self.send_cancellation_mail(ticket_ids, data)

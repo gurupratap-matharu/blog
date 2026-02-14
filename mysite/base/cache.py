@@ -33,4 +33,6 @@ def get_default_cache_control_decorator():
     # cache_control_kwargs = get_cache_control_kwargs()
     # return cache_control(**cache_control_kwargs)
 
-    return cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # one day
+    return cache_control(
+        max_age=60 * 60 * 24, immutable=True, public=True
+    )  # one day

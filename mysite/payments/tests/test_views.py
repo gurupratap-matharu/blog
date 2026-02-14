@@ -33,7 +33,9 @@ class PaymentViewTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTemplateUsed(response, self.template_name)
         self.assertContains(response, "Pago")
-        self.assertNotContains(response, "Hi there! I should not be on this page.")
+        self.assertNotContains(
+            response, "Hi there! I should not be on this page."
+        )
 
     def test_payment_view_only_accepts_get_request(self):
         response = self.client.post(self.url)  # try POST
@@ -67,7 +69,9 @@ class PaymentSuccessTests(TestCase):
         self.assertContains(response, "Pago Éxitoso")
         self.assertContains(response, "¡Pasajes Confirmados!")
         self.assertContains(response, "Reservar otro pasaje")
-        self.assertNotContains(response, "Hi there! I should not be on this page.")
+        self.assertNotContains(
+            response, "Hi there! I should not be on this page."
+        )
 
     def test_payment_success_view_only_accepts_get_request(self):
         response = self.client.post(self.url)  # try POST
@@ -88,7 +92,9 @@ class PaymentSuccessTests(TestCase):
         self.fail()
 
     @skip
-    def test_payment_success_view_sends_notification_to_operator_via_email(self):
+    def test_payment_success_view_sends_notification_to_operator_via_email(
+        self,
+    ):
         self.fail()
 
     @skip
@@ -112,7 +118,9 @@ class PaymentPendingTests(TestCase):
         self.assertTemplateUsed(response, self.template_name)
         self.assertContains(response, "Pago Pendiente")
         self.assertContains(response, "Ir al Home")
-        self.assertNotContains(response, "Hi there! I should not be on this page.")
+        self.assertNotContains(
+            response, "Hi there! I should not be on this page."
+        )
 
     def test_payment_pending_view_only_accepts_get_request(self):
         response = self.client.post(self.url)  # try POST
@@ -138,7 +146,9 @@ class PaymentFailTests(TestCase):
         self.assertContains(response, "Pago sin éxito")
         self.assertContains(response, "Ir al home")
         self.assertContains(response, "Probar de nuevo")
-        self.assertNotContains(response, "Hi there! I should not be on this page.")
+        self.assertNotContains(
+            response, "Hi there! I should not be on this page."
+        )
 
     def test_payment_fail_view_only_accepts_get_request(self):
         response = self.client.post(self.url)  # try POST
@@ -195,7 +205,9 @@ class MercadoPagoSuccessTests(TestCase):
         )
 
         # Assert: that we are redirected to payment fail page
-        self.assertRedirects(response, reverse_lazy("payments:fail"), HTTPStatus.FOUND)
+        self.assertRedirects(
+            response, reverse_lazy("payments:fail"), HTTPStatus.FOUND
+        )
         self.assertTemplateUsed(response, PaymentFailView.template_name)
 
     def test_stores_query_params_in_webhook_message_model(self):

@@ -11,6 +11,7 @@ from .views import (
     mercadopago_webhook,
 )
 
+
 app_name = "payments"
 
 urlpatterns = [
@@ -19,7 +20,11 @@ urlpatterns = [
     path("fail/", PaymentFailView.as_view(), name="fail"),
     path("pending/", PaymentPendingView.as_view(), name="pending"),
     path("mercado-pago/", MercadoPagoView.as_view(), name="mercado-pago"),
-    path("mercado-pago/success/", mercadopago_success, name="mercado-pago-success"),
+    path(
+        "mercado-pago/success/",
+        mercadopago_success,
+        name="mercado-pago-success",
+    ),
     path(
         "webhooks/mercado-pago/drSndwy4YXkO15Zx1gABbbspSpxOasfx/",
         mercadopago_webhook,

@@ -5,7 +5,13 @@ from django.core import mail
 from django.test import TestCase
 
 from lxml import etree
-from requests.exceptions import ConnectionError, HTTPError, RequestException, Timeout
+from requests.exceptions import (
+    ConnectionError,
+    HTTPError,
+    RequestException,
+    Timeout,
+)
+
 from trips.providers.prosys import Prosys
 
 from .utils import GET_BY_FECHA_ORIGEN_DESTINO_XML, START_SESSION_XML
@@ -136,12 +142,16 @@ class ProsysTests(TestCase):
         return_value = etree.fromstring(xml)
 
         client = MockClient()
-        client.service.GetByFechaOrigenDestino = MagicMock(return_value=return_value)
+        client.service.GetByFechaOrigenDestino = MagicMock(
+            return_value=return_value
+        )
 
         # Act
 
         obj = Prosys(connection_id="12345")
-        actual = obj.search(origin="393", destination="443", departure="15-05-2025")
+        actual = obj.search(
+            origin="393", destination="443", departure="15-05-2025"
+        )
         print("veer actual: ", actual)
 
         # Assert
