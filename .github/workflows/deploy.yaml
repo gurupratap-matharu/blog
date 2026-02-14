@@ -16,8 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.12"]
-        poetry-version: ["1.7.1"]
+        python-version: ["3.14"]
         os: [ubuntu-latest]
 
     steps:
@@ -37,16 +36,16 @@ jobs:
             git pull origin main
 
             echo "Veer: collecting static..."
-            /home/veer/.pyenv/versions/blog/bin/python mysite/manage.py collectstatic --noinput
+            /home/veer/code/blog/.venv/bin/python mysite/manage.py collectstatic --noinput
 
             echo "Veer: showing migrations..."
-            /home/veer/.pyenv/versions/blog/bin/python mysite/manage.py showmigrations
+            /home/veer/code/blog/.venv/bin/python mysite/manage.py showmigrations
 
             echo "Veer: applying migrations..."
-            /home/veer/.pyenv/versions/blog/bin/python mysite/manage.py migrate
+            /home/veer/code/blog/.venv/bin/python mysite/manage.py migrate
 
             echo "Veer: compiling translations..."
-            /home/veer/.pyenv/versions/blog/bin/django-admin compilemessages
+            /home/veer/code/blog/.venv/bin/django-admin compilemessages
 
             echo "Veer: reloading daemon..."
             sudo systemctl daemon-reload
