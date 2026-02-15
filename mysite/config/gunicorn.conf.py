@@ -2,7 +2,7 @@
 # https://docs.gunicorn.org/en/stable/configure.html#configuration-file
 # https://docs.gunicorn.org/en/stable/settings.html
 
-# import multiprocessing
+import multiprocessing
 
 import gunicorn
 
@@ -20,8 +20,7 @@ bind = "unix:/run/wagtail.sock"
 
 
 # Define the number of workers
-# workers = multiprocessing.cpu_count() * 2 + 1 # <-- Change in production
-workers = 1
+workers = multiprocessing.cpu_count() * 2 + 1
 
 # Access log - records incoming HTTP requests
 accesslog = "-"
