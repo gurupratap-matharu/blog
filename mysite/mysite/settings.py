@@ -115,14 +115,28 @@ if not TESTING:
 
 # Django allauth
 ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
+ACCOUNT_MAX_EMAIL_ADDRESSES = 2
+ACCOUNT_UNIQUE_EMAIL = True
+
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
+ACCOUNT_SIGNUP_FORM_HONEYPOT_FIELD = "address"
+
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True
 ACCOUNT_LOGOUT_REDIRECT = "/"
+
+ACCOUNT_PASSWORD_RESET_BY_CODE_ENABLED = True
+
 ACCOUNT_PRESERVE_USERNAME_CASING = False
+ACCOUNT_USERNAME_MIN_LENGTH = 3
+ACCOUNT_USERNAME_VALIDATORS = "users.validators.ascii_validator"
 ACCOUNT_SESSION_REMEMBER = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
+
+ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
@@ -245,6 +259,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {
+            "min_length": 9,
+        },
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
@@ -347,10 +364,6 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "simple": {
-            "format": "{levelname} {message}",
-            "style": "{",
-        },
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s:%(lineno)d %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
@@ -360,7 +373,7 @@ LOGGING = {
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
-            "formatter": "simple",
+            "formatter": "verbose",
         },
         "file": {
             "level": "WARNING",
