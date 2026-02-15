@@ -31,7 +31,7 @@ exclude=["*migrations*", "static"]
 combine-as-imports=true
 force-single-line=false
 known-first-party=["blog", "base", "home", "search", "users", "partners", "orders", "payments"]
-known-third-party=["wagtail", "rest_framework"]
+known-third-party=["rest_framework"]
 lines-after-imports=2
 section-order=["future", "standard-library", "django", "wagtail", "third-party", "first-party", "local-folder"]
 
