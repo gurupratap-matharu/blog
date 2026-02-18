@@ -2,11 +2,26 @@
 
 {% load static i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
 
+{% block extra_css %}
+  <style>
+       #reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            z-index: 9999;
+            background: linear-gradient(310deg, #7928ca, #ff0080);
+            transition: width 0.2s ease;
+       }
+  </style>
+{% endblock extra_css %}
+
 {% block content %}
+  <div id="reading-progress"></div>
   <section class="container mb-5">
-    {% image page.image original as tmp_photo %}
     <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-6 mx-auto">
         <div class="d-none d-md-block">{% breadcrumbs %}</div>
         <h1 class="display-4">{{ page.title }}</h1>
         {% for author in page.authors %}
@@ -47,4 +62,5 @@
   {# djlint:off #}
   <script type="application/ld+json">{{ page.ld_entity }}</script>
   {# djlint:on #}
+  <script src="{% static 'assets/js/blog_page.js' %}"></script>
 {% endblock extra_js %}

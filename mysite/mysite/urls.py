@@ -9,14 +9,12 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
-from debug_toolbar.toolbar import debug_toolbar_urls
-
 from base.views import IndexNow, RobotsView, favicon
 from search import views as search_views
 
 
 urlpatterns = [
-    path("django-admin/", admin.site.urls),
+    path("dj-admin/", admin.site.urls),
     path("private/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("accounts/", include("allauth.urls")),
@@ -30,12 +28,13 @@ urlpatterns = [
     path("robots.txt", RobotsView.as_view()),
     path(f"{settings.INDEXNOW_KEY}.txt", IndexNow.as_view(), name="indexnow"),
     path("styleguide/", TemplateView.as_view(template_name="styleguide.html")),
-    path("results/", TemplateView.as_view(template_name="results.html")),
     path("routes/", TemplateView.as_view(template_name="routes.html")),
 ]
 
 
 if not settings.TESTING:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+
     urlpatterns = [*urlpatterns] + debug_toolbar_urls()
 
 if settings.DEBUG:

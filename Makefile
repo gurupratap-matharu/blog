@@ -66,12 +66,8 @@ lint:
 	djlint --check .
 
 test: check migrations-check
-	coverage run --source='.' manage.py test --no-input
+	cd mysite && coverage run --source='.' manage.py test --no-input
 	coverage html
-
-security:
-	poetry run bandit -rc pyproject.toml .
-	poetry run safety check
 
 ci: format lint test
 

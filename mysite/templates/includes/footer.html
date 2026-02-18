@@ -4,33 +4,31 @@
 <footer class="footer">
   <div class="container">
     <div class="row justify-content-between">
-      <div class="col-md-2 mb-4">
-        <p class="font-weight-bolder">
-          <a href="/" class="link-dark">Ventanita</a>
-        </p>
-        <ul class="d-flex flex-row ms-n3 nav">
-          <li class="nav-item">
-            <a class="nav-link" target="_blank" href="{{ settings.base.GenericSettings.facebook_url }}" aria-label="Facebook Page">
-              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                <use xlink:href="{% static 'assets/icons/icons.svg' %}#facebook" />
-              </svg>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" target="_blank" href="{{ settings.base.GenericSettings.instagram_url }}" aria-label="Instagram Page">
-              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                <use xlink:href="{% static 'assets/icons/icons.svg' %}#instagram" />
-              </svg>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" target="_blank" href="{{ settings.base.GenericSettings.youtube_url }}" aria-label="Youtube Page">
-              <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                <use xlink:href="{% static 'assets/icons/icons.svg' %}#youtube" />
-              </svg>
-            </a>
-          </li>
-        </ul>
+      <div class="col-6 col-md-2 mb-4">
+        <a href="/" class="fw-bold text-primary text-gradient">Ventanita</a>
+        <div class="d-flex">
+          <a class="nav-link me-3"
+             target="_blank"
+             href="{{ settings.base.GenericSettings.facebook_url }}"
+             aria-label="Facebook Page">
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#facebook" />
+            </svg>
+          </a>
+          <a class="nav-link me-3"
+             target="_blank"
+             href="{{ settings.base.GenericSettings.instagram_url }}"
+             aria-label="Instagram Page">
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#instagram" />
+            </svg>
+          </a>
+          <a class="nav-link me-3" target="_blank" href="{{ settings.base.GenericSettings.youtube_url }}" aria-label="Youtube Page">
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#youtube" />
+            </svg>
+          </a>
+        </div>
         <div class="d-flex mt-3 mb-2">
           <form action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
@@ -57,8 +55,8 @@
         </p>
       </div>
       <div class="col-6 col-md-2 mb-4">
-        <p class="fw-bold">{% translate "Empresa" %}</p>
-        <ul class="flex-column ms-n3 nav">
+        <p class="fw-bold text-primary text-gradient">{% translate "Empresa" %}</p>
+        <ul class="flex-column nav ms-n3">
           <li class="nav-item">
             <a class="nav-link" href="/about/">{% translate "Sobre nosotros" %}</a>
           </li>
@@ -68,8 +66,8 @@
         </ul>
       </div>
       <div class="col-6 col-md-2 mb-4">
-        <p class="fw-bold">{% translate "Info Útil" %}</p>
-        <ul class="flex-column ms-n3 nav">
+        <p class="fw-bold text-primary text-gradient">{% translate "Info Útil" %}</p>
+        <ul class="flex-column nav ms-n3">
           <li class="nav-item">
             <a class="nav-link" href="/pasajes-de-micro/">{% translate "Terminales de Bus" %}</a>
           </li>
@@ -79,8 +77,8 @@
         </ul>
       </div>
       <div class="col-6 col-md-2 mb-4">
-        <p class="fw-bold">{% translate "Soporte" %}</p>
-        <ul class="flex-column ms-n3 nav">
+        <p class="fw-bold text-primary text-gradient">{% translate "Soporte" %}</p>
+        <ul class="flex-column nav ms-n3">
           <li class="nav-item">
             <a class="nav-link" href="/contact/">{% translate "Contacto" %}</a>
           </li>
@@ -93,8 +91,8 @@
         </ul>
       </div>
       <div class="col-6 col-md-2 mb-4">
-        <p class="fw-bold">{% translate "Enlaces Útiles" %}</p>
-        <ul class="flex-column ms-n3 nav">
+        <p class="fw-bold text-primary text-gradient">{% translate "Enlaces Útiles" %}</p>
+        <ul class="flex-column nav ms-n3">
           <li class="nav-item">
             <a class="nav-link" href="/condiciones-generales/">{% translate "Condiciones Generales" %}</a>
           </li>
@@ -106,9 +104,6 @@
           </li>
         </ul>
       </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-6 col-md-3 col-lg-2"></div>
     </div>
     <div class="d-flex justify-content-center">
       <p class="mt-4 nav-link">
