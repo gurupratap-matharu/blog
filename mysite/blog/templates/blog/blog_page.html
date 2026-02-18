@@ -3,84 +3,41 @@
 {% load static i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
-  <header>
-    <div class="page-header min-vh-75">
-      {% image page.image original as tmp_photo %}
-      <div class="oblique position-absolute top-0 h-100 d-md-block d-none">
-        <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
-             style="background-image:url({{ tmp_photo.url }})"></div>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-            {% comment %} {% breadcrumbs %} {% endcomment %}
-            <h1 class="display-5 mb-5">{{ page.title }}</h1>
-            {% for author in page.authors %}
-              <div class="author align-items-center">
-                {% image author.image width-200 class="avatar avatar-xl rounded-circle" %}
-                <div class="name ps-2">
-                  <p class="h6 mb-0">Por: {{ author.first_name }} {{ author.last_name }}</p>
-                  <div class="stats">
-                    <small class="text-sm text-muted">Actualizado: {{ page.date }}</small>
-                    <svg class="mx-1 d-none d-md-inline"
-                         width="8"
-                         height="8"
-                         viewBox="0 0 64 64"
-                         xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true">
-                      <circle cx="32" cy="32" r="30" fill="#054ada" />
-                    </svg>
-                    <small class="text-sm text-muted">{{ page.reading_time }} min de lectura</small>
-                  </div>
-                </div>
+  <section class="container mb-5">
+    {% image page.image original as tmp_photo %}
+    <div class="row">
+      <div class="col-md-7">
+        <div class="d-none d-md-block">{% breadcrumbs %}</div>
+        <h1 class="display-4">{{ page.title }}</h1>
+        {% for author in page.authors %}
+          <div class="author align-items-center">
+            {% image author.image width-200 class="avatar avatar-xl rounded-circle" %}
+            <div class="name ps-2">
+              <p class="h6 mb-0">Por: {{ author.first_name }} {{ author.last_name }}</p>
+              <div class="stats">
+                <small class="text-sm text-muted">Actualizado: {{ page.date }}</small>
+                <svg class="mx-1 d-none d-md-inline"
+                     width="8"
+                     height="8"
+                     viewBox="0 0 64 64"
+                     xmlns="http://www.w3.org/2000/svg"
+                     aria-hidden="true">
+                  <circle cx="32" cy="32" r="30" fill="#054ada" />
+                </svg>
+                <small class="text-sm text-muted">{{ page.reading_time }} min de lectura</small>
               </div>
-            {% endfor %}
+            </div>
           </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
-  </header>
-  <section class="my-md-5 py-md-5">
-    <div class="container">
-      <div class="row">
-        {% comment "TOC" %}
-                <div class="col-lg-2">
-                    <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2 d-none d-md-block" style="top: 100px">
-                        <a data-bs-toggle="collapse" href="#tableOfContents" role="button" aria-expanded="false" aria-controls="tableOfContents">
-                            <h5 class="ms-3 pb-3">Table of contents</h5>
-                        </a>
-                        <div class="collapse show" id="tableOfContents">
-                            <div class="list-group list-group-flush">
-                                <a href="javascript:;" class="list-group-item list-group-item-action">Content Heading</a>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-around py-5">
-                            <i class="bi bi-twitter"></i>
-                            <i class="bi bi-linkedin"></i>
-                            <i class="bi bi-envelope"></i>
-                            <i class="bi bi-link-45deg"></i>
-                        </div>
-                        <div class="card">
-                            <div class="card-header pt-4 pb-3">
-                                <span class="badge rounded-pill bg-light text-dark">Premium</span>
-                                <h6 class="font-weight-bold mt-2">Experience the world of travel for yourself!</h6>
-                            </div>
-                            <div class="card-body text-lg-start text-center pt-0">
-                                Create an account in seconds.
-                                <a href="javascript:;" class="btn btn-icon bg-gradient-primary d-lg-block mt-3 mb-0">
-                                    Sign up for free
-                                    <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        {% endcomment %}
-        <div class="col-lg-8 mx-auto">
-          {% if page.subtitle %}<p class="lead mb-3">{{ page.subtitle }}</p>{% endif %}
-          {% if page.intro %}<p class="lead mb-3">{{ page.intro }}</p>{% endif %}
-          {{ page.body }}
-        </div>
+  </section>
+  <section class="container">
+    <div class="row">
+      <div class="col-lg-6 mx-auto">
+        {% if page.subtitle %}<p class="lead mb-3">{{ page.subtitle }}</p>{% endif %}
+        {% if page.intro %}<p class="lead mb-3">{{ page.intro }}</p>{% endif %}
+        <article>{{ page.body }}</article>
       </div>
     </div>
   </section>
