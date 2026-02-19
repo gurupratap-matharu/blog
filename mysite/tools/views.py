@@ -1,8 +1,9 @@
 import logging
 
 from django.contrib import messages
+from django.http import HttpRequest, HttpResponse
+from django.template.response import TemplateResponse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import TemplateView
 
 from trips.models import Stats
 
@@ -10,17 +11,13 @@ from trips.models import Stats
 logger = logging.getLogger(__name__)
 
 
-class ToolsIndexView(TemplateView):
-    template_name = "tools/tools_index.html"
+def tools_index(request: HttpRequest) -> HttpResponse:
+    return TemplateResponse(request, "tools/tools_index.html", {})
 
 
-class PriceEstimateView(TemplateView):
-    template_name = "tools/price_estimate.html"
-    no_data_msg = _(
-        "No encontramos datos entre este tramo. ¿Porque no probás uno otro?"
-    )
-
-    def post(self, request, *args, **kwargs):
+def price_estimate(request: HttpRequest) -> HttpResponse:
+    ctx = dict()
+    if request.method == "POST":
         origin = request.POST.get("origin")
         destination = request.POST.get("destination")
 
@@ -32,10 +29,12 @@ class PriceEstimateView(TemplateView):
             )
 
         except Stats.DoesNotExist:
-            messages.info(request, self.no_data_msg)
+            no_data_msg = _(
+                "No encontramos datos entre este tramo. ¿Porque no probás uno otro?"
+            )
+            messages.info(request, no_data_msg)
             stats = None
 
-        context = super().get_context_data(**kwargs)
-        context["stats"] = stats
+        ctx["stats"] = stats
 
-        return self.render_to_response(context)
+    return TemplateResponse(request, "tools/price_estimate.html", ctx)

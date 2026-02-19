@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
-from django_countries.fields import CountryField
+from .choices import Country, Province
 
 
 class Location(models.Model):
@@ -19,11 +19,15 @@ class Location(models.Model):
     name = models.CharField(_("name"), max_length=200)
     slug = models.SlugField(_("slug"), max_length=200, unique=True)
     abbr = models.CharField(
-        verbose_name=_("abbreviation"),
+        verbose_name=_("abbr"),
         max_length=7,
-        blank=True,
         unique=True,
-        help_text=_("Used internally as a reference"),
+    )
+    latitude = models.DecimalField(
+        _("Latitude"), max_digits=22, decimal_places=16, null=True
+    )
+    longitude = models.DecimalField(
+        _("Longitude"), max_digits=22, decimal_places=16, null=True
     )
     address_line1 = models.CharField(
         _("Address line 1"), max_length=128, blank=True
@@ -32,15 +36,12 @@ class Location(models.Model):
         _("Address line 2"), max_length=128, blank=True
     )
     city = models.CharField(_("City"), max_length=64, blank=True)
-    state = models.CharField(_("State/Province"), max_length=200, blank=True)
+    state = models.CharField(_("Province"), max_length=5, choices=Province)
+    country = models.CharField(
+        _("Country"), max_length=5, choices=Country, default=Country.ARGENTINA
+    )
     postal_code = models.CharField(_("Postal Code"), max_length=10, blank=True)
-    country = CountryField(blank_label=_("(select country)"))
-    latitude = models.DecimalField(
-        _("Latitude"), max_digits=9, decimal_places=6, null=True
-    )
-    longitude = models.DecimalField(
-        _("Longitude"), max_digits=9, decimal_places=6, null=True
-    )
+    is_active = models.BooleanField(_("Active"), default=True)
 
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -53,7 +54,7 @@ class Location(models.Model):
         return self.name
 
     def natural_key(self):
-        return (self.abbr,)
+        return (self.code,)
 
     def save(self, *args, **kwargs) -> None:
         if not self.slug:
