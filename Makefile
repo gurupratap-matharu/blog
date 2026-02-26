@@ -77,6 +77,9 @@ css:
 superuser:
 	python mysite/manage.py createsuperuser
 
+pull-media:
+	rsync -avzhP --progress DO:/home/veer/code/blog/mysite/media/ ./mysite/media/
+
 dump-data:
 	python mysite/manage.py dumpdata --natural-foreign --indent 2 \
 		-e auth.permission -e contenttypes -e wagtailcore.GroupCollectionPermission \

@@ -14,6 +14,16 @@
             background: linear-gradient(310deg, #7928ca, #ff0080);
             transition: width 0.2s ease;
        }
+
+       #toc .nav-link {
+            color: #6c757d;
+            padding: 3px 0;
+       }
+
+       #toc .nav-link.active {
+            color: #054ada;
+            font-weight: 600;
+       }
   </style>
 {% endblock extra_css %}
 
@@ -47,12 +57,24 @@
       </div>
     </div>
   </section>
-  <section class="container">
+  <section class="container py-5">
     <div class="row">
-      <div class="col-lg-6 mx-auto">
+      <nav id="toc" class="col-lg-3 d-none d-md-block">
+        <div class="position-sticky" style="top: 100px;">
+          <h6>{% translate "Contenidos" %}</h6>
+          <nav class="nav flex-column text-sm" id="toc-list">
+          </nav>
+        </div>
+      </nav>
+      <div class="col-lg-6">
         {% if page.subtitle %}<p class="lead mb-3">{{ page.subtitle }}</p>{% endif %}
         {% if page.intro %}<p class="lead mb-3">{{ page.intro }}</p>{% endif %}
-        <article>{{ page.body }}</article>
+        <article id="blog-content"
+                 data-bs-spy="scroll"
+                 data-bs-target="#toc"
+                 data-bs-root-margin="0px 0px -40%"
+                 data-bs-smooth-scroll="true"
+                 tabindex="0">{{ page.body }}</article>
       </div>
     </div>
   </section>
