@@ -7,8 +7,371 @@
 {% endblock title %}
 
 {% block content %}
-  <section class="container pt-7">
-    <h1 class="text-center">Styleguide 🌈</h1>
+  <div class="container">
+    <h1 class="text-center">Styleguide</h1>
+    <h2>Typography</h2>
+    <h1>h1. Bootstrap heading</h1>
+    <h2>h2. Bootstrap heading</h2>
+    <h3>h3. Bootstrap heading</h3>
+    <h4>h4. Bootstrap heading</h4>
+    <h5>h5. Bootstrap heading</h5>
+    <h6>h6. Bootstrap heading</h6>
+    <h3>
+      Fancy display heading
+      <small class="text-body-secondary">With faded secondary text</small>
+    </h3>
+    <h1 class="display-1">Display 1</h1>
+    <h1 class="display-2">Display 2</h1>
+    <h1 class="display-3">Display 3</h1>
+    <h1 class="display-4">Display 4</h1>
+    <h1 class="display-5">Display 5</h1>
+    <h1 class="display-6">Display 6</h1>
+    <p class="lead">This is a lead paragraph. It stands out from regular paragraphs.</p>
+    <p>
+      You can use the mark tag to <mark>highlight</mark> text.
+    </p>
+    <p>
+      <del>This line of text is meant to be treated as deleted text.</del>
+    </p>
+    <p>
+      <s>This line of text is meant to be treated as no longer accurate.</s>
+    </p>
+    <p>
+      <ins>This line of text is meant to be treated as an addition to the document.</ins>
+    </p>
+    <p>
+      <u>This line of text will render as underlined.</u>
+    </p>
+    <p>
+      <small>This line of text is meant to be treated as fine print.</small>
+    </p>
+    <p>
+      <strong>This line rendered as bold text.</strong>
+    </p>
+    <p>
+      <em>This line rendered as italicized text.</em>
+    </p>
+    <p>
+      <abbr title="attribute">attr</abbr>
+    </p>
+    <p>
+      <abbr title="HyperText Markup Language" class="initialism">HTML</abbr>
+    </p>
+    <blockquote class="blockquote">
+      <p>A well-known quote, contained in a blockquote element.</p>
+    </blockquote>
+    <figure class="text-end">
+      <blockquote class="blockquote">
+        <p>A well-known quote, contained in a blockquote element.</p>
+      </blockquote>
+      <figcaption class="blockquote-footer">
+        Someone famous in <cite title="Source Title">Source Title</cite>
+      </figcaption>
+    </figure>
+    <h2>Tables</h2>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">First</th>
+          <th scope="col">Last</th>
+          <th scope="col">Handle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>John</td>
+          <td>Doe</td>
+          <td>@social</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>Image</h2>
+    <figure class="figure">
+      <img src="/static/assets/img/stock/asuncion.avif" class="figure-img img-fluid rounded" alt="Asuncion" />
+      <figcaption class="figure-caption">Cathedral in Asuncion city</figcaption>
+    </figure>
+    <h2>Progress Bar</h2>
+    <div class="progress mb-3"
+         role="progressbar"
+         aria-label="Example 1px high"
+         aria-valuenow="25"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         style="height: 1px">
+      <div class="progress-bar" style="width: 25%"></div>
+    </div>
+    <div class="progress mb-3"
+         role="progressbar"
+         aria-label="Example 20px high"
+         aria-valuenow="25"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         style="height: 20px">
+      <div class="progress-bar bg-dark" style="width: 25%"></div>
+    </div>
+    <h2>Forms</h2>
+    <form class="row g-3">
+      <div class="col-md-6">
+        <label for="inputEmail4" class="form-label">Email</label>
+        <input type="email" class="form-control" id="inputEmail4" />
+      </div>
+      <div class="col-md-6">
+        <label for="inputPassword4" class="form-label">Password</label>
+        <input type="password" class="form-control" id="inputPassword4" />
+      </div>
+      <div class="col-12">
+        <label for="inputAddress" class="form-label">Address</label>
+        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" />
+      </div>
+      <div class="col-12">
+        <label for="inputAddress2" class="form-label">Address 2</label>
+        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" />
+      </div>
+      <div class="col-md-6">
+        <label for="inputCity" class="form-label">City</label>
+        <input type="text" class="form-control" id="inputCity" />
+      </div>
+      <div class="col-md-4">
+        <label for="inputState" class="form-label">State</label>
+        <select id="inputState" class="form-select">
+          <option selected="">Choose...</option>
+          <option>...</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label for="inputZip" class="form-label">Zip</label>
+        <input type="text" class="form-control" id="inputZip" />
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck" />
+          <label class="form-check-label" for="gridCheck">Check me out</label>
+        </div>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Sign in</button>
+      </div>
+    </form>
+    <form class="row g-3">
+      <div class="col-md-4">
+        <label for="validationServer01" class="form-label">First name</label>
+        <input type="text" class="form-control is-valid" id="validationServer01" value="Mark" required="" />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="col-md-4">
+        <label for="validationServer02" class="form-label">Last name</label>
+        <input type="text" class="form-control is-valid" id="validationServer02" value="Otto" required="" />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="col-md-4">
+        <label for="validationServerUsername" class="form-label">Username</label>
+        <div class="input-group has-validation">
+          <span class="input-group-text" id="inputGroupPrepend3">@</span>
+          <input type="text"
+                 class="form-control is-invalid"
+                 id="validationServerUsername"
+                 aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback"
+                 required="" />
+          <div id="validationServerUsernameFeedback" class="invalid-feedback">Please choose a username.</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="validationServer03" class="form-label">City</label>
+        <input type="text"
+               class="form-control is-invalid"
+               id="validationServer03"
+               aria-describedby="validationServer03Feedback"
+               required="" />
+        <div id="validationServer03Feedback" class="invalid-feedback">Please provide a valid city.</div>
+      </div>
+      <div class="col-md-3">
+        <label for="validationServer04" class="form-label">State</label>
+        <select class="form-select is-invalid" id="validationServer04" aria-describedby="validationServer04Feedback" required="">
+          <option selected="" disabled="" value="">Choose...</option>
+          <option>...</option>
+        </select>
+        <div id="validationServer04Feedback" class="invalid-feedback">Please select a valid state.</div>
+      </div>
+      <div class="col-md-3">
+        <label for="validationServer05" class="form-label">Zip</label>
+        <input type="text"
+               class="form-control is-invalid"
+               id="validationServer05"
+               aria-describedby="validationServer05Feedback"
+               required="" />
+        <div id="validationServer05Feedback" class="invalid-feedback">Please provide a valid zip.</div>
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input is-invalid"
+                 type="checkbox"
+                 value=""
+                 id="invalidCheck3"
+                 aria-describedby="invalidCheck3Feedback"
+                 required="" />
+          <label class="form-check-label" for="invalidCheck3">Agree to terms and conditions</label>
+          <div id="invalidCheck3Feedback" class="invalid-feedback">You must agree before submitting.</div>
+        </div>
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">Submit form</button>
+      </div>
+    </form>
+    <h2>Accordion</h2>
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseOne"
+                  aria-expanded="true"
+                  aria-controls="collapseOne">Accordion Item #1</button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <strong>This is the first item’s accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseTwo"
+                  aria-expanded="false"
+                  aria-controls="collapseTwo">Accordion Item #2</button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <strong>This is the second item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseThree"
+                  aria-expanded="false"
+                  aria-controls="collapseThree">Accordion Item #3</button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          </div>
+        </div>
+      </div>
+    </div>
+    <h2>Alerts</h2>
+    <div class="alert alert-primary" role="alert">
+      A simple primary alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+    </div>
+    <div class="alert alert-secondary" role="alert">
+      A simple secondary alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+    </div>
+    <div class="alert alert-success" role="alert">
+      A simple success alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+    </div>
+    <div class="alert alert-danger" role="alert">
+      A simple danger alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+    </div>
+    <div class="alert alert-warning" role="alert">
+      A simple warning alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+    </div>
+    <div class="alert alert-info" role="alert">
+      A simple info alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+    </div>
+    <div class="alert alert-light" role="alert">
+      A simple light alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+    </div>
+    <div class="alert alert-dark" role="alert">
+      A simple dark alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+    </div>
+    <h2>Badges</h2>
+    <span class="badge rounded-pill text-bg-primary">Primary</span>
+    <span class="badge rounded-pill text-bg-secondary">Secondary</span>
+    <span class="badge rounded-pill text-bg-success">Success</span>
+    <span class="badge rounded-pill text-bg-danger">Danger</span>
+    <span class="badge rounded-pill text-bg-warning">Warning</span>
+    <span class="badge rounded-pill text-bg-info">Info</span>
+    <span class="badge rounded-pill text-bg-light">Light</span>
+    <span class="badge rounded-pill text-bg-dark">Dark</span>
+    <button type="button" class="btn btn-primary position-relative">
+      Profile
+      <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+        <span class="visually-hidden">New alerts</span>
+      </span>
+    </button>
+    <h2>Breadcrumbs</h2>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Home</li>
+      </ol>
+    </nav>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Library</li>
+      </ol>
+    </nav>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">Library</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Data</li>
+      </ol>
+    </nav>
+    <h2>Buttons</h2>
+    <div>
+      <button type="button" class="btn btn-primary">Primary</button>
+      <button type="button" class="btn btn-secondary">Secondary</button>
+      <button type="button" class="btn btn-success">Success</button>
+      <button type="button" class="btn btn-danger">Danger</button>
+      <button type="button" class="btn btn-warning">Warning</button>
+      <button type="button" class="btn btn-info">Info</button>
+      <button type="button" class="btn btn-light">Light</button>
+      <button type="button" class="btn btn-dark">Dark</button>
+      <button type="button" class="btn btn-link">Link</button>
+    </div>
+    <div>
+      <button type="button" class="btn btn-outline-primary">Primary</button>
+      <button type="button" class="btn btn-outline-secondary">Secondary</button>
+      <button type="button" class="btn btn-outline-success">Success</button>
+      <button type="button" class="btn btn-outline-danger">Danger</button>
+      <button type="button" class="btn btn-outline-warning">Warning</button>
+      <button type="button" class="btn btn-outline-info">Info</button>
+      <button type="button" class="btn btn-outline-light">Light</button>
+      <button type="button" class="btn btn-outline-dark">Dark</button>
+    </div>
+    <div>
+      <button type="button" class="btn btn-primary btn-lg">Large button</button>
+      <button type="button" class="btn btn-secondary btn-lg">Large button</button>
+      <button type="button" class="btn btn-primary btn-sm">Small button</button>
+      <button type="button" class="btn btn-secondary btn-sm">Small button</button>
+    </div>
     <div class="card mb-3">
       <div class="card-header pb-0">
         <h5>Ratings</h5>
@@ -211,132 +574,5 @@
         </div>
       </div>
     </div>
-    <h3 class="mt-3">Headers</h3>
-    {% include "includes/header-card.html" %}
-    {% include "includes/header-chips.html" %}
-    {% include "includes/header-curvy.html" %}
-    {% include "includes/header-hero.html" %}
-    {% include "includes/header-slant.html" %}
-    <div class="card mt-3">
-      <div class="card-header">
-        <h5>Buttons</h5>
-      </div>
-      <div class="card-body">
-        <button type="button" class="btn btn-primary">Primary</button>
-        <button type="button" class="btn btn-secondary">Secondary</button>
-        <button type="button" class="btn btn-info">Info</button>
-        <button type="button" class="btn btn-warning">Warning</button>
-        <button type="button" class="btn btn-success">Success</button>
-        <button type="button" class="btn btn-danger">Danger</button>
-        <button type="button" class="btn btn-light">Light</button>
-        <button type="button" class="btn btn-dark">Dark</button>
-        <button type="button" class="btn btn-link">Link</button>
-        <hr />
-        <button type="button" class="btn btn-outline-primary">Primary</button>
-        <button type="button" class="btn btn-outline-secondary">Secondary</button>
-        <button type="button" class="btn btn-outline-info">Info</button>
-        <button type="button" class="btn btn-outline-warning">Warning</button>
-        <button type="button" class="btn btn-outline-success">Success</button>
-        <button type="button" class="btn btn-outline-danger">Danger</button>
-        <button type="button" class="btn btn-outline-light">Light</button>
-        <button type="button" class="btn btn-outline-dark">Dark</button>
-        <button type="button" class="btn btn-outline-link">Link</button>
-        <hr />
-        <button type="button" class="btn bg-gradient-primary">Primary</button>
-        <button type="button" class="btn bg-gradient-secondary">Secondary</button>
-        <button type="button" class="btn bg-gradient-info">Info</button>
-        <button type="button" class="btn bg-gradient-warning">Warning</button>
-        <button type="button" class="btn bg-gradient-success">Success</button>
-        <button type="button" class="btn bg-gradient-danger">Danger</button>
-        <button type="button" class="btn bg-gradient-light">Light</button>
-        <button type="button" class="btn bg-gradient-dark">Dark</button>
-        <button type="button" class="btn bg-gradient-link">Link</button>
-        <hr />
-      </div>
-    </div>
-    <article class="mt-3">
-      <h3>Shadows</h3>
-      <div class="d-flex flex-wrap gap-3">
-        <div class="card shadow-none">
-          <div class="card-header">
-            <h5>Shadow None</h5>
-          </div>
-          <div class="card-body">{% lorem %}</div>
-        </div>
-        <div class="card shadow-xs">
-          <div class="card-header">
-            <h5>Shadow XS</h5>
-          </div>
-          <div class="card-body">{% lorem %}</div>
-        </div>
-        <div class="card shadow-lg">
-          <div class="card-header">
-            <h5>Shadow Large</h5>
-          </div>
-          <div class="card-body">{% lorem %}</div>
-        </div>
-        <div class="card shadow-xl">
-          <div class="card-header">
-            <h5>Shadow XL</h5>
-          </div>
-          <div class="card-body">{% lorem %}</div>
-        </div>
-        <div class="card blur">
-          <div class="card-header">
-            <h5>Shadow Blur</h5>
-          </div>
-          <div class="card-body">{% lorem %}</div>
-        </div>
-      </div>
-    </article>
-    <article class="mt-3">
-      <div class="accordion" id="accordionExample">
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseOne"
-                    aria-expanded="true"
-                    aria-controls="collapseOne">Accordion Item #1</button>
-          </h2>
-          <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-              <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseTwo"
-                    aria-expanded="false"
-                    aria-controls="collapseTwo">Accordion Item #2</button>
-          </h2>
-          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-              <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseThree"
-                    aria-expanded="false"
-                    aria-controls="collapseThree">Accordion Item #3</button>
-          </h2>
-          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-              <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-            </div>
-          </div>
-        </div>
-      </div>
-    </article>
-  </section>
+  </div>
 {% endblock content %}

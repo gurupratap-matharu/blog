@@ -71,7 +71,7 @@ class PartnerIndexPage(BasePage):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
-        partners = self.get_children().live().order_by("-first_published_at")
+        partners = self.get_children().live().order_by("title")
         context["partners"] = partners
 
         return context
@@ -217,14 +217,14 @@ class PartnerPage(BasePage):
         FieldPanel("logo"),
         FieldPanel("intro"),
         FieldPanel("hero_image"),
-        FieldPanel("info"),
         FieldPanel("contact"),
+        FieldPanel("ratings"),
+        FieldPanel("info"),
         FieldPanel("body"),
         FieldPanel("destinations"),
         FieldPanel("routes"),
         FieldPanel("faq"),
         FieldPanel("links"),
-        FieldPanel("ratings"),
         MultiFieldPanel(
             [
                 FieldPanel("tags"),
@@ -239,6 +239,16 @@ class PartnerPage(BasePage):
     class Meta:
         verbose_name = "partnerpage"
         verbose_name_plural = "partnerpages"
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        options = {
+            "title": self.title,
+            "text": self.intro,
+            "url": self.get_full_url(),
+        }
+        context["options"] = options
+        return context
 
     def get_tags(self):
         """

@@ -3,17 +3,69 @@
 {% load i18n static wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
-  <article id="content" class="container">
-    <h1 class="fs-2">
-      <span class="text-primary text-gradient">Guía Completa</span>
-      <br />
-      {{ page.title }}
-    </h1>
-    <section class="py-3 py-md-5">
-      {% include 'includes/search_form.html' %}
+  <article id="content"
+           class="container"
+           data-bs-spy="scroll"
+           data-bs-target="#scrollnav"
+           data-bs-root-margin="0px 0px -40%"
+           data-bs-smooth-scroll="true"
+           tabindex="0">
+    {% breadcrumbs %}
+    <h1 class="mb-0">{{ page.title }}</h1>
+    <section class="mb-1 mb-sm-3">
+      <div class="row g-0">
+        {% if page.ratings %}
+          <div class="col-sm-auto d-flex align-items-center">
+            {% with ratings=page.ratings.0.value %}
+              <span class="fw-bolder me-2">{{ ratings.get_score }}</span>
+              {% for color in ratings.get_star_colors %}
+                <svg class="bi" width="16" height="16" fill="{{ color }}" aria-hidden="true">
+                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#star-fill" />
+                </svg>
+              {% endfor %}
+              <span class="ms-2">({{ ratings.get_total_ratings }})</span>
+            {% endwith %}
+          </div>
+        {% endif %}
+        {% if page.contact %}
+          {% with contact=page.contact.0.value %}
+            <div class="col-sm-auto">
+              <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
+              </svg>
+              <span class="text-sm text-secondary">Tel: <a class="icon-link" href="tel:{{ contact.phone }}">{{ contact.phone }}
+                <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#telephone-outbound" />
+                </svg>
+              </a></span>
+              <svg width="24" height="24" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
+              </svg>
+              <span class="text-sm"><a class="icon-link text-success" href="https://wa.me/{{ contact.whatsapp }}" target="_blank">Whatsapp
+                <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#whatsapp" />
+                </svg>
+              </a></span>
+            </div>
+            <div class="col-sm">
+              <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
+              </svg>
+              <span class="text-sm text-secondary">{{ contact.address }}</span>
+            </div>
+          {% endwith %}
+        {% endif %}
+        <div class="col-sm-auto">
+          <a class="d-none d-sm-inline" href="#" type="button" id="share">
+            <svg width="24" height="24" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#share" />
+            </svg>
+          </a>
+        </div>
+      </div>
     </section>
-    <section class="py-3">
-      {% breadcrumbs %}
+    <section class="py-3 py-md-5">
+      {% include "includes/search_form.html" %}
     </section>
     <section class="py-3 py-md-5">
       <div class="row">
@@ -115,14 +167,16 @@
 {% endblock content %}
 
 {% block modal %}
-  {% include 'includes/offcanvas.html' %}
+  {% include "includes/offcanvas.html" %}
 {% endblock modal %}
 
 {% block extra_js %}
+  {{ options|json_script:"options" }}
   <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
   <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
   <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
   <script defer src="{% static 'assets/js/search.js' %}"></script>
+  <script defer src="{% static 'assets/js/partner_page.js' %}"></script>
   {# djlint:off #}
   <script type="application/ld+json">{{ page.ld_entity }}</script>
   {# djlint:on #}

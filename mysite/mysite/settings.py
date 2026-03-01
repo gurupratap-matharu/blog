@@ -231,6 +231,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "wagtail.contrib.settings.context_processors.settings",
+                "mysite.context_processors.branding",
             ],
         },
     },
@@ -316,8 +317,11 @@ MESSAGE_TAGS = {messages.ERROR: "danger"}
 
 SESSION_EXPIRED_MESSAGE = _("¡Tu sesión ha expirado! 😔")
 
-# Wagtail settings
+SITE_ROOT = os.getenv("SITE_ROOT", "http://localhost:8000").removesuffix("/")
+SITE_NAME = os.getenv("SITE_NAME", "Ventanita")
+SITE_LOGO_URL = os.getenv("SITE_LOGO_URL")
 
+# Wagtail settings
 WAGTAIL_SITE_NAME = "Ventanita"
 
 # Search

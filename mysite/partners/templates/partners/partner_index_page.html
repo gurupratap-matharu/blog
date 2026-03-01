@@ -3,36 +3,27 @@
 {% load i18n static wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
-  <article class="container mt-3">
-    <h1 class="fs-2">
-      <span class="text-primary text-gradient">{% translate "Empresas de Micro" %}</span>
-      <br />
-      en Argentina
-    </h1>
-    <section class="py-3 py-md-5">
-      {% include 'includes/search_form.html' %}
-    </section>
-    <section class="py-3">
-      {% breadcrumbs %}
-    </section>
-    <section class="py-3 py-md-5 row row-cols-2 row-cols-md-4">
+  <article class="container">
+    {% breadcrumbs %}
+    <h1 class="fs-2">{% translate "Empresas de Micro" %}</h1>
+    <section class="py-3 row row-cols-1 row-cols-md-4">
       {% for partner in partners %}
-        <div class="col p-1">
+        <div class="col">
           <a href="{% pageurl partner %}">{{ partner }}</a>
         </div>
       {% endfor %}
     </section>
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       <h2 class="fs-5 pb-3">¡Comprá tu pasajes en Ventanita!</h2>
       <p>
         En <a href="https://ventanita.com.ar" class="fw-bold">ventanita.com.ar</a> podes buscar y
         comparar los mejores precios de micros en Argentina y paises limitrofes, así como también obtener información detallada sobre las rutas y los horarios de partida. Averigua los promociones vigentes y comience a disfrutar de su viaje sin complicaciones.
       </p>
     </section>
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       {% include "includes/featured-companies.html" %}
     </section>
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       {% include "includes/mission.html" %}
     </section>
   </article>
@@ -40,10 +31,6 @@
 {% endblock content %}
 
 {% block extra_js %}
-  <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
-  <script defer src="{% static 'assets/js/search.js' %}"></script>
   {# djlint:off #}
     <script type="application/ld+json">{{ page.ld_entity }}</script>
   {# djlint:on #}
