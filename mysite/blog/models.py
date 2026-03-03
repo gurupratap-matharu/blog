@@ -9,6 +9,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import mark_safe, strip_tags
+from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
@@ -82,13 +83,15 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
     class Meta:
         verbose_name = "blogindexpage"
 
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-
-        posts = self.get_children().live().order_by("-first_published_at")
-        context["posts"] = posts
-
-        return context
+    def posts(self, tag=None):
+        """
+        Returns the child BlogPage objects for this BlogIndexPage.
+        If a tag is used then it will filter the posts by tag.
+        """
+        qs = BlogPage.objects.live().order_by("-first_published_at")
+        qs = qs.select_related("feed_image")
+        qs = qs.filter(tags=tag) if tag else qs
+        return qs
 
     @route(r"^tags/$", name="tag_archive")
     @route(r"^tags/([\w-]+)/$", name="tag_archive")
@@ -114,7 +117,7 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
                 messages.info(request, msg)
             return redirect(self.url)
 
-        posts = self.get_posts(tag=tag)
+        posts = self.posts(tag=tag)
         context = {"tag": tag, "posts": posts}
         return render(request, "blog/blog_index_page.html", context)
 
@@ -126,27 +129,17 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
         """
 
         try:
-            category = BlogCategory.objects.get(name__iexact=category)
+            category = BlogCategory.objects.get(slug=category)
         except BlogCategory.DoesNotExist:
             if category:
                 msg = f'There are no blog posts of category "{category}"'
                 messages.info(request, msg)
             return redirect(self.url)
 
-        posts = self.get_posts().filter(categories=category)
+        posts = self.posts().filter(categories=category)
 
         context = {"category": category, "posts": posts}
         return render(request, "blog/blog_index_page.html", context)
-
-    def get_posts(self, tag=None):
-        """
-        Returns the child BlogPage objects for this BlogIndexPage.
-        If a tag is used then it will filter the posts by tag.
-        """
-
-        posts = BlogPage.objects.live().descendant_of(self)
-        posts = posts.filter(tags=tag) if tag else posts
-        return posts
 
     def ld_entity(self):
         page_schema = json.dumps(
@@ -164,15 +157,14 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
         return mark_safe(page_schema)
 
     def _get_breadcrumb_schema(self):
-
-        breadcrumb_schema = {
+        return {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
                 {
                     "@type": "ListItem",
                     "position": 1,
-                    "name": "Ventanita",
+                    "name": "Inicio",
                     "item": "https://ventanita.com.ar/",
                 },
                 {
@@ -183,8 +175,6 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
                 },
             ],
         }
-
-        return breadcrumb_schema
 
 
 class BlogPageTag(TaggedItemBase):
@@ -457,7 +447,7 @@ class BlogPageGalleryImage(Orderable):
 
     class Meta:
         verbose_name = "blogpagegallery"
-        verbose_name_plural = "blogpagegalleries"
+        verbose_name_plural = "blogpagegallery"
 
 
 class BlogPageRelatedLink(Orderable):
@@ -481,22 +471,20 @@ class BlogPageRelatedLink(Orderable):
 
 
 class BlogCategory(models.Model):
-    name = models.CharField(max_length=255)
-    icon = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
+    name = models.CharField(_("name"), max_length=255)
+    slug = models.SlugField(_("slug"), max_length=255)
+    icon = models.CharField(
+        _("icon"), max_length=20, help_text="Only name of the icon"
     )
     panels = [
         FieldPanel("name"),
+        FieldPanel("slug"),
         FieldPanel("icon"),
     ]
-
-    def __str__(self):
-        return self.name
 
     class Meta:
         verbose_name = "blogcategory"
         verbose_name_plural = "blog categories"
+
+    def __str__(self):
+        return self.name

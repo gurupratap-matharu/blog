@@ -1,15 +1,15 @@
 {% extends "layouts/base.html" %}
 
-{% load static i18n %}
-
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load static i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
 
 {% block content %}
   <div class="container mb-5">
-    <div class="row">
-      {% for post in posts %}
+    {% breadcrumbs %}
+    <h1>{{ page.title }}</h1>
+    <div class="row row-cols-1 row-cols-md-3">
+      {% for post in page.posts %}
         {% with post=post.specific %}
-          <div class="col-md-4 mt-3">
+          <div class="col mb-3">
             <div class="card h-100">
               {% image post.feed_image fill-400x300 class="card-img-top" %}
               <div class="card-body">
@@ -17,17 +17,20 @@
                   <a href="{% pageurl post %}">{{ post.title }}</a>
                 </h5>
                 <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
-                <a href="{% pageurl post %}" class="card-link icon-link icon-link-hover">{% translate "Leer" %}
-                  <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
-                  </svg>
-                </a>
+                <div class="d-flex justify-content-between">
+                  <span class="text-sm text-secondary">{{ post.first_published_at|date:"d M" }}</span>
+                  <a href="{% pageurl post %}" class="card-link icon-link icon-link-hover">{% translate "Leer" %}
+                    <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         {% endwith %}
       {% empty %}
-        <p class="display-6">{% translate "Aún no tenemos posts" %}"</p>
+        <p class="display-6">{% translate "Aún no tenemos posts" %}</p>
       {% endfor %}
     </div>
   </div>

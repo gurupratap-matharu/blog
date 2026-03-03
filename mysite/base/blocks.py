@@ -162,7 +162,7 @@ class BlockQuote(StructBlock):
 
     class Meta:
         icon = "openquote"
-        label = "{text}"
+        label = "Blockquote"
         search_index = False
         template = "blocks/blockquote.html"
 
