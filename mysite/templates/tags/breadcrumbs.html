@@ -5,7 +5,7 @@
     <ol class="breadcrumb text-sm mb-2">
       {% for ancestor in ancestors %}
         {% if forloop.last %}
-          <li class="breadcrumb-item active text-dark" aria-current="page">{{ ancestor }}</li>
+          <li class="breadcrumb-item active text-dark" aria-current="page">{{ ancestor|truncatechars:25 }}</li>
         {% else %}
           <li class="breadcrumb-item">
             <a href="{% pageurl ancestor %}" class="text-secondary">

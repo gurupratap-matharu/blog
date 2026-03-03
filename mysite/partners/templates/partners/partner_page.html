@@ -101,12 +101,12 @@
       </section>
     {% endif %}
     {% if page.routes %}
-      <section class="py-3 py-md-5">
+      <section class="py-3">
         {{ page.routes }}
       </section>
     {% endif %}
     {% if page.body %}
-      <section class="pb-3 pb-md-5">
+      <section class="py-3">
         <h2 class="fs-5 pb-3">Sobre {{ page.title }}</h2>
         <div class="row">
           <div class="col-12 col-md-7">{{ page.body }}</div>
@@ -127,12 +127,12 @@
       </section>
     {% endif %}
     {% if page.faq %}
-      <section class="py-3 py-md-5">
+      <section class="py-3">
         {{ page.faq }}
       </section>
     {% endif %}
     {% if page.ratings %}
-      <section class="py-3 py-md-5">
+      <section class="py-3">
         <h2 class="fs-5 pb-3">Opiniones sobre {{ page.title }}</h2>
         {{ page.ratings }}
         <div class="mt-3">
@@ -144,7 +144,7 @@
         </div>
       </section>
     {% endif %}
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       <h2 class="fs-5 pb-3">¡Comprá tu pasaje con {{ page.title }}!</h2>
       <p>
         En <a href="https://ventanita.com.ar">ventanita.com.ar</a> podes buscar y
@@ -152,14 +152,14 @@
       </p>
     </section>
     {% if page.links %}
-      <section class="py-3 py-md-5">
+      <section class="py-3">
         {{ page.links }}
       </section>
     {% endif %}
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       {% include "includes/featured-companies.html" %}
     </section>
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       {% include "includes/mission.html" %}
     </section>
   </article>

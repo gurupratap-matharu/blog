@@ -237,9 +237,9 @@ class BlogPage(BasePage):
     ]
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("subtitle"),
-        FieldPanel("intro"),
-        FieldPanel("body"),
+        FieldPanel("subtitle", classname="collapsed"),
+        FieldPanel("intro", classname="collapsed"),
+        FieldPanel("body", classname="collapsed"),
         MultiFieldPanel(
             [
                 InlinePanel(
@@ -252,19 +252,36 @@ class BlogPage(BasePage):
                 ),
                 FieldPanel("date"),
                 FieldPanel("tags"),
-                FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
+                FieldPanel(
+                    "categories",
+                    widget=forms.CheckboxSelectMultiple,
+                    help_text="Select only one category",
+                ),
             ],
             heading="Blog information",
+            classname="collapsed",
         ),
-        InlinePanel("gallery_images", label="Gallery images"),
+        MultiFieldPanel(
+            [
+                FieldPanel("feed_image"),
+                InlinePanel(
+                    "gallery_images",
+                    label="Gallery images",
+                ),
+            ],
+            heading="Media",
+            classname="collapsed",
+        ),
         InlinePanel(
-            "related_links", heading="Related links", label="Related links"
+            "related_links",
+            heading="Related links",
+            label="Related links",
+            classname="collapsed",
         ),
     ]
 
     promote_panels = [
         MultiFieldPanel(BasePage.promote_panels, "Common page configuration"),
-        FieldPanel("feed_image"),
     ]
 
     # Specifies parent to BlogPage as being BlogIndexPages
@@ -278,11 +295,6 @@ class BlogPage(BasePage):
         verbose_name = "blogpage"
         verbose_name_plural = "blogpages"
 
-    def main_image(self):
-        gallery_item = self.gallery_images.first()
-
-        return gallery_item.image if gallery_item else None
-
     @cached_property
     def get_tags(self):
         """
@@ -290,13 +302,16 @@ class BlogPage(BasePage):
         We're additionally adding a URL to access BlogPage objects with that tag
         """
 
-        base_url = self.get_parent().url
         tags = self.tags.all()
 
         for tag in tags:
-            tag.url = f"{base_url}tags/{tag.slug}/"
+            tag.url = f"/blog/tags/{tag.slug}/"
 
         return tags
+
+    @cached_property
+    def category(self):
+        return self.categories.first()
 
     def get_similar_posts(self):
         """
@@ -312,6 +327,7 @@ class BlogPage(BasePage):
         ).order_by("-same_tags")[:3]
         return similar_posts
 
+    @cached_property
     def authors(self):
         """
         Returns the BlogPage's related people.
@@ -326,7 +342,7 @@ class BlogPage(BasePage):
             n.person
             for n in self.blog_person_relationship.filter(
                 person__live=True
-            ).select_related("person")
+            ).select_related("person", "person__image")
         ]
 
     def canonical_url(self):
@@ -336,6 +352,7 @@ class BlogPage(BasePage):
     @cached_property
     def reading_time(self):
         """
+        Blog post reading time in minutes.
         Divide the word count by avg reading speed of 200 words per minute.
         """
         text = strip_tags(self.body.raw_data)
@@ -343,7 +360,6 @@ class BlogPage(BasePage):
         return round(words / 200)
 
     def ld_entity(self):
-
         page_schema = json.dumps(
             {
                 "@context": "http://schema.org",
@@ -367,7 +383,7 @@ class BlogPage(BasePage):
         image = self.feed_image or self.listing_image or self.social_image
         image_url = image.file.url if image else ""
 
-        date_published = self.first_published_at or timezone.now()
+        date_published = self.date or self.first_published_at or timezone.now()
         date_modified = self.last_published_at or timezone.now()
 
         article_schema = {
@@ -383,7 +399,7 @@ class BlogPage(BasePage):
             "image": f"https://ventanita.com.ar{image_url}",
             "author": {
                 "@type": "Person",
-                "name": self.authors()[0].full_name(),
+                "name": self.authors[0].full_name(),
             },
             "publisher": {
                 "@type": "Organization",
@@ -400,15 +416,14 @@ class BlogPage(BasePage):
         return article_schema
 
     def _get_breadcrumb_schema(self):
-
-        breadcrumb_schema = {
+        return {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
                 {
                     "@type": "ListItem",
                     "position": 1,
-                    "name": "Ventanita",
+                    "name": "Home",
                     "item": "https://ventanita.com.ar/",
                 },
                 {
@@ -425,8 +440,6 @@ class BlogPage(BasePage):
                 },
             ],
         }
-
-        return breadcrumb_schema
 
 
 class BlogPageGalleryImage(Orderable):
