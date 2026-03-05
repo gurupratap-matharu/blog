@@ -6,7 +6,7 @@
   <article class="container">
     <h1 class="display-2 text-center">Bus</h1>
     <section class="py-3 py-md-5">
-      {% include 'includes/search_form.html' %}
+      {% include "includes/search_form.html" %}
     </section>
     <section class="py-3">
       {{ page.promotions }}
@@ -55,9 +55,9 @@
 {% endblock content %}
 
 {% block extra_js %}
-  <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
+  <script defer src="{% static 'assets/js/autocomplete.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/flatpickr.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/es.js' %}"></script>
   <script defer src="{% static 'assets/js/search.js' %}"></script>
   {# djlint:off #}
     <script type="application/ld+json">{{ page.ld_entity }}</script>
