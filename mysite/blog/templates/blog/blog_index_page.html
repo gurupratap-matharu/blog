@@ -11,7 +11,7 @@
         {% with post=post.specific %}
           <div class="col mb-3">
             <div class="card h-100">
-              {% image post.feed_image fill-400x300 class="card-img-top" %}
+              {% image post.feed_image original format-avif loading="lazy" class="img-fluid card-img-top" %}
               <div class="card-body">
                 <h5 class="card-title">
                   <a href="{% pageurl post %}">{{ post.title }}</a>

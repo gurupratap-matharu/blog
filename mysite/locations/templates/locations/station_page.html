@@ -8,83 +8,207 @@
 {% endblock extra_css %}
 
 {% block content %}
-  <article class="container col-12 col-xl-9 mt-3 min-vh-75">
-    <h1 class="fs-2">
-      <span class="text-primary text-gradient">Busca pasajes baratos a</span>
-      <br />
-      {{ page.title }}
-    </h1>
-    <section class="py-3 py-md-5">
-      {% include 'includes/search_form.html' %}
+  <article class="container"
+           data-bs-spy="scroll"
+           data-bs-target="#scrollnav"
+           data-bs-root-margin="0px 0px -40%"
+           data-bs-smooth-scroll="true"
+           tabindex="0">
+    {% breadcrumbs %}
+    <h1 class="fs-2 mb-0">{{ page.title }}</h1>
+    <section class="mb-1 mb-sm-3">
+      <div class="row g-0">
+        {% if page.ratings %}
+          {% with ratings=page.ratings.0.value %}
+            <div class="col-sm-auto d-flex align-items-center">
+              <span class="fw-bolder me-2">{{ ratings.get_score }}</span>
+              {% for color in ratings.get_star_colors %}
+                <svg class="bi" width="16" height="16" fill="{{ color }}" aria-hidden="true">
+                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#star-fill" />
+                </svg>
+              {% endfor %}
+              <span class="ms-2">({{ ratings.get_total_ratings }})</span>
+            </div>
+          {% endwith %}
+        {% endif %}
+        <div class="col-sm-auto">
+          <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
+            <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
+          </svg>
+          <span class="text-sm text-success">{% translate "Abierto" %}<span class="text-sm text-secondary ms-1">{% translate "las 24hs" %}</span></span>
+          {% if page.phone %}
+            <svg width="24" height="24" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
+            </svg>
+            <span class="text-sm text-secondary">Tel: <a class="icon-link" href="tel:{{ page.phone }}">{{ page.phone }}
+              <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#telephone-outbound" />
+              </svg>
+            </a></span>
+          {% endif %}
+        </div>
+        <div class="col-sm">
+          <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
+            <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
+          </svg>
+          <span class="text-sm text-secondary">{{ page.address }}</span>
+          <a class="text-sm" href="{{ page.get_google_maps_directions_url }}" target="_blank">¿Como llegar?</a>
+        </div>
+        <div class="col-sm-auto">
+          <a class="d-none d-sm-inline" href="#" type="button" id="share">
+            <svg width="24" height="24" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#share" />
+            </svg>
+          </a>
+        </div>
+      </div>
     </section>
-    <section class="py-3">
-      {% breadcrumbs %}
+    <section class="rounded-3 min-vh-50 mb-3" id="map">
     </section>
-    <section class="py-3">
-      <h2 class="fs-4 pb-3">Comprá tus pasajes a {{ page.title }}</h2>
+    <section class="sticky-top">
+      <ul class="nav nav-underline bg-white border-bottom" id="scrollnav">
+        <li class="nav-item">
+          <a class="nav-link" href="#map">{% translate "Mapa" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#servicios">{% translate "Servicios" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#info">{% translate "Info" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#horarios">{% translate "Horarios" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#faq">{% translate "Faq" %}</a>
+        </li>
+      </ul>
     </section>
-    {% if page.image %}
-      <section class="py-3">
-        {% picture page.image format-{avif,webp,jpeg} original class="img-fluid shadow-xl border-radius-xl" %}
-      </section>
-    {% endif %}
-    {% if page.intro %}
-      <section class="pt-3">
-        <h2 class="lead">{{ page.intro }}</h2>
-      </section>
-    {% endif %}
-    {% if page.body %}
-      <section class="py-3 py-md-5">
-        {{ page.body }}
-      </section>
-    {% endif %}
-    <section class="py-3 py-md-5 rounded-3 min-vh-50 shadow-xl" id="map">
+    <section class="py-3" id="servicios">
+      <h2 class="fs-5">{% translate "Servicios disponibles" %}</h2>
+      <div class="row row-cols-1 row-cols-md-3">
+        {% for service in page.services.all %}
+          <div class="col p-2">
+            <svg class="me-2" width="24" height="24" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/services.svg' %}#{{ service.icon }}" />
+            </svg>
+            {{ service.name }}
+          </div>
+        {% endfor %}
+      </div>
     </section>
-    {% if page.faq %}
-      <section class="py-3 py-md-5">
-        {{ page.faq }}
-      </section>
-    {% endif %}
-    <section class="py-3 py-md-5">
-      <h2 class="fs-5 pb-3">¡Comprá tu pasaje a {{ page.title }}!</h2>
-      <p>
-        En <a href="https://ventanita.com.ar" class="fw-bold">ventanita.com.ar</a> podes buscar y
-        comparar los mejores precios de micros a {{ page.title }}, así como también obtener información detallada sobre las rutas y los horarios de partida. Averigua los promociones vigentes y comience a disfrutar de su viaje sin complicaciones.
-      </p>
-    </section>
-    {% if page.links %}
-      <section class="py-3 py-md-5">
-        {{ page.links }}
-      </section>
-    {% endif %}
     {% if page.companies %}
-      <section class="py-3 py-md-5">
+      <section class="mb-3">
         {{ page.companies }}
       </section>
     {% endif %}
-    <section class="py-3 py-md-5">
-      {% include 'includes/featured-companies.html' %}
+    <section class="py-3" id="info">
+      <h2 class="fs-5">{% translate "Información Útil" %}</h2>
+      {% if page.phone %}
+        <h3 class="fs-6">{% translate "Teléfono" %}</h3>
+        <a class="icon-link mb-3" href="tel:{{ page.phone }}">{{ page.phone }}
+          <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+            <use xlink:href="{% static 'assets/icons/icons.svg' %}#telephone-outbound" />
+          </svg>
+        </a>
+      {% endif %}
+      <h3 class="fs-6">{% translate "Dirección" %}</h3>
+      {{ page.address }}
+      {% if page.directions %}
+        <h3 class="fs-6">{% translate "¿Cómo llegar?" %}</h3>
+        {{ page.directions }}
+      {% endif %}
     </section>
-    <section class="py-3 py-md-5">
-      {% include 'includes/mission.html' %}
+    <section class="py-3" id="horarios">
+      <h2 class="fs-5">{% translate "Horarios" %}</h2>
+      <div class="row text-sm">
+        {% for day in page.opening_hours.all %}
+          <div class="col-5 col-sm-3 {% if day.weekday == today %}fw-bold{% endif %}">
+            <svg class="me-1" width="16" height="16" fill="limegreen" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot-lg" />
+            </svg>
+            {{ day.get_weekday_display|title }}
+          </div>
+          <div class="col-7 col-sm-4 {% if day.weekday == today %}fw-bold{% endif %}">
+            {{ day.open_time|date:"h:i a" }} - {{ day.close_time|date:"h:i a" }}
+          </div>
+          <div class="w-100 d-none d-md-block"></div>
+        {% endfor %}
+      </div>
+    </section>
+    {% if page.image %}
+      <section class="py-3">
+        <h2 class="fs-5">{% translate "Galería" %}</h2>
+        <div class="row">
+          <div class="col-sm-4 mb-3">
+            {% picture page.image original format-avif loading="lazy" class="img-fluid border-radius-xl" %}
+          </div>
+          {% for item in page.gallery_images.all %}
+            <div class="col-sm-4 mb-3">
+              {% picture item.image original format-avif loading="lazy" class="img-fluid border-radius-xl" %}
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+    {% if page.body %}
+      <section class="py-3">
+        <h2 class="fs-5">{% translate "Sobre el terminal" %}</h2>
+        {{ page.body }}
+      </section>
+    {% endif %}
+    {% if page.faq %}
+      <section class="py-3" id="faq">
+        {{ page.faq }}
+      </section>
+    {% endif %}
+    {% if page.ratings %}
+      <section class="mb-3">
+        <h2 class="fs-5 pb-3">{% translate "Opiniones sobre" %} {{ page.title }}</h2>
+        {{ page.ratings }}
+        <div class="mt-3">
+          <a href="/cuentanos-como-fue-tu-experiencia/" target="_blank" class="text-sm">
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#chat-left-dots" />
+            </svg>
+          {% translate "Escribí Opinion" %}</a>
+        </div>
+      </section>
+    {% endif %}
+    {% if page.links %}
+      <section class="py-3">
+        {{ page.links }}
+      </section>
+    {% endif %}
+    <section class="py-3">
+      {% include "includes/advice.html" %}
+    </section>
+    <section class="py-3">
+      <h2 class="fs-5 pb-3">Explora con Ventanita</h2>
+      <p>
+        En <a href="https://ventanita.com.ar" class="fw-bold">Ventanita</a> podes buscar y
+        comparar los mejores precios de micros a {{ page.title }}, así como también obtener información detallada sobre las rutas y los horarios de partida. Averigua los promociones vigentes y comience a disfrutar de su viaje sin complicaciones.
+      </p>
+      <ul>
+        <li>Descubre nuevos destinos con total confianza</li>
+        <li>Viaja cómodo, seguro y económico</li>
+        <li>Nuestra plataforma te conecta con Paraguay y Argentina</li>
+      </ul>
+    </section>
+    <section class="py-3">
+      {% include "includes/featured-companies.html" %}
+    </section>
+    <section class="py-3">
+      {% include "includes/mission.html" %}
     </section>
   </article>
+  {% include "includes/seo_links.html" %}
 {% endblock content %}
 
-{% block modal %}
-  {% include 'includes/offcanvas.html' %}
-{% endblock modal %}
-
 {% block extra_js %}
-  {{ lat_long|json_script:"coordinates" }}
-  <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
-  <script defer src="{% static 'assets/js/search.js' %}"></script>
-  <script defer src="{% static 'assets/js/maps/leaflet.js' %}"></script>
-  <script defer src="{% static 'assets/js/maps/Leaflet.fullscreen.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/maps/station_page.js' %}"></script>
-  {# djlint:off #}
-  <script type="application/ld+json">{{ page.ld_entity }}</script>
-  {# djlint:on #}
+  {{ options|json_script:"options" }}
+  <script defer src="{% static 'assets/js/leaflet.js' %}"></script>
+  <script defer src="{% static 'assets/js/Leaflet.fullscreen.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/station_page.js' %}"></script>
+  {# djlint:off #} <script type="application/ld+json">{{ page.ld_entity }}</script> {# djlint:on #}
 {% endblock extra_js %}

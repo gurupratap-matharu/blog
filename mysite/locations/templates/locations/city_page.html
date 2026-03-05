@@ -8,17 +8,15 @@
 {% endblock extra_css %}
 
 {% block content %}
-  <article class="container mt-3">
+  <article class="container">
+    {% breadcrumbs %}
     <h1 class="fs-2">
       <span class="text-primary text-gradient">Buscá pasajes baratos a</span>
       <br />
       {{ page.title }}
     </h1>
     <section class="py-3 py-md-5">
-      {% include 'includes/search_form.html' %}
-    </section>
-    <section class="py-3">
-      {% breadcrumbs %}
+      {% include "includes/search_form.html" %}
     </section>
     <section class="py-3">
       <h2 class="fs-4 pb-3">Comprá tus pasajes a {{ page.title }}</h2>
@@ -35,14 +33,11 @@
       </section>
     {% endif %}
     {% if page.body %}
-      <section class="pb-3 pb-md-5">
+      <section class="py-3">
         {{ page.body }}
       </section>
     {% endif %}
-    <section class="py-3 py-md-5 rounded-3 min-vh-50 shadow-xl" id="map">
-    </section>
-    <section class="pt-3 pt-md-5 mt-3">
-      {% include "includes/advice.html" %}
+    <section class="rounded-3 min-vh-50 mb-3" id="map">
     </section>
     {% if stations %}
       <section class="py-3 py-md-5">
@@ -61,11 +56,14 @@
       </section>
     {% endif %}
     {% if page.faq %}
-      <section class="py-3 py-md-5">
+      <section class="py-3">
         {{ page.faq }}
       </section>
     {% endif %}
-    <section class="py-3 py-md-5">
+    <section class="py-3">
+      {% include "includes/advice.html" %}
+    </section>
+    <section class="py-3">
       <h2 class="fs-5 pb-3">¡Comprá tu pasaje a {{ page.title }}!</h2>
       <p>
         En <a href="https://ventanita.com.ar" class="fw-bold">ventanita.com.ar</a> podes buscar y
@@ -73,19 +71,19 @@
       </p>
     </section>
     {% if page.links %}
-      <section class="py-3 py-md-5">
+      <section class="py-3">
         {{ page.links }}
       </section>
     {% endif %}
     {% if page.companies %}
-      <section class="py-3 py-md-5">
+      <section class="py-3">
         {{ page.companies }}
       </section>
     {% endif %}
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       {% include "includes/featured-companies.html" %}
     </section>
-    <section class="py-3 py-md-5">
+    <section class="py-3">
       {% include "includes/mission.html" %}
     </section>
   </article>
@@ -93,18 +91,18 @@
 {% endblock content %}
 
 {% block modal %}
-  {% include 'includes/offcanvas.html' %}
+  {% include "includes/offcanvas.html" %}
 {% endblock modal %}
 
 {% block extra_js %}
   {{ lat_long|json_script:"coordinates" }}
-  <script defer src="{% static 'assets/js/autocomplete/autocomplete.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/flatpickr.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/dates/es.js' %}"></script>
+  <script defer src="{% static 'assets/js/autocomplete.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/flatpickr.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/es.js' %}"></script>
   <script defer src="{% static 'assets/js/search.js' %}"></script>
-  <script defer src="{% static 'assets/js/maps/leaflet.js' %}"></script>
-  <script defer src="{% static 'assets/js/maps/Leaflet.fullscreen.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/maps/city_page.js' %}"></script>
+  <script defer src="{% static 'assets/js/leaflet.js' %}"></script>
+  <script defer src="{% static 'assets/js/Leaflet.fullscreen.min.js' %}"></script>
+  <script defer src="{% static 'assets/js/city_page.js' %}"></script>
   {# djlint:off #}
   <script type="application/ld+json">{{ page.ld_entity }}</script>
   {# djlint:on #}
