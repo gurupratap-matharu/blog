@@ -8,9 +8,16 @@ main menu is constructed.
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
 
+from locations.models import Service
+
 from base.models import Country, FooterText, Person
 from blog.models import BlogCategory
 from partners.models import Amenity
+
+
+class ServiceViewSet(SnippetViewSet):
+    model = Service
+    icon = "tag"
 
 
 class AmenityViewSet(SnippetViewSet):
@@ -63,7 +70,12 @@ class MiscSnippetViewSetGroup(SnippetViewSetGroup):
     menu_label = "Misc"
     menu_icon = "list-ul"
     menu_order = 300
-    items = (PersonViewSet, BlogCategoryViewSet, FooterTextViewSet)
+    items = (
+        PersonViewSet,
+        BlogCategoryViewSet,
+        ServiceViewSet,
+        FooterTextViewSet,
+    )
 
 
 register_snippet(MiscSnippetViewSetGroup)
