@@ -98,29 +98,40 @@
       </div>
     </section>
     {% if page.companies %}
-      <section class="mb-3">
+      <section class="py-3" id="companies">
         {{ page.companies }}
       </section>
     {% endif %}
     <section class="py-3" id="info">
       <h2 class="fs-5">{% translate "Información Útil" %}</h2>
       {% if page.phone %}
-        <h3 class="fs-6">{% translate "Teléfono" %}</h3>
-        <a class="icon-link mb-3" href="tel:{{ page.phone }}">{{ page.phone }}
+        <p>
+          {% translate "Teléfono:" %}
+          <a class="icon-link" href="tel:{{ page.phone }}">{{ page.phone }}
+            <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#telephone-outbound" />
+            </svg>
+          </a>
+        </p>
+      {% endif %}
+      <p>
+        {% translate "Dirección:" %} {{ page.address }}
+        <a class="icon-link" href="{{ page.get_google_maps_directions_url }}" target="_blank">{% translate "Ver direcciones" %}
           <svg width="16" height="16" fill="currentColor" aria-hidden="true">
-            <use xlink:href="{% static 'assets/icons/icons.svg' %}#telephone-outbound" />
+            <use xlink:href="{% static 'assets/icons/icons.svg' %}#box-arrow-up-right" />
           </svg>
         </a>
-      {% endif %}
-      <h3 class="fs-6">{% translate "Dirección" %}</h3>
-      {{ page.address }}
+      </p>
       {% if page.directions %}
-        <h3 class="fs-6">{% translate "¿Cómo llegar?" %}</h3>
+        <p class="fw-bold">{% translate "¿Cómo llegar?" %}</p>
         {{ page.directions }}
       {% endif %}
     </section>
     <section class="py-3" id="horarios">
       <h2 class="fs-5">{% translate "Horarios" %}</h2>
+      <p>
+        {% translate "Aunque la terminal está abierta las 24 Hs para abordar un micro los comercios locales suelen seguir este horario." %}
+      </p>
       <div class="row text-sm">
         {% for day in page.opening_hours.all %}
           <div class="col-5 col-sm-3 {% if day.weekday == today %}fw-bold{% endif %}">
@@ -137,15 +148,18 @@
       </div>
     </section>
     {% if page.image %}
-      <section class="py-3">
+      <section class="py-3" id="gallery">
         <h2 class="fs-5">{% translate "Galería" %}</h2>
         <div class="row">
           <div class="col-sm-4 mb-3">
             {% picture page.image original format-avif loading="lazy" class="img-fluid border-radius-xl" %}
           </div>
-          {% for item in page.gallery_images.all %}
+          {% for item in gallery_images %}
             <div class="col-sm-4 mb-3">
-              {% picture item.image original format-avif loading="lazy" class="img-fluid border-radius-xl" %}
+              <figure class="figure">
+                {% picture item.image original format-avif loading="lazy" class="figure-img img-fluid rounded-3" %}
+                <figcaption class="figure-caption ps-2">{{ item.caption|title }}</figcaption>
+              </figure>
             </div>
           {% endfor %}
         </div>
@@ -163,7 +177,7 @@
       </section>
     {% endif %}
     {% if page.ratings %}
-      <section class="mb-3">
+      <section class="mb-3" id="ratings">
         <h2 class="fs-5 pb-3">{% translate "Opiniones sobre" %} {{ page.title }}</h2>
         {{ page.ratings }}
         <div class="mt-3">
@@ -176,7 +190,7 @@
       </section>
     {% endif %}
     {% if page.links %}
-      <section class="py-3">
+      <section class="py-3" id="links">
         {{ page.links }}
       </section>
     {% endif %}
@@ -201,8 +215,48 @@
     <section class="py-3">
       {% include "includes/mission.html" %}
     </section>
+    <section class="py-3">
+      <div class="row">
+        <div class="col-md-3">
+          <p>
+            <strong>{% translate "¿Te fue útil esta página?" %}</strong>
+          </p>
+        </div>
+        <div class="col-md-auto">
+          <button class="btn btn-outline-dark me-2"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#feedbackFail"
+                  aria-expanded="false"
+                  aria-controls="feedbackFail">{% translate "No me sirvió" %}</button>
+          <button class="btn btn-outline-dark"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#feedbackSuccess"
+                  aria-expanded="false"
+                  aria-controls="feedbackSuccess">{% translate "Sí, me fue útil" %}</button>
+        </div>
+      </div>
+      <div class="collapse" id="feedbackFail">
+        <div class="row">
+          <div class="col-sm-6 py-3">
+            <p class="fw-bold">{% translate "¿En qué aspectos esta página no es útil?" %}</p>
+            <form method="post" action="{% url 'base:page-feedback' %}">
+              {% csrf_token %}
+              {{ page_feedback_form }}
+              <button type="submit" class="btn bg-gradient-primary">{% translate "Enviar" %}</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="collapse" id="feedbackSuccess">
+        <p>{% translate "Gracias por tus comentarios." %}</p>
+      </div>
+    </section>
   </article>
-  {% include "includes/seo_links.html" %}
+  <section class="py-3">
+    {% include "includes/seo_links.html" %}
+  </section>
 {% endblock content %}
 
 {% block extra_js %}

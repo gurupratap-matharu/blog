@@ -31,6 +31,7 @@ from base.blocks import (
     RatingsBlock,
 )
 from base.choices import Country, Province, Weekday
+from base.forms import PageFeedbackForm
 from base.models import BasePage
 from base.validators import validate_lat_lng, validate_phone
 
@@ -500,7 +501,15 @@ class StationPage(RoutablePageMixin, BasePage):
         }
         context["options"] = options
         context["today"] = timezone.now().weekday()
+        context["gallery_images"] = self.gallery_images.select_related("image")
+        context["page_feedback_form"] = self.get_page_feedback_form()
         return context
+
+    def get_page_feedback_form(self):
+        # prepopulate the hidden page url field of the form
+        initial = {"url": self.url}
+        form = PageFeedbackForm(initial=initial)
+        return form
 
     def get_google_maps_directions_url(self):
         return f"https://www.google.com/maps/dir/?api=1&destination={self.lat_long}"
@@ -510,15 +519,95 @@ class StationPage(RoutablePageMixin, BasePage):
             {
                 "@context": "http://schema.org",
                 "@graph": [
-                    self._get_breadcrumb_schema(),
+                    self._get_station_schema(),
                     self._get_image_schema(),
-                    self._get_article_schema(),
-                    self._get_organisation_schema(),
                     self._get_faq_schema(),
+                    self._get_organisation_schema(),
+                    self._get_breadcrumb_schema(),
                 ],
-            }
+            },
+            ensure_ascii=False,
         )
         return mark_safe(page_schema)
+
+    def _get_station_schema(self):
+        return {
+            "@type": "BusStation",
+            "@id": f"{self.full_url}#busstation",
+            "name": self.title,
+            "description": self.search_description,
+            "url": self.full_url,
+            "telephone": self.phone,
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": self.address,
+                #  "addressLocality": "{{ page.city }}",
+                "addressRegion": self.get_province_display(),
+                # "postalCode": "{{ page.postal_code }}",
+                "addressCountry": self.get_country_display(),
+            },
+            "geo": self._get_geo_schema(),
+            "openingHoursSpecification": "Mo-Su",
+            "image": self._get_image_schema(),
+            # Can't seem to pass ratings in google rich test results
+            # "aggregateRating": self._get_ratings_schema(),
+            "amenityFeature": self._get_services_schema(),
+        }
+
+    def _get_image_schema(self):
+        image = self.image or self.social_image
+        image_url = image.file.url if image else ""
+
+        image_schema = {
+            "@context": "https://schema.org",
+            "@type": "ImageObject",
+            "contentUrl": f"https://ventanita.com.ar{image_url}",
+            "url": f"https://ventanita.com.ar{image_url}",
+            "license": "https://ventanita.com.ar/condiciones-generales/",
+            "acquireLicensePage": "https://ventanita.com.ar/contact/",
+            "creditText": image.title,
+            "creator": {"@type": "Person", "name": "Ventanita"},
+            "copyrightNotice": "Ventanita",
+            "contentLocation": self.title,
+            "description": image.description,
+            "name": image.title,
+        }
+
+        return image_schema
+
+    def _get_geo_schema(self):
+        lat, long = self.lat_long.split(",")
+        return {
+            "@type": "GeoCoordinates",
+            "latitude": lat.strip(),
+            "longitude": long.strip(),
+        }
+
+    def _get_ratings_schema(self):
+        if self.ratings:
+            obj = self.ratings[0].value
+            rating_value = str(obj.get_score())
+            rating_count = str(obj.get_total_ratings())
+        else:
+            rating_value = rating_count = 0
+
+        return {
+            "@type": "AggregateRating",
+            "ratingValue": rating_value,
+            "ratingCount": rating_count,
+            "bestRating": "5",
+            "worstRating": "1",
+        }
+
+    def _get_services_schema(self):
+        return [
+            {
+                "@type": "LocationFeatureSpecification",
+                "name": service.name,
+                "value": True,
+            }
+            for service in self.services.all()
+        ]
 
     def _get_breadcrumb_schema(self):
         return {
@@ -528,24 +617,18 @@ class StationPage(RoutablePageMixin, BasePage):
                 {
                     "@type": "ListItem",
                     "position": 1,
-                    "name": "Argentina",
+                    "name": "Inicio",
                     "item": "https://ventanita.com.ar/",
                 },
                 {
                     "@type": "ListItem",
                     "position": 2,
-                    "name": "Terminales",
-                    "item": self.get_parent().get_parent().full_url,
+                    "name": "Terminales de Micro",
+                    "item": "https://ventanita.com.ar/terminales-de-micro/",
                 },
                 {
                     "@type": "ListItem",
                     "position": 3,
-                    "name": self.get_parent().title,
-                    "item": self.get_parent().full_url,
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 4,
                     "name": self.title,
                     "item": self.full_url,
                 },
