@@ -149,15 +149,15 @@
     </section>
     {% if page.image %}
       <section class="py-3" id="gallery">
-        <h2 class="fs-5">{% translate "Galería" %}</h2>
+        <h2 class="fs-5 mb-3">{% translate "Galería" %}</h2>
         <div class="row">
           <div class="col-sm-4 mb-3">
-            {% picture page.image original format-avif loading="lazy" class="img-fluid border-radius-xl" %}
+            {% picture page.image original format-avif loading="lazy" class="img-fluid rounded-3 shadow-xl" %}
           </div>
           {% for item in gallery_images %}
             <div class="col-sm-4 mb-3">
               <figure class="figure">
-                {% picture item.image original format-avif loading="lazy" class="figure-img img-fluid rounded-3" %}
+                {% picture item.image original format-avif loading="lazy" class="figure-img img-fluid rounded-3 shadow-xl" %}
                 <figcaption class="figure-caption ps-2">{{ item.caption|title }}</figcaption>
               </figure>
             </div>
