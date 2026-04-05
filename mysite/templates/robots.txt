@@ -8,15 +8,10 @@ Disallow: /cart/
 Disallow: /cdn-cgi/
 Disallow: /coupons/
 Disallow: /django-admin/
-Disallow: /media/
 Disallow: /orders/
 Disallow: /payments/
 Disallow: /private/
 Disallow: /trips/
-
-
-User-agent: GPTBot
-Disallow: /
 
 # Sitemap files
 Sitemap: {{ wagtail_site.root_url }}/sitemap.xml
