@@ -29,6 +29,7 @@ urlpatterns = [
     path("robots.txt", RobotsView.as_view()),
     path(f"{settings.INDEXNOW_KEY}.txt", IndexNow.as_view(), name="indexnow"),
     path("styleguide/", TemplateView.as_view(template_name="styleguide.html")),
+    path("tables/", TemplateView.as_view(template_name="tables.html")),
     path("routes/", TemplateView.as_view(template_name="routes.html")),
 ]
 
