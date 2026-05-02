@@ -4,9 +4,16 @@ import logging
 from django import forms
 from django.db import models
 from django.utils.html import mark_safe
+from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import (
+    FieldPanel,
+    FieldRowPanel,
+    InlinePanel,
+    MultiFieldPanel,
+)
 from wagtail.fields import StreamField
+from wagtail.models import Orderable
 from wagtail.search import index
 
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -23,6 +30,7 @@ from base.blocks import (
     NavTabLinksBlock,
     RatingsBlock,
 )
+from base.forms import PageFeedbackForm, SuggestionForm
 from base.models import BasePage
 
 
@@ -61,8 +69,6 @@ class PartnerIndexPage(BasePage):
         FieldPanel("intro"),
         FieldPanel("image"),
     ]
-
-    subpage_types = ["PartnerPage"]
 
     class Meta:
         verbose_name = "partnerindexpage"
@@ -133,6 +139,17 @@ class PartnerPage(BasePage):
 
     intro = models.TextField(
         help_text="A brief introduction about the company", blank=True
+    )
+
+    daily_departures = models.PositiveIntegerField(
+        _("Daily departures"), blank=True, null=True
+    )
+    countries = models.PositiveIntegerField(
+        _("Countries"), blank=True, null=True
+    )
+    cities = models.PositiveIntegerField(_("Cities"), blank=True, null=True)
+    num_routes = models.PositiveIntegerField(
+        _("Routes"), blank=True, null=True
     )
 
     hero_image = models.ForeignKey(
@@ -214,17 +231,34 @@ class PartnerPage(BasePage):
     ]
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("logo"),
-        FieldPanel("intro"),
-        FieldPanel("hero_image"),
-        FieldPanel("contact"),
-        FieldPanel("ratings"),
-        FieldPanel("info"),
-        FieldPanel("body"),
-        FieldPanel("destinations"),
-        FieldPanel("routes"),
-        FieldPanel("faq"),
-        FieldPanel("links"),
+        FieldPanel("logo", classname="collapsed"),
+        FieldPanel("intro", classname="collapsed"),
+        FieldRowPanel(
+            [
+                FieldPanel("countries"),
+                FieldPanel("cities"),
+                FieldPanel("num_routes"),
+                FieldPanel("daily_departures"),
+            ],
+            heading="Statistics",
+            classname="collapsed",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("hero_image"),
+                InlinePanel("gallery_images", label="Gallery"),
+            ],
+            heading="Media",
+            classname="collapsed",
+        ),
+        FieldPanel("contact", classname="collapsed"),
+        FieldPanel("ratings", classname="collapsed"),
+        FieldPanel("info", classname="collapsed"),
+        FieldPanel("destinations", classname="collapsed"),
+        FieldPanel("body", classname="collapsed"),
+        FieldPanel("routes", classname="collapsed"),
+        FieldPanel("faq", classname="collapsed"),
+        FieldPanel("links", classname="collapsed"),
         MultiFieldPanel(
             [
                 FieldPanel("tags"),
@@ -234,7 +268,6 @@ class PartnerPage(BasePage):
         ),
     ]
     parent_page_types = ["partners.PartnerIndexPage"]
-    subpage_types = []
 
     class Meta:
         verbose_name = "partnerpage"
@@ -248,7 +281,21 @@ class PartnerPage(BasePage):
             "url": self.get_full_url(),
         }
         context["options"] = options
+        context["gallery_images"] = self.gallery_images.select_related("image")
+        context["page_feedback_form"] = self.get_page_feedback_form()
+        context["suggestion_form"] = self.get_suggestion_form()
         return context
+
+    def get_page_feedback_form(self):
+        # prepopulate the hidden page url field of the form
+        initial = {"url": self.url}
+        form = PageFeedbackForm(initial=initial)
+        return form
+
+    def get_suggestion_form(self):
+        initial = {"url": self.url}
+        form = SuggestionForm(initial=initial)
+        return form
 
     def get_tags(self):
         """
@@ -361,6 +408,22 @@ class PartnerPage(BasePage):
         return breadcrumb_schema
 
 
+class PartnerPageGalleryImage(Orderable):
+    page = ParentalKey(
+        "PartnerPage", on_delete=models.CASCADE, related_name="gallery_images"
+    )
+    image = models.ForeignKey(
+        "wagtailimages.Image", on_delete=models.CASCADE, related_name="+"
+    )
+    caption = models.CharField(blank=True, max_length=250)
+
+    panels = ["image", "caption"]
+
+    class Meta:
+        verbose_name = "partnerpagegallery"
+        verbose_name_plural = "partnerpagegallery"
+
+
 class Amenity(models.Model):
     """
     An Amenity that a partner provides. Generally common across many partners and typically
@@ -368,14 +431,6 @@ class Amenity(models.Model):
     """
 
     name = models.CharField(max_length=255)
-    icon = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-    )
-
     icon_name = models.CharField(
         max_length=20,
         help_text="Name of the bootstrap icon",
@@ -385,7 +440,6 @@ class Amenity(models.Model):
 
     panels = [
         FieldPanel("name"),
-        FieldPanel("icon"),
         FieldPanel("icon_name"),
     ]
 
