@@ -15,7 +15,7 @@ from wagtail.contrib.forms.views import SubmissionsListView
 from wagtail.images import get_image_model
 from wagtail.models.sites import Site
 
-from base.forms import PageFeedbackForm
+from base.forms import PageFeedbackForm, SuggestionForm
 
 
 logger = logging.getLogger(__name__)
@@ -116,6 +116,17 @@ class CustomSubmissionsListView(SubmissionsListView):
 @require_POST
 def page_feedback(request: HttpRequest) -> HttpResponse:
     form = PageFeedbackForm(data=request.POST)
+    if form.is_valid():
+        cd = form.cleaned_data
+        form.send_mail()
+        msg = _("Mensaje enviado exitosamente.")
+        messages.success(request, msg)
+        return redirect(cd["url"])
+
+
+@require_POST
+def suggestion(request: HttpRequest) -> HttpResponse:
+    form = SuggestionForm(data=request.POST)
     if form.is_valid():
         cd = form.cleaned_data
         form.send_mail()

@@ -1,0 +1,66 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block title %}
+  Tables
+{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <h1>Data Tables</h1>
+    <div id="monkey-list">
+      <input class="form-control fuzzy-search" type="search" placeholder="Search..." autofocus />
+      <button class="btn btn-link sort" data-sort="name">Sort by name</button>
+      <ul class="list">
+        <li>
+          <p class="name">Guybrush Threepwood</p>
+        </li>
+        <li>
+          <p class="name">Elaine Marley</p>
+        </li>
+        <li>
+          <p class="name">LeChuck</p>
+        </li>
+        <li>
+          <p class="name">Stan</p>
+        </li>
+        <li>
+          <p class="name">Voodoo Lady</p>
+        </li>
+        <li>
+          <p class="name">Herman Toothrot</p>
+        </li>
+        <li>
+          <p class="name">Meathook</p>
+        </li>
+        <li>
+          <p class="name">Carla</p>
+        </li>
+        <li>
+          <p class="name">Otis</p>
+        </li>
+        <li>
+          <p class="name">Rapp Scallion</p>
+        </li>
+        <li>
+          <p class="name">Rum Rogers Sr.</p>
+        </li>
+        <li>
+          <p class="name">Men of Low Moral Fiber</p>
+        </li>
+        <li>
+          <p class="name">Murray</p>
+        </li>
+        <li>
+          <p class="name">Cannibals</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block extra_js %}
+  <script defer src="{% static 'assets/js/list.min.js'  %}"></script>
+  <script defer src="{% static 'assets/js/tables.js'  %}"></script>
+{% endblock extra_js %}

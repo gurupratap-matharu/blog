@@ -70,3 +70,33 @@ class PageFeedbackForm(forms.Form):
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[settings.DEFAULT_TO_EMAIL],
         )
+
+
+class SuggestionForm(forms.Form):
+    """
+    Generic form we use on wagtail pages to take suggestions.
+    """
+
+    template_name = "base/forms/div.html"
+
+    url = forms.CharField(widget=forms.HiddenInput)
+
+    message = forms.CharField(
+        label=_("Sugerencia"),
+        min_length=10,
+        required=True,
+        widget=forms.Textarea(
+            attrs={"class": "form-control", "rows": 3, "cols": 20}
+        ),
+    )
+
+    def send_mail(self):
+        cd = self.cleaned_data
+        subject = f"[Ventanita] Suggestion for {cd['url']}"
+        message = f"Url:{cd['url']}\nMessage:{cd['message']}"
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[settings.DEFAULT_TO_EMAIL],
+        )
