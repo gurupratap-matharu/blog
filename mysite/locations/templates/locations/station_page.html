@@ -238,19 +238,23 @@
         </div>
       </div>
       <div class="collapse" id="feedbackFail">
-        <div class="row">
-          <div class="col-sm-6 py-3">
-            <p class="fw-bold">{% translate "¿En qué aspectos esta página no es útil?" %}</p>
-            <form method="post" action="{% url 'base:page-feedback' %}">
-              {% csrf_token %}
-              {{ page_feedback_form }}
-              <button type="submit" class="btn bg-gradient-primary">{% translate "Enviar" %}</button>
-            </form>
+        <div class="alert alert-light mt-3" role="alert">
+          <div class="row">
+            <div class="col-sm-6 py-3">
+              <p class="fw-bold">{% translate "¿En qué aspectos esta página no es útil?" %}</p>
+              <form method="post" action="{% url 'base:page-feedback' %}">
+                {% csrf_token %}
+                {{ page_feedback_form }}
+                <button type="submit" class="btn bg-gradient-primary">{% translate "Enviar" %}</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
       <div class="collapse" id="feedbackSuccess">
-        <p>{% translate "Gracias por tus comentarios." %}</p>
+        <div class="alert alert-light mt-3" role="alert">
+          <p>{% translate "Gracias por tus comentarios." %}</p>
+        </div>
       </div>
     </section>
   </article>

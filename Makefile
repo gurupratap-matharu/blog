@@ -77,16 +77,46 @@ css:
 superuser:
 	python mysite/manage.py createsuperuser
 
-pull-media:
+pullmedia:
 	rsync -avzhP --progress DO:/home/veer/code/blog/mysite/media/ ./mysite/media/
 
 dump-data:
 	python mysite/manage.py dumpdata --natural-foreign --indent 2 \
 		-e auth.permission -e contenttypes -e wagtailcore.GroupCollectionPermission \
-		-e wagtailimages.rendition -e images.rendition -e sessions \
-		-e wagtailsearch.indexentry -e wagtailsearch.sqliteftsindexentry \
+		-e wagtailimages.rendition -e sessions \
+		-e wagtailsearch.indexentry \
 		-e wagtailcore.referenceindex -e wagtailcore.pagesubscription \
 		> data.json
+copydb:
+	ssh DO "pg_dump -d varg -Fc -f /tmp/varg.dump"
+	scp DO:/tmp/varg.dump .
+
+restoredb:
+	@echo "dropping database..."
+	dropdb varg || true
+
+	@echo "creating empty varg database..."
+	createdb varg
+
+	@echo "Using os user veer as owner of db varg..."
+	pg_restore -U veer -d varg -c varg.dump
+
+	@echo "Now run grantdbpermissions & postrestoredb..."
+
+
+grantdbpermissions:
+	@echo "Giving varg user rights on db..."
+	psql -U veer -d varg -c 'GRANT ALL PRIVILEGES ON DATABASE varg TO varg; GRANT ALL ON SCHEMA public TO varg; ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO varg; ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO varg;'
+
+postrestoredb:
+	@echo "Cleaning up restored db..."
+	python mysite/manage.py migrate
+	python mysite/manage.py update_index
+	python mysite/manage.py fixtree
+	python mysite/manage.py clearsessions
+
+pulldb: copydb restoredb
+
 
 status:
 	@echo "Nginx"
