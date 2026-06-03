@@ -6,15 +6,63 @@
   <article class="container">
     {% breadcrumbs %}
     <h1 class="fs-2">{{ page.title }}</h1>
-    <section class="py-3 py-md-5">
-      {% include "includes/search_form.html" %}
+    {% if page.intro %}
+      <section>
+        <p class="text-secondary">{{ page.intro }}</p>
+      </section>
+    {% endif %}
+    <section class="py-3">
+      <input class="form-control border border-2 border-primary"
+             id="terminal-search"
+             type="search"
+             dir="ltr"
+             spellcheck="false"
+             autocorrect="off"
+             autocomplete="off"
+             autocapitalize="off"
+             maxlength="2048"
+             tabindex="1" />
     </section>
-    <section class="py-3 py-md-5 row row-cols-1 row-cols-md-4">
-      {% for station in page.children %}
-        <div class="col p-1">
-          <a href="{% pageurl station %}">{{ station }}</a>
-        </div>
-      {% endfor %}
+    <section class="py-3">
+      <h2 class="fs-5">{% translate "Terminales por provincia" %}</h2>
+      <div class="accordion accordion-flush" id="accordionProvinces">
+        {% for province, terminals in provinces.items %}
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button ps-0 collapsed font-weight-bold"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapse{{ forloop.counter }}"
+                      aria-expanded="{% if forloop.first %}
+                                       true
+                                     {% else %}
+                                       false
+                                     {% endif %}"
+                      aria-controls="collapse{{ forloop.counter }}">{{ province }}</button>
+            </h3>
+            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#accordionProvinces">
+              <div class="accordion-body ps-0">
+                <div class="row row-cols-1 row-cols-sm-3">
+                  {% for terminal in terminals %}
+                    <div class="col mb-1">
+                      <a href="{{ terminal.url }}">{{ terminal }}</a>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% if page.body %}
+      <section class="py-3">
+        <h2 class="fs-5">{% translate "Guía Completa de Terminales" %}</h2>
+        {{ page.body }}
+      </section>
+    {% endif %}
+    <section class="py-3" id="faq">
+      {{ page.faq }}
     </section>
     <section class="py-3 py-md-5">
       {% include "includes/featured-companies.html" %}
@@ -27,11 +75,8 @@
 {% endblock content %}
 
 {% block extra_js %}
+  {{ terminals|json_script:"terminals" }}
+  {# djlint:off #} <script type="application/ld+json">{{ page.ld_entity }}</script> {# djlint:on #}
   <script defer src="{% static 'assets/js/autocomplete.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/flatpickr.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/es.js' %}"></script>
-  <script defer src="{% static 'assets/js/search.js' %}"></script>
-  {# djlint:off #}
-    <script type="application/ld+json">{{ page.ld_entity }}</script>
-  {# djlint:on #}
+  <script defer src="{% static 'assets/js/station_index.js' %}"></script>
 {% endblock extra_js %}

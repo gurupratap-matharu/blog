@@ -238,10 +238,7 @@
         <div class="alert alert-light mt-3" role="alert">
           <div class="row">
             <div class="col-sm-6 py-3">
-              <p class="fw-bold">
-                {% translate "Nos alegra que te guste." %}
-
-              </p>
+              <p class="fw-bold">{% translate "Nos alegra que te guste." %}</p>
               <p>{% translate "Si tienes alguna idea o sugerencia sobre cómo podemos hacerlo más útil, escríbenos aquí." %}</p>
               <form method="post" action="{% url 'base:suggestion' %}">
                 {% csrf_token %}

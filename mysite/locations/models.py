@@ -1,5 +1,6 @@
 import json
 import logging
+from collections import defaultdict
 from datetime import time
 
 from django import forms
@@ -319,6 +320,24 @@ class StationIndexPage(BasePage):
 
     def children(self):
         return self.get_children().specific().live()
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context["provinces"], context["terminals"] = (
+            self.get_provinces_terminals()
+        )
+        return context
+
+    def get_provinces_terminals(self):
+        data = defaultdict(list)
+        pages = StationPage.objects.live().order_by("title")
+        for page in pages:
+            province_name = page.get_province_display()
+            data[province_name].append(page)
+
+        provinces = dict(sorted(data.items()))
+        terminals = [{"k": page.title, "v": page.slug} for page in pages]
+        return provinces, terminals
 
     def ld_entity(self):
         page_schema = json.dumps(
