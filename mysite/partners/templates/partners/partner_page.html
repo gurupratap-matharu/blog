@@ -90,7 +90,9 @@
     </section>
     <section class="py-3">
       <div class="row">
-        <div class="col-4 col-md-2 rounded-3 d-flex align-items-center">{% image page.logo original class="img-fluid" %}</div>
+        <div class="col-4 col-md-2 rounded-3 d-flex align-items-center">
+          {% image page.logo original format-avif class="img-fluid" %}
+        </div>
         <div class="col-8 col-md-8 ps-3">
           <div class="d-flex align-items-center">
             <h2 class="fs-5 mb-0 me-1">{{ page.title }}</h2>
