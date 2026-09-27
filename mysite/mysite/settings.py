@@ -18,7 +18,7 @@ os.environ["DJANGO_RUNSERVER_HIDE_WARNING"] = "true"
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = int(os.getenv("DEBUG", default=0))
+DEBUG = int(os.getenv("DEBUG", default="0"))
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="").split(" ")
 
@@ -34,10 +34,6 @@ INSTALLED_APPS = [
     "locations.apps.LocationsConfig",
     "help.apps.HelpConfig",
     "users.apps.UsersConfig",
-    "trips.apps.TripsConfig",
-    # "orders.apps.OrdersConfig",
-    # "payments.apps.PaymentsConfig",
-    "tools.apps.ToolsConfig",
     # Wagtail contrib
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -103,10 +99,11 @@ AUTHENTICATION_BACKENDS = [
 AUTH_USER_MODEL = "users.CustomUser"
 
 
-# Debug Toolbar
-INTERNAL_IPS = ["127.0.0.1"]
 TESTING = "test" in sys.argv
-if not TESTING:
+
+# Debug Toolbar
+if DEBUG and not TESTING:
+    INTERNAL_IPS = ["127.0.0.1"]
     INSTALLED_APPS = [*INSTALLED_APPS, "debug_toolbar"]
     MIDDLEWARE = [
         "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -315,7 +312,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 MESSAGE_TAGS = {messages.ERROR: "danger"}
 
-SESSION_EXPIRED_MESSAGE = _("¡Tu sesión ha expirado! 😔")
+SESSION_EXPIRED_MESSAGE = _("¡Tu sesión ha expirado!")
 
 SITE_ROOT = os.getenv("SITE_ROOT", "http://localhost:8000").removesuffix("/")
 SITE_NAME = os.getenv("SITE_NAME", "Ventanita")
@@ -358,8 +355,8 @@ MP_WEBHOOK_TOKEN = os.getenv("MP_WEBHOOK_TOKEN")
 CATA_WSDL = os.getenv("CATA_WSDL", "")
 CATA_USER = os.getenv("CATA_USER", "")
 CATA_PASSWORD = os.getenv("CATA_PASSWORD", "")
-CATA_WEB_ID = int(os.getenv("CATA_WEB_ID", 0))
-CATA_WEB_AGENCY_ID = int(os.getenv("CATA_WEB_AGENCY_ID", 0))
+CATA_WEB_ID = int(os.getenv("CATA_WEB_ID", "0"))
+CATA_WEB_AGENCY_ID = int(os.getenv("CATA_WEB_AGENCY_ID", "0"))
 CATA_KEY = os.getenv("CATA_KEY", "")
 
 # Django Countries
@@ -382,7 +379,7 @@ LOGGING = {
         "file": {
             "level": "WARNING",
             "class": "logging.FileHandler",
-            "filename": BASE_DIR / "wagtail.log",
+            "filename": "./warnings.log",
             "formatter": "verbose",
         },
         "mail_admins": {

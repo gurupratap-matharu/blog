@@ -20,28 +20,19 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
     path("base/", include("base.urls")),
-    # path("pasajes-en-micro/", include("trips.urls")),
-    # path("orders/", include("orders.urls")),
-    # path("payments/", include("payments.urls")),
-    path("herramientas/", include("tools.urls")),
+    # path("herramientas/", include("tools.urls")),
     path("sitemap.xml", sitemap),
     path("favicon.ico", favicon),
     path("robots.txt", RobotsView.as_view()),
     path(f"{settings.INDEXNOW_KEY}.txt", IndexNow.as_view(), name="indexnow"),
-    path("styleguide/", TemplateView.as_view(template_name="styleguide.html")),
-    path("tables/", TemplateView.as_view(template_name="tables.html")),
-    path("routes/", TemplateView.as_view(template_name="routes.html")),
 ]
 
 
-if not settings.TESTING:
-    from debug_toolbar.toolbar import debug_toolbar_urls
-
-    urlpatterns = [*urlpatterns] + debug_toolbar_urls()
-
-if settings.DEBUG:
+if settings.DEBUG and not settings.TESTING:
     from django.conf.urls.static import static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+    from debug_toolbar.toolbar import debug_toolbar_urls
 
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
@@ -53,8 +44,17 @@ if settings.DEBUG:
     urlpatterns += [
         path("test404/", TemplateView.as_view(template_name="404.html")),
         path("test500/", TemplateView.as_view(template_name="500.html")),
+        path(
+            "styleguide/",
+            TemplateView.as_view(template_name="styleguide.html"),
+        ),
+        path("tables/", TemplateView.as_view(template_name="tables.html")),
+        path("routes/", TemplateView.as_view(template_name="routes.html")),
     ]
+    # Add debug toolbar
+    urlpatterns = [*urlpatterns] + debug_toolbar_urls()
 
+# keep wagtail urls in the last
 urlpatterns += i18n_patterns(
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
