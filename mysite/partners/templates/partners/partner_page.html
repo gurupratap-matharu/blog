@@ -33,7 +33,8 @@
               <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
                 <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
               </svg>
-              <span class="text-sm text-secondary">Tel: <a class="icon-link" href="tel:{{ contact.phone }}">{{ contact.phone }}
+              <span class="text-sm text-secondary">Tel: <a class="icon-link"
+    href="tel:{{ contact.phone }}">{{ contact.phone }}
                 <svg width="16" height="16" fill="currentColor" aria-hidden="true">
                   <use xlink:href="{% static 'assets/icons/icons.svg' %}#telephone-outbound" />
                 </svg>
@@ -41,7 +42,9 @@
               <svg width="24" height="24" fill="currentColor" aria-hidden="true">
                 <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
               </svg>
-              <span class="text-sm"><a class="icon-link text-success" href="https://wa.me/{{ contact.whatsapp }}" target="_blank">Whatsapp
+              <span class="text-sm"><a class="icon-link text-success"
+   href="https://wa.me/{{ contact.whatsapp }}"
+   target="_blank">Whatsapp
                 <svg width="16" height="16" fill="currentColor" aria-hidden="true">
                   <use xlink:href="{% static 'assets/icons/icons.svg' %}#whatsapp" />
                 </svg>

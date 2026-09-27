@@ -7,7 +7,10 @@
     <form method="get" action="{% url 'search' %}">
       {% csrf_token %}
       <label for="search" class="form-label visually-hidden">{% translate "Buscar" %}</label>
-      <input name="query" id="search" class="form-control form-control-lg" placeholder="{% translate "Buscar articulos..." %}" />
+      <input name="query"
+             id="search"
+             class="form-control form-control-lg"
+             placeholder="{% translate "Buscar articulos..." %}" />
       <input type="submit" value="Go" tabindex="-1" hidden />
     </form>
   </section>

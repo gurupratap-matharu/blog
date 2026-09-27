@@ -1,4 +1,4 @@
-{% extends 'layouts/base.html' %}
+{% extends "layouts/base.html" %}
 
 {% load i18n static %}
 
@@ -7,7 +7,7 @@
 {% endblock title %}
 
 {% block extra_css %}
-  <link href="{% static 'assets/css/seats.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'assets/css/seats.css' %}" rel="stylesheet" />
 {% endblock extra_css %}
 
 {% block content %}
@@ -38,13 +38,17 @@
       <form method="post">
         {% csrf_token %}
         <div class="tab-content mt-3" id="myTabContent">
-          <div class="tab-pane fade show active" id="lower-tab-pane" role="tabpanel" aria-labelledby="lower-tab" tabindex="0">
+          <div class="tab-pane fade show active"
+               id="lower-tab-pane"
+               role="tabpanel"
+               aria-labelledby="lower-tab"
+               tabindex="0">
             <div class="bus mx-auto py-2 border rounded-3">
               {% for row in trip.seat_map.B %}
                 <div class="row gx-0 my-1 gap-1 justify-content-center">
                   {% for col in row %}
                     <div class="col-1 box">
-                      {% if col.category == 'Seat' %}
+                      {% if col.category == "Seat" %}
                         <input class="seat-checkbox"
                                type="checkbox"
                                id="check-{{ col.row }}{{ col.col }}"
@@ -52,8 +56,9 @@
                                value="{{ col.label }}"
                                data-label="{{ col.label }}"
                                {% if col.is_selectable == 'false' %}disabled{% endif %} />
-                        <label class="form-check-label visually-hidden" for="check-{{ col.row }}{{ col.col }}">{{ col.label }}</label>
-                      {% elif col.category != 'Undefined' %}
+                        <label class="form-check-label visually-hidden"
+                               for="check-{{ col.row }}{{ col.col }}">{{ col.label }}</label>
+                      {% elif col.category != "Undefined" %}
                         <span class="info">{{ col.label }}</span>
                       {% endif %}
                     </div>
@@ -68,7 +73,7 @@
                 <div class="row gx-0 my-1 gap-1 justify-content-center">
                   {% for col in row %}
                     <div class="col-1 box">
-                      {% if col.category == 'Seat' %}
+                      {% if col.category == "Seat" %}
                         <input class="seat-checkbox"
                                type="checkbox"
                                id="checkDefault-{{ col.row }}{{ col.col }}"
@@ -76,8 +81,9 @@
                                value="{{ col.label }}"
                                data-label="{{ col.label }}"
                                {% if col.is_selectable == 'false' %}disabled{% endif %} />
-                        <label class="form-check-label visually-hidden" for="checkDefault-{{ col.row }}{{ col.col }}">{{ col.label }}</label>
-                      {% elif col.category != 'Undefined' %}
+                        <label class="form-check-label visually-hidden"
+                               for="checkDefault-{{ col.row }}{{ col.col }}">{{ col.label }}</label>
+                      {% elif col.category != "Undefined" %}
                         <span class="info">{{ col.label }}</span>
                       {% endif %}
                     </div>

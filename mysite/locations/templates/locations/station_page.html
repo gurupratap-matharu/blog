@@ -116,7 +116,9 @@
       {% endif %}
       <p>
         {% translate "Dirección:" %} {{ page.address }}
-        <a class="icon-link" href="{{ page.get_google_maps_directions_url }}" target="_blank">{% translate "Ver direcciones" %}
+        <a class="icon-link"
+           href="{{ page.get_google_maps_directions_url }}"
+           target="_blank">{% translate "Ver direcciones" %}
           <svg width="16" height="16" fill="currentColor" aria-hidden="true">
             <use xlink:href="{% static 'assets/icons/icons.svg' %}#box-arrow-up-right" />
           </svg>

@@ -36,12 +36,18 @@
                     <use xlink:href="{% static 'assets/icons/icons.svg' %}#credit-card-2-front" />
                   </svg>
                 </div>
-                <div class="me-2 mb-1" data-bs-toggle="tooltip" data-bs-placement="top" title="{% translate "Podes pagar con efectivo" %}">
+                <div class="me-2 mb-1"
+                     data-bs-toggle="tooltip"
+                     data-bs-placement="top"
+                     title="{% translate "Podes pagar con efectivo" %}">
                   <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
                     <use xlink:href="{% static 'assets/icons/icons.svg' %}#cash-stack" />
                   </svg>
                 </div>
-                <span class="me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="{% translate "Butacas disponible" %}">{{ trip.seats_available }}</span>
+                <span class="me-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="{% translate "Butacas disponible" %}">{{ trip.seats_available }}</span>
                 <span class="badge bg-gradient-primary px-2"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"

@@ -26,7 +26,10 @@
       <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
         <use xlink:href="{% static 'assets/icons/icons.svg' %}#chat-left-dots" />
       </svg>
-      <a href="#" class="text-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal">{% translate "Envía tus comentarios sobre este artículo" %}</a>
+      <a href="#"
+         class="text-sm"
+         data-bs-toggle="modal"
+         data-bs-target="#feedbackModal">{% translate "Envía tus comentarios sobre este artículo" %}</a>
       <!-- Modal -->
       <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -35,7 +38,7 @@
               <h1 class="modal-title fs-5" id="feedbackModalLabel">{% translate "Comentarios" %}</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action={{ article_feedback_page.url }} method="post">
+            <form action="{{ article_feedback_page.url }}" method="post">
               <div class="modal-body">
                 {% csrf_token %}
                 {{ article_feedback_form.as_p }}
@@ -49,4 +52,4 @@
         </div>
       </section>
     </article>
-  {% endblock content %}
+{% endblock content %}

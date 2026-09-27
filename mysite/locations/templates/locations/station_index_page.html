@@ -40,7 +40,9 @@
                                      {% endif %}"
                       aria-controls="collapse{{ forloop.counter }}">{{ province }}</button>
             </h3>
-            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#accordionProvinces">
+            <div id="collapse{{ forloop.counter }}"
+                 class="accordion-collapse collapse"
+                 data-bs-parent="#accordionProvinces">
               <div class="accordion-body ps-0">
                 <div class="row row-cols-1 row-cols-sm-3">
                   {% for terminal in terminals %}
