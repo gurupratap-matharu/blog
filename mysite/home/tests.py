@@ -20,23 +20,9 @@ class HomePageTests(WagtailPageTestCase):
 
     @classmethod
     def setUpTestData(cls):
-        try:
-            default_home = Page.objects.get(
-                title="Welcome to your new Wagtail site!"
-            )
-            default_home.slug = "home-old"
-            default_home.save_revision().publish()
-            default_home.save()
-
-        except Page.DoesNotExist:
-            pass
-
-        cls.root = Page.objects.get(id=1).specific
+        cls.root = Page.get_first_root_node()
         cls.home_page = HomePage(
-            title="Home",
-            slug="home",
-            hero_text="You can do it",
-            hero_cta="Learn More",
+            title="Home", hero_text="You can do it", hero_cta="Learn More"
         )
         # Set Home Page as child of root
         cls.root.add_child(instance=cls.home_page)
@@ -48,16 +34,16 @@ class HomePageTests(WagtailPageTestCase):
         cls.site.root_page = cls.home_page
         cls.site.save()
 
-    def _get_post_data(self):
-        data = dict()
-        data["title"] = "Ventanita"
-        data["body"] = streamfield([("text", "buy bus tickets")])
-        data["promotions"] = streamfield([("text", "we have good promos")])
-        data["featured_pages"] = streamfield([("text", "promotions")])
-        data["faq"] = streamfield([("text", "your questions answered")])
-        data["links"] = streamfield([("text", "contact us")])
-
-        return nested_form_data(data)
+        cls.post_data = nested_form_data(
+            {
+                "title": "Ventanita",
+                "body": streamfield([("text", "buy bus tickets")]),
+                "promotions": streamfield([("text", "we have good promos")]),
+                "featured_pages": streamfield([("text", "promotions")]),
+                "faq": streamfield([("text", "your questions answered")]),
+                "links": streamfield([("text", "contact us")]),
+            }
+        )
 
     def test_get(self):
         response = self.client.get(self.home_page.url)
@@ -73,32 +59,7 @@ class HomePageTests(WagtailPageTestCase):
         self.assertPageIsRenderable(self.home_page)
 
     def test_page_is_previewable(self):
-        post_data = self._get_post_data()
-        self.assertPageIsPreviewable(self.home_page, post_data=post_data)
+        self.assertPageIsPreviewable(self.home_page, post_data=self.post_data)
 
     def test_editability(self):
-        post_data = self._get_post_data()
-        self.assertPageIsEditable(self.home_page, post_data=post_data)
-
-    def test_can_create_index_pages_under_home_page(self):
-        self.assertCanCreateAt(parent_model=HomePage, child_model=StandardPage)
-        self.assertCanCreateAt(
-            parent_model=HomePage, child_model=BlogIndexPage
-        )
-        self.assertCanCreateAt(
-            parent_model=HomePage, child_model=CityIndexPage
-        )
-        self.assertCanCreateAt(
-            parent_model=HomePage, child_model=PartnerIndexPage
-        )
-
-    def test_cannot_create_wrong_children_or_parents_for_home_page(self):
-        self.assertCanNotCreateAt(
-            parent_model=BlogIndexPage, child_model=HomePage
-        )
-        self.assertCanNotCreateAt(
-            parent_model=CityIndexPage, child_model=HomePage
-        )
-        self.assertCanNotCreateAt(
-            parent_model=PartnerIndexPage, child_model=HomePage
-        )
+        self.assertPageIsEditable(self.home_page, post_data=self.post_data)

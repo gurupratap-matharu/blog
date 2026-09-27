@@ -115,24 +115,8 @@ class BlogPageTests(WagtailPageTestCase):
 
     @classmethod
     def setUpTestData(cls):
-        try:
-            default_home = Page.objects.get(
-                title="Welcome to your new Wagtail site!"
-            )
-            default_home.slug = "home-old"
-            default_home.save_revision().publish()
-            default_home.save()
-
-        except Page.DoesNotExist:
-            pass
-
         cls.root = Page.objects.get(id=1).specific
-        cls.home_page = HomePage(
-            title="Home",
-            slug="home",
-            hero_text="You can do it",
-            hero_cta="Learn More",
-        )
+        cls.home_page = HomePage(title="Home", hero_text="hi", hero_cta="bye")
         cls.blog_index_page = BlogIndexPage(title="blog", slug="blog")
         cls.blog_page = BlogPage(title="Buenos Aires", slug="buenos-aires")
 
@@ -156,12 +140,12 @@ class BlogPageTests(WagtailPageTestCase):
         cls.blog_page.save_revision().publish()
         cls.blog_page.save()
 
-    def _get_post_data(self):
-        data = dict()
-        data["title"] = "Things to do in Buenos Aires"
-        data["body"] = streamfield([("text", "come see the obelisco")])
-
-        return nested_form_data(data)
+        cls.post_data = nested_form_data(
+            {
+                "title": "Things to do in Buenos Aires",
+                "body": streamfield([("text", "come see the obelisco")]),
+            }
+        )
 
     def test_get(self):
         response = self.client.get(self.blog_page.url)
@@ -179,12 +163,10 @@ class BlogPageTests(WagtailPageTestCase):
     def test_page_is_previewable(self):
         # Veer this test is failing probably because we are not providing author for
         # blog page. At this moment i don't know how to do it.
-        post_data = self._get_post_data()
-        self.assertPageIsPreviewable(self.blog_page, post_data=post_data)
+        self.assertPageIsPreviewable(self.blog_page, post_data=self.post_data)
 
     def test_editability(self):
-        post_data = self._get_post_data()
-        self.assertPageIsEditable(self.blog_page, post_data=post_data)
+        self.assertPageIsEditable(self.blog_page, post_data=self.post_data)
 
     def test_can_create_blog_page_under_blogindex_page(self):
         self.assertCanCreateAt(
