@@ -38,7 +38,8 @@
             {% if redirect_field_value %}
               <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
-            <button type="submit" class="btn bg-gradient-primary btn-round w-100 mt-4 mb-0">{% translate "Sign Up" %}</button>
+            <button type="submit"
+                    class="btn bg-gradient-primary btn-round w-100 mt-4 mb-0">{% translate "Sign Up" %}</button>
           </form>
         </div>
         <div class="card-footer text-center pt-0 px-lg-2 px-1">
@@ -53,10 +54,10 @@
 
 {% block extra_js %}
   <script>
-       const add_form_classes = () => {
-            const email = document.querySelector('#id_email');
-            email.classList.add('form-control');
-       }
-       document.addEventListener("DOMContentLoaded", add_form_classes);
+    const add_form_classes = () => {
+      const email = document.querySelector('#id_email');
+      email.classList.add('form-control');
+    }
+    document.addEventListener("DOMContentLoaded", add_form_classes);
   </script>
 {% endblock extra_js %}

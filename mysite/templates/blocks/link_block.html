@@ -2,7 +2,7 @@
 <div class="row row-cols-1 row-cols-sm-2">
   {% for link in self.item %}
     <div class="col mb-1">
-      <a href={{ link.get_url }}>{{ link.get_title }}</a>
+      <a href="{{ link.get_url }}">{{ link.get_title }}</a>
     </div>
   {% endfor %}
 </div>

@@ -6,7 +6,7 @@
 <hr />
 <ul>
   {% for link in self %}
-    {% if link.block_type == 'external_link' %}
+    {% if link.block_type == "external_link" %}
       <li>
         <a href="{{ link.value.get_url }}" target="_blank" class="me-1">{{ link.value.get_title }}</a>
         <svg width="16px" height="16px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

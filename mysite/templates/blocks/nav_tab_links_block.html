@@ -21,11 +21,11 @@
 <div class="tab-content text-sm" id="myTabContent-{% lorem 1 w random %}"">
   {% for element in self.item %}
     <div class="tab-pane fade
-                {% if forloop.first %}show active{% endif %}"
-         id="tab-pane-{{ forloop.counter }}{% cycle 'A' 'B' 'C' 'D' 'E' as seed %}"
-         role="tabpanel"
-         aria-labelledby="tab-{{ forloop.counter }}{{ seed }}"
-         tabindex="0">
+      {% if forloop.first %}show active{% endif %}"
+      id="tab-pane-{{ forloop.counter }}{% cycle 'A' 'B' 'C' 'D' 'E' as seed %}"
+      role="tabpanel"
+      aria-labelledby="tab-{{ forloop.counter }}{{ seed }}"
+      tabindex="0">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
         {% for link in element.item %}
           <div class="col mb-1">

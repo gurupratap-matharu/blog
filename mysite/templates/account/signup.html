@@ -76,7 +76,7 @@
           <p class="text-sm">
             By registering, you accept our <a href="/condiciones-generales/">Terms of use</a> and <a href="/politicas-de-privacidad/">Privacy Policy</a>
           </p>
-          <p class="text-sm mt-3 ">
+          <p class="text-sm mt-3">
             {% translate "Already have an account?" %} <a href="{% url 'account_login' %}">{% translate "Sign in" %}</a>
           </p>
         </div>
@@ -90,13 +90,13 @@
 
 {% block extra_js %}
   <script>
-       const add_form_classes = () => {
-            const email = document.querySelector('#id_email');
-            const password = document.querySelector('#id_password1');
+    const add_form_classes = () => {
+      const email = document.querySelector('#id_email');
+      const password = document.querySelector('#id_password1');
 
-            email.classList.add('form-control');
-            password.classList.add('form-control');
-       }
-       document.addEventListener("DOMContentLoaded", add_form_classes);
+      email.classList.add('form-control');
+      password.classList.add('form-control');
+    }
+    document.addEventListener("DOMContentLoaded", add_form_classes);
   </script>
 {% endblock extra_js %}

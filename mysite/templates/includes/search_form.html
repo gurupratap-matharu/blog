@@ -19,7 +19,8 @@
                   aria-label="Num of passengers"
                   required>
             {% for i in '12345'|make_list %}
-              <option value="{{ i }}" {% if request.session.q.num_of_passengers == i %}selected{% endif %}>Pasajeros {{ i }}</option>
+              <option value="{{ i }}"
+                      {% if request.session.q.num_of_passengers == i %}selected{% endif %}>Pasajeros {{ i }}</option>
             {% endfor %}
           </select>
         </div>

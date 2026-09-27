@@ -23,7 +23,10 @@
               <use xlink:href="{% static 'assets/icons/icons.svg' %}#instagram" />
             </svg>
           </a>
-          <a class="nav-link me-3" target="_blank" href="{{ settings.base.GenericSettings.youtube_url }}" aria-label="Youtube Page">
+          <a class="nav-link me-3"
+             target="_blank"
+             href="{{ settings.base.GenericSettings.youtube_url }}"
+             aria-label="Youtube Page">
             <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
               <use xlink:href="{% static 'assets/icons/icons.svg' %}#youtube" />
             </svg>
@@ -112,7 +115,7 @@
       <p class="mt-4 nav-link">
         {% translate "Copyright" %} ©
         <script>
-             document.write(new Date().getFullYear());
+          document.write(new Date().getFullYear());
         </script>
         {% translate " Made with ❤️ in Argentina 🇦🇷" %}
       </p>
