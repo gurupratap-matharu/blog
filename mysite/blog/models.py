@@ -376,6 +376,8 @@ class BlogPage(BasePage):
         date_published = self.date or self.first_published_at or timezone.now()
         date_modified = self.last_published_at or timezone.now()
 
+        author_name = self.authors[0].full_name() if self.authors else ""
+
         article_schema = {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
@@ -389,7 +391,7 @@ class BlogPage(BasePage):
             "image": f"https://ventanita.com.ar{image_url}",
             "author": {
                 "@type": "Person",
-                "name": self.authors[0].full_name(),
+                "name": author_name,
             },
             "publisher": {
                 "@type": "Organization",

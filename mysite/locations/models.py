@@ -576,6 +576,8 @@ class StationPage(RoutablePageMixin, BasePage):
     def _get_image_schema(self):
         image = self.image or self.social_image
         image_url = image.file.url if image else ""
+        image_title = getattr(image, "title", "")
+        image_description = getattr(image, "description", "")
 
         image_schema = {
             "@context": "https://schema.org",
@@ -584,12 +586,12 @@ class StationPage(RoutablePageMixin, BasePage):
             "url": f"https://ventanita.com.ar{image_url}",
             "license": "https://ventanita.com.ar/condiciones-generales/",
             "acquireLicensePage": "https://ventanita.com.ar/contact/",
-            "creditText": image.title,
+            "creditText": image_title,
             "creator": {"@type": "Person", "name": "Ventanita"},
             "copyrightNotice": "Ventanita",
             "contentLocation": self.title,
-            "description": image.description,
-            "name": image.title,
+            "description": image_description,
+            "name": image_title,
         }
 
         return image_schema
