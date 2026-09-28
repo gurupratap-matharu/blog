@@ -31,9 +31,7 @@
                 <h5>
                   <a href="{% pageurl result %}">{{ result }}</a>
                 </h5>
-                <p class="text-sm">
-                  {% if result.search_description %}{{ result.search_description }}{% endif %}
-                </p>
+                <p class="text-sm">{% if result.search_description %}{{ result.search_description }}{% endif %}</p>
               </li>
             {% endfor %}
           </ul>

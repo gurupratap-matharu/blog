@@ -15,20 +15,57 @@
               aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
         <div class="offcanvas-header">
-          <a id="offcanvasNavbarLabel" class="navbar-brand fw-bold" href="/">Ventanita</a>
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel"> <a class="link-dark" href="/">Ventanita</a> </h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <ul class="navbar-nav ms-auto align-items-center">
-            {% if request.user.is_superuser %}
-              <li class="nav-item mx-2">
-                <a class="nav-link ps-2 cursor-pointer" data-bs-toggle="modal" data-bs-target="#sessionModal">
-                  Session
-                  <svg class="bi ms-1" width="16" height="16" fill="currentColor" aria-hidden="true">
-                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-down" />
+          <ul class="navbar-nav justify-content-end flex-grow-1">
+            <div class="d-md-none">
+              <li class="nav-item">
+                <a class="nav-link" href="/terminales-de-micro/">
+                  <svg class="bi me-1" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#geo" />
                   </svg>
+                {% translate "Terminales" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/empresas-de-bus/">
+                  <svg class="bi me-1" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#gem" />
+                  </svg>
+                {% translate "Empresas" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/contact/">
+                  <svg class="bi me-1" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#telephone-outbound" />
+                  </svg>
+                {% translate "Contacto" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/feedback/">
+                  <svg class="bi me-1" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#chat-left-dots" />
+                  </svg>
+                {% translate "Comentarios" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/blog/">
+                  <svg class="bi me-1" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#compass-fill" />
+                  </svg>
+                {% translate "Blog" %}</a>
+              </li>
+            </div>
+            {% if request.user.is_superuser %}
+              <li class="nav-item">
+                <a class="nav-link cursor-pointer" data-bs-toggle="modal" data-bs-target="#sessionModal">
+                  <svg class="bi me-1" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#toggles" />
+                  </svg>
+                  {% translate "Session" %}
                 </a>
               </li>
             {% endif %}
@@ -38,10 +75,10 @@
               </li>
             {% else %}
               <li class="nav-item">
-                <a class="nav-link me-2" href="{% url 'account_login' %}">Log In</a>
+                <a class="nav-link" href="{% url 'account_login' %}">Log In</a>
               </li>
               <li class="nav-item">
-                <a class="btn bg-gradient-primary btn-sm btn-round mb-0" href="{% url 'account_signup' %}">Sign Up</a>
+                <a class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
               </li>
             {% endif %}
           </ul>
