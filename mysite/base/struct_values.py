@@ -36,11 +36,6 @@ class RatingsStructValue(StructValue):
             "1": self._round_to_nearest_5(100 * one / total),
         }
 
-        logger.info("total:%s" % total)
-        logger.info("score:%s" % score)
-        logger.info("stars:%s" % stars)
-        logger.info("star_percentages:%s" % star_percentages)
-
         return total, score, stars, star_percentages
 
     def get_total_ratings(self):
