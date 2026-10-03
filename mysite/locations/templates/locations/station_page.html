@@ -65,6 +65,21 @@
     </section>
     <section class="rounded-3 min-vh-50 mb-3" id="map">
     </section>
+    {% if page.province %}
+      <section class="py-3">
+        <div class="row align-items-center">
+          <div class="col-3 col-lg-2">
+            {% with "assets/img/flags/"|add:page.province|add:".avif" as flag %}
+              <img src="{% static flag %}" class="img-fluid border" alt="{{ page.get_province_display }}" />
+            {% endwith %}
+          </div>
+          <div class="col-auto">
+            <p class="text-secondary text-uppercase fw-medium small mb-0">{% translate "Provincia" %}</p>
+            <span class="fw-bold">{{ page.get_province_display }}</span>
+          </div>
+        </div>
+      </section>
+    {% endif %}
     <section class="sticky-top">
       <ul class="nav nav-underline bg-white border-bottom" id="scrollnav">
         <li class="nav-item">
