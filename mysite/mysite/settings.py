@@ -112,7 +112,6 @@ if DEBUG and not TESTING:
 
 # Django allauth
 ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
@@ -192,10 +191,11 @@ SITE_ID = 1
 ROOT_URLCONF = "mysite.urls"
 
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # Mailpit
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "127.0.0.1"
-EMAIL_PORT = 1025
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = "127.0.0.1"
+# EMAIL_PORT = 1025
 
 # Email
 DEFAULT_FROM_EMAIL = "'Ventanita' <noreply@ventanita.com.ar>"
