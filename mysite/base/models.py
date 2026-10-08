@@ -51,7 +51,6 @@ from modelcluster.models import ClusterableModel
 from base.blocks import BaseStreamBlock
 from base.cache import get_default_cache_control_decorator
 from base.schemas import organisation_schema
-from base.views import CustomSubmissionsListView
 
 
 logger = logging.getLogger(__name__)
@@ -471,7 +470,6 @@ class CustomFormBuilder(FormBuilder):
 class FormPage(AbstractEmailForm):
     page_description = "Use this page to create a simple form"
     form_builder = CustomFormBuilder
-    submissions_list_view_class = CustomSubmissionsListView
 
     image = models.ForeignKey(
         "wagtailimages.Image",
