@@ -71,14 +71,19 @@
             {% endif %}
             {% if user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>
+                <a class="nav-link" href="{% url 'account_logout' %}">
+                  <svg class="bi me-1" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#box-arrow-right" />
+                  </svg>
+                Log Out</a>
               </li>
             {% else %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'account_login' %}">Log In</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
+                <a class="nav-link" href="{% url 'account_login' %}">
+                  <svg class="bi me-1" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#box-arrow-right" />
+                  </svg>
+                Log In</a>
               </li>
             {% endif %}
           </ul>

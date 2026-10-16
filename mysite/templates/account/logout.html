@@ -3,7 +3,7 @@
 {% load i18n account %}
 
 {% block title %}
-  {% trans "Log out" %}
+  {% translate "Log out" %}
 {% endblock title %}
 
 {% block header %}
@@ -21,9 +21,9 @@
           <form action="{% url 'account_logout' %}" role="form" method="post">
             {% csrf_token %}
             {{ form }}
-            <button type="submit" class="btn btn-round bg-gradient-primary w-100">Sign Out</button>
+            <button type="submit" class="btn bg-gradient-primary w-100">Sign Out</button>
           </form>
-          <p class="text-sm text-center">
+          <p class="text-sm text-center mt-3">
             Go back
             <a href="/">Home</a>
           </p>
