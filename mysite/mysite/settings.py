@@ -137,6 +137,7 @@ ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APP": {
@@ -151,6 +152,7 @@ SOCIALACCOUNT_PROVIDERS = {
         "AUTH_PARAMS": {
             "access_type": "online",
         },
+        "EMAIL_AUTHENTICATION": True,
     },
     "facebook": {
         "APP": {
@@ -163,6 +165,7 @@ SOCIALACCOUNT_PROVIDERS = {
             "email",
             "public_profile",
         ],
+        "EMAIL_AUTHENTICATION": True,
         "AUTH_PARAMS": {
             "auth_type": "reauthenticate",
         },
