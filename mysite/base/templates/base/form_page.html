@@ -5,11 +5,7 @@
 {% block content %}
   <div class="row">
     <div class="col col-sm-8 col-md-6 mx-auto">
-      <div class="card card-plain">
-        <div class="card-header py-0">
-          <h1 class="fs-3">{{ page.title }}</h1>
-          <p class="mb-0">{{ page.body }}</p>
-        </div>
+      <div class="card border-0">
         <form action="{% pageurl page %}"
               id="contact-form"
               method="post"
@@ -17,27 +13,20 @@
               {% if has_upload %}enctype="multipart/form-data"{% endif %}>
           {% csrf_token %}
           <div class="card-body">
+            <h1 class="fs-5">{{ page.title }}</h1>
+            <p>{{ page.body }}</p>
             {{ form.non_field_errors }}
-            <div class="row">
-              {% for field in form.visible_fields %}
-                <div class="col-12">
-                  {{ field.label_tag }}
-                  <p class="text-danger text-sm mb-1">{{ field.errors.as_text }}</p>
-                  {{ field }}
-                  <p>
-                    <small class="form-text text-xs">{{ field.help_text|safe }}</small>
-                  </p>
-                </div>
-              {% endfor %}
-            </div>
-            <div class="card-footer px-0 d-flex justify-content-between align-items-center">
-              <a href="{% url 'wagtail_serve' '' %}" class="link-dark">Cancel</a>
-              <button type="submit" class="btn bg-gradient-primary btn-round icon-link icon-link-hover mb-0">
-                {% translate "Enviar" %}
-                <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
-                </svg>
-              </button>
+            {% for field in form.visible_fields %}
+              <div class="mb-3">
+                {{ field.label_tag }}
+                <p class="text-danger text-sm mb-1">{{ field.errors.as_text }}</p>
+                {{ field }}
+                <p class="form-text text-sm">{{ field.help_text|safe }}</p>
+              </div>
+            {% endfor %}
+            <div class="d-flex justify-content-between">
+              <a href="{% url 'wagtail_serve' '' %}" class="btn bg-body-tertiary border me-3">Cancel</a>
+              <button type="submit" class="btn btn-success">{% translate "Enviar" %}</button>
             </div>
           </div>
         </form>

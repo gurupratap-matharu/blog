@@ -35,12 +35,13 @@
           <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
             <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
           </svg>
-          <span class="text-sm text-success">{% translate "Abierto" %}<span class="text-sm text-secondary ms-1">{% translate "las 24hs" %}</span></span>
+          <span class="text-sm text-success">{% translate "Abierto" %}<span class="text-sm text-body-secondary ms-1">{% translate "las 24hs" %}</span></span>
           {% if page.phone %}
             <svg width="24" height="24" fill="currentColor" aria-hidden="true">
               <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
             </svg>
-            <span class="text-sm text-secondary">Tel: <a class="icon-link" href="tel:{{ page.phone }}">{{ page.phone }}
+            <span class="text-sm text-body-secondary">Tel: <a class="icon-link"
+    href="tel:{{ page.phone }}">{{ page.phone }}
               <svg width="16" height="16" fill="currentColor" aria-hidden="true">
                 <use xlink:href="{% static 'assets/icons/icons.svg' %}#telephone-outbound" />
               </svg>
@@ -51,7 +52,7 @@
           <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
             <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
           </svg>
-          <span class="text-sm text-secondary">{{ page.address }}</span>
+          <span class="text-sm text-body-secondary">{{ page.address }}</span>
           <a class="text-sm" href="{{ page.get_google_maps_directions_url }}" target="_blank">¿Como llegar?</a>
         </div>
         <div class="col-sm-auto">
@@ -74,14 +75,14 @@
             {% endwith %}
           </div>
           <div class="col-auto">
-            <p class="text-secondary text-uppercase fw-medium small mb-0">{% translate "Provincia" %}</p>
+            <p class="text-body-secondary text-uppercase fw-medium small mb-0">{% translate "Provincia" %}</p>
             <span class="fw-bold">{{ page.get_province_display }}</span>
           </div>
         </div>
       </section>
     {% endif %}
-    <section class="sticky-top">
-      <ul class="nav nav-underline bg-white border-bottom" id="scrollnav">
+    <section class="sticky-top bg-adaptive">
+      <ul class="nav nav-underline border-bottom" id="scrollnav">
         <li class="nav-item">
           <a class="nav-link" href="#map">{% translate "Mapa" %}</a>
         </li>
@@ -240,18 +241,28 @@
           </p>
         </div>
         <div class="col-md-auto">
-          <button class="btn btn-outline-dark me-2"
+          <button class="btn bg-danger-subtle text-danger-emphasis border border-danger-subtle me-2"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#feedbackFail"
                   aria-expanded="false"
-                  aria-controls="feedbackFail">{% translate "No me sirvió" %}</button>
-          <button class="btn btn-outline-dark"
+                  aria-controls="feedbackFail">
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#hand-thumbs-down" />
+            </svg>
+            {% translate "No me sirvió" %}
+          </button>
+          <button class="btn bg-success-subtle text-success-emphasis border border-success-subtle"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#feedbackSuccess"
                   aria-expanded="false"
-                  aria-controls="feedbackSuccess">{% translate "Sí, me fue útil" %}</button>
+                  aria-controls="feedbackSuccess">
+            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#hand-thumbs-up" />
+            </svg>
+            {% translate "Sí, me fue útil" %}
+          </button>
         </div>
       </div>
       <div class="collapse" id="feedbackFail">
@@ -270,7 +281,17 @@
       </div>
       <div class="collapse" id="feedbackSuccess">
         <div class="alert alert-light mt-3" role="alert">
-          <p>{% translate "Gracias por tus comentarios." %}</p>
+          <div class="row">
+            <div class="col-sm-6 py-3">
+              <p class="fw-bold">{% translate "Nos alegra que te guste." %}</p>
+              <p>{% translate "Si tienes alguna idea o sugerencia sobre cómo podemos hacerlo más útil, escríbenos aquí." %}</p>
+              <form method="post" action="{% url 'base:suggestion' %}">
+                {% csrf_token %}
+                {{ suggestion_form }}
+                <button type="submit" class="btn bg-gradient-primary">{% translate "Enviar" %}</button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </section>

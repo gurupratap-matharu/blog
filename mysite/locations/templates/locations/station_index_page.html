@@ -8,20 +8,11 @@
     <h1 class="fs-2">{{ page.title }}</h1>
     {% if page.intro %}
       <section>
-        <p class="text-secondary">{{ page.intro }}</p>
+        <p class="text-body-secondary">{{ page.intro }}</p>
       </section>
     {% endif %}
     <section class="py-3">
-      <input class="form-control border border-2 border-primary"
-             id="terminal-search"
-             type="search"
-             dir="ltr"
-             spellcheck="false"
-             autocorrect="off"
-             autocomplete="off"
-             autocapitalize="off"
-             maxlength="2048"
-             tabindex="1" />
+      <input class="form-control" id="terminal-search" type="search" />
     </section>
     <section class="py-3">
       <h2 class="fs-5">{% translate "Terminales por provincia" %}</h2>

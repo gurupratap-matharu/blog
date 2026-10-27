@@ -5,33 +5,7 @@
   <div class="container">
     <div class="row justify-content-between">
       <div class="col-6 col-md-2 mb-4">
-        <a href="/" class="fw-bold text-primary text-gradient">Ventanita</a>
-        <div class="d-flex">
-          <a class="nav-link me-3"
-             target="_blank"
-             href="{{ settings.base.GenericSettings.facebook_url }}"
-             aria-label="Facebook Page">
-            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-              <use xlink:href="{% static 'assets/icons/icons.svg' %}#facebook" />
-            </svg>
-          </a>
-          <a class="nav-link me-3"
-             target="_blank"
-             href="{{ settings.base.GenericSettings.instagram_url }}"
-             aria-label="Instagram Page">
-            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-              <use xlink:href="{% static 'assets/icons/icons.svg' %}#instagram" />
-            </svg>
-          </a>
-          <a class="nav-link me-3"
-             target="_blank"
-             href="{{ settings.base.GenericSettings.youtube_url }}"
-             aria-label="Youtube Page">
-            <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
-              <use xlink:href="{% static 'assets/icons/icons.svg' %}#youtube" />
-            </svg>
-          </a>
-        </div>
+        <h6>{{ site_name }}</h6>
         <div class="d-flex mt-3 mb-2">
           <form action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
@@ -48,7 +22,7 @@
                   </option>
                 {% endfor %}
               </select>
-              <button class="btn btn-outline-primary mb-0" type="submit">Go</button>
+              <button class="btn bg-body-tertiary border mb-0" type="submit">Go</button>
             </div>
           </form>
         </div>
@@ -112,7 +86,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-center">
-      <p class="mt-4 nav-link">
+      <p class="small mt-4">
         {% translate "Copyright" %} ©
         <script>
           document.write(new Date().getFullYear());

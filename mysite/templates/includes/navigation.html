@@ -5,7 +5,7 @@
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="/">Ventanita</a>
+      <a class="navbar-brand fw-bold" href="/">{{ site_name }}</a>
       <button class="navbar-toggler"
               type="button"
               data-bs-toggle="offcanvas"
@@ -17,7 +17,9 @@
       </button>
       <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasNavbarLabel"> <a class="link-dark" href="/">Ventanita</a> </h5>
+          <h5 class="offcanvas-title"
+              id="offcanvasNavbarLabel"> <a class="navbar-brand fw-bold"
+    href="/">{{ site_name }}</a> </h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -54,11 +56,61 @@
               <li class="nav-item">
                 <a class="nav-link" href="/blog/">
                   <svg class="bi me-1" width="16" height="16" fill="currentColor" aria-hidden="true">
-                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#compass-fill" />
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#compass" />
                   </svg>
                 {% translate "Blog" %}</a>
               </li>
             </div>
+            {# Theme switcher #}
+            <li class="nav-item dropdown">
+              <button class="btn nav-link dropdown-toggle"
+                      id="bd-theme"
+                      type="button"
+                      aria-expanded="false"
+                      data-bs-toggle="dropdown"
+                      data-bs-display="static"
+                      aria-label="Toggle theme (dark)">
+                <svg class="theme-icon-active" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#sun" />
+                </svg>
+                <span class="d-lg-none ms-1" id="bd-theme-text">{% translate "Color" %}</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
+                <li>
+                  <button type="button"
+                          class="dropdown-item d-flex align-items-center"
+                          data-bs-theme-value="light"
+                          aria-pressed="false">
+                    <svg class="bi me-2 opacity-50" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <use xlink:href="{% static 'assets/icons/icons.svg' %}#sun" />
+                    </svg>
+                    {% translate "Claro" %}
+                  </button>
+                </li>
+                <li>
+                  <button type="button"
+                          class="dropdown-item d-flex align-items-center"
+                          data-bs-theme-value="dark"
+                          aria-pressed="false">
+                    <svg class="bi me-2 opacity-50" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <use xlink:href="{% static 'assets/icons/icons.svg' %}#moon-stars-fill" />
+                    </svg>
+                    {% translate "Oscuro" %}
+                  </button>
+                </li>
+                <li>
+                  <button type="button"
+                          class="dropdown-item d-flex align-items-center"
+                          data-bs-theme-value="auto"
+                          aria-pressed="false">
+                    <svg class="bi me-2 opacity-50" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <use xlink:href="{% static 'assets/icons/icons.svg' %}#circle-half" />
+                    </svg>
+                    {% translate "Auto" %}
+                  </button>
+                </li>
+              </ul>
+            </li>
             {% if request.user.is_superuser %}
               <li class="nav-item">
                 <a class="nav-link cursor-pointer" data-bs-toggle="modal" data-bs-target="#sessionModal">

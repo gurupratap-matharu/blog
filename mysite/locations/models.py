@@ -32,7 +32,7 @@ from base.blocks import (
     RatingsBlock,
 )
 from base.choices import Country, Province, Weekday
-from base.forms import PageFeedbackForm
+from base.forms import PageFeedbackForm, SuggestionForm
 from base.models import BasePage
 from base.validators import validate_lat_lng, validate_phone
 
@@ -522,12 +522,18 @@ class StationPage(RoutablePageMixin, BasePage):
         context["today"] = timezone.now().weekday()
         context["gallery_images"] = self.gallery_images.select_related("image")
         context["page_feedback_form"] = self.get_page_feedback_form()
+        context["suggestion_form"] = self.get_suggestion_form()
         return context
 
     def get_page_feedback_form(self):
         # prepopulate the hidden page url field of the form
         initial = {"url": self.url}
         form = PageFeedbackForm(initial=initial)
+        return form
+
+    def get_suggestion_form(self):
+        initial = {"url": self.url}
+        form = SuggestionForm(initial=initial)
         return form
 
     def get_google_maps_directions_url(self):

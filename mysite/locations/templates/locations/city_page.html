@@ -15,12 +15,6 @@
       <br />
       {{ page.title }}
     </h1>
-    <section class="py-3 py-md-5">
-      {% include "includes/search_form.html" %}
-    </section>
-    <section class="py-3">
-      <h2 class="fs-4 pb-3">Comprá tus pasajes a {{ page.title }}</h2>
-    </section>
     {% if page.image %}
       <figure class="figure d-block py-3">
         {% image page.image original format-avif loading="lazy" class="figure-img img-fluid rounded-3 d-block shadow-xl" %}
@@ -96,10 +90,6 @@
 
 {% block extra_js %}
   {{ lat_long|json_script:"coordinates" }}
-  <script defer src="{% static 'assets/js/autocomplete.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/flatpickr.min.js' %}"></script>
-  <script defer src="{% static 'assets/js/es.js' %}"></script>
-  <script defer src="{% static 'assets/js/search.js' %}"></script>
   <script defer src="{% static 'assets/js/leaflet.js' %}"></script>
   <script defer src="{% static 'assets/js/Leaflet.fullscreen.min.js' %}"></script>
   <script defer src="{% static 'assets/js/city_page.js' %}"></script>

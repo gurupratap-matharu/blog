@@ -4,7 +4,7 @@
 <div class="row row-cols-2 row-cols-sm-3 row-cols-md-6">
   {% for element in self.item %}
     <div class="col">
-      <div class="card card-plain">
+      <div class="card border-0">
         {% image element.image format-avif original loading="lazy" class="img-fluid shadow-xl rounded" %}
         <div class="ps-1 pt-1">
           <a href="{{ element.page.url }}" class="card-title text-sm stretched-link">{{ element.title }}</a>

@@ -13,13 +13,12 @@
             <div class="card h-100">
               {% image post.feed_image original format-avif loading="lazy" class="img-fluid card-img-top" %}
               <div class="card-body">
-                <h5 class="card-title">
-                  <a href="{% pageurl post %}">{{ post.title }}</a>
-                </h5>
+                <h5 class="card-title">{{ post.title }}</h5>
                 <p class="card-text">{{ post.intro|truncatechars:120 }}</p>
                 <div class="d-flex justify-content-between">
-                  <span class="text-sm text-secondary">{{ post.first_published_at|date:"d M" }}</span>
-                  <a href="{% pageurl post %}" class="card-link icon-link icon-link-hover">{% translate "Leer" %}
+                  <span class="text-sm text-body-secondary">{{ post.first_published_at|date:"d M" }}</span>
+                  <a href="{% pageurl post %}"
+                     class="card-link icon-link icon-link-hover stretched-link">{% translate "Leer" %}
                     <svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true">
                       <use xlink:href="{% static 'assets/icons/icons.svg' %}#chevron-right" />
                     </svg>
