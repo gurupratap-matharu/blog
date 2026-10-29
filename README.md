@@ -1,20 +1,4 @@
-<h1 align="center">
-  <br>
-  <a href="https://ventanita.com.ar/blog/"><img src="https://ventanita.com.ar/static/assets/img/logos/logo-color.svg" alt="Ventanita" width="200"></a>
-  <br>
-  Ventanita
-  <br>
-</h1>
-
-<h4 align="center">Ventanita Marketing site built with ❤️ using wagtail.</h4>
-
-<p align="center">
-  <a href="#key-features">Key Features</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#credits">Credits</a> •
-  <a href="#live">Live</a> •
-  <a href="#license">License</a>
-</p>
+<h4 align="center">Simple blog site</h4>
 
 
 ## Key Features
@@ -53,8 +37,3 @@ This software uses the following open source packages:
 - [Django](https://www.djangoproject.com)
 - [Leaflet](http://leafletjs.com)
 - [Bootstrap](https://getbootstrap.com)
-
-
-## Live
-
-[Online Here](https://ventanita.com.ar/blog/) - Web version of the app

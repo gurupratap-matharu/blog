@@ -47,11 +47,6 @@ class BaseScraper:
 
         Note this removes all query strings, url params, sub directories but preserves
         subdomains and scheme.
-
-        Examples:
-            https://maps.google.com.ar/maps?hl=es-419&tab=wl -> https://maps.google.com.ar
-            https://www.google.com.ar/intl/es-419/about/products?tab=wh -> https://www.google.com.ar
-
         """
 
         parse = urlparse(url)
@@ -84,4 +79,4 @@ class BaseScraper:
         return NotImplementedError("Subclass should implement this method...")
 
     def save_item_to_db(self, item=None):
-        logger.info("saving item %s to db..." % item)
+        logger.info("saving item %s to db...", item)
