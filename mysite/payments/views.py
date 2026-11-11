@@ -15,9 +15,9 @@ from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
 import mercadopago
-from trips.providers.prosys import Prosys
 
 from orders.models import Order
+from trips.providers.prosys import Prosys
 
 from .models import WebhookMessage
 
@@ -55,9 +55,7 @@ class MercadoPagoView(TemplateView):
     def get_preference(self):
         session = self.request.session
         order_id = session.get("order_id")
-        unit_price = (
-            float(session.get("amount")) / 100
-        )  # <-- Minimizing this for MP
+        unit_price = float(session.get("amount")) / 100  # <-- Minimizing this for MP
 
         BASE_URI = settings.BASE_URI
 
@@ -163,9 +161,7 @@ def mercadopago_success(request):
         try:
             # Complete sale with operator
             obj = Prosys(connection_id=connection_id)
-            sale = obj.complete_sale(
-                service_id=service_id, guid=guid, passengers=passengers
-            )
+            sale = obj.complete_sale(service_id=service_id, guid=guid, passengers=passengers)
 
             logger.info("CompletedSale:%s" % sale)
 

@@ -68,9 +68,7 @@ class OrderCreateView(CreateView):
         data = self.request.POST or None
         queryset = Passenger.objects.none()
 
-        PassengerFormset = modelformset_factory(
-            model=Passenger, form=PassengerForm, extra=extra
-        )
+        PassengerFormset = modelformset_factory(model=Passenger, form=PassengerForm, extra=extra)
         formset = PassengerFormset(data=data, queryset=queryset)
 
         logger.info("data:%s" % data)
@@ -209,9 +207,7 @@ class OrderCancelView(DetailView):
             ticket = obj.check_ticket(ticket_id)
             retention_pct = ticket.get("details")["retention_pct"]
 
-            refund = obj.refund(
-                ticket_id=ticket_id, retention_pct=retention_pct
-            )
+            refund = obj.refund(ticket_id=ticket_id, retention_pct=retention_pct)
             data.append(refund)
 
         self.send_cancellation_mail(ticket_ids, data)

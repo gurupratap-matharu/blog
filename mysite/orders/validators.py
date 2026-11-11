@@ -10,9 +10,7 @@ logger = logging.getLogger(__name__)
 
 phone_regex = RegexValidator(
     regex=r"^\+?1?\d{9,17}$",
-    message=_(
-        "El número de teléfono debe tener el formato '+5491150251122'. Se permiten hasta 17 dígitos."
-    ),
+    message=_("El número de teléfono debe tener el formato '+5491150251122'. Se permiten hasta 17 dígitos."),
 )
 
 
@@ -20,11 +18,7 @@ def validate_birth_date(born):
     """Check if a person is between 1 - 99 years old"""
 
     today = date.today()
-    age = (
-        today.year
-        - born.year
-        - ((today.month, today.day) < (born.month, born.day))
-    )
+    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
     logger.info("validating birth date:%s", born)
     logger.info("age:%s", age)

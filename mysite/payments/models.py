@@ -27,12 +27,8 @@ class WebhookMessage(models.Model):
         choices=PROVIDER_CHOICES,
         default=MERCADOPAGO,
     )
-    received_at = models.DateTimeField(
-        help_text=_("When we received the message")
-    )
-    payload = models.JSONField(
-        _("payload"), default=dict, encoder=DjangoJSONEncoder
-    )
+    received_at = models.DateTimeField(help_text=_("When we received the message"))
+    payload = models.JSONField(_("payload"), default=dict, encoder=DjangoJSONEncoder)
 
     class Meta:
         verbose_name = _("webhook message")

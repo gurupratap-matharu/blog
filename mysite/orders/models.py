@@ -26,9 +26,7 @@ class Order(models.Model):
     passengers = models.ManyToManyField("Passenger", related_name="+")
 
     name = models.CharField(_("Nombre"), max_length=50)
-    email = models.EmailField(
-        _("Email"), help_text=_("Enviaremos los pasajes a este email")
-    )
+    email = models.EmailField(_("Email"), help_text=_("Enviaremos los pasajes a este email"))
     phone_number = models.CharField(
         _("Telefono"),
         help_text="Ex: +5491150254321",
@@ -74,9 +72,7 @@ class Order(models.Model):
         self.paid = True
         self.payment_id = payment_id
         self.transaction_id = guid
-        self.reservation_code = get_random_string(
-            length=6, allowed_chars=string.ascii_uppercase
-        )
+        self.reservation_code = get_random_string(length=6, allowed_chars=string.ascii_uppercase)
         self.save(
             update_fields=[
                 "paid",
@@ -163,24 +159,14 @@ class Passenger(models.Model):
         max_length=10,
         default="DNI",
     )
-    document_number = models.CharField(
-        _("Nro de documento"), max_length=50, unique=True
-    )
-    nationality = CountryField(
-        _("Nacionalidad"), blank_label=_("(Nationality)")
-    )
+    document_number = models.CharField(_("Nro de documento"), max_length=50, unique=True)
+    nationality = CountryField(_("Nacionalidad"), blank_label=_("(Nationality)"))
     first_name = models.CharField(_("Nombre"), max_length=50)
     last_name = models.CharField(_("Apellido"), max_length=50)
-    gender = models.CharField(
-        _("Género"), choices=GENDER_CHOICES, max_length=1, default=FEMALE
-    )
-    birth_date = models.DateField(
-        _("Fecha de nacimiento"), validators=[validate_birth_date]
-    )
+    gender = models.CharField(_("Género"), choices=GENDER_CHOICES, max_length=1, default=FEMALE)
+    birth_date = models.DateField(_("Fecha de nacimiento"), validators=[validate_birth_date])
 
-    phone_number = models.CharField(
-        _("Telefono"), validators=[phone_regex], max_length=17
-    )
+    phone_number = models.CharField(_("Telefono"), validators=[phone_regex], max_length=17)
 
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

@@ -41,11 +41,7 @@ class OrderForm(forms.ModelForm):
         email = cd.get("email")
         confirm_email = cd.get("confirm_email")
 
-        if (
-            email
-            and confirm_email
-            and (email.lower() != confirm_email.lower())
-        ):
+        if email and confirm_email and (email.lower() != confirm_email.lower()):
             err = ValidationError(self.INVALID_EMAIL_MSG, code="invalid")
             self.add_error("confirm_email", err)
 
@@ -73,9 +69,7 @@ class PassengerForm(forms.ModelForm):
             "birth_date": forms.DateInput(
                 attrs={"type": "date", **control},
             ),
-            "phone_number": forms.TextInput(
-                attrs={"placeholder": _("Whatsapp"), "type": "tel", **control}
-            ),
+            "phone_number": forms.TextInput(attrs={"placeholder": _("Whatsapp"), "type": "tel", **control}),
             "nationality": forms.Select(attrs=select),
             "gender": forms.Select(attrs=select),
         }
