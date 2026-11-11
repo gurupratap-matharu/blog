@@ -1,12 +1,8 @@
-import logging
-
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 import requests
 from bs4 import BeautifulSoup
-
-
-logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -14,64 +10,48 @@ class Command(BaseCommand):
     Command that submits all the urls of our sitemap to index now via post request.
     """
 
-    SITEMAP_URL = "https://ventanita.com.ar/sitemap.xml"
+    SITEMAP_URL = f"{settings.BASE_URI}/sitemap.xml"
     INDEXNOW_URL = "https://api.indexnow.org/IndexNow"
 
     def handle(self, *args, **kwargs):
         self.stdout.write("fetching sitemap...")
 
-        try:
-            response = requests.get(self.SITEMAP_URL, timeout=10)
-            response.raise_for_status()
+        r = requests.get(self.SITEMAP_URL, timeout=10)
+        r.raise_for_status()
 
-        except requests.exceptions.RequestException as err:
-            msg = "Error fetching sitemap:%s" % err
-
-            logger.error(msg)
-            self.stderr.write(msg)
-
-            return
-
-        soup = BeautifulSoup(response.content, "xml")
+        soup = BeautifulSoup(r.text, features="xml")
         urls = [loc.text for loc in soup.find_all("loc")]
 
-        self.stdout.write(f"Found {len(urls)} URLs in the sitemap.")
         self.submit_urls(urls=urls)
-        self.stdout.write("All Done.")
+        return "All Done"
 
     def submit_urls(self, urls):
         payload = {
-            "host": "ventanita.com.ar",
-            "key": "3520839d70e34eb79e009ddb5fedef3b",
-            "keyLocation": "https://ventanita.com.ar/3520839d70e34eb79e009ddb5fedef3b.txt",
+            "host": f"{settings.BASE_URI}",
+            "key": settings.INDEXNOW_KEY,
+            "keyLocation": f"{settings.BASE_URI}/{settings.INDEXNOW_KEY}.txt",
             "urlList": urls,
         }
 
-        headers = {
-            "Content-type": "application/json",
-            "charset": "utf-8",
-            "Host": "api.indexnow.org",
-        }
+        headers = {"Content-type": "application/json", "charset": "utf-8", "Host": "api.indexnow.org"}
 
         try:
-            response = requests.post(
+            r = requests.post(
                 url=self.INDEXNOW_URL,
                 headers=headers,
                 json=payload,
                 timeout=10,
             )
-            response.raise_for_status()
+            r.raise_for_status()
 
         except requests.exceptions.RequestException as e:
-            msg = "Error submitting to IndexNow:%s" % e
-
-            logger.error(msg)
-            self.stderr.write(msg)
-
+            msg = "Error submitting to IndexNow:%s", e
+            self.error(msg)
         else:
-            self.stdout.write(
-                f"Successfully submitted {len(urls)} URLs to IndexNow."
-            )
-            self.stdout.write(
-                f"Response: {response.status_code} - {response.text}"
-            )
+            self.success(f"Successfully submitted {len(urls)} URLs to IndexNow.")
+
+    def success(self, msg) -> None:
+        self.stdout.write(self.style.SUCCESS(msg))
+
+    def error(self, msg) -> None:
+        self.stdout.write(self.style.ERROR(msg))
