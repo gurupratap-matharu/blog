@@ -156,9 +156,7 @@ class BlockQuote(StructBlock):
     """
 
     text = TextBlock()
-    attribute_name = CharBlock(
-        blank=True, required=False, label="e.g. Mary Berry"
-    )
+    attribute_name = CharBlock(blank=True, required=False, label="e.g. Mary Berry")
 
     class Meta:
         icon = "openquote"
@@ -201,9 +199,7 @@ class LinkBlock(StructBlock):
 
 class NavTabItemBlock(StructBlock):
     title = CharBlock(required=True)
-    content = RichTextBlock(
-        required=True, icon="pilcrow", template="blocks/paragraph_block.html"
-    )
+    content = RichTextBlock(required=True, icon="pilcrow", template="blocks/paragraph_block.html")
 
     class Meta:
         help_text = "Content with rich text in a simple tab"
@@ -278,9 +274,7 @@ class RatingsBlock(StructBlock):
     class Meta:
         icon = "pick"
         template = "blocks/ratings.html"
-        label_format = (
-            "Five:{five} Four:{four} Three:{three} Two:{two} One:{one}"
-        )
+        label_format = "Five:{five} Four:{four} Three:{three} Two:{two} One:{one}"
         search_index = False
         value_class = RatingsStructValue
 
@@ -291,9 +285,7 @@ class BaseStreamBlock(StreamBlock):
     """
 
     heading_block = HeadingBlock()
-    paragraph_block = RichTextBlock(
-        icon="pilcrow", template="blocks/paragraph_block.html"
-    )
+    paragraph_block = RichTextBlock(icon="pilcrow", template="blocks/paragraph_block.html")
 
     image_block = ImageBlock()
     gallery = ListBlock(ImageBlock(), template="blocks/gallery_block.html")

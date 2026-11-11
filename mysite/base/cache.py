@@ -9,9 +9,7 @@ def get_cache_control_kwargs():
     """
 
     s_max_age = getattr(settings, "CACHE_CONTROL_S_MAX_AGE", None)
-    stale_while_revalidate = getattr(
-        settings, "CACHE_CONTROL_STALE_WHILE_REVALIDATE", None
-    )
+    stale_while_revalidate = getattr(settings, "CACHE_CONTROL_STALE_WHILE_REVALIDATE", None)
 
     cache_control_kwargs = {
         "s_max_age": s_max_age,
@@ -33,6 +31,4 @@ def get_default_cache_control_decorator():
     # cache_control_kwargs = get_cache_control_kwargs()
     # return cache_control(**cache_control_kwargs)
 
-    return cache_control(
-        max_age=60 * 60 * 24, immutable=True, public=True
-    )  # one day
+    return cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # one day

@@ -25,9 +25,7 @@ class ReasonChoices(models.TextChoices):
     )
     ERRONEOUS = (
         "ERRONEOUS",
-        _(
-            "Errores menores: problemas de formato, errores ortográficos y vínculos rotos"
-        ),
+        _("Errores menores: problemas de formato, errores ortográficos y vínculos rotos"),
     )
     OTHER = (
         "OTHER",
@@ -53,17 +51,13 @@ class PageFeedbackForm(forms.Form):
         label=_("Comentarios"),
         min_length=10,
         required=False,
-        widget=forms.Textarea(
-            attrs={"class": "form-control", "rows": 3, "cols": 20}
-        ),
+        widget=forms.Textarea(attrs={"class": "form-control", "rows": 3, "cols": 20}),
     )
 
     def send_mail(self):
         cd = self.cleaned_data
         subject = f"[Ventanita] Page Feedback for {cd['url']}"
-        message = (
-            f"URL:{cd['url']}\nReason:{cd['reason']}\nmessage:{cd['message']}"
-        )
+        message = f"URL:{cd['url']}\nReason:{cd['reason']}\nmessage:{cd['message']}"
         send_mail(
             subject=subject,
             message=message,
@@ -85,9 +79,7 @@ class SuggestionForm(forms.Form):
         label=_("Sugerencia"),
         min_length=10,
         required=True,
-        widget=forms.Textarea(
-            attrs={"class": "form-control", "rows": 3, "cols": 20}
-        ),
+        widget=forms.Textarea(attrs={"class": "form-control", "rows": 3, "cols": 20}),
     )
 
     def send_mail(self):

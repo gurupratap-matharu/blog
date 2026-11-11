@@ -106,9 +106,7 @@ def register_mark_feature(features):
     }
 
     # Call register_editor_plugin to register the configuration for draftail
-    features.register_editor_plugin(
-        "draftail", feature_name, draftail_features.InlineStyleFeature(control)
-    )
+    features.register_editor_plugin("draftail", feature_name, draftail_features.InlineStyleFeature(control))
 
     # Configure the content transform from DB to the editor and back
     db_conversion = {
@@ -117,9 +115,7 @@ def register_mark_feature(features):
     }
 
     # Register the converter
-    features.register_converter_rule(
-        "contentstate", feature_name, db_conversion
-    )
+    features.register_converter_rule("contentstate", feature_name, db_conversion)
 
     # Add feature to the default features list
     features.default_features.append("mark")
@@ -144,9 +140,7 @@ def register_small_feature(features):
     }
 
     # Call register_editor_plugin to register the configuration for draftail
-    features.register_editor_plugin(
-        "draftail", feature_name, draftail_features.InlineStyleFeature(control)
-    )
+    features.register_editor_plugin("draftail", feature_name, draftail_features.InlineStyleFeature(control))
 
     # Configure the content transform from DB to the editor and back
     db_conversion = {
@@ -155,9 +149,7 @@ def register_small_feature(features):
     }
 
     # Register the converter
-    features.register_converter_rule(
-        "contentstate", feature_name, db_conversion
-    )
+    features.register_converter_rule("contentstate", feature_name, db_conversion)
 
     # Add feature to the default features list
     features.default_features.append("small")
@@ -182,7 +174,5 @@ def register_underline_feature(features):
         "from_database_format": {tag: InlineStyleElementHandler(type_)},
         "to_database_format": {"style_map": {type_: tag}},
     }
-    features.register_converter_rule(
-        "contentstate", feature_name, db_conversion
-    )
+    features.register_converter_rule("contentstate", feature_name, db_conversion)
     features.default_features.append("underline")

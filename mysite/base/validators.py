@@ -4,9 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 validate_phone = RegexValidator(
     regex=r"^\+?1?\d{9,15}$",
-    message=_(
-        "Phone number must be entered in the format: '+5491150254191'. Up to 15 digits allowed."
-    ),
+    message=_("Phone number must be entered in the format: '+5491150254191'. Up to 15 digits allowed."),
 )
 
 
