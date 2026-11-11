@@ -1,30 +1,26 @@
 <h2 class="fs-5 pb-3">{{ self.title }}</h2>
-<ul class="nav nav-underline text-sm mb-3" id="myTab-{% lorem 1 w random %}" role="tablist">
-  {% for element in self.item %}
-    <li class="nav-item" role="presentation">
-      <button class="nav-link
-                     {% if forloop.first %}active{% endif %}"
-              id="tab-{{ forloop.counter }}{% cycle 'A' 'B' 'C' 'D' 'E' as seed %}"
+{% with tag=self.title|slugify|slice:":3" %}
+  <ul class="nav nav-underline mb-3" id="tab-{{ tag }}" role="tablist">
+    {% for element in self.item %}
+      <li class="nav-item" role="presentation">{# djlint:off #}
+      <button class="nav-link {% if forloop.first %}active{% endif %}"
+              id="tab-{{ tag }}-{{ forloop.counter }}"
               data-bs-toggle="tab"
-              data-bs-target="#tab-pane-{{ forloop.counter }}{{ seed }}"
+              data-bs-target="#tab-pane-{{ tag }}-{{ forloop.counter }}"
               type="button"
               role="tab"
-              aria-controls="tab-pane-{{ forloop.counter }}{{ seed }}"
-              aria-selected="{% if forloop.first %}
-                               true
-                             {% else %}
-                               false
-                             {% endif %}">{{ element.title }}</button>
-    </li>
-  {% endfor %}
-</ul>
-<div class="tab-content text-sm" id="myTabContent-{% lorem 1 w random %}"">
-  {% for element in self.item %}
-    <div class="tab-pane fade
-      {% if forloop.first %}show active{% endif %}"
-      id="tab-pane-{{ forloop.counter }}{% cycle 'A' 'B' 'C' 'D' 'E' as seed %}"
+              aria-controls="tab-pane-{{ tag }}-{{ forloop.counter }}"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">{{ element.title }}</button>
+      {# djlint:on #}</li>
+    {% endfor %}
+  </ul>
+  <div class="tab-content" id="tabContent-{{ tag }}"">
+    {% for element in self.item %}
+      {# djlint:off #}
+    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+      id="tab-pane-{{ tag }}-{{ forloop.counter }}"
       role="tabpanel"
-      aria-labelledby="tab-{{ forloop.counter }}{{ seed }}"
+      aria-labelledby="tab-{{ tag }}-{{ forloop.counter }}"
       tabindex="0">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
         {% for link in element.item %}
@@ -34,5 +30,7 @@
         {% endfor %}
       </div>
     </div>
-  {% endfor %}
-</div>
+      {# djlint:on #}
+    {% endfor %}
+  </div>
+{% endwith %}
