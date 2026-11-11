@@ -18,9 +18,7 @@ class HelpIndexPage(BasePage):
     A collection of help article pages under the same topic.
     """
 
-    page_description = (
-        "Use this page to show a list of help articles under the same topic"
-    )
+    page_description = "Use this page to show a list of help articles under the same topic"
 
     subtitle = models.CharField(max_length=255, blank=True)
 
@@ -45,9 +43,7 @@ class HelpArticlePage(BasePage):
     page_description = "Use this page to write a single help article"
     subtitle = models.CharField(max_length=255, blank=True)
 
-    body = StreamField(
-        BaseStreamBlock(), verbose_name="Page Body", blank=True, collapsed=True
-    )
+    body = StreamField(BaseStreamBlock(), verbose_name="Page Body", blank=True, collapsed=True)
     date = models.DateField("Post date", blank=True, null=True)
 
     search_fields = BasePage.search_fields + [

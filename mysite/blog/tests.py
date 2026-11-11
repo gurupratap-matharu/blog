@@ -22,9 +22,7 @@ class BlogIndexPageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         try:
-            default_home = Page.objects.get(
-                title="Welcome to your new Wagtail site!"
-            )
+            default_home = Page.objects.get(title="Welcome to your new Wagtail site!")
             default_home.slug = "home-old"
             default_home.save_revision().publish()
             default_home.save()
@@ -169,14 +167,10 @@ class BlogPageTests(WagtailPageTestCase):
         self.assertPageIsEditable(self.blog_page, post_data=self.post_data)
 
     def test_can_create_blog_page_under_blogindex_page(self):
-        self.assertCanCreateAt(
-            parent_model=BlogIndexPage, child_model=BlogPage
-        )
+        self.assertCanCreateAt(parent_model=BlogIndexPage, child_model=BlogPage)
 
     def test_cannot_create_wrong_children_or_parents_for_blog_page(self):
-        self.assertCanNotCreateAt(
-            parent_model=BlogPage, child_model=BlogIndexPage
-        )
+        self.assertCanNotCreateAt(parent_model=BlogPage, child_model=BlogIndexPage)
         self.assertCanNotCreateAt(parent_model=BlogPage, child_model=HomePage)
 
     def test_blog_page_subpages(self):

@@ -24,15 +24,9 @@ class AccountAdapter(DefaultAccountAdapter):
         return None
 
     def get_user_by_phone(self, phone: str) -> User | None:
-        return (
-            User.objects.filter(phone=phone)
-            .order_by("-phone_verified")
-            .first()
-        )
+        return User.objects.filter(phone=phone).order_by("-phone_verified").first()
 
-    def generate_phone_verification_code(
-        self, *, user: User, phone: str
-    ) -> str:
+    def generate_phone_verification_code(self, *, user: User, phone: str) -> str:
         """Overwrite allauth method to generate a numeric OTP code."""
 
         return get_random_string(length=4, allowed_chars=string.digits)
@@ -40,9 +34,7 @@ class AccountAdapter(DefaultAccountAdapter):
     def set_phone_verified(self, user: User, phone: str) -> None:
         self.set_phone(user, phone, True)
 
-    def send_verification_code_sms(
-        self, user: User, phone: str, code: str, **kwargs
-    ) -> None:
+    def send_verification_code_sms(self, user: User, phone: str, code: str, **kwargs) -> None:
         messages.warning(
             self.request,
             f"⚠️ SMS demo stub: assume code {code} was sent to {phone}.",

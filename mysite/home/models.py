@@ -38,9 +38,7 @@ class HomePage(BasePage):
         related_name="+",
         help_text="Homepage image",
     )
-    hero_text = models.CharField(
-        max_length=255, help_text="Keep it short and powerful"
-    )
+    hero_text = models.CharField(max_length=255, help_text="Keep it short and powerful")
     hero_cta = models.CharField(
         verbose_name="Hero CTA",
         max_length=255,

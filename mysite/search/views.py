@@ -15,11 +15,7 @@ def search(request):
 
     # Search
     if search_query:
-        search_results = (
-            Page.objects.live()
-            .filter(locale=Locale.get_active())
-            .search(search_query)
-        )
+        search_results = Page.objects.live().filter(locale=Locale.get_active()).search(search_query)
     else:
         search_results = Page.objects.none()
 

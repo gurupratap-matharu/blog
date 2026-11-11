@@ -184,9 +184,7 @@ class BlogPageTag(TaggedItemBase):
     https://docs.wagtail.org/en/stable/reference/pages/model_recipes.html#tagging
     """
 
-    content_object = ParentalKey(
-        "BlogPage", related_name="tagged_items", on_delete=models.CASCADE
-    )
+    content_object = ParentalKey("BlogPage", related_name="tagged_items", on_delete=models.CASCADE)
 
 
 class BlogPage(BasePage):
@@ -201,9 +199,7 @@ class BlogPage(BasePage):
     page_description = "Use this page to write a single blog post"
 
     subtitle = models.CharField(max_length=255, blank=True)
-    intro = models.CharField(
-        help_text="Text to describe the page", max_length=500, blank=True
-    )
+    intro = models.CharField(help_text="Text to describe the page", max_length=500, blank=True)
     feed_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -212,9 +208,7 @@ class BlogPage(BasePage):
         related_name="+",
         help_text="Landscape mode only; horizontal width between 1000px to 3000px",
     )
-    body = StreamField(
-        BaseStreamBlock(), verbose_name="Page body", blank=True, collapsed=True
-    )
+    body = StreamField(BaseStreamBlock(), verbose_name="Page body", blank=True, collapsed=True)
 
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
     date = models.DateField("Post date", blank=True, null=True)
@@ -309,12 +303,8 @@ class BlogPage(BasePage):
         """
 
         post_tags_ids = self.tags.values_list("id", flat=True)
-        similar_posts = BlogPage.objects.filter(
-            tags__in=post_tags_ids
-        ).exclude(id=self.id)
-        similar_posts = similar_posts.annotate(
-            same_tags=Count("tags")
-        ).order_by("-same_tags")[:3]
+        similar_posts = BlogPage.objects.filter(tags__in=post_tags_ids).exclude(id=self.id)
+        similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by("-same_tags")[:3]
         return similar_posts
 
     @cached_property
@@ -330,9 +320,7 @@ class BlogPage(BasePage):
         # Only return authors that are not in draft
         return [
             n.person
-            for n in self.blog_person_relationship.filter(
-                person__live=True
-            ).select_related("person", "person__image")
+            for n in self.blog_person_relationship.filter(person__live=True).select_related("person", "person__image")
         ]
 
     def canonical_url(self):
@@ -435,12 +423,8 @@ class BlogPage(BasePage):
 
 
 class BlogPageGalleryImage(Orderable):
-    page = ParentalKey(
-        BlogPage, on_delete=models.CASCADE, related_name="gallery_images"
-    )
-    image = models.ForeignKey(
-        "wagtailimages.Image", on_delete=models.CASCADE, related_name="+"
-    )
+    page = ParentalKey(BlogPage, on_delete=models.CASCADE, related_name="gallery_images")
+    image = models.ForeignKey("wagtailimages.Image", on_delete=models.CASCADE, related_name="+")
     caption = models.CharField(blank=True, max_length=250)
     panels = [
         FieldPanel("image"),
@@ -453,9 +437,7 @@ class BlogPageGalleryImage(Orderable):
 
 
 class BlogPageRelatedLink(Orderable):
-    page = ParentalKey(
-        BlogPage, on_delete=models.CASCADE, related_name="related_links"
-    )
+    page = ParentalKey(BlogPage, on_delete=models.CASCADE, related_name="related_links")
     name = models.CharField(max_length=255)
     url = models.URLField()
 
@@ -475,9 +457,7 @@ class BlogPageRelatedLink(Orderable):
 class BlogCategory(models.Model):
     name = models.CharField(_("name"), max_length=255)
     slug = models.SlugField(_("slug"), max_length=255)
-    icon = models.CharField(
-        _("icon"), max_length=20, help_text="Only name of the icon"
-    )
+    icon = models.CharField(_("icon"), max_length=20, help_text="Only name of the icon")
     panels = [
         FieldPanel("name"),
         FieldPanel("slug"),

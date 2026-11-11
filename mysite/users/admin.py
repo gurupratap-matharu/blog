@@ -30,9 +30,7 @@ class CustomUserAdmin(UserAdmin):
     actions = ("login", "activate", "deactivate")
     ordering = ("-id",)
 
-    def login(
-        self, r: HttpRequest, qs: QuerySet[CustomUser]
-    ) -> HttpResponseRedirect:
+    def login(self, r: HttpRequest, qs: QuerySet[CustomUser]) -> HttpResponseRedirect:
         """Custom action to login as a user to browse the platform."""
 
         try:
@@ -50,9 +48,7 @@ class CustomUserAdmin(UserAdmin):
             user.save()
         self.message_user(request, f"{len(qs)} user(s) activated")
 
-    def deactivate(
-        self, request: HttpRequest, qs: QuerySet[CustomUser]
-    ) -> None:
+    def deactivate(self, request: HttpRequest, qs: QuerySet[CustomUser]) -> None:
         for user in qs:
             user.is_active = False
             user.set_unusable_password()

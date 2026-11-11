@@ -21,9 +21,7 @@ class HomePageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.root = Page.get_first_root_node()
-        cls.home_page = HomePage(
-            title="Home", hero_text="You can do it", hero_cta="Learn More"
-        )
+        cls.home_page = HomePage(title="Home", hero_text="You can do it", hero_cta="Learn More")
         # Set Home Page as child of root
         cls.root.add_child(instance=cls.home_page)
         cls.home_page.save_revision().publish()
