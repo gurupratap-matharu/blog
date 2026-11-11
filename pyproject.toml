@@ -8,6 +8,7 @@ dependencies = [
     "django-allauth[socialaccount]>=65.14.3",
     "django-countries>=8.2.0",
     "gunicorn>=25.1.0",
+    "lxml>=6.1.3",
     "psycopg2-binary>=2.9.11",
     "python-dotenv>=1.2.1",
     "wagtail==8.0",
@@ -23,13 +24,13 @@ dev = [
 ]
 
 [tool.ruff]
-line-length=79
+line-length=120
 exclude=["*migrations*", "static", ".venv"]
 
 [tool.ruff.lint.isort]
 combine-as-imports=true
 force-single-line=false
-known-first-party=["blog", "base", "home", "search", "users", "partners", "orders", "payments"]
+known-first-party=["blog", "base", "home", "search", "users", "partners", "trips", "orders", "payments"]
 known-third-party=["allauth"]
 lines-after-imports=2
 section-order=["future", "standard-library", "django", "wagtail", "third-party", "first-party", "local-folder"]
