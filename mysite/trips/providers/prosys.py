@@ -63,15 +63,11 @@ class Prosys:
 
     def __init__(self, connection_id=None):
         try:
-            self.client = Client(
-                self.url, transport=transport, plugins=[self.history]
-            )
+            self.client = Client(self.url, transport=transport, plugins=[self.history])
 
         except requests.exceptions.ConnectionError as e:
             logger.warn("Prosys ConnectionError:%s" % e)
-            mail_admins(
-                "Prosys ConnectionError", f"Connection Id:{connection_id}"
-            )
+            mail_admins("Prosys ConnectionError", f"Connection Id:{connection_id}")
             return
 
         except requests.exceptions.Timeout as e:
@@ -97,9 +93,7 @@ class Prosys:
             logger.info("created new connection:%s" % self.connection_id)
 
     def start_session(self):
-        response = self.client.service.StartSession(
-            self.web_id, self.user, self.password, self.key
-        )
+        response = self.client.service.StartSession(self.web_id, self.user, self.password, self.key)
         session = response.find("SessionInformation")
         result = response.find("Result")
 
@@ -123,10 +117,7 @@ class Prosys:
         origin_id = origin.get("IdParada", 123)
         destination_id = destination.get("IdParada", 456)
 
-        logger.info(
-            "searching from:%s to:%s on:%s"
-            % (origin_id, destination_id, departure)
-        )
+        logger.info("searching from:%s to:%s on:%s" % (origin_id, destination_id, departure))
 
         response = self.client.service.GetByFechaOrigenDestino(
             self.web_id,
@@ -247,9 +238,7 @@ class Prosys:
         # qualities
         qualities = dict()
         qualities["code"] = el_qualities.find("Codigo").text.strip()
-        qualities["description"] = el_qualities.find(
-            "Descripcion"
-        ).text.strip()
+        qualities["description"] = el_qualities.find("Descripcion").text.strip()
 
         data["result"] = result
         data["stops"] = stops
@@ -327,10 +316,7 @@ class Prosys:
 
             raise InvalidPaymentsType(err)
 
-        payments_type = [
-            self._parse_payments_type(key)
-            for key in response.findall("PaymentsTypes")
-        ]
+        payments_type = [self._parse_payments_type(key) for key in response.findall("PaymentsTypes")]
         data["result"] = result
         data["payments_type"] = payments_type
 
@@ -377,27 +363,12 @@ class Prosys:
 
             raise InvalidPrepareSale(err)
 
-        elements = [
-            self._parse_element(key) for key in response.findall("Elements")
-        ]
-        countries = [
-            self._parse_country(key) for key in response.findall("Countries")
-        ]
-        document_types = [
-            self._parse_document_types(key)
-            for key in response.findall("DocumentTypes")
-        ]
-        tax_id = [
-            self._parse_tax_id(key) for key in response.findall("IdTributaria")
-        ]
-        tax_category = [
-            self._parse_tax_category(key)
-            for key in response.findall("CondImpositiva")
-        ]
-        civil_states = [
-            self._parse_civil_states(key)
-            for key in response.findall("CivilStates")
-        ]
+        elements = [self._parse_element(key) for key in response.findall("Elements")]
+        countries = [self._parse_country(key) for key in response.findall("Countries")]
+        document_types = [self._parse_document_types(key) for key in response.findall("DocumentTypes")]
+        tax_id = [self._parse_tax_id(key) for key in response.findall("IdTributaria")]
+        tax_category = [self._parse_tax_category(key) for key in response.findall("CondImpositiva")]
+        civil_states = [self._parse_civil_states(key) for key in response.findall("CivilStates")]
 
         data["guid"] = response.find("Operation").find("GUID").text.strip()
         data["seats"] = elements
@@ -441,28 +412,13 @@ class Prosys:
 
             raise InvalidPrepareSaleInsurance(errors.get("description"))
 
-        insurance_info = self._parse_insurance_info(
-            response.find("Seguros_Info")
-        )
+        insurance_info = self._parse_insurance_info(response.find("Seguros_Info"))
 
-        countries = [
-            self._parse_country(key) for key in response.findall("Countries")
-        ]
-        document_types = [
-            self._parse_document_types(key)
-            for key in response.findall("DocumentTypes")
-        ]
-        tax_id = [
-            self._parse_tax_id(key) for key in response.findall("IdTributaria")
-        ]
-        tax_category = [
-            self._parse_tax_category(key)
-            for key in response.findall("CondImpositiva")
-        ]
-        civil_states = [
-            self._parse_civil_states(key)
-            for key in response.findall("CivilStates")
-        ]
+        countries = [self._parse_country(key) for key in response.findall("Countries")]
+        document_types = [self._parse_document_types(key) for key in response.findall("DocumentTypes")]
+        tax_id = [self._parse_tax_id(key) for key in response.findall("IdTributaria")]
+        tax_category = [self._parse_tax_category(key) for key in response.findall("CondImpositiva")]
+        civil_states = [self._parse_civil_states(key) for key in response.findall("CivilStates")]
 
         data["insurance_info"] = insurance_info
         data["countries"] = countries
@@ -520,9 +476,7 @@ class Prosys:
         context["service_id"] = service_id
         context["passengers"] = passengers
 
-        passengers_xml = render_to_string(
-            "trips/get_computed_rates.xml", context
-        )
+        passengers_xml = render_to_string("trips/get_computed_rates.xml", context)
 
         logger.info("passengers_xml:%s" % passengers_xml)
 
@@ -566,12 +520,8 @@ class Prosys:
 
         for p in passengers:
             p["amount"] = float(p.get("amount"))
-            p["document_type_id"] = self._get_document_type_id(
-                p.get("document_type")
-            )
-            p["nationality_id"] = self._get_nationality_id(
-                p.get("nationality")
-            )
+            p["document_type_id"] = self._get_document_type_id(p.get("document_type"))
+            p["nationality_id"] = self._get_nationality_id(p.get("nationality"))
             p["residential_id"] = 1
             p["tax_id"] = 2
             p["tax_id_number"] = 9876543
@@ -609,9 +559,7 @@ class Prosys:
         if result["is_ok"] == "false":
             errors = self._parse_errors(response.find("Errors"))
             data["errors"] = errors
-            passengers_json = json.dumps(
-                passengers, indent=4, ensure_ascii=False
-            )
+            passengers_json = json.dumps(passengers, indent=4, ensure_ascii=False)
             data_json = json.dumps(data, indent=4, ensure_ascii=False)
 
             subject = f"CompleteSale Error Guid:{guid}"
@@ -625,10 +573,7 @@ class Prosys:
             raise InvalidCompleteSale(errors.get("description"))
 
         details = self._parse_sale_details(response.find("SaleDataDetails"))
-        items = [
-            self._parse_sale_item(item)
-            for item in response.findall("SaleDataItems")
-        ]
+        items = [self._parse_sale_item(item) for item in response.findall("SaleDataItems")]
 
         data["details"] = details
         data["items"] = items
@@ -658,9 +603,7 @@ class Prosys:
         context = dict()
         context["service_id"] = service_id
         context["insurance_amount"] = insurance_amount
-        insurance_xml = render_to_string(
-            "trips/complete_sale_insurance.xml", context
-        )
+        insurance_xml = render_to_string("trips/complete_sale_insurance.xml", context)
 
         logger.info("insurance_xml: %s" % insurance_xml)
 
@@ -698,10 +641,7 @@ class Prosys:
             raise InvalidCompleteSaleInsurance(errors.get("description"))
 
         details = self._parse_sale_details(response.find("SaleDataDetails"))
-        items = [
-            self._parse_sale_item(item)
-            for item in response.findall("SaleDataItems")
-        ]
+        items = [self._parse_sale_item(item) for item in response.findall("SaleDataItems")]
 
         data["details"] = details
         data["items"] = items
@@ -756,9 +696,7 @@ class Prosys:
         Check the current status of a transaction.
         """
 
-        response = self.client.service.GetResultTransaction(
-            self.web_id, self.user, self.password, guid, self.key
-        )
+        response = self.client.service.GetResultTransaction(self.web_id, self.user, self.password, guid, self.key)
         logger.info(etree.tostring(response, pretty_print=True).decode())
 
         result = self._parse_result(response.find("Result"))
@@ -766,14 +704,10 @@ class Prosys:
         operation_el = response.find("Operation")
 
         if operation_el is None:
-            raise InvalidTransaction(
-                "Could not find the transaction. Invalid guid"
-            )
+            raise InvalidTransaction("Could not find the transaction. Invalid guid")
 
         operation = self._parse_operation(operation_el)
-        tickets = [
-            self._parse_ticket(key) for key in response.findall("Tickets")
-        ]
+        tickets = [self._parse_ticket(key) for key in response.findall("Tickets")]
 
         data = dict()
         data["result"] = result
@@ -878,9 +812,7 @@ class Prosys:
         Ends a session with the API.
         """
 
-        response = self.client.service.EndSession(
-            self.web_id, self.user, self.password, self.connection_id, self.key
-        )
+        response = self.client.service.EndSession(self.web_id, self.user, self.password, self.connection_id, self.key)
 
         logger.debug(etree.tostring(response, pretty_print=True).decode())
 
@@ -917,9 +849,7 @@ class Prosys:
 
         stops_xml = f"<Params><StopId>{stop_id}</StopId><WebAgenciaId>{web_agency_id}</WebAgenciaId></Params>"
 
-        response = self.client.service.Execute(
-            "Designers.GetStopsWithFullInfo", stops_xml
-        )
+        response = self.client.service.Execute("Designers.GetStopsWithFullInfo", stops_xml)
         response = response["_value_1"]["_value_1"]
 
         return [x.get("Stops") for x in response if "Stops" in x]
@@ -927,27 +857,17 @@ class Prosys:
     def get_all_companies(self, web_id=0):
         params_xml = f"<Params><WebId>{web_id}</WebId></Params>"
 
-        response = self.client.service.Execute(
-            "Designers.GetAllCompaniesDetailsByWeb", params_xml
-        )
+        response = self.client.service.Execute("Designers.GetAllCompaniesDetailsByWeb", params_xml)
         response = response["_value_1"]["_value_1"]
-        return [
-            x.get("CompaniesDetails")
-            for x in response
-            if "CompaniesDetails" in x
-        ]
+        return [x.get("CompaniesDetails") for x in response if "CompaniesDetails" in x]
 
     def _parse_service(self, key):
         data = dict()
 
         data["service_id"] = key.get("idServicio")
         data["service_code"] = key.find("CodigoServicio").text
-        data["departure"] = self._parse_datetime(
-            value=key.find("HoraSalida").text
-        )
-        data["arrival"] = self._parse_datetime(
-            value=key.find("HoraLlegada").text
-        )
+        data["departure"] = self._parse_datetime(value=key.find("HoraSalida").text)
+        data["arrival"] = self._parse_datetime(value=key.find("HoraLlegada").text)
         # data["seats_available"] = key.find("ButacasLibres").text.split()[1]
         data["seats_available"] = key.find("ButacasLibres").text
         data["can_select_seats"] = key.find("VeTaquilla").text
@@ -1058,9 +978,7 @@ class Prosys:
         data["amount"] = key.find("Amount").text
         data["discount_code"] = key.find("DiscountCode").text
         data["discount_amount"] = key.find("DiscountAmount").text
-        data["discount_amount_special"] = key.find(
-            "SpecialDiscountAmount"
-        ).text
+        data["discount_amount_special"] = key.find("SpecialDiscountAmount").text
         data["payment_info"] = key.find("PaymentInfo").text
         data["residential_id"] = key.find("ResidentialId").text
         data["nationality_id"] = key.find("NationalityId").text
@@ -1145,9 +1063,7 @@ class Prosys:
         data["associate"] = key.find("Asociar").text
         data["quantity"] = key.find("CantidadAsociar").text
         data["rg3450_amount"] = key.find("RG3450Amount").text
-        data["rg3450_not_charge_foreigners"] = key.find(
-            "RG3450NoCobraAExtranjeros"
-        ).text
+        data["rg3450_not_charge_foreigners"] = key.find("RG3450NoCobraAExtranjeros").text
         data["currency_code"] = key.find("MonedaISO").text
 
         return data
@@ -1244,9 +1160,7 @@ class Prosys:
 
         # Generate this key based on derived logic of other data for a ticket
         # Very handy later
-        data["is_refundable"], data["retention_pct"] = self._get_refund_status(
-            key
-        )
+        data["is_refundable"], data["retention_pct"] = self._get_refund_status(key)
 
         return data
 

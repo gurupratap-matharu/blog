@@ -82,9 +82,7 @@ class TripSearchForm:
             departure = departure[0]
 
         if not departure:
-            raise ValidationError(
-                _("Fecha de ida es invalida"), code="invalid"
-            )
+            raise ValidationError(_("Fecha de ida es invalida"), code="invalid")
 
         self.departure_date = datetime.strptime(departure, "%d-%m-%Y").date()
 
@@ -132,9 +130,7 @@ class TripSearchForm:
         trip_type = self.data.get("trip_type")
 
         if not trip_type:
-            raise ValidationError(
-                _("Tipo de viaje es invalido"), code="invalid"
-            )
+            raise ValidationError(_("Tipo de viaje es invalido"), code="invalid")
 
         if isinstance(trip_type, list):
             trip_type = trip_type[0]
@@ -154,19 +150,14 @@ class TripSearchForm:
         num_of_passengers = self.data.get("num_of_passengers")
 
         if not num_of_passengers:
-            raise ValidationError(
-                _("Número de pasajeros es invalido"), code="invalid"
-            )
+            raise ValidationError(_("Número de pasajeros es invalido"), code="invalid")
 
         if isinstance(num_of_passengers, list):
             num_of_passengers = num_of_passengers[0]
 
         num_of_passengers = int(num_of_passengers)
 
-        if (
-            num_of_passengers < 1
-            or num_of_passengers > self.VALID_NUM_PASSENGERS
-        ):
+        if num_of_passengers < 1 or num_of_passengers > self.VALID_NUM_PASSENGERS:
             raise ValidationError(
                 _("Número de pasajeros:%(value)s es invalido"),
                 code="invalid",

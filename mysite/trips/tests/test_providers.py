@@ -38,9 +38,7 @@ class ProsysTests(TestCase):
         connection_id = "43210"
 
         # Act: instantiate without connection_id
-        with patch.object(
-            Prosys, "start_session", return_value=connection_id
-        ) as m_start_session:
+        with patch.object(Prosys, "start_session", return_value=connection_id) as m_start_session:
             obj = Prosys()
 
         # Assert
@@ -142,16 +140,12 @@ class ProsysTests(TestCase):
         return_value = etree.fromstring(xml)
 
         client = MockClient()
-        client.service.GetByFechaOrigenDestino = MagicMock(
-            return_value=return_value
-        )
+        client.service.GetByFechaOrigenDestino = MagicMock(return_value=return_value)
 
         # Act
 
         obj = Prosys(connection_id="12345")
-        actual = obj.search(
-            origin="393", destination="443", departure="15-05-2025"
-        )
+        actual = obj.search(origin="393", destination="443", departure="15-05-2025")
         print("veer actual: ", actual)
 
         # Assert

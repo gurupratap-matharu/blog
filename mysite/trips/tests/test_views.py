@@ -227,9 +227,7 @@ class SeatViewTests(TestCase):
         self.assertIn("trip", response.context)
         self.assertNotContains(response, "Hi I should not be on this page")
 
-        obj.get_service_with_seat_map.assert_called_with(
-            service_id=self.service_id
-        )
+        obj.get_service_with_seat_map.assert_called_with(service_id=self.service_id)
 
     def test_redirects_home_incase_of_invalid_selection(self):
         """
@@ -277,9 +275,7 @@ class SeatViewTests(TestCase):
         self.assertEqual(settings.SESSION_EXPIRED_MESSAGE, str(messages[0]))
 
     @patch("trips.views.Prosys")
-    def test_seat_view_sets_service_id_in_session_on_valid_post(
-        self, MockProsys
-    ):
+    def test_seat_view_sets_service_id_in_session_on_valid_post(self, MockProsys):
         # Arrange: mock the get_service_with_seat_map() to get a dummy seatmap
         # also verify that session does not contain `service_id`
 
