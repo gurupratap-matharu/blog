@@ -12,7 +12,7 @@ load_dotenv()
 
 PROJECT_DIR = Path(__file__).resolve().parent  # Django project dir
 BASE_DIR = PROJECT_DIR.parent  # Git root
-BASE_URI = "https://ventanita.com.ar"
+BASE_URI = os.getenv("BASE_URI", "")
 
 os.environ["DJANGO_RUNSERVER_HIDE_WARNING"] = "true"
 
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "partners.apps.PartnersConfig",
     "locations.apps.LocationsConfig",
     "help.apps.HelpConfig",
+    "trips.apps.TripsConfig",
     "users.apps.UsersConfig",
     # Wagtail contrib
     "wagtail.contrib.forms",
@@ -68,7 +69,6 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.facebook",
     "django_extensions",
     "django_countries",
     "taggit",
@@ -154,38 +154,6 @@ SOCIALACCOUNT_PROVIDERS = {
         },
         "EMAIL_AUTHENTICATION": True,
     },
-    "facebook": {
-        "APP": {
-            "client_id": os.getenv("FB_CLIENT_ID"),
-            "secret": os.getenv("FB_CLIENT_SECRET"),
-            "key": "",
-        },
-        "METHOD": "oauth2",
-        "SCOPE": [
-            "email",
-            "public_profile",
-        ],
-        "EMAIL_AUTHENTICATION": True,
-        "AUTH_PARAMS": {
-            "auth_type": "reauthenticate",
-        },
-        "INIT_PARAMS": {"cookie": True},
-        "FIELDS": [
-            "id",
-            "first_name",
-            "last_name",
-            "middle_name",
-            "name",
-            "name_format",
-            "picture",
-            "short_name",
-        ],
-        "EXCHANGE_TOKEN": True,
-        "LOCALE_FUNC": lambda request: "en_US",
-        "VERIFIED_EMAIL": False,
-        "VERSION": "v13.0",
-        "GRAPH_API_URL": "https://graph.facebook.com/v13.0",
-    },
 }
 
 
@@ -202,12 +170,8 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Email
 DEFAULT_FROM_EMAIL = "'Ventanita' <noreply@ventanita.com.ar>"
-NOTIFICATION_EMAIL = (
-    "'Ventanita | Notificaciones' <notificaciones@ventanita.com.ar>"
-)
-CANCELLATION_EMAIL = (
-    "'Ventanita | Devoluciones' <devoluciones@ventanita.com.ar>"
-)
+NOTIFICATION_EMAIL = "'Ventanita | Notificaciones' <notificaciones@ventanita.com.ar>"
+CANCELLATION_EMAIL = "'Ventanita | Devoluciones' <devoluciones@ventanita.com.ar>"
 DEFAULT_TO_EMAIL = "gurupratap.matharu@gmail.com"
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 RECIPIENT_LIST = ["gurupratap.matharu@gmail.com"]
@@ -432,6 +396,9 @@ SHELL_PLUS_IMPORTS = [
     "from datetime import datetime, timedelta",
 ]
 
+RED_BASE_URL = os.getenv("RED_BASE_URL")
+PINK_BASE_URL = os.getenv("PINK_BASE_URL")
+BLUE_BASE_URL = os.getenv("BLUE_BASE_URL")
 
 if not DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
