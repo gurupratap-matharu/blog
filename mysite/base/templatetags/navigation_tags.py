@@ -1,13 +1,9 @@
-import logging
-
 from django import template
 
 from base.models import FooterText
 
 
 register = template.Library()
-
-logger = logging.getLogger(__name__)
 
 
 @register.inclusion_tag("tags/breadcrumbs.html", takes_context=True)
@@ -24,9 +20,7 @@ def breadcrumbs(context):
     else:
         ancestors = page.get_ancestors(inclusive=True).filter(depth__gt=1)
 
-    context_breadcrumb = dict(ancestors=ancestors, request=request)
-
-    return context_breadcrumb
+    return {"ancestors": ancestors, "request": request}
 
 
 @register.inclusion_tag("base/includes/footer_text.html", takes_context=True)
@@ -39,6 +33,5 @@ def get_footer_text(context):
 
     if not footer_text:
         obj = FooterText.objects.filter(live=True).first()
-
         footer_text = obj.body if obj else ""
     return {"footer_text": footer_text}

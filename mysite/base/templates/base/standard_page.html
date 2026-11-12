@@ -1,7 +1,5 @@
 {% extends "layouts/base.html" %}
 
-{% load wagtailimages_tags navigation_tags schema_tags %}
-
 {% block content %}
   <article class="container">
     {% breadcrumbs %}
@@ -11,9 +9,3 @@
     </section>
   </article>
 {% endblock content %}
-
-{% block extra_js %}
-  {# djlint:off #}
-    <script type="application/ld+json">{% global_schema_markup wagtail_site %}</script>
-  {# djlint:on #}
-{% endblock extra_js %}

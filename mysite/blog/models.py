@@ -2,6 +2,7 @@ import json
 import logging
 
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.db import models
 from django.db.models import Count
@@ -49,7 +50,7 @@ class BlogPersonRelationship(Orderable, models.Model):
         on_delete=models.CASCADE,
     )
 
-    panels = [FieldPanel("person")]
+    panels = (FieldPanel("person"),)
 
     class Meta:
         verbose_name = "blogpersonrelationship"
@@ -75,10 +76,10 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
         FieldPanel("image"),
     ]
 
-    parent_page_types = ["home.HomePage"]
+    parent_page_types = ("home.HomePage",)
 
     # Specify that only blog pages can be children of this blogindex page
-    subpage_types = ["BlogPage"]
+    subpage_types = ("BlogPage",)
 
     class Meta:
         verbose_name = "blogindexpage"
@@ -165,13 +166,13 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
                     "@type": "ListItem",
                     "position": 1,
                     "name": "Inicio",
-                    "item": "https://ventanita.com.ar/",
+                    "item": f"{settings.BASE_URI}",
                 },
                 {
                     "@type": "ListItem",
                     "position": 2,
                     "name": "Blog",
-                    "item": "https://ventanita.com.ar/blog/",
+                    "item": f"{settings.BASE_URI}/blog/",
                 },
             ],
         }
@@ -264,12 +265,10 @@ class BlogPage(BasePage):
         ),
     ]
 
-    promote_panels = [
-        MultiFieldPanel(BasePage.promote_panels, "Common page configuration"),
-    ]
+    promote_panels = (MultiFieldPanel(BasePage.promote_panels, "Common page configuration"),)
 
     # Specifies parent to BlogPage as being BlogIndexPages
-    parent_page_types = ["blog.BlogIndexPage"]
+    parent_page_types = ("blog.BlogIndexPage",)
 
     # Specifies what content types can exist as children of BlogPage.
     # Empty list means that no child content types are allowed.
@@ -376,17 +375,17 @@ class BlogPage(BasePage):
             },
             "headline": self.title,
             "description": self.search_description,
-            "image": f"https://ventanita.com.ar{image_url}",
+            "image": f"{settings.BASE_URI}{image_url}",
             "author": {
                 "@type": "Person",
                 "name": author_name,
             },
             "publisher": {
                 "@type": "Organization",
-                "name": "Ventanita",
+                "name": f"{settings.SITE_NAME}",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://ventanita.com.ar/static/assets/img/logos/ventanita.avif",
+                    "url": f"{settings.BASE_URI}/static/assets/img/logos/ventanita.avif",
                 },
             },
             "datePublished": date_published.isoformat(),
@@ -404,13 +403,13 @@ class BlogPage(BasePage):
                     "@type": "ListItem",
                     "position": 1,
                     "name": "Home",
-                    "item": "https://ventanita.com.ar/",
+                    "item": f"{settings.BASE_URI}",
                 },
                 {
                     "@type": "ListItem",
                     "position": 2,
                     "name": "Blog",
-                    "item": "https://ventanita.com.ar/blog/",
+                    "item": f"{settings.BASE_URI}/blog/",
                 },
                 {
                     "@type": "ListItem",
@@ -426,10 +425,7 @@ class BlogPageGalleryImage(Orderable):
     page = ParentalKey(BlogPage, on_delete=models.CASCADE, related_name="gallery_images")
     image = models.ForeignKey("wagtailimages.Image", on_delete=models.CASCADE, related_name="+")
     caption = models.CharField(blank=True, max_length=250)
-    panels = [
-        FieldPanel("image"),
-        FieldPanel("caption"),
-    ]
+    panels = (FieldPanel("image"), FieldPanel("caption"))
 
     class Meta:
         verbose_name = "blogpagegallery"
@@ -441,10 +437,7 @@ class BlogPageRelatedLink(Orderable):
     name = models.CharField(max_length=255)
     url = models.URLField()
 
-    panels = [
-        FieldPanel("name"),
-        FieldPanel("url"),
-    ]
+    panels = (FieldPanel("name"), FieldPanel("url"))
 
     class Meta:
         verbose_name = "blogpagerelatedlink"
@@ -458,11 +451,7 @@ class BlogCategory(models.Model):
     name = models.CharField(_("name"), max_length=255)
     slug = models.SlugField(_("slug"), max_length=255)
     icon = models.CharField(_("icon"), max_length=20, help_text="Only name of the icon")
-    panels = [
-        FieldPanel("name"),
-        FieldPanel("slug"),
-        FieldPanel("icon"),
-    ]
+    panels = (FieldPanel("name"), FieldPanel("slug"), FieldPanel("icon"))
 
     class Meta:
         verbose_name = "blogcategory"

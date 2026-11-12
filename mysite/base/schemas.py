@@ -1,12 +1,15 @@
+from django.conf import settings
+
+
 organisation_schema = {
     "@context": "http://schema.org",
     "@type": "Organization",
-    "name": "Ventanita",
-    "url": "https://ventanita.com.ar",
-    "logo": "https://ventanita.com.ar/static/assets/img/logos/ventanita.avif",
-    "image": "https://ventanita.com.ar/static/assets/img/logos/ventanita.avif",
+    "name": f"{settings.SITE_ROOT}",
+    "url": f"{settings.BASE_URI}",
+    "logo": f"{settings.BASE_URI}/static/assets/img/logos/ventanita.avif",
+    "image": f"{settings.BASE_URI}/static/assets/img/logos/ventanita.avif",
     "description": "Plataforma de viajes en Argentina 🇦🇷",
-    "email": "support@ventanita.com.ar",
+    "email": f"{settings.DEFAULT_FROM_EMAIL}",
     "telephone": "+54-11-5025-4191",
     "address": {
         "@type": "PostalAddress",
@@ -19,7 +22,7 @@ organisation_schema = {
     "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+54-911-5025-4191",
-        "email": "support@ventanita.com.ar",
+        "email": f"{settings.DEFAULT_FROM_EMAIL}",
     },
     "sameAs": [],
 }

@@ -2,6 +2,7 @@ import json
 import logging
 
 from django import forms
+from django.conf import settings
 from django.db import models
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -46,9 +47,7 @@ class PartnerPageTag(TaggedItemBase):
 
     """
 
-    content_object = ParentalKey(
-        "PartnerPage", related_name="tagged_items", on_delete=models.CASCADE
-    )
+    content_object = ParentalKey("PartnerPage", related_name="tagged_items", on_delete=models.CASCADE)
 
 
 class PartnerIndexPage(BasePage):
@@ -109,13 +108,13 @@ class PartnerIndexPage(BasePage):
                     "@type": "ListItem",
                     "position": 1,
                     "name": "Argentina",
-                    "item": "https://ventanita.com.ar/",
+                    "item": f"{settings.BASE_URI}",
                 },
                 {
                     "@type": "ListItem",
                     "position": 2,
                     "name": "Empresas de Micro",
-                    "item": "https://ventanita.com.ar/empresas-de-bus/",
+                    "item": f"{settings.BASE_URI}/empresas-de-bus/",
                 },
             ],
         }
@@ -137,20 +136,12 @@ class PartnerPage(BasePage):
         related_name="+",
     )
 
-    intro = models.TextField(
-        help_text="A brief introduction about the company", blank=True
-    )
+    intro = models.TextField(help_text="A brief introduction about the company", blank=True)
 
-    daily_departures = models.PositiveIntegerField(
-        _("Daily departures"), blank=True, null=True
-    )
-    countries = models.PositiveIntegerField(
-        _("Countries"), blank=True, null=True
-    )
+    daily_departures = models.PositiveIntegerField(_("Daily departures"), blank=True, null=True)
+    countries = models.PositiveIntegerField(_("Countries"), blank=True, null=True)
     cities = models.PositiveIntegerField(_("Cities"), blank=True, null=True)
-    num_routes = models.PositiveIntegerField(
-        _("Routes"), blank=True, null=True
-    )
+    num_routes = models.PositiveIntegerField(_("Routes"), blank=True, null=True)
 
     hero_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -168,13 +159,9 @@ class PartnerPage(BasePage):
         collapsed=True,
     )
 
-    body = StreamField(
-        BaseStreamBlock(), verbose_name="Page body", blank=True, collapsed=True
-    )
+    body = StreamField(BaseStreamBlock(), verbose_name="Page body", blank=True, collapsed=True)
 
-    tags = ClusterTaggableManager(
-        through="partners.PartnerPageTag", blank=True
-    )
+    tags = ClusterTaggableManager(through="partners.PartnerPageTag", blank=True)
 
     amenities = ParentalManyToManyField("partners.Amenity", blank=True)
 
@@ -334,8 +321,20 @@ class PartnerPage(BasePage):
         bus operator in the organisation schema markup with aggregated Ratings.
         """
 
-        image = self.logo or self.listing_image or self.social_image
+        logo = self.logo or self.listing_image or self.social_image
+        logo_url = logo.file.url if logo else ""
+
+        image = self.hero_image or self.listing_image or self.social_image
         image_url = image.file.url if image else ""
+
+        contact = {}
+        if self.contact:
+            contact.update(self.contact.raw_data[0]["value"])
+
+        email = contact.get("email", settings.DEFAULT_FROM_EMAIL)
+        telephone = contact.get("phone", "")
+        address = contact.get("address", "")
+        website = contact.get("website", self.full_url)
 
         if self.ratings:
             obj = self.ratings[0].value
@@ -347,25 +346,18 @@ class PartnerPage(BasePage):
         org_schema = {
             "@context": "https://schema.org",
             "@type": "Organization",
+            "@id": f"{self.full_url}#organization",
             "name": self.title,
-            "url": self.full_url,
-            "logo": f"https://ventanita.com.ar{image_url}",
-            "image": f"https://ventanita.com.ar{image_url}",
+            "url": website,
+            "logo": f"{settings.BASE_URI}{logo_url}",
+            "image": f"{settings.BASE_URI}{image_url}",
             "description": self.search_description,
-            "email": "support@ventanita.com.ar",
-            "telephone": "+54-11-5025-4191",
+            "email": email,
+            "telephone": telephone,
             "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "Uspallata 471",
-                "addressLocality": "Buenos Aires",
+                "streetAddress": address,
                 "addressCountry": "AR",
-                "addressRegion": "CABA",
-                "postalCode": "1143",
-            },
-            "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+54-911-5025-4191",
-                "email": "support@ventanita.com.ar",
             },
             "sameAs": [],
             "aggregateRating": {
@@ -389,12 +381,12 @@ class PartnerPage(BasePage):
                     "@type": "ListItem",
                     "position": 1,
                     "name": "Argentina",
-                    "item": "https://ventanita.com.ar/",
+                    "item": f"{settings.BASE_URI}",
                 },
                 {
                     "@type": "ListItem",
                     "position": 2,
-                    "name": "Empresas de Bus",
+                    "name": "Empresas de micro",
                     "item": self.get_parent().full_url,
                 },
                 {
@@ -409,15 +401,11 @@ class PartnerPage(BasePage):
 
 
 class PartnerPageGalleryImage(Orderable):
-    page = ParentalKey(
-        "PartnerPage", on_delete=models.CASCADE, related_name="gallery_images"
-    )
-    image = models.ForeignKey(
-        "wagtailimages.Image", on_delete=models.CASCADE, related_name="+"
-    )
+    page = ParentalKey("PartnerPage", on_delete=models.CASCADE, related_name="gallery_images")
+    image = models.ForeignKey("wagtailimages.Image", on_delete=models.CASCADE, related_name="+")
     caption = models.CharField(blank=True, max_length=250)
 
-    panels = ["image", "caption"]
+    panels = ("image", "caption")
 
     class Meta:
         verbose_name = "partnerpagegallery"
@@ -438,10 +426,10 @@ class Amenity(models.Model):
         null=True,
     )
 
-    panels = [
+    panels = (
         FieldPanel("name"),
         FieldPanel("icon_name"),
-    ]
+    )
 
     class Meta:
         verbose_name = "Amenity"

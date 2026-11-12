@@ -20,12 +20,8 @@ class PartnerIndexPageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.root = Page.get_first_root_node()
-        cls.home_page = HomePage(
-            title="Home", hero_text="You can do it", hero_cta="Learn More"
-        )
-        cls.partner_index_page = PartnerIndexPage(
-            title="Empresas de bus", slug="empresas-de-bus"
-        )
+        cls.home_page = HomePage(title="Home", hero_text="You can do it", hero_cta="Learn More")
+        cls.partner_index_page = PartnerIndexPage(title="Empresas de bus", slug="empresas-de-bus")
 
         # Build page hierarchy
         cls.root.add_child(instance=cls.home_page)
@@ -83,9 +79,7 @@ class PartnerPageTests(WagtailPageTestCase):
             hero_text="You can do it",
             hero_cta="Learn More",
         )
-        cls.partner_index_page = PartnerIndexPage(
-            title="Empresas de bus", slug="empresas-de-bus"
-        )
+        cls.partner_index_page = PartnerIndexPage(title="Empresas de bus", slug="empresas-de-bus")
         cls.partner_page = PartnerPage(title="Cata International", slug="cata")
 
         # Build page hierarchy
@@ -113,22 +107,14 @@ class PartnerPageTests(WagtailPageTestCase):
             {
                 "title": "Cata International",
                 "body": streamfield([("text", "Lorem ipsum dolor sit amet")]),
-                "destinations": streamfield(
-                    [("text", "Lorem ipsum dolor sit amet")]
-                ),
+                "destinations": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "info": streamfield([("text", "Lorem ipsum dolor sit amet")]),
-                "routes": streamfield(
-                    [("text", "Lorem ipsum dolor sit amet")]
-                ),
+                "routes": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "faq": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "links": streamfield([("text", "Lorem ipsum dolor sit amet")]),
-                "contact": streamfield(
-                    [("text", "Lorem ipsum dolor sit amet")]
-                ),
+                "contact": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 # TODO: this is not correct
-                "ratings": streamfield(
-                    [("text", "Lorem ipsum dolor sit amet")]
-                ),
+                "ratings": streamfield([("text", "Lorem ipsum dolor sit amet")]),
             }
         )
 
@@ -146,14 +132,10 @@ class PartnerPageTests(WagtailPageTestCase):
 
     @skip("Not sure how to correctly pass post data (ratings)")
     def test_page_is_previewable(self):
-        self.assertPageIsPreviewable(
-            self.partner_page, post_data=self.post_data
-        )
+        self.assertPageIsPreviewable(self.partner_page, post_data=self.post_data)
 
     def test_editability(self):
-        self.assertPageIsEditable(
-            self.partner_index_page, post_data=self.post_data
-        )
+        self.assertPageIsEditable(self.partner_index_page, post_data=self.post_data)
 
     def test_can_create_partner_page_under_partnerindex_page(self):
         self.assertCanCreateAt(PartnerIndexPage, PartnerPage)

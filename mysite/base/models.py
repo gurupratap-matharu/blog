@@ -1,6 +1,8 @@
 import logging
 from os.path import splitext
+from typing import ClassVar
 
+from django.conf import settings
 from django.contrib import messages
 from django.db import models
 from django.forms import widgets
@@ -318,15 +320,18 @@ class BasePage(SocialFields, ListingFields, Page):
         image = self.listing_image or self.social_image
         image_url = image.file.url if image else ""
 
+        if not image_url:
+            return
+
         image_schema = {
             "@context": "https://schema.org",
             "@type": "ImageObject",
-            "contentUrl": f"https://ventanita.com.ar{image_url}",
-            "license": "https://ventanita.com.ar/condiciones-generales/",
-            "acquireLicensePage": "https://ventanita.com.ar/contact/",
+            "contentUrl": f"{settings.BASE_URI}{image_url}",
+            "license": f"{settings.BASE_URI}/condiciones-generales/",
+            "acquireLicensePage": f"{settings.BASE_URI}/contact/",
             "creditText": self.listing_title or self.social_text,
-            "creator": {"@type": "Person", "name": "Ventanita"},
-            "copyrightNotice": "Ventanita",
+            "creator": {"@type": "Person", "name": f"{settings.SITE_NAME}"},
+            "copyrightNotice": f"{settings.SITE_NAME}",
         }
 
         return image_schema
@@ -340,15 +345,16 @@ class BasePage(SocialFields, ListingFields, Page):
 
         org = {
             "@type": "Organization",
-            "name": "Ventanita",
-            "url": "https://ventanita.com.ar",
+            "@id": f"{settings.BASE_URI}/#organization",
+            "name": f"{settings.SITE_NAME}",
+            "url": f"{settings.BASE_URI}",
         }
 
         article_schema = {
             "@context": "https://schema.org",
             "@type": "Article",
             "headline": self.title,
-            "image": [f"https://ventanita.com.ar{image_url}"],
+            "image": [f"{settings.BASE_URI}{image_url}"],
             "datePublished": date_published.isoformat(),
             "dateModified": date_modified.isoformat(),
             "author": [org],
@@ -594,7 +600,7 @@ class FormPage(AbstractEmailForm):
 
                 else:
                     # remove the value from the data
-                    logger.warn("image_file_data is None...")
+                    logger.warning("image_file_data is None...")
                     del cleaned_data[name]
 
         submission = self.get_submission_class().objects.create(form_data=cleaned_data, page=self)
@@ -616,9 +622,9 @@ class FormPage(AbstractEmailForm):
         # if a form_submission instance is available, append the id to URL
         # when previewing landing page, there will not be a form_submission instance
         if form_submission:
-            url += "?id=%s" % form_submission.id
+            url += f"?id={form_submission.id}"
 
-        messages.success(request, "Message sent successfully! 🙌")
+        messages.success(request, "Message sent successfully.")
         return redirect(url, permanent=False)
 
     def canonical_url(self):
@@ -633,7 +639,7 @@ class GenericSettings(ClusterableModel, BaseGenericSetting):
     youtube_url = models.URLField(verbose_name="Youtube URL", blank=True)
     organisation_url = models.URLField(verbose_name="Organisation URL", blank=True)
 
-    panels = [
+    panels: ClassVar = [
         MultiFieldPanel(
             [
                 FieldPanel("twitter_url"),
@@ -655,15 +661,13 @@ class SiteSettings(BaseSiteSetting):
         default="Book Bus tickets",
     )
 
-    panels = [
-        FieldPanel("title_suffix"),
-    ]
+    panels = (FieldPanel("title_suffix"),)
 
 
 @register_setting(icon="placeholder")
 class GenericImportantPages(BaseGenericSetting):
     # Fetch these pages when looking up GenericImportantPages for or a site
-    select_related = ["contact_page", "feedback_page", "article_feedback_page"]
+    select_related: ClassVar = ["contact_page", "feedback_page", "article_feedback_page"]
 
     contact_page = models.ForeignKey(
         "wagtailcore.Page",
@@ -686,7 +690,7 @@ class GenericImportantPages(BaseGenericSetting):
         related_name="+",
     )
 
-    panels = [
+    panels: ClassVar = [
         FieldPanel("contact_page"),
         FieldPanel("feedback_page"),
         FieldPanel("article_feedback_page"),
