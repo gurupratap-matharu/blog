@@ -256,25 +256,47 @@
         </figure>
       </div>
     </div>
-    <h2>Progress Bar</h2>
-    <div class="progress mb-3"
-         role="progressbar"
-         aria-label="Example 1px high"
-         aria-valuenow="25"
-         aria-valuemin="0"
-         aria-valuemax="100"
-         style="height: 1px">
-      <div class="progress-bar" style="width: 25%"></div>
-    </div>
-    <div class="progress mb-3"
-         role="progressbar"
-         aria-label="Example 20px high"
-         aria-valuenow="25"
-         aria-valuemin="0"
-         aria-valuemax="100"
-         style="height: 20px">
-      <div class="progress-bar bg-dark" style="width: 25%"></div>
-    </div>
+    <section class="py-3">
+      <h2>Horizontal Slider</h2>
+      <h5>Bus overview</h5>
+      <p class="text-sm">Useful information for finding cheap flights from Buenos Aires to Miami and booking your next trip</p>
+      <div class="d-flex flex-row overflow-x-auto">
+        {% for i in '0123456789'|make_list %}
+          <div class="card bg-light-subtle h-100" style="min-width:600px;">
+            <div class="card-body">
+              <p class="fw-bold">{{ forloop.counter }} Más económico</p>
+              <div class="row">
+                <div class="col-md"><span class="fs-3">ARS 30.000</span></div>
+                <div class="col-md">
+                  <small>El colectivo más económico de Buenos Aires a Mendoza sale ARS 30.000</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+    <section class="py-3">
+      <h2>Progress Bar</h2>
+      <div class="progress mb-3"
+           role="progressbar"
+           aria-label="Example 1px high"
+           aria-valuenow="25"
+           aria-valuemin="0"
+           aria-valuemax="100"
+           style="height: 1px">
+        <div class="progress-bar" style="width: 25%"></div>
+      </div>
+      <div class="progress mb-3"
+           role="progressbar"
+           aria-label="Example 20px high"
+           aria-valuenow="25"
+           aria-valuemin="0"
+           aria-valuemax="100"
+           style="height: 20px">
+        <div class="progress-bar bg-dark" style="width: 25%"></div>
+      </div>
+    </section>
     <h2>Forms</h2>
     <form class="row g-3">
       <div class="col-md-6">
