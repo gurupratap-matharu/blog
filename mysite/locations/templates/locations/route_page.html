@@ -1,0 +1,448 @@
+{% extends "layouts/base.html" %}
+
+{% load static i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
+
+{% block extra_css %}
+  <style>
+    [data-bs-theme="light"] .chart-dark,
+    :root:not([data-bs-theme="dark"]) .chart-dark {
+      display: none !important;
+    }
+
+    [data-bs-theme="dark"] .chart-light {
+      display: none !important;
+    }
+  </style>
+{% endblock extra_css %}
+
+{% block content %}
+  <article class="container"
+           data-bs-spy="scroll"
+           data-bs-target="#scrollnav"
+           data-bs-root-margin="0px 0px -40%"
+           data-bs-smooth-scroll="true"
+           tabindex="0">
+    {% breadcrumbs %}
+    <h1 class="fs-2 mb-0">{{ page.title }}</h1>
+    <section>
+      <div class="row g-0">
+        {% if route.min_price %}
+          <div class="col-sm-auto">
+            <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#coin" />
+            </svg>
+            <span class="text-sm">{% translate "Precio min." %} ARS {{ route.min_price|floatformat:"0" }}</span>
+          </div>
+        {% endif %}
+        {% if route.distance %}
+          <div class="col-sm-auto">
+            <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
+            </svg>
+            <span class="text-sm">
+              <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#signpost" />
+              </svg>
+              {% translate "Distancia" %} {{ route.distance|floatformat:"0" }} Km
+            </span>
+          </div>
+          <div class="col-sm-auto">
+            <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
+            </svg>
+            <span class="text-sm text-success">
+              <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+                <use xlink:href="{% static 'assets/icons/icons.svg' %}#leaf" />
+              </svg>
+              {% translate "Emisiones de CO₂" %}
+            </span>
+            <span class="text-sm ms-1">{{ route.get_carbon_emissions }} Kg</span>
+          </div>
+        {% endif %}
+        <div class="col-sm">
+          <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
+            <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
+          </svg>
+          <a class="text-sm" href="{{ route.get_maps_directions_url }}" target="_blank">
+            <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#globe-americas" />
+            </svg>
+          {% translate "Ver mapa" %}</a>
+        </div>
+      </div>
+    </section>
+    {% if page.province %}
+      <section class="py-3">
+        <div class="row align-items-center">
+          <div class="col-3 col-lg-1">
+            {% with "assets/img/flags/"|add:page.province|add:".avif" as flag %}
+              <img src="{% static flag %}" class="img-fluid" alt="{{ page.get_province_display }}" />
+            {% endwith %}
+          </div>
+          <div class="col-auto">
+            <p class="text-body-secondary small mb-0">{% translate "Departamento" %}</p>
+            <span>{{ page.get_province_display }}</span>
+          </div>
+        </div>
+      </section>
+    {% endif %}
+    <section class="sticky-top bg-adaptive">
+      <ul class="nav nav-underline border-bottom text-sm" id="scrollnav">
+        <li class="nav-item">
+          <a class="nav-link" href="#horarios">{% translate "Horarios" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#cifras">{% translate "Cifras" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#info">{% translate "Info" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#companies">{% translate "Empresas" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#faq">{% translate "Faq" %}</a>
+        </li>
+      </ul>
+    </section>
+    {% if trips %}
+      <section class="py-3" id="horarios">
+        <h2 class="fs-5">{% translate "Próximas salidas" %}</h2>
+        {% if page.intro %}
+          <p class="text-sm">{{ page.intro }}</p>
+        {% endif %}
+        <ul class="list-group">
+          {% for trip in trips %}
+            {# Trip card #}
+            <li class="list-group-item">
+              <div class="row align-items-center">
+                <div class="col-12 col-md-3">
+                  <img class="img-fluid"
+                       width="90"
+                       height="30"
+                       loading="lazy"
+                       src="{{ trip.company.logo_url }}"
+                       alt="Logo of {{ trip.company.name }}" />
+                  <p class="text-body-secondary text-xs mb-1">{{ trip.company.name }}</p>
+                </div>
+                <div class="col-12 col-md-3">
+                  <div class="row">
+                    <div class="col-5">
+                      <span class="h5">{{ trip.local_departure|time }}</span>
+                      <p class="text-body-secondary text-xs mb-1">{{ route.origin }}</p>
+                    </div>
+                    <svg class="col-2 align-self-center" width="16" height="16" fill="CurrentColor" aria-hidden="true">
+                      <use xlink:href="{% static 'assets/icons/icons.svg' %}#arrow-right" />
+                    </svg>
+                    <div class="col-5 text-end">
+                      <span class="h5">
+                        {{ trip.local_arrival|time }}
+                        {% if trip.local_arrival.time < trip.local_departure.time %}<sup>+1</sup>{% endif %}
+                      </span>
+                      <p class="text-body-secondary text-xs mb-1">{{ route.destination }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-2 text-center">
+                  <span class="text-xs">{{ trip.get_duration_display }}</span>
+                  <span class="d-none d-md-block text-body-secondary text-xs">{{ route.origin.code }}-{{ route.destination.code }}</span>
+                </div>
+                <div class="col-6 col-md-2">
+                  <span class="text-xs text-uppercase">{{ trip.get_category_a_display }}</span>
+                </div>
+                <div class="col-6 col-md-2 text-end text-md-start">
+                  <span class="text-xs">ARS</span>
+                  <span class="h6">{{ trip.price_a|floatformat:"0" }}</span>
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+        <p class="text-body-secondary text-sm mt-2 mb-1">
+          {% translate "Los horarios son estimados y pueden contener errores." %}
+          <a data-bs-toggle="collapse"
+             href="#collapseDisclaimer"
+             role="button"
+             aria-expanded="false"
+             aria-controls="collapseDisclaimer">{% translate "¿Por que? Leer más" %}</a>
+        </p>
+        <p class="text-body-secondary text-sm">{% translate "Última actualización hace" %} {{ route.updated|timesince }}</p>
+        <div class="collapse" id="collapseDisclaimer">
+          <div class="alert alert-success alert-dismissible fade show text-sm" role="alert">
+            {% translate "Los horarios se actualiza a partir de datos públicos proporcionados por las empresas de micros. Pueden sufrir cambios de última hora sin previo aviso." %}
+            <hr />
+            <p class="d-inline-flex gap-3">
+              <a class="alert-link small"
+                 data-bs-toggle="collapse"
+                 href="#collapseDisclaimer"
+                 role="button"
+                 aria-controls="collapseDisclaimer">{% translate "Okay Entendido" %}</a>
+              <a class="alert-link small" href="/contact/">{% translate "Me quedo una duda" %}</a>
+            </p>
+          </div>
+        </div>
+      </section>
+    {% endif %}
+    {# charts #}
+    <section class="py-3" id="cifras">
+      <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+          <div class="card chart border-0 shadow-sm h-100">
+            <div class="card-body p-3 p-md-4">
+              <h2 class="fs-5 mb-4">{% translate "¿Qué precios son habituales entre las empresas?" %}</h2>
+              <h2 class="h6">{% translate "Precio de pasajes" %}</h2>
+              <ul class="list-unstyled d-grid gap-3 mb-3">
+                {% for key, value, pct in price_chart %}
+                  <li>
+                    <div class="d-flex justify-content-between gap-2 small mb-1">
+                      <span class="fw-medium">${{ key }}</span>
+                      <span class="font-monospace">{{ value }}<span class="text-body-secondary">({{ pct }}%)</span></span>
+                    </div>
+                    {# djlint:off #}
+                    <div class="progress"
+                         aria-label="Hay {{ value }} salidas con el precio de ${{ key }}"
+                         aria-valuenow="{{ pct }}"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         style="height: 10px">
+                      <div class="progress-bar rounded-3" style="width: {{ pct }}%"></div>
+                    </div>
+                    {# djlint:on #}
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="d-flex justify-content-center text-body-secondary font-monospace text-sm" aria-hidden="true">
+                {% translate "Cantidad de salidas" %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card chart border-0 shadow-sm h-100">
+            <div class="card-body p-3 p-md-4">
+              <h2 class="fs-5 mb-4">¿A qué hora salen los micros de {{ route.origin }} a {{ route.destination }}?</h2>
+              <h2 class="h6">{% translate "Franja horaria" %}</h2>
+              <ul class="list-unstyled d-grid gap-3 mb-3">
+                {% for key, value, pct in departure_chart %}
+                  <li>
+                    <div class="d-flex justify-content-between gap-2 small mb-1">
+                      <span class="fw-medium">{{ key }}</span>
+                      <span class="font-monospace">{{ value }}<span class="text-body-secondary">({{ pct }}%)</span></span>
+                    </div>
+                    {# djlint:off #}
+                    <div class="progress"
+                         aria-label="Hay {{ value }} salidas en la hora de {{ key }}"
+                         aria-valuenow="{{ pct }}"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         style="height: 10px">
+                      <div class="progress-bar rounded-3" style="width: {{ pct }}%"></div>
+                    </div>
+                    {# djlint:on #}
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="d-flex justify-content-center text-body-secondary font-monospace text-sm" aria-hidden="true">
+                {% translate "Cantidad de salidas" %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {# Route stats #}
+    {% if route %}
+      <section class="py-3" id="info">
+        <h2 class="fs-5">Guía de ómnibus</h2>
+        <p class="text-sm">
+          Información útil para encontrar colectivos de {{ route.origin }} a {{ route.destination }} y planear tu próximo viaje.
+        </p>
+        {# first row #}
+        <div class="row row-cols-1 row-cols-md-2 g-3 mb-3">
+          {% if route.min_price %}
+            <div class="col">
+              <div class="card bg-light-subtle h-100">
+                <div class="card-body">
+                  <p class="fw-bold">{% translate "Más económico" %}</p>
+                  <div class="row">
+                    <div class="col-md"><span class="fs-3">$ {{ route.min_price|floatformat:"0" }}</span></div>
+                    <div class="col-md">
+                      <small>El colectivo más económico de {{ route.origin }} a {{ route.destination }} sale ARS {{ route.min_price|floatformat:"0" }}.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if route.min_duration %}
+            <div class="col">
+              <div class="card bg-light-subtle h-100">
+                <div class="card-body">
+                  <p class="fw-bold">{% translate "Más rapidó" %}</p>
+                  <div class="row">
+                    <div class="col-md"><span class="fs-3">{{ route.get_min_duration_display }}</span></div>
+                    <div class="col-md">
+                      <small>
+                        El colectivo más rapidó de {{ route.origin }} a {{ route.destination }} tarda {{ route.get_min_duration_display }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        {# second row #}
+        <div class="row row-cols-2 row-cols-md-4 g-3">
+          {% if route.num_departures %}
+            <div class="col">
+              <div class="card bg-light-subtle h-100">
+                <div class="card-body">
+                  <p class="fw-bold">{% translate "Buses por día" %}</p>
+                  <div class="row">
+                    <div class="col-md"><span class="fs-3">{{ route.num_departures }}</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if route.num_companies %}
+            <div class="col">
+              <div class="card bg-light-subtle h-100">
+                <div class="card-body">
+                  <p class="fw-bold">{% translate "Operadores" %}</p>
+                  <div class="row">
+                    <div class="col-md"><span class="fs-3">{{ route.num_companies }}</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if route.first_departure %}
+            <div class="col">
+              <div class="card bg-light-subtle h-100">
+                <div class="card-body">
+                  <p class="fw-bold">{% translate "Primera salida" %}</p>
+                  <div class="row">
+                    <div class="col-md"><span class="fs-3">{{ route.first_departure }}</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if route.last_departure %}
+            <div class="col">
+              <div class="card bg-light-subtle h-100">
+                <div class="card-body">
+                  <p class="fw-bold">{% translate "Última salida" %}</p>
+                  <div class="row">
+                    <div class="col-md"><span class="fs-3">{{ route.last_departure }}</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </section>
+    {% endif %}
+    {% if page.body %}
+      <section class="py-3" id="body">
+        {{ page.body }}
+      </section>
+    {% endif %}
+    {% if page.companies %}
+      <section class="py-3" id="companies">
+        {{ page.companies }}
+      </section>
+    {% endif %}
+    <section class="py-3" id="terminals">
+      <div class="row row-cols-1 row-cols-md-2">
+        <div class="col mb-3">{{ page.terminals_origin }}</div>
+        <div class="col">{{ page.terminals_destination }}</div>
+      </div>
+    </section>
+    {% if page.faq %}
+      <section class="py-3" id="faq">
+        {{ page.faq }}
+      </section>
+    {% endif %}
+    {% if page.featured %}
+      <section class="py-3" id="featured">
+        {{ page.featured }}
+      </section>
+    {% endif %}
+    {% if page.links %}
+      <section class="py-3" id="links">
+        {{ page.links }}
+      </section>
+    {% endif %}
+    <section class="py-3">
+      {% include "includes/mission.html" %}
+    </section>
+    <section class="py-3">
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <p class="fw-bold">{% translate "¿Te fue útil esta página?" %}</p>
+        </div>
+        <div class="col-md-auto">
+          <button class="btn bg-danger-subtle text-danger-emphasis border border-danger-subtle me-2"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#feedbackFail"
+                  aria-expanded="false"
+                  aria-controls="feedbackFail">
+            <svg class="bi" width="16" height="16" fill="CurrentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#hand-thumbs-down" />
+            </svg>
+            {% translate "No me sirvió" %}
+          </button>
+          <button class="btn bg-success-subtle text-success-emphasis border border-success-subtle"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#feedbackSuccess"
+                  aria-expanded="false"
+                  aria-controls="feedbackSuccess">
+            <svg class="bi" width="16" height="16" fill="CurrentColor" aria-hidden="true">
+              <use xlink:href="{% static 'assets/icons/icons.svg' %}#hand-thumbs-up" />
+            </svg>
+            {% translate "Sí, me fue útil" %}
+          </button>
+        </div>
+      </div>
+      <div class="collapse" id="feedbackFail">
+        <div class="alert alert-light" role="alert">
+          <div class="row">
+            <div class="col-sm-6 py-3">
+              <p class="fw-bold">{% translate "¿En qué aspectos esta página no es útil?" %}</p>
+              <form method="post" action="{% url 'base:page-feedback' %}">
+                {% csrf_token %}
+                {{ page_feedback_form }}
+                <button type="submit" class="btn bg-gradient-primary">{% translate "Enviar" %}</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="collapse" id="feedbackSuccess">
+        <div class="alert alert-light" role="alert">
+          <div class="row">
+            <div class="col-sm-6">
+              <p class="fw-bold">{% translate "Nos alegra que te guste." %}</p>
+              <small>{% translate "Si tienes alguna idea o sugerencia sobre cómo podemos hacerlo más útil, escríbenos aquí." %}</small>
+              <form method="post" action="{% url 'base:suggestion' %}">
+                {% csrf_token %}
+                {{ suggestion_form }}
+                <button type="submit" class="btn bg-gradient-primary">{% translate "Enviar" %}</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+  {% include "includes/seo_links.html" %}
+{% endblock content %}
+
+{% block extra_js %}
+  {# djlint:off #}<script type="application/ld+json">{{ page.ld_entity }}</script>{# djlint:on #}
+{% endblock extra_js %}

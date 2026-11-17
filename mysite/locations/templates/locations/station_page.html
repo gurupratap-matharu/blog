@@ -41,7 +41,7 @@
               <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
             </svg>
             <span class="text-sm text-body-secondary">Tel: <a class="icon-link"
-    href="tel:{{ page.phone }}">{{ page.phone }}
+                                                              href="tel:{{ page.phone }}">{{ page.phone }}
               <svg width="16" height="16" fill="currentColor" aria-hidden="true">
                 <use xlink:href="{% static 'assets/icons/icons.svg' %}#telephone-outbound" />
               </svg>
@@ -57,7 +57,7 @@
         </div>
         <div class="col-sm-auto">
           <a class="d-none d-sm-inline" href="#" type="button" id="share">
-            <svg width="24" height="24" fill="currentColor" aria-hidden="true">
+            <svg width="16" height="16" fill="currentColor" aria-hidden="true">
               <use xlink:href="{% static 'assets/icons/icons.svg' %}#share" />
             </svg>
           </a>
@@ -71,7 +71,7 @@
         <div class="row align-items-center">
           <div class="col-3 col-lg-2">
             {% with "assets/img/flags/"|add:page.province|add:".avif" as flag %}
-              <img src="{% static flag %}" class="img-fluid border" alt="{{ page.get_province_display }}" />
+              <img src="{% static flag %}" class="img-fluid" alt="{{ page.get_province_display }}" />
             {% endwith %}
           </div>
           <div class="col-auto">
@@ -218,7 +218,7 @@
     <section class="py-3">
       <h2 class="fs-5 pb-3">Explora con Ventanita</h2>
       <p>
-        En <a href="https://ventanita.com.ar" class="fw-bold">Ventanita</a> podes buscar y
+        En <a href="{{ site_root }}" class="fw-bold">{{ site_name }}</a> podes buscar y
         comparar los mejores precios de micros a {{ page.title }}, así como también obtener información detallada sobre las rutas y los horarios de partida. Averigua los promociones vigentes y comience a disfrutar de su viaje sin complicaciones.
       </p>
       <ul>

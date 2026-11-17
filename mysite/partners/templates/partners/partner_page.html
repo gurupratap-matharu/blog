@@ -33,8 +33,8 @@
               <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
                 <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
               </svg>
-              <span class="text-sm text-body-secondary">Tel: <a class="icon-link"
-    href="tel:{{ contact.phone }}">{{ contact.phone }}
+              <span class="text-sm text-body-secondary">
+                Tel: <a class="icon-link" href="tel:{{ contact.phone }}">{{ contact.phone }}
                 <svg width="16" height="16" fill="currentColor" aria-hidden="true">
                   <use xlink:href="{% static 'assets/icons/icons.svg' %}#telephone-outbound" />
                 </svg>
@@ -42,13 +42,13 @@
               <svg width="24" height="24" fill="currentColor" aria-hidden="true">
                 <use xlink:href="{% static 'assets/icons/icons.svg' %}#dot" />
               </svg>
-              <span class="text-sm"><a class="icon-link text-success"
-   href="https://wa.me/{{ contact.whatsapp }}"
-   target="_blank">Whatsapp
-                <svg width="16" height="16" fill="currentColor" aria-hidden="true">
-                  <use xlink:href="{% static 'assets/icons/icons.svg' %}#whatsapp" />
-                </svg>
-              </a></span>
+              <span class="text-sm">
+                <a class="icon-link text-success" href="https://wa.me/{{ contact.whatsapp }}" target="_blank">Whatsapp
+                  <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <use xlink:href="{% static 'assets/icons/icons.svg' %}#whatsapp" />
+                  </svg>
+                </a>
+              </span>
             </div>
             <div class="col-sm d-none d-sm-inline">
               <svg class="d-none d-sm-inline" width="24" height="24" fill="currentColor" aria-hidden="true">
@@ -97,20 +97,29 @@
           {% image page.logo original format-avif class="img-fluid" %}
         </div>
         <div class="col-8 col-md-8 ps-3">
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center mb-2">
             <h2 class="fs-5 mb-0 me-1">{{ page.title }}</h2>
             <svg class="bi" width="24" height="24" fill="currentColor" aria-hidden="true">
               <use xlink:href="{% static 'assets/icons/icons.svg' %}#blue-check" />
             </svg>
           </div>
-          <ul class="text-sm list-unstyled">
-            <li>
-              <span class="text-body-secondary">{% translate "Salidas" %}</span> {{ page.daily_departures }} • <span class="text-body-secondary">{% translate "Rutas" %}</span> {{ page.num_routes }}
-            </li>
-            <li>
-              <span class="text-body-secondary">{% translate "Destinos" %}</span> {{ page.cities }} • <span class="text-body-secondary">{% translate "Países" %}</span> {{ page.countries }}
-            </li>
-          </ul>
+          <div class="container-fluid ps-0">
+            <div class="row text-sm">
+              <div class="col-6 col-sm-2">
+                <span class="text-body-secondary">{% translate "Salidas" %}</span> {{ page.daily_departures }}
+              </div>
+              <div class="col-6 col-sm-2">
+                <span class="text-body-secondary">{% translate "Rutas" %}</span> {{ page.num_routes }}
+              </div>
+              <div class="w-100"></div>
+              <div class="col-6 col-sm-2">
+                <span class="text-body-secondary">{% translate "Destinos" %}</span> {{ page.cities }}
+              </div>
+              <div class="col-6 col-sm-2">
+                <span class="text-body-secondary">{% translate "Países" %}</span> {{ page.countries }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-6 col-md-2 mt-3 mt-md-0">

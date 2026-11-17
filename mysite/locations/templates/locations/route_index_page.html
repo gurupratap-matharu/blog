@@ -1,0 +1,60 @@
+{% extends "layouts/base.html" %}
+
+{% load static i18n wagtailcore_tags wagtailimages_tags navigation_tags %}
+
+{% block content %}
+  <article class="container">
+    {% breadcrumbs %}
+    <h1 class="fs-2">{{ page.title }}</h1>
+    {% if page.intro %}
+      <p class="text-body-secondary">{{ page.intro }}</p>
+    {% endif %}
+    {% if page.children %}
+      <section class="row row-cols-1 row-cols-md-2 py-3">
+        {% for route in page.children %}
+          <div class="col">
+            <a href="{% pageurl route %}">{{ route }}</a>
+          </div>
+        {% endfor %}
+      </section>
+    {% endif %}
+    {% if page.body %}
+      <section class="py-3">
+        {{ page.body }}
+      </section>
+    {% endif %}
+    {% if page.companies %}
+      <section class="py-3" id="companies">
+        {{ page.companies }}
+      </section>
+    {% endif %}
+    {% if page.faq %}
+      <section class="py-3" id="faq">
+        {{ page.faq }}
+      </section>
+    {% endif %}
+    {% if page.destinos %}
+      <section class="py-3" id="destinos">
+        {{ page.destinos }}
+      </section>
+    {% endif %}
+    {% if page.routes %}
+      <section class="py-3" id="routes">
+        {{ page.routes }}
+      </section>
+    {% endif %}
+    <section class="py-3 py-md-5">
+      {% include "includes/featured-companies.html" %}
+    </section>
+    <section class="py-3 py-md-5">
+      {% include "includes/mission.html" %}
+    </section>
+  </article>
+  {% include "includes/seo_links.html" %}
+{% endblock content %}
+
+{% block extra_js %}
+  {# djlint:off #}
+    <script type="application/ld+json">{{ page.ld_entity }}</script>
+  {# djlint:on #}
+{% endblock extra_js %}
