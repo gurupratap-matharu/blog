@@ -197,7 +197,7 @@ class HomePage(BasePage):
 
         page_schema = json.dumps(
             {
-                "@context": "http://schema.org",
+                "@context": "https://schema.org",
                 "@graph": [
                     self._get_image_schema(),
                     self._get_faq_schema(),

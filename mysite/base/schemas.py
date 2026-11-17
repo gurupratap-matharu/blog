@@ -2,13 +2,13 @@ from django.conf import settings
 
 
 organisation_schema = {
-    "@context": "http://schema.org",
+    "@context": "https://schema.org",
     "@type": "Organization",
     "name": f"{settings.SITE_ROOT}",
     "url": f"{settings.BASE_URI}",
     "logo": f"{settings.BASE_URI}/static/assets/img/logos/ventanita.avif",
     "image": f"{settings.BASE_URI}/static/assets/img/logos/ventanita.avif",
-    "description": "Plataforma de viajes en Argentina 🇦🇷",
+    "description": "Plataforma de información y comparación de horarios y tarifas de micros de larga distancia en Argentina.",
     "email": f"{settings.DEFAULT_FROM_EMAIL}",
     "telephone": "+54-11-5025-4191",
     "address": {

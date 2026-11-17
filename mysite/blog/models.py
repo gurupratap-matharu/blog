@@ -145,7 +145,7 @@ class BlogIndexPage(RoutablePageMixin, BasePage):
     def ld_entity(self):
         page_schema = json.dumps(
             {
-                "@context": "http://schema.org",
+                "@context": "https://schema.org",
                 "@graph": [
                     self._get_breadcrumb_schema(),
                     self._get_image_schema(),
@@ -339,7 +339,7 @@ class BlogPage(BasePage):
     def ld_entity(self):
         page_schema = json.dumps(
             {
-                "@context": "http://schema.org",
+                "@context": "https://schema.org",
                 "@graph": [
                     self._get_breadcrumb_schema(),
                     self._get_image_schema(),
