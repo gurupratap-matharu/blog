@@ -4,6 +4,7 @@ from django.contrib import admin, messages
 from django.core.management import call_command
 from django.db.models import Count, QuerySet
 from django.http import HttpRequest
+from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 
 from trips.models import Company, Route, Stop, Trip
@@ -83,7 +84,7 @@ class RouteAdmin(admin.ModelAdmin[Route]):
     autocomplete_fields = ("origin", "destination")
     search_fields = ("id", "code", "origin__name", "destination__name")
     inlines = (TripInlineAdmin,)
-    actions = ("pull_red", "pull_blue", "pull")
+    actions = ("pull", "pull_red", "pull_blue", "create_route_page")
 
     _basic_fields = (("name", "code"), ("origin", "destination"))
     _extra_fields = (("distance", "co2", "strategy", "pull_preference", "is_active"),)
@@ -163,6 +164,12 @@ class RouteAdmin(admin.ModelAdmin[Route]):
         if red_qs.exists():
             self.pull_red(request, red_qs)
 
+    @admin.action(description="Create Route Pages")
+    def create_route_page(self, request: HttpRequest, qs: QuerySet[Route]) -> None:
+        ids = [obj.id for obj in qs]
+        out = call_command("createroutepage", ids)
+        self.message_user(request, f"{out}", messages.SUCCESS)
+
 
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
@@ -171,14 +178,17 @@ class TripAdmin(admin.ModelAdmin):
     list_select_related = ("route", "company")
     list_filter = ("strategy", "updated")
     search_fields = ("route__name", "company__name", "route__origin__name", "route__destination__name")
+    autocomplete_fields = ("route", "company")
 
     @admin.display(ordering="departure")
     def departs(self, obj: Trip) -> str:
-        return obj.departure.strftime("%d %b %H:%M")
+        departure = timezone.localtime(obj.departure)
+        return departure.strftime("%d %b %H:%M")
 
     @admin.display(ordering="arrival")
     def arrives(self, obj: Trip) -> str:
-        return obj.arrival.strftime("%d %b %H:%M")
+        arrival = timezone.localtime(obj.arrival)
+        return arrival.strftime("%d %b %H:%M")
 
     @admin.display(ordering="duration")
     def runtime(self, obj: Trip) -> str:

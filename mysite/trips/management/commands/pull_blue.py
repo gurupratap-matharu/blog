@@ -152,6 +152,7 @@ class Command(BaseCommand):
             "company": self.clean_blue_company(chunk),
             "departure": self.clean_blue_departure(chunk),
             "arrival": self.clean_blue_arrival(chunk),
+            # TODO: deduce this as arrival - departure for preciseness
             "duration": self.clean_blue_duration(chunk),
             "category_a": self.clean_blue_category(chunk, row=0),
             "price_a": self.clean_blue_price(chunk, row=0),

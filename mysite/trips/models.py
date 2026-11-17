@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -6,7 +8,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from base.choices import Country, Province
-from trips.date import next_weekday
+from trips.date import duration_display, next_weekday
 from trips.managers import CompanyManager, RouteManager, StopManager, TripManager
 
 
@@ -201,11 +203,17 @@ class Route(models.Model):
         d_lat, d_lon = self.destination.lat, self.destination.lon
         return f"https://www.google.com/maps/dir/?api=1&origin={o_lat},{o_lon}&destination={d_lat},{d_lon}&travelmode=driving"
 
-    def get_duration_display(self):
-        hours, remaining_seconds = divmod(self.duration.seconds, 3600)
-        mins = remaining_seconds // 60
+    def get_min_duration_display(self) -> str:
+        return duration_display(self.min_duration)
 
-        return f"{hours} hr {mins} min"
+    def get_avg_duration_display(self) -> str:
+        return duration_display(self.avg_duration)
+
+    def get_carbon_emissions(self) -> int:
+        # rough estimate for long route buses
+        if not self.distance:
+            return 0
+        return round(self.distance / 40)
 
 
 class Trip(models.Model):
@@ -243,3 +251,12 @@ class Trip(models.Model):
     class Meta:
         verbose_name = _("Trip")
         verbose_name_plural = _("Trips")
+
+    def get_duration_display(self) -> str:
+        return duration_display(self.arrival - self.departure)
+
+    def local_departure(self) -> datetime:
+        return timezone.localtime(self.departure)
+
+    def local_arrival(self) -> datetime:
+        return timezone.localtime(self.arrival)

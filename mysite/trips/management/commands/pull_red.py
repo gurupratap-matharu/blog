@@ -146,6 +146,7 @@ class Command(BaseCommand):
             "company": self.clean_red_company(tag),
             "departure": departure,
             "arrival": arrival,
+            # TODO: deduce this as arrival - departure for preciseness
             "duration": self.clean_red_duration(tag),
             "category_a": self.clean_red_category(tag, row=0),
             "price_a": self.clean_red_price(tag, row=0),
