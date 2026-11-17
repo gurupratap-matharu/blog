@@ -27,9 +27,7 @@ class CityIndexPageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.root = Page.get_first_root_node()
-        cls.home_page = HomePage(
-            title="Home", hero_text="You can do it", hero_cta="Learn More"
-        )
+        cls.home_page = HomePage(title="Home", hero_text="You can do it", hero_cta="Learn More")
         cls.city_index_page = CityIndexPage(title="cities", slug="cities")
 
         # Set Home Page as child of root
@@ -91,9 +89,7 @@ class CityPageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.root = Page.get_first_root_node()
-        cls.home_page = HomePage(
-            title="Home", hero_text="You can do it", hero_cta="Learn More"
-        )
+        cls.home_page = HomePage(title="Home", hero_text="You can do it", hero_cta="Learn More")
         cls.city_index_page = CityIndexPage(title="cities", slug="cities")
         cls.city_page = CityPage(title="Buenos Aires", slug="buenos-aires")
 
@@ -125,9 +121,7 @@ class CityPageTests(WagtailPageTestCase):
                 "body": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "faq": streamfield([("text", "Lorem ipsum dolor sit amet")]),
                 "links": streamfield([("text", "Lorem ipsum dolor sit amet")]),
-                "companies": streamfield(
-                    [("text", "Lorem ipsum dolor sit amet")]
-                ),
+                "companies": streamfield([("text", "Lorem ipsum dolor sit amet")]),
             }
         )
 
@@ -163,12 +157,8 @@ class StationPageTests(WagtailPageTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.root = Page.get_first_root_node()
-        cls.home_page = HomePage(
-            title="Home", hero_text="You can do it", hero_cta="Learn More"
-        )
-        cls.station_index_page = StationIndexPage(
-            title="terminales", slug="terminales"
-        )
+        cls.home_page = HomePage(title="Home", hero_text="You can do it", hero_cta="Learn More")
+        cls.station_index_page = StationIndexPage(title="terminales", slug="terminales")
         cls.station_page = StationPage(
             title="Terminal de Retiro",
             slug="terminal-de-retiro",
@@ -202,9 +192,7 @@ class StationPageTests(WagtailPageTestCase):
                 "body": streamfield([("text", "busy terminal")]),
                 "faq": streamfield([("text", "get answers here")]),
                 "links": streamfield([("text", "you might like these")]),
-                "companies": streamfield(
-                    [("text", "companies serving this terminal")]
-                ),
+                "companies": streamfield([("text", "companies serving this terminal")]),
                 # TODO: figure out how to pass ratings
                 "ratings": streamfield([("text", "you might like these")]),
             }
@@ -224,9 +212,7 @@ class StationPageTests(WagtailPageTestCase):
 
     @skip("needs more research")
     def test_page_is_previewable(self):
-        self.assertPageIsPreviewable(
-            self.station_page, post_data=self.post_data
-        )
+        self.assertPageIsPreviewable(self.station_page, post_data=self.post_data)
 
     def test_editability(self):
         self.assertPageIsEditable(self.station_page, post_data=self.post_data)
