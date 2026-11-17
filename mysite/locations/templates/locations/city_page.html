@@ -10,11 +10,7 @@
 {% block content %}
   <article class="container">
     {% breadcrumbs %}
-    <h1 class="fs-2">
-      <span class="text-primary text-gradient">Buscá pasajes baratos a</span>
-      <br />
-      {{ page.title }}
-    </h1>
+    <h1 class="fs-2">{{ page.title }}</h1>
     {% if page.image %}
       <figure class="figure d-block py-3">
         {% image page.image original format-avif loading="lazy" class="figure-img img-fluid rounded-3 d-block shadow-xl" %}
@@ -57,13 +53,6 @@
     <section class="py-3">
       {% include "includes/advice.html" %}
     </section>
-    <section class="py-3">
-      <h2 class="fs-5 pb-3">¡Comprá tu pasaje a {{ page.title }}!</h2>
-      <p>
-        En <a href="{{ site_root }}" class="fw-bold">{{ site_name }}</a> podes buscar y
-        comparar los mejores precios de micros a {{ page.title }}, así como también obtener información detallada sobre las rutas y los horarios de partida. Averigua los promociones vigentes y comience a disfrutar de su viaje sin complicaciones.
-      </p>
-    </section>
     {% if page.links %}
       <section class="py-3">
         {{ page.links }}
@@ -83,10 +72,6 @@
   </article>
   {% include "includes/seo_links.html" %}
 {% endblock content %}
-
-{% block modal %}
-  {% include "includes/offcanvas.html" %}
-{% endblock modal %}
 
 {% block extra_js %}
   {{ lat_long|json_script:"coordinates" }}
