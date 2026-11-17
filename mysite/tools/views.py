@@ -24,14 +24,10 @@ def price_estimate(request: HttpRequest) -> HttpResponse:
         logger.info("origin:%s, destination:%s" % (origin, destination))
 
         try:
-            stats = Stats.objects.get(
-                origin__slug=origin, destination__slug=destination
-            )
+            stats = Stats.objects.get(origin__slug=origin, destination__slug=destination)
 
         except Stats.DoesNotExist:
-            no_data_msg = _(
-                "No encontramos datos entre este tramo. ¿Porque no probás uno otro?"
-            )
+            no_data_msg = _("No encontramos datos entre este tramo. ¿Porque no probás uno otro?")
             messages.info(request, no_data_msg)
             stats = None
 
