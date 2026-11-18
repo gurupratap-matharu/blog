@@ -124,19 +124,19 @@ class RouteAdmin(admin.ModelAdmin[Route]):
 
     def red(self, obj: Route) -> str:
         url = obj.get_red_url()
-        return format_html("<a href='{}' target='_blank'>View</a>", url)
+        return format_html("<a href='{}' target='_blank'  rel='noreferrer'>View</a>", url)
 
     def blue(self, obj: Route) -> str:
         url = obj.get_blue_url()
-        return format_html("<a href='{}' target='_blank'>View</a>", url)
+        return format_html("<a href='{}' target='_blank' rel='noreferrer'>View</a>", url)
 
     def pink(self, obj: Route) -> str:
         url = obj.get_pink_url()
-        return format_html("<a href='{}' target='_blank'>View</a>", url)
+        return format_html("<a href='{}' target='_blank' rel='noreferrer'>View</a>", url)
 
     def map(self, obj: Route) -> str:
         url = obj.get_maps_directions_url()
-        return format_html("<a href='{}' target='_blank'>See</a>", url)
+        return format_html("<a href='{}' target='_blank' rel='noreferrer'>See</a>", url)
 
     def active(self, obj: Route) -> bool:
         return obj.is_active
