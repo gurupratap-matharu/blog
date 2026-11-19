@@ -34,7 +34,7 @@ class CompanyAdmin(admin.ModelAdmin[Company]):
 
 @admin.register(Stop)
 class StopAdmin(admin.ModelAdmin[Stop]):
-    list_display = ("id", "name", "code", "state", "red_code", "pink_code", "blue_code", "is_active")
+    list_display = ("id", "name", "code", "state", "red_code", "blue_code", "pink_code", "is_active")
     list_display_links = ("id", "name")
     list_per_page = 30
     prepopulated_fields: ClassVar = {"slug": ("name",)}
