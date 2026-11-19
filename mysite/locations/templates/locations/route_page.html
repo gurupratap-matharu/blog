@@ -76,11 +76,11 @@
         <div class="row align-items-center">
           <div class="col-3 col-lg-1">
             {% with "assets/img/flags/"|add:page.province|add:".avif" as flag %}
-              <img src="{% static flag %}" class="img-fluid" alt="{{ page.get_province_display }}" />
+              <img src="{% static flag %}" class="img-fluid shadow-sm" alt="{{ page.get_province_display }}" />
             {% endwith %}
           </div>
           <div class="col-auto">
-            <p class="text-body-secondary small mb-0">{% translate "Departamento" %}</p>
+            <p class="text-body-secondary small mb-0">{% translate "Provincia" %}</p>
             <span>{{ page.get_province_display }}</span>
           </div>
         </div>
